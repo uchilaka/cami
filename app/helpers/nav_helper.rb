@@ -1,6 +1,12 @@
+# frozen_string_literal: true
+
 module NavHelper
   def nav_link_to(name = nil, options = {}, html_options = {}, &block)
-    name, options, html_options = block, name, options if block
+    if block
+      html_options = options
+      options = name
+      name = block
+    end
 
     url = url_for(options)
     starts_with = html_options.delete(:starts_with)
@@ -15,6 +21,4 @@ module NavHelper
 
     link_to(name, url, html_options, &block)
   end
-
-
 end

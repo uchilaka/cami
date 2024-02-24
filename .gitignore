@@ -27,11 +27,13 @@
 
 /public/assets
 
-# Ignore docker container files
+# Docker container files
 /db/development/
+/.mongodb/.env.*
+!/.mongodb/.env.example
 
 # Ignore master key for decrypting credentials and more.
-/config/master.key
+/config/credentials/*.key
 
 # Vite Ruby
 /public/vite*
@@ -40,3 +42,7 @@ node_modules
 # https://vitejs.dev/guide/env-and-mode.html#env-files
 *.local
 
+# IDE files
+/.idea
+/.envrc
+/*.code-workspace

@@ -1,26 +1,55 @@
-version: '3.6'
+version: '3.7'
 
 services:
-  redis:
+  redis-store:
+    container_name: redis.accounts.larcity
     image: redis:7
     restart: unless-stopped
     ports:
-      - '6379:6379'
+      - '16079:6379'
     volumes:
       - ./db/development/redis:/data
 
-  db:
+  app-store:
+    container_name: db.accounts.larcity
     image: postgres:13.13
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${USER}
+      POSTGRES_DB: ${APP_DATABASE_NAME}
+      POSTGRES_USER: ${APP_DATABASE_USER}
+      POSTGRES_PASSWORD: ${APP_DATABASE_PASSWORD}
       POSTGRES_HOST_AUTH_METHOD: trust # IMPORTANT allows all connections without a password - experimental only!
     ports:
-      - '5432:5432'
+      - '16032:5432'
     volumes:
       - ./db/development/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       - ./db/development/postgres/data:/var/lib/postgresql/data
       - ./db/development/postgres/downloads:/usr/local/downloads
+
+  doc-store:
+    container_name: mongodb.accounts.larcity
+    # Mongodb versions: https://github.com/docker-library/docs/blob/master/mongo/README.md#supported-tags-and-respective-dockerfile-links
+    image: mongo:7.0-jammy
+    restart: unless-stopped
+    volumes:
+      # Read more: https://registry.hub.docker.com/_/mongo
+      - ./db/development/mongodb/data:/data/db
+      - ./db/development/mongodb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - "16017:27017"
+    env_file:
+      - ./.mongodb/.env.development
+
+  doc-store-admin:
+    container_name: mongodb-admin.accounts.larcity
+    image: mongo-express
+    restart: unless-stopped
+    ports:
+      - "16081:8081"
+    env_file:
+      - ./.mongodb/.env.development
+    depends_on:
+      - doc-store
 
 networks:
   default:
