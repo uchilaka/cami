@@ -1,0 +1,17 @@
+<div id="<%= dom_id service %>" class="bg-white p-6 shadow-sm rounded overflow-hidden">
+<p class="my-5">
+    <strong class="block font-medium mb-1">Display name:</strong>
+    <%= service.display_name %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Readme:</strong>
+    <%= service.readme %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this service", service, class: "btn btn-primary" %>
+    <%= link_to 'Edit this service', edit_service_path(service), class: "btn btn-secondary" %>
+    <hr class="mt-6">
+  <% end %>
+</div>

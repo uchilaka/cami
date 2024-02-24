@@ -12,9 +12,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 20_240_224_094_005) do
+ActiveRecord::Schema[7.0].define(version: 20_240_224_133_702) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
+
+  create_table 'accounts', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
+    t.string 'business_name'
+    t.text 'readme'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.string 'tax_id'
+  end
 
   create_table 'active_storage_attachments', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
     t.string 'name', null: false
@@ -45,6 +53,30 @@ ActiveRecord::Schema[7.0].define(version: 20_240_224_094_005) do
     t.index %w[blob_id variation_digest], name: 'index_active_storage_variant_records_uniqueness', unique: true
   end
 
+  create_table 'products', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
+    t.string 'sku'
+    t.string 'display_name'
+    t.text 'description'
+    t.json 'data'
+    t.uuid 'vendor_id'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+  end
+
+  create_table 'services', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
+    t.string 'display_name'
+    t.text 'readme'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+  end
+
+  create_table 'services_products', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
+    t.uuid 'service_id', null: false
+    t.uuid 'product_id', null: false
+    t.index ['product_id'], name: 'index_services_products_on_product_id'
+    t.index ['service_id'], name: 'index_services_products_on_service_id'
+  end
+
   create_table 'users', force: :cascade do |t|
     t.string 'email', default: '', null: false
     t.string 'encrypted_password', default: '', null: false
@@ -61,4 +93,7 @@ ActiveRecord::Schema[7.0].define(version: 20_240_224_094_005) do
 
   add_foreign_key 'active_storage_attachments', 'active_storage_blobs', column: 'blob_id'
   add_foreign_key 'active_storage_variant_records', 'active_storage_blobs', column: 'blob_id'
+  add_foreign_key 'products', 'accounts', column: 'vendor_id'
+  add_foreign_key 'services_products', 'products'
+  add_foreign_key 'services_products', 'services'
 end

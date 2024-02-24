@@ -1,0 +1,27 @@
+<div id="<%= dom_id product %>" class="bg-white p-6 shadow-sm rounded overflow-hidden">
+<p class="my-5">
+    <strong class="block font-medium mb-1">Sku:</strong>
+    <%= product.sku %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Display name:</strong>
+    <%= product.display_name %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Description:</strong>
+    <%= product.description %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Data:</strong>
+    <%= product.data %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this product", product, class: "btn btn-primary" %>
+    <%= link_to 'Edit this product', edit_product_path(product), class: "btn btn-secondary" %>
+    <hr class="mt-6">
+  <% end %>
+</div>
