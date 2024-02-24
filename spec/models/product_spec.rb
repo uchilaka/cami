@@ -7,7 +7,7 @@
 #  id           :uuid             not null, primary key
 #  data         :json
 #  description  :text
-#  display_name :string
+#  display_name :string           not null
 #  sku          :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null

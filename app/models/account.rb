@@ -5,7 +5,7 @@
 # Table name: accounts
 #
 #  id            :uuid             not null, primary key
-#  business_name :string
+#  business_name :string           not null
 #  readme        :text
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
