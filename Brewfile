@@ -6,6 +6,7 @@ cask_args appdir: '~/Applications', require_sha: true
 # brew install
 brew 'heroku'
 brew 'ruby-build'
+brew 'foreman'
 
 # install only on specified OS
 brew 'tree' if OS.mac?
