@@ -67,24 +67,22 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example
   config.before(:suite) do
+    # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
 
     # Purge the MongoDB test store
     system "RAILS_ENV=test #{Rails.root}/bin/rails db:mongoid:drop"
     system "RAILS_ENV=test #{Rails.root}/bin/rails db:mongoid:create_collections"
+
+    # Sidekiq setup
+    Sidekiq::Testing.fake!
   end
 
   config.around(:each) do |example|
     DatabaseCleaner.cleaning do
       example.run
     end
-  end
-
-  # Sidekiq setup
-  config.before(:suite) do
-    Sidekiq::Testing.fake!
   end
 end
