@@ -71,6 +71,10 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
+
+    # Purge the MongoDB test store
+    system "RAILS_ENV=test #{Rails.root}/bin/rails db:mongoid:drop"
+    system "RAILS_ENV=test #{Rails.root}/bin/rails db:mongoid:create_collections"
   end
 
   config.around(:each) do |example|
