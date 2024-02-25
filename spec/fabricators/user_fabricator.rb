@@ -6,7 +6,7 @@ Fabricator(:user) do
   last_name  { Faker::Name.last_name }
   password { Faker::Internet.password(min_length: 8) }
 
-  after_build do |user|
-    Fabricate.build(:user_profile, user_id: user.id)
-  end
+  # after_build do |attrs|
+  #   Fabricate.build(:user_profile, user_id: attrs.id)
+  # end
 end
