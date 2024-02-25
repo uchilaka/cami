@@ -61,6 +61,24 @@
 
 > TODO: Add database initialization instructions
 
+## Database management 
+
+Review the list of available rake tasks for managing the `MongoDB` database:
+
+```shell
+bundle exec rake -T | grep mongoid
+
+# Sample output
+rake db:mongoid:create_collections             # Create collections for Mongoid models
+rake db:mongoid:create_collections:force       # Drop and create collections for Mongoid models
+rake db:mongoid:create_indexes                 # Create indexes specified in Mongoid models
+rake db:mongoid:drop                           # Drop the database of the default Mongoid client
+rake db:mongoid:purge                          # Drop all non-system collections
+rake db:mongoid:remove_indexes                 # Remove indexes specified in Mongoid models
+rake db:mongoid:remove_undefined_indexes       # Remove indexes that exist in the database but are not specified in Mongoid models
+rake db:mongoid:shard_collections              # Shard collections with shard keys specified in Mongoid models
+```
+
 ### Test
 
 ```shell
