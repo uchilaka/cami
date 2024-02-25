@@ -16,5 +16,5 @@ class Business < Account
   has_many :products, foreign_key: :vendor_id
   has_and_belongs_to_many :users, class_name: 'Account'
 
-  validates :tax_id, uniqueness: true, null: true
+  validates :tax_id, allow_blank: true, uniqueness: { case_sensitive: false }
 end
