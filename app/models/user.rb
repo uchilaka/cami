@@ -26,5 +26,20 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
   has_person_name
+
+  has_and_belongs_to_many :accounts
+
+  after_create_commit :initialize_profile
+
+  def profile
+    @profile ||= UserProfile.find_by(user_id: id)
+  end
+
+  private
+
+  def initialize_profile
+    UserProfile.create(user_id: id)
+  end
 end

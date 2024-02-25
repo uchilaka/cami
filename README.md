@@ -61,6 +61,38 @@
 
 > TODO: Add database initialization instructions
 
+### Test
+
+```shell
+# Show help menu for mongosh
+docker exec -it mongodb.accounts.larcity mongosh --help
+
+# Run the command to initialize the database
+docker exec -it mongodb.accounts.larcity mongosh \
+  --authenticationDatabase admin
+  --file ./development/mongodb/docker-entrypoint-initdb.d/init-doc-stores
+  --username <MONGO_INITDB_ROOT_USERNAME>
+  --password <MONGO_INITDB_ROOT_PASSWORD>
+
+# List databases
+show dbs
+
+# Use the admin database
+use doc_store_test
+
+# Create a new user
+db.createUser({
+  user: "db_admin",
+  pwd: passwordPrompt(),
+  roles: [
+    { role: "dbOwner", db: "doc_store_test" }
+  ]
+})
+
+# Grant roles to an existing user
+db.grantRolesToUser("db_admin", ["dbOwner"])
+```
+
 ## How to run the test suite
 
 > TODO: Add test suite instructions
@@ -113,6 +145,36 @@ Then you can open a tunnel to your local environment by running:
 thor lar-city-cli:tunnel:open_all
 ```
 
+### Generating a `Monogid` Model
+
+```shell
+rails g model Invoice --orm=mongoid
+```
+
+After generating the model, if you would like to inherit application functionality for document records, 
+you can include the `DocumentRecord` concern in the model:
+
+```ruby
+class Invoice
+  include DocumentRecord
+end
+```
+
 ## Guides and References
 
+- [MongoDB Tutorial](https://www.w3schools.com/mongodb/)
+- [Rails API](https://api.rubyonrails.org/)
+- [Rails Guides](https://guides.rubyonrails.org/)
+  - [Rails Routing from the Outside In](https://guides.rubyonrails.org/routing.html)
+  - [Active Record Migrations](https://guides.rubyonrails.org/active_record_migrations.html)
+  - [Active Record Validations](https://guides.rubyonrails.org/active_record_validations.html)
+  - [Active Record Callbacks](https://guides.rubyonrails.org/active_record_callbacks.html)
+  - [Active Record Associations](https://guides.rubyonrails.org/association_basics.html)
+  - [Active Record Query Interface](https://guides.rubyonrails.org/active_record_querying.html)
+  - [Active Record Scopes](https://guides.rubyonrails.org/active_record_querying.html#scopes)
+  - [Multiple Databases](https://guides.rubyonrails.org/active_record_multiple_databases.html)
 - [Introduction to Sidekiq for Rails](https://blog.appsignal.com/2023/09/20/an-introduction-to-sidekiq-for-ruby-on-rails.html)
+
+## Future Work
+
+- [ ] Setup secrets using [docker images' compatibility with secret files](https://docs.docker.com/compose/use-secrets/) 

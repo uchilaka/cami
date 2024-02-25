@@ -12,6 +12,5 @@
 #  updated_at   :datetime         not null
 #  tax_id       :string
 #
-Fabricator(:account) do
-  display_name { Faker::Company.name }
+class Individual < Account
 end
