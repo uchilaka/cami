@@ -29,6 +29,7 @@
 
 # Docker container files
 /db/development/
+!/db/development/mongodb/docker-entrypoint-initdb.d/
 /.mongodb/.env.*
 !/.mongodb/.env.example
 
