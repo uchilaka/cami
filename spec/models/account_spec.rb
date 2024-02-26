@@ -15,5 +15,11 @@
 require 'rails_helper'
 
 RSpec.describe Account, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe '#display_name' do
+    it 'is required' do
+      account = Fabricate.build :account, display_name: nil
+      expect(account).to be_invalid
+      expect(account.errors[:display_name]).to include("can't be blank")
+    end
+  end
 end

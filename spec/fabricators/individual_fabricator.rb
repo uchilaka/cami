@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Fabricator(:individual, from: :account) do
+  type 'Individual'
   display_name do
     [
       Faker::Name.gender_neutral_first_name,
