@@ -1,0 +1,36 @@
+name: RSpec
+
+on: [pull_request]
+
+jobs:
+  build:
+    name: CI test suite
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: [3.2.2]
+        node-version: [18.x, 20.x]
+        mongodb-version: [7.x]
+    env:
+      RAILS_ENV: test
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      PROJECT_ROOT: .
+      APP_DATABASE_HOST: localhost
+      APP_DATABASE_NAME: account_manager_test
+      APP_DATABASE_USER: ${{ secrets.APP_DATABASE_USER }}
+      APP_DATABASE_PASSWORD: ${{ secrets.APP_DATABASE_PASSWORD }}
+      APP_DATABASE_PORT: 5432
+    services:
+      postgres:
+        image: postgres:15.4
+        env:
+          POSTGRES_DB: ${{env.APP_DATABASE_NAME}}
+          POSTGRES_USER: ${{env.DATABASE_USER}}
+          POSTGRES_PASSWORD: ${{env.DATABASE_PASSWORD}}
+          # POSTGRES_HOST_AUTH_METHOD: trust # IMPORTANT allows all connections without a password - experimental only!
+        ports: ['5432:5432']
+        options: >- # Options for the service, in this case we want to make sure that the Postgres container passes a health check
+          --health-cmd pg_isready
+          --health-interval 15s
+          --health-timeout 5s
+          --health-retries 3      
