@@ -52,17 +52,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 6.1', '>= 6.1.1'
   gem 'rubocop'
   gem 'rubocop-performance'
-
-  # Selenium is a browser automation tool for automated testing of
-  #     webapps and more [https://www.selenium.dev/documentation/en/]
-  gem 'selenium-webdriver'
-
-  gem 'database_cleaner-active_record'
-
-  # TODO: The transaction strategy is not supported by Mongoid.
-  #   You can use the deletion strategy to clean the document store.
-  # gem 'database_cleaner-mongoid'
-  # gem 'database_cleaner-redis'
+  gem 'strong_migrations'
 end
 
 group :development do
@@ -76,6 +66,25 @@ group :development do
   # gem "spring"
 
   gem 'annotate'
+end
+
+group :test do
+  # Record your test suite's HTTP interactions and replay them during future test runs for fast, deterministic, accurate tests
+  gem 'vcr', '~> 6.2'
+
+  gem 'shoulda-matchers'
+  # Selenium is a browser automation tool for automated testing of
+  #     webapps and more [https://www.selenium.dev/documentation/en/]
+  gem 'selenium-webdriver'
+
+  gem 'database_cleaner-active_record'
+
+  # TODO: The transaction strategy is not supported by Mongoid.
+  #   You can use the deletion strategy to clean the document store.
+  # gem 'database_cleaner-mongoid'
+  # gem 'database_cleaner-redis'
+
+  gem 'climate_control'
 end
 
 gem 'devise'
