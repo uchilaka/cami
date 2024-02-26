@@ -19,7 +19,12 @@ Rails.application.routes.draw do
 
   get 'pages/home'
 
-  root to: 'pages#home'
+  # root to: 'pages#home'
+
+  devise_scope :user do
+    root to: 'devise/sessions#new'
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
