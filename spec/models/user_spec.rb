@@ -20,26 +20,32 @@
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
-class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+require 'rails_helper'
 
-  # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
-  has_person_name
+RSpec.describe User, type: :model do
+  let!(:email) { Faker::Internet.email }
 
-  has_and_belongs_to_many :accounts
-
-  after_create_commit :initialize_profile
-
-  def profile
-    @profile ||= UserProfile.find_by(user_id: id)
+  around do |example|
+    Sidekiq::Testing.inline! { example.run }
   end
 
-  private
+  describe 'callbacks' do
+    describe ':after_create_commit' do
+      subject do
+        Fabricate :user, email:
+      end
 
-  def initialize_profile
-    UserProfile.create(user_id: id)
+      it 'initializes a user profile' do
+        expect { subject }.to change { UserProfile.count }.by(1)
+      end
+    end
+  end
+
+  describe '#profile' do
+    subject { find_or_create_mock_user!(email:) }
+
+    it 'returns the expected user profile' do
+      expect(subject.profile).to eq(UserProfile.find_by(user_id: subject.id))
+    end
   end
 end

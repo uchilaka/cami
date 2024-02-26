@@ -10,7 +10,7 @@ jobs:
       matrix:
         ruby-version: [3.2.2]
         node-version: [18.x, 20.x]
-        mongodb-version: [7.x]
+        mongodb-version: ['7.0.5']
     env:
       RAILS_ENV: test
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
@@ -20,6 +20,9 @@ jobs:
       APP_DATABASE_USER: ${{ secrets.APP_DATABASE_USER }}
       APP_DATABASE_PASSWORD: ${{ secrets.APP_DATABASE_PASSWORD }}
       APP_DATABASE_PORT: 5432
+      MONGODB_PORT: 27017
+      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
+      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
     services:
       postgres:
         image: postgres:15.4
@@ -33,4 +36,33 @@ jobs:
           --health-cmd pg_isready
           --health-interval 15s
           --health-timeout 5s
-          --health-retries 3      
+          --health-retries 3
+      mongodb:
+        image: mongo:${{ matrix.mongodb-version }}
+        ports: ['27017:27017']
+        options: >-
+          --health-cmd 'mongo admin --eval "printjson(db.serverStatus())"'
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby 3.2.2
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+
+      - name: Run bundle install
+        working-directory: ${{env.PROJECT_ROOT}}
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3        
+
+      - name: Setup DB
+        run: bin/rake db:drop db:create db:migrate && bin/rake db:seed
+
+      - name: Build and run tests
+        run: |
+          bundle exec rake db:create db:migrate
+          # Run all specs except those with the option devtool: true
+          bundle exec rspec --tag "~devtool"
