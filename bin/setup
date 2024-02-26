@@ -31,6 +31,7 @@ FileUtils.chdir APP_ROOT do
   system! 'bin/rails db:prepare'
 
   puts "\n== Preparing document store =="
+  # system! 'bin/rails db:mongoid:drop'
   system! 'bin/rails db:mongoid:create_collections'
 
   puts "\n== Preparing document store (test mode) =="
