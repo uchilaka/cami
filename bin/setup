@@ -24,11 +24,17 @@ FileUtils.chdir APP_ROOT do
   #   FileUtils.cp "config/database.yml.sample", "config/database.yml"
   # end
 
-  puts "\n== Preparing database =="
+  puts "\n== Preparing app data store =="
   system! 'bin/rails db:prepare'
 
+  puts "\n== Preparing document store =="
+  system! 'bin/rails db:mongoid:create_collections'
+
+  puts "\n== Preparing document store (test mode) =="
+  system! 'RAILS_ENV=test bin/rails db:mongoid:create_collections'
+
   puts "\n== Removing old logs and tempfiles =="
-  system! 'bin/rails log:clear tmp:clear'
+  system! 'bin/rake log:clear tmp:clear'
 
   puts "\n== Restarting application server =="
   system! 'bin/rails restart'

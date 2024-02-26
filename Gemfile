@@ -56,6 +56,13 @@ group :development, :test do
   # Selenium is a browser automation tool for automated testing of
   #     webapps and more [https://www.selenium.dev/documentation/en/]
   gem 'selenium-webdriver'
+
+  gem 'database_cleaner-active_record'
+
+  # TODO: The transaction strategy is not supported by Mongoid.
+  #   You can use the deletion strategy to clean the document store.
+  # gem 'database_cleaner-mongoid'
+  # gem 'database_cleaner-redis'
 end
 
 group :development do
@@ -85,3 +92,6 @@ gem 'sidekiq-cron'
 
 # Process manager for applications with multiple components
 gem 'foreman'
+
+# Rake tasks to migrate data alongside schema changes [https://github.com/ilyakatz/data-migrate]
+gem 'data_migrate', '~> 9.2', '>= 9.2.0'

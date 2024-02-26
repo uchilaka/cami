@@ -19,6 +19,7 @@ AllCops:
   #  NewCops: disable
   Exclude:
     - '.spec'
+    - 'db/schema.rb'
 
 Metrics:
   Enabled: false

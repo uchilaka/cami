@@ -1,0 +1,14 @@
+<div class="w-full">
+  <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+  <% end %>
+
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="font-bold text-4xl">Accounts</h1>
+    <%= link_to 'New account', new_account_path, class: "btn btn-primary" %>
+  </div>
+
+  <div id="accounts" class="min-w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+    <%= render @accounts %>
+  </div>
+</div>
