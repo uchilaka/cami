@@ -85,20 +85,28 @@ rake db:mongoid:shard_collections              # Shard collections with shard ke
 # Show help menu for mongosh
 docker exec -it mongodb.accounts.larcity mongosh --help
 
-# Run the command to initialize the database
-docker exec -it mongodb.accounts.larcity mongosh \
-  --authenticationDatabase admin
-  --file ./development/mongodb/docker-entrypoint-initdb.d/init-doc-stores
-  --username <MONGO_INITDB_ROOT_USERNAME>
-  --password <MONGO_INITDB_ROOT_PASSWORD>
+# Run the command to connect the mongodb container
+bin/thor lx-cli:db:connect --mongodb
 
 # List databases
 show dbs
 
 # Use the admin database
-use doc_store_test
+use admin
 
 # Create a new user
+db.createUser({
+  user: "db_admin",
+  pwd: `${process.env.MONGO_INITDB_ROOT_PASSWORD}`,
+  roles: [
+    { role: "dbOwner", db: "doc_store_development" },
+    { role: "dbOwner", db: "doc_store_test" },
+  ]
+})
+
+use doc_store_test
+
+# Create a new user (for testing purposes)
 db.createUser({
   user: "db_admin",
   pwd: passwordPrompt(),
@@ -107,7 +115,18 @@ db.createUser({
   ]
 })
 
-# Grant roles to an existing user
+use doc_store_development
+
+# Create a new user (for development purposes)
+db.createUser({
+  user: "db_admin",
+  pwd: passwordPrompt(),
+  roles: [
+    { role: "dbOwner", db: "doc_store_development" }
+  ]
+})
+
+# Example: Grant roles to an existing user
 db.grantRolesToUser("db_admin", ["dbOwner"])
 ```
 
@@ -130,7 +149,7 @@ db.grantRolesToUser("db_admin", ["dbOwner"])
 To edit credentials in your IDE, run the following command in your console:
 
 ```shell
-bin/thor lar-city-cli:secrets:edit
+bin/thor lx-cli:secrets:edit
 ```
 
 To view help information about managing application credentials, run the following command in your console:
@@ -160,7 +179,7 @@ Follow these steps to setup `ngrok` for your local environment:
 Then you can open a tunnel to your local environment by running:
 
 ```shell
-thor lar-city-cli:tunnel:open_all
+thor lx-cli:tunnel:open_all
 ```
 
 ### Generating a `Monogid` Model
