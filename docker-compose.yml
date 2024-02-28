@@ -37,8 +37,12 @@ services:
       - ./db/development/mongodb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     ports:
       - "16017:27017"
-    env_file:
-      - ./.mongodb/.env.development
+    # env_file:
+    #   - ./.mongodb/.env.development
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
 
   doc-store-admin:
     container_name: mongodb-admin.accounts.larcity
@@ -46,8 +50,14 @@ services:
     restart: unless-stopped
     ports:
       - "16081:8081"
-    env_file:
-      - ./.mongodb/.env.development
+    # env_file:
+    #   - ./.mongodb/.env.development
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb.accounts.larcity
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGODB_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGODB_PASSWORD}
+      ME_CONFIG_BASICAUTH_USERNAME: dev
+      ME_CONFIG_BASICAUTH_PASSWORD: Test1234
     depends_on:
       - doc-store
 

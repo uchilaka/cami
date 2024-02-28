@@ -175,6 +175,20 @@
             }
           }
         }
+      },
+      "yarn": {
+        "version": "1.22.21",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "all": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/yarn/blobs/sha256:321bf5ede7905483a19a4acd4896caad7f6cb7cc4f92fbe4e2f39706e1f98bb3",
+              "sha256": "321bf5ede7905483a19a4acd4896caad7f6cb7cc4f92fbe4e2f39706e1f98bb3"
+            }
+          }
+        }
       }
     },
     "cask": {
@@ -188,6 +202,11 @@
           }
         }
       }
+    },
+    "tap": {
+      "heroku/brew": {
+        "revision": "379bc49cf928a18cb0e7dcad4946278ff831e420"
+      }
     }
   },
   "system": {
@@ -199,6 +218,14 @@
         "CLT": "15.1.0.0.1.1700200546",
         "Xcode": "15.2",
         "macOS": "14.3.1"
+      }
+    },
+    "linux": {
+      "Ubuntu 22.04.3 LTS (jammy)": {
+        "HOMEBREW_VERSION": "4.2.10",
+        "HOMEBREW_PREFIX": "/home/linuxbrew/.linuxbrew",
+        "Homebrew/homebrew-core": "api",
+        "GCC": "11.4.0"
       }
     }
   }
