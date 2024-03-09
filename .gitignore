@@ -37,6 +37,9 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/credentials/*.key
+# NOTE: Ignore development environment secrets file. This should allow engineers to maintain 
+#   versions of this configuration file without inadvertent conflicts with source control
+/config/credentials/development*.yml.enc
 
 # Vite Ruby
 /public/vite*
