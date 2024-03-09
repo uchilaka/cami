@@ -29,6 +29,7 @@
 
 # Docker container files
 /db/development/
+!db/development/mongodb/docker-entrypoint-initdb.d/
 /.mongodb/.env.*
 !/.mongodb/.env.example
 
@@ -37,7 +38,7 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/credentials/*.key
-# NOTE: Ignore development environment secrets file. This should allow engineers to maintain 
+# NOTE: Ignore development environment secrets file. This should allow engineers to maintain
 #   versions of this configuration file without inadvertent conflicts with source control
 /config/credentials/development*.yml.enc
 
