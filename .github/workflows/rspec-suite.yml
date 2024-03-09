@@ -22,11 +22,9 @@ jobs:
       APP_DATABASE_PASSWORD: ${{ secrets.APP_DATABASE_PASSWORD }}
       APP_DATABASE_PORT: 5432
       MONGODB_TEST_PORT: 27017
-      #MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
-      #MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
-      #MONGODB_DATABASE: doc_store_test
     services:
       postgres:
+        # https://hub.docker.com/_/postgres
         image: postgres:15.4
         env:
           POSTGRES_DB: ${{env.APP_DATABASE_NAME}}
@@ -42,10 +40,6 @@ jobs:
           --health-retries 3
       mongodb:
         image: mongo:${{ matrix.mongodb-version }}
-        #env:
-        #  MONGO_INITDB_ROOT_USERNAME: ${{env.MONGODB_USERNAME}}
-        #  MONGO_INITDB_ROOT_PASSWORD: ${{env.MONGODB_PASSWORD}}
-        #  MONGO_INITDB_DATABASE: ${{env.MONGODB_DATABASE}}
         ports:
           - '27017:27017'
     steps:
