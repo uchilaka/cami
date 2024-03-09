@@ -12,6 +12,7 @@ jobs:
         node-version: [18.x, 20.x]
         mongodb-version: ['7.0.6-jammy']
     env:
+      CI: true
       RAILS_ENV: test
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
       PROJECT_ROOT: .
@@ -20,10 +21,10 @@ jobs:
       APP_DATABASE_USER: ${{ secrets.APP_DATABASE_USER }}
       APP_DATABASE_PASSWORD: ${{ secrets.APP_DATABASE_PASSWORD }}
       APP_DATABASE_PORT: 5432
-      MONGODB_PORT: 27017
-      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
-      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
-      MONGODB_DATABASE: doc_store_test
+      MONGODB_TEST_PORT: 27017
+      #MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
+      #MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+      #MONGODB_DATABASE: doc_store_test
     services:
       postgres:
         image: postgres:15.4
@@ -41,10 +42,10 @@ jobs:
           --health-retries 3
       mongodb:
         image: mongo:${{ matrix.mongodb-version }}
-        env:
-          MONGO_INITDB_ROOT_USERNAME: ${{env.MONGODB_USERNAME}}
-          MONGO_INITDB_ROOT_PASSWORD: ${{env.MONGODB_PASSWORD}}
-          MONGO_INITDB_DATABASE: ${{env.MONGODB_DATABASE}}
+        #env:
+        #  MONGO_INITDB_ROOT_USERNAME: ${{env.MONGODB_USERNAME}}
+        #  MONGO_INITDB_ROOT_PASSWORD: ${{env.MONGODB_PASSWORD}}
+        #  MONGO_INITDB_DATABASE: ${{env.MONGODB_DATABASE}}
         ports:
           - '27017:27017'
     steps:

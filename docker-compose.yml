@@ -44,6 +44,13 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
 
+  doc-store-test:
+    container_name: mongodb.accounts.larcity.test
+    image: mongo:7.0.6-jammy
+    restart: unless-stopped
+    ports:
+      - "${MONGODB_TEST_PORT}:27017"
+
   # Readme: https://registry.hub.docker.com/_/mongo-express
   doc-store-admin:
     container_name: mongodb-admin.accounts.larcity

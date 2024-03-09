@@ -13,7 +13,7 @@ development:
       # Provides the hosts the default client can connect to. Must be an array
       # of host:port pairs. (required)
       hosts:
-        - localhost:<%= ENV.fetch('MONGODB_PORT', 16017) %>
+        - "localhost:<%= ENV.fetch('MONGODB_PORT', 16017) %>"
       options:
         # Note that all options listed below are Ruby driver client options (the mongo gem).
         # Please refer to the driver documentation of the version of the mongo gem you are using
@@ -178,12 +178,8 @@ test:
     default:
       database: doc_store_test
       hosts:
-        - "localhost:<%= ENV.fetch('MONGODB_PORT', 16017) %>"
+        - "localhost:<%= ENV.fetch('MONGODB_TEST_PORT', Rails.application.credentials.mongodb.port) %>"
       options:
-        user: <%= ENV.fetch('MONGODB_USERNAME', Rails.application.credentials.mongodb.user) %>
-        password: <%= ENV.fetch('MONGODB_PASSWORD', Rails.application.credentials.mongodb.password) %>
-        roles:
-          - 'dbOwner'
         read:
           mode: :primary
         max_pool_size: 1
