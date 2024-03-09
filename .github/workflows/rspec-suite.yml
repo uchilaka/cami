@@ -31,7 +31,8 @@ jobs:
           POSTGRES_USER: ${{env.DATABASE_USER}}
           POSTGRES_PASSWORD: ${{env.DATABASE_PASSWORD}}
           # POSTGRES_HOST_AUTH_METHOD: trust # IMPORTANT allows all connections without a password - experimental only!
-        ports: ['5432:5432']
+        ports:
+         - '5432:5432'
         options: >- # Options for the service, in this case we want to make sure that the Postgres container passes a health check
           --health-cmd pg_isready
           --health-interval 15s
@@ -39,12 +40,13 @@ jobs:
           --health-retries 3
       mongodb:
         image: mongo:${{ matrix.mongodb-version }}
-        ports: ['27017:27017']
+        ports:
+          - '27017:27017'
         options: >-
           --health-cmd 'mongo admin --eval "printjson(db.serverStatus())"'
-          --health-interval 10s
+          --health-interval 15s
           --health-timeout 5s
-          --health-retries 5
+          --health-retries 4
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby 3.2.2
