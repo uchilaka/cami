@@ -28,9 +28,9 @@ jobs:
         image: postgres:15.4
         env:
           POSTGRES_DB: ${{env.APP_DATABASE_NAME}}
-          POSTGRES_USER: ${{env.DATABASE_USER}}
-          POSTGRES_PASSWORD: ${{env.DATABASE_PASSWORD}}
-          # POSTGRES_HOST_AUTH_METHOD: trust # IMPORTANT allows all connections without a password - experimental only!
+          POSTGRES_USER: ${{env.APP_DATABASE_USER}}
+          POSTGRES_PASSWORD: ${{env.APP_DATABASE_PASSWORD}}
+          #POSTGRES_HOST_AUTH_METHOD: trust # IMPORTANT allows all connections without a password - experimental only!
         ports:
          - '5432:5432'
         options: >- # Options for the service, in this case we want to make sure that the Postgres container passes a health check
@@ -42,11 +42,6 @@ jobs:
         image: mongo:${{ matrix.mongodb-version }}
         ports:
           - '27017:27017'
-        #options: >-
-        #  --health-cmd 'mongosh --quiet --eval "db.adminCommand({ ping: 1 })"'
-        #  --health-interval 15s
-        #  --health-timeout 5s
-        #  --health-retries 4
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby 3.2.2
@@ -64,12 +59,10 @@ jobs:
         run: bin/rake db:drop db:create db:migrate && bin/rake db:seed
 
       #- name: Start MongoDB
-      #  with:
-      #    mongodb-version: ${{ matrix.mongodb-version }}
       #  run: |
       #    docker run -p 27017:27017 --health-cmd="mongo --quiet --eval 'db.adminCommand({ ping: 1 })'" \
       #      --health-interval 10s --health-timeout 5s --health-retries 5 \
-      #      mongo:${{ inputs.mongodb_version }}
+      #      mongo:${{ matrix.mongodb-version }}
 
       #- name: Wait for MongoDB to be healthy
       #  run: |
