@@ -43,7 +43,7 @@ jobs:
         ports:
           - '27017:27017'
         options: >-
-          --health-cmd 'mongo admin --eval "printjson(db.serverStatus())"'
+          --health-cmd 'mongod --noauth --sysinfo'
           --health-interval 15s
           --health-timeout 5s
           --health-retries 4
