@@ -49,7 +49,7 @@ services:
     image: mongo:7.0.6-jammy
     restart: unless-stopped
     ports:
-      - "${MONGODB_TEST_PORT}:27017"
+      - "${MONGODB_TEST_PORT:-16027}:27017"
 
   # Readme: https://registry.hub.docker.com/_/mongo-express
   doc-store-admin:
