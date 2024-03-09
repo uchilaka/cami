@@ -43,7 +43,7 @@ jobs:
         ports:
           - '27017:27017'
         options: >-
-          --health-cmd 'mongo --quiet --eval "db.adminCommand({ ping: 1 })"'
+          --health-cmd 'mongosh --quiet --eval "db.adminCommand({ ping: 1 })"'
           --health-interval 15s
           --health-timeout 5s
           --health-retries 4
