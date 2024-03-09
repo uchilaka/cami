@@ -18,7 +18,7 @@ module LarCityCLI
                  default: false,
                  required: false
 
-    namespace :'lar-city-cli:tunnel'
+    namespace :'lx-cli:tunnel'
 
     def self.exit_on_failure?
       true

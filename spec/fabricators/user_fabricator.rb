@@ -20,26 +20,13 @@
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
-class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+Fabricator(:user) do
+  email { Faker::Internet.email }
+  first_name { Faker::Name.gender_neutral_first_name }
+  last_name  { Faker::Name.last_name }
+  password { Faker::Internet.password(min_length: 8) }
 
-  # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
-  has_person_name
-
-  has_and_belongs_to_many :accounts
-
-  after_create_commit :initialize_profile
-
-  def profile
-    @profile ||= UserProfile.find_by(user_id: id)
-  end
-
-  private
-
-  def initialize_profile
-    UserProfile.create(user_id: id)
-  end
+  # after_build do |attrs|
+  #   Fabricate.build(:user_profile, user_id: attrs.id)
+  # end
 end
