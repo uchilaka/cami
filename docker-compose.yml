@@ -12,7 +12,7 @@ services:
 
   app-store:
     container_name: db.accounts.larcity
-    image: postgres:13.13
+    image: postgres:15.4
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${APP_DATABASE_NAME}
@@ -30,7 +30,7 @@ services:
     container_name: mongodb.accounts.larcity
     # Readme: https://hub.docker.com/_/mongo
     # Mongodb versions: https://github.com/docker-library/docs/blob/master/mongo/README.md#supported-tags-and-respective-dockerfile-links
-    image: mongo:7.0-jammy
+    image: mongo:7.0.6-jammy
     restart: unless-stopped
     volumes:
       - ./db/development/mongodb/data:/data/db

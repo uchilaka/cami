@@ -10,7 +10,7 @@ jobs:
       matrix:
         ruby-version: [3.2.2]
         node-version: [18.x, 20.x]
-        mongodb-version: ['7.0.5']
+        mongodb-version: ['7.0.6-jammy']
     env:
       RAILS_ENV: test
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
@@ -43,7 +43,7 @@ jobs:
         ports:
           - '27017:27017'
         options: >-
-          --health-cmd 'mongod --noauth --sysinfo'
+          --health-cmd 'mongod --sysinfo'
           --health-interval 15s
           --health-timeout 5s
           --health-retries 4
