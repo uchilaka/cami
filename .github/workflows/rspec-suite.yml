@@ -53,23 +53,16 @@ jobs:
         working-directory: ${{env.PROJECT_ROOT}}
         run: |
           gem install bundler
-          bundle install --jobs 4 --retry 3        
+          bundle install --jobs 4 --retry 3 
+
+      - name: Install OS libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpq-dev
+          sudo apt-get install -y libvips
 
       - name: Setup DB
         run: bin/rake db:drop db:create db:migrate && bin/rake db:seed
-
-      #- name: Start MongoDB
-      #  run: |
-      #    docker run -p 27017:27017 --health-cmd="mongo --quiet --eval 'db.adminCommand({ ping: 1 })'" \
-      #      --health-interval 10s --health-timeout 5s --health-retries 5 \
-      #      mongo:${{ matrix.mongodb-version }}
-
-      #- name: Wait for MongoDB to be healthy
-      #  run: |
-      #    while ! nc -z localhost 27017; do
-      #      echo "Waiting for MongoDB..."
-      #      sleep 5
-      #    done
 
       - name: Build and run tests
         run: |
