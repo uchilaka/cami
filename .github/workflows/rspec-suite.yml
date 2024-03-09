@@ -42,11 +42,11 @@ jobs:
         image: mongo:${{ matrix.mongodb-version }}
         ports:
           - '27017:27017'
-        options: >-
-          --health-cmd 'mongosh --quiet --eval "db.adminCommand({ ping: 1 })"'
-          --health-interval 15s
-          --health-timeout 5s
-          --health-retries 4
+        #options: >-
+        #  --health-cmd 'mongosh --quiet --eval "db.adminCommand({ ping: 1 })"'
+        #  --health-interval 15s
+        #  --health-timeout 5s
+        #  --health-retries 4
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby 3.2.2
@@ -62,6 +62,21 @@ jobs:
 
       - name: Setup DB
         run: bin/rake db:drop db:create db:migrate && bin/rake db:seed
+
+      #- name: Start MongoDB
+      #  with:
+      #    mongodb-version: ${{ matrix.mongodb-version }}
+      #  run: |
+      #    docker run -p 27017:27017 --health-cmd="mongo --quiet --eval 'db.adminCommand({ ping: 1 })'" \
+      #      --health-interval 10s --health-timeout 5s --health-retries 5 \
+      #      mongo:${{ inputs.mongodb_version }}
+
+      #- name: Wait for MongoDB to be healthy
+      #  run: |
+      #    while ! nc -z localhost 27017; do
+      #      echo "Waiting for MongoDB..."
+      #      sleep 5
+      #    done
 
       - name: Build and run tests
         run: |
