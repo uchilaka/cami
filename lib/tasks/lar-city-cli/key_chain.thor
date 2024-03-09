@@ -24,7 +24,7 @@ module LarCityCLI
                  desc: 'Environment',
                  required: false
 
-    namespace :'lar-city-cli:secrets'
+    namespace :'lx-cli:secrets'
 
     def self.exit_on_failure?
       true

@@ -102,7 +102,7 @@ module LarCityCLI
     def setup_mongodb
       # NOTE: This is the path to the initialization script within the docker container.
       #   This script is mounted from <rails_root>/db/development/mongodb/docker-entrypoint-initdb.d/init-doc-stores
-      mongosh_script_path = '/docker-entrypoint-initdb.d/init-doc-stores.mongodb'
+      mongosh_script_path = '/docker-entrypoint-initdb.d/init-doc-stores.js'
 
       # SO on manually filtering (hash) parameters: https://stackoverflow.com/a/6156581
       if dry_run? || verbose?
