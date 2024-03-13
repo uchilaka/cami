@@ -24,6 +24,9 @@ FileUtils.chdir APP_ROOT do
   #   FileUtils.cp "config/database.yml.sample", "config/database.yml"
   # end
 
+  puts "\n== Preparing service images =="
+  system 'docker compose pull', out: $stdout
+
   puts "\n== Preparing app data store =="
   system! 'bin/rails db:prepare'
 

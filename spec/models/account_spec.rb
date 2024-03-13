@@ -15,11 +15,5 @@
 require 'rails_helper'
 
 RSpec.describe Account, type: :model do
-  describe '#display_name' do
-    it 'is required' do
-      account = Fabricate.build :account, display_name: nil
-      expect(account).to be_invalid
-      expect(account.errors[:display_name]).to include("can't be blank")
-    end
-  end
+  it { should validate_presence_of :display_name }
 end

@@ -4,14 +4,15 @@
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
-require 'database_cleaner/active_record'
-require 'sidekiq/testing'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'rspec/rails'
+require 'database_cleaner/active_record'
+require 'sidekiq/testing'
+require 'devise/test/integration_helpers'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -67,6 +68,9 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
+  # Devise integration helpers https://github.com/heartcombo/devise?tab=readme-ov-file#integration-tests
+  config.include Devise::Test::IntegrationHelpers, type: :feature
+
   config.before(:suite) do
     # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example
     DatabaseCleaner.strategy = :transaction
@@ -84,5 +88,12 @@ RSpec.configure do |config|
     DatabaseCleaner.cleaning do
       example.run
     end
+  end
+end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
   end
 end

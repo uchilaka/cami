@@ -62,23 +62,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_25_091819) do
   create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "sku"
     t.string "display_name", null: false
+    t.string "type", null: false
     t.text "description"
     t.json "data"
     t.uuid "vendor_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "products_services", id: false, force: :cascade do |t|
-    t.uuid "service_id", null: false
-    t.uuid "product_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "services", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "display_name", null: false
-    t.text "readme"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

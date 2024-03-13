@@ -12,7 +12,7 @@ services:
 
   app-store:
     container_name: db.accounts.larcity
-    image: postgres:13.13
+    image: postgres:15.4
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${APP_DATABASE_NAME}
@@ -28,26 +28,40 @@ services:
 
   doc-store:
     container_name: mongodb.accounts.larcity
+    # Readme: https://hub.docker.com/_/mongo
     # Mongodb versions: https://github.com/docker-library/docs/blob/master/mongo/README.md#supported-tags-and-respective-dockerfile-links
-    image: mongo:7.0-jammy
+    image: mongo:7.0.6-jammy
     restart: unless-stopped
     volumes:
-      # Read more: https://registry.hub.docker.com/_/mongo
       - ./db/development/mongodb/data:/data/db
       - ./db/development/mongodb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     ports:
-      - "16017:27017"
-    env_file:
-      - ./.mongodb/.env.development
+      - "${MONGODB_PORT}:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
 
+  doc-store-test:
+    container_name: mongodb.accounts.larcity.test
+    image: mongo:7.0.6-jammy
+    restart: unless-stopped
+    ports:
+      - "${MONGODB_TEST_PORT:-16027}:27017"
+
+  # Readme: https://registry.hub.docker.com/_/mongo-express
   doc-store-admin:
     container_name: mongodb-admin.accounts.larcity
     image: mongo-express
     restart: unless-stopped
     ports:
       - "16081:8081"
-    env_file:
-      - ./.mongodb/.env.development
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb.accounts.larcity
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGODB_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGODB_PASSWORD}
+      ME_CONFIG_BASICAUTH_USERNAME: dev
+      ME_CONFIG_BASICAUTH_PASSWORD: Test1234
     depends_on:
       - doc-store
 

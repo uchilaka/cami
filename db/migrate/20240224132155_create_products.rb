@@ -5,6 +5,7 @@ class CreateProducts < ActiveRecord::Migration[7.0]
     create_table :products, id: :uuid do |t|
       t.string :sku
       t.string :display_name, null: false
+      t.string :type, null: false
       t.text :description
       t.json :data
       t.uuid :vendor_id

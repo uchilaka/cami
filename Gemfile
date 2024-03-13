@@ -38,6 +38,9 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 # Use Sass to process CSS
 # gem "sassc-rails"
 
+# Use Tailwind CSS for stylesheets https://tailwindcss.com/docs/guides/ruby-on-rails
+gem 'tailwindcss-rails', '~> 2.3'
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
@@ -52,17 +55,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 6.1', '>= 6.1.1'
   gem 'rubocop'
   gem 'rubocop-performance'
-
-  # Selenium is a browser automation tool for automated testing of
-  #     webapps and more [https://www.selenium.dev/documentation/en/]
-  gem 'selenium-webdriver'
-
-  gem 'database_cleaner-active_record'
-
-  # TODO: The transaction strategy is not supported by Mongoid.
-  #   You can use the deletion strategy to clean the document store.
-  # gem 'database_cleaner-mongoid'
-  # gem 'database_cleaner-redis'
+  gem 'strong_migrations'
 end
 
 group :development do
@@ -78,11 +71,47 @@ group :development do
   gem 'annotate'
 end
 
+group :test do
+  # Record your test suite's HTTP interactions and replay them during future test runs for fast, deterministic, accurate tests
+  gem 'vcr', '~> 6.2'
+
+  gem 'shoulda-matchers'
+  # Selenium is a browser automation tool for automated testing of
+  #     webapps and more [https://www.selenium.dev/documentation/en/]
+  gem 'selenium-webdriver'
+
+  gem 'database_cleaner-active_record'
+
+  # TODO: The transaction strategy is not supported by Mongoid.
+  #   You can use the deletion strategy to clean the document store.
+  # gem 'database_cleaner-mongoid'
+  # gem 'database_cleaner-redis'
+
+  gem 'climate_control'
+end
+
+# Flexible authentication solution for Rails with Warden https://github.com/heartcombo/devise
 gem 'devise'
+
+# Passwordless (email-only) login strategy for Devise https://github.com/abevoelker/devise-passwordless
+gem 'devise-passwordless'
+
+gem 'omniauth-rails_csrf_protection'
+
+# https://github.com/nhosoya/omniauth-apple
+# gem 'omniauth-apple'
+
+# A Google OAuth2 strategy for OmniAuth 1.x https://github.com/zquestz/omniauth-google-oauth2
+gem 'omniauth-google-oauth2'
+
+# Presenting names of people in full, familiar, abbreviated, and initialized forms (but without titulation etc)
 gem 'name_of_person'
+
+# A fast image processing library with low memory needs
 gem 'ruby-vips', '~> 2.1', '>= 2.1.4'
+
+# Use Vite in Rails for JS https://github.com/ElMassimo/vite_ruby
 gem 'vite_rails', '~> 3.0', '>= 3.0.17'
-gem 'vite_ruby', '~> 3.2', '>= 3.2.2'
 
 # Simple, efficient background processing for Ruby [https://github.com/sidekiq/sidekiq/wiki/Getting-Started]
 gem 'sidekiq', '~> 7.2', '>= 7.2.0'

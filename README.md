@@ -92,13 +92,32 @@ docker exec -it mongodb.accounts.larcity mongosh \
   --username <MONGO_INITDB_ROOT_USERNAME>
   --password <MONGO_INITDB_ROOT_PASSWORD>
 
-# List databases
+# Run the command to connect the mongodb container
+bin/thor lx-cli:db:connect --mongodb
+```
+
+Once connected to the database instance, run the following commands to setup test credentials:
+
+```js
+// List databases
 show dbs
 
-# Use the admin database
+// Use the admin database
+use admin
+
+// Create a new user
+db.createUser({
+  user: "db_admin",
+  pwd: `${process.env.MONGO_INITDB_ROOT_PASSWORD}`,
+  roles: [
+    { role: "dbOwner", db: "doc_store_development" },
+    { role: "dbOwner", db: "doc_store_test" },
+  ]
+})
+
 use doc_store_test
 
-# Create a new user
+// Create a new user (for testing purposes)
 db.createUser({
   user: "db_admin",
   pwd: passwordPrompt(),
@@ -107,7 +126,18 @@ db.createUser({
   ]
 })
 
-# Grant roles to an existing user
+use doc_store_development
+
+# Create a new user (for development purposes)
+db.createUser({
+  user: "db_admin",
+  pwd: passwordPrompt(),
+  roles: [
+    { role: "dbOwner", db: "doc_store_development" }
+  ]
+})
+
+// Example: Grant roles to an existing user
 db.grantRolesToUser("db_admin", ["dbOwner"])
 ```
 
@@ -130,7 +160,7 @@ db.grantRolesToUser("db_admin", ["dbOwner"])
 To edit credentials in your IDE, run the following command in your console:
 
 ```shell
-bin/thor lar-city-cli:secrets:edit
+bin/thor lx-cli:secrets:edit
 ```
 
 To view help information about managing application credentials, run the following command in your console:
@@ -160,7 +190,7 @@ Follow these steps to setup `ngrok` for your local environment:
 Then you can open a tunnel to your local environment by running:
 
 ```shell
-thor lar-city-cli:tunnel:open_all
+thor lx-cli:tunnel:open_all
 ```
 
 ### Generating a `Monogid` Model
@@ -181,6 +211,7 @@ end
 ## Guides and References
 
 - [MongoDB Tutorial](https://www.w3schools.com/mongodb/)
+  - [Release: Official Atlas Github Action](https://www.mongodb.com/community/forums/t/introducing-the-offical-github-action-and-docker-image-for-atlas-cli/253891)
 - [Rails API](https://api.rubyonrails.org/)
 - [Rails Guides](https://guides.rubyonrails.org/)
   - [Autoloading and Reloading Constants](https://guides.rubyonrails.org/autoloading_and_reloading_constants.html)
@@ -197,7 +228,13 @@ end
   - [Active Record Scopes](https://guides.rubyonrails.org/active_record_querying.html#scopes)
   - [Multiple Databases](https://guides.rubyonrails.org/active_record_multiple_databases.html)
 - [Introduction to Sidekiq for Rails](https://blog.appsignal.com/2023/09/20/an-introduction-to-sidekiq-for-ruby-on-rails.html)
+- [The beginner's guide to magic links](https://postmarkapp.com/blog/magic-links)
+- [Devise OmniAuth](https://github.com/heartcombo/devise/wiki/OmniAuth:-Overview)
+    - [List of Strategies](https://github.com/omniauth/omniauth/wiki/List-of-Strategies)
+    - [Devise Omniauth Custom Strategies](https://github.com/heartcombo/devise/wiki/OmniAuth:-Overview#custom-strategies)
 
 ## Future Work
 
 - [ ] Setup secrets using [docker images' compatibility with secret files](https://docs.docker.com/compose/use-secrets/) 
+- [ ] [Vite CJS API is deprecated](https://vitejs.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated). Update the `vite.config.js` file to use the ESM build instead
+- [ ] [New ESLint configuration system is available](https://eslint.org/docs/latest/use/configure/configuration-files-new). You will need to create a new `eslint.config.js` file to use the new configuration system
