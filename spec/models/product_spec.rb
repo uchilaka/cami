@@ -9,6 +9,7 @@
 #  description  :text
 #  display_name :string           not null
 #  sku          :string
+#  type         :string           not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  vendor_id    :uuid
