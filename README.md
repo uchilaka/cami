@@ -85,6 +85,13 @@ rake db:mongoid:shard_collections              # Shard collections with shard ke
 # Show help menu for mongosh
 docker exec -it mongodb.accounts.larcity mongosh --help
 
+# Run the command to initialize the database
+docker exec -it mongodb.accounts.larcity mongosh \
+  --authenticationDatabase admin
+  --file ./development/mongodb/docker-entrypoint-initdb.d/init-doc-stores
+  --username <MONGO_INITDB_ROOT_USERNAME>
+  --password <MONGO_INITDB_ROOT_PASSWORD>
+
 # Run the command to connect the mongodb container
 bin/thor lx-cli:db:connect --mongodb
 
@@ -200,6 +207,7 @@ end
 ## Guides and References
 
 - [MongoDB Tutorial](https://www.w3schools.com/mongodb/)
+  - [Release: Official Atlas Github Action](https://www.mongodb.com/community/forums/t/introducing-the-offical-github-action-and-docker-image-for-atlas-cli/253891)
 - [Rails API](https://api.rubyonrails.org/)
 - [Rails Guides](https://guides.rubyonrails.org/)
   - [Autoloading and Reloading Constants](https://guides.rubyonrails.org/autoloading_and_reloading_constants.html)

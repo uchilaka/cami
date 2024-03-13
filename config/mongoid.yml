@@ -9,11 +9,11 @@ development:
       # Otherwise define the parameters separately.
       # This defines the name of the default database that Mongoid can connect to.
       # (required).
-      database: <%= Rails.application.credentials.mongodb.store_name %>
+      database: <%= ENV.fetch('MONGODB_DATABASE', Rails.application.credentials.mongodb.store_name) %>
       # Provides the hosts the default client can connect to. Must be an array
       # of host:port pairs. (required)
       hosts:
-        - localhost:16017
+        - "localhost:<%= ENV.fetch('MONGODB_PORT', 16017) %>"
       options:
         # Note that all options listed below are Ruby driver client options (the mongo gem).
         # Please refer to the driver documentation of the version of the mongo gem you are using
@@ -32,10 +32,10 @@ development:
         #     - use: web
 
         # The name of the user for authentication.
-        user: <%= Rails.application.credentials.mongodb.user %>
+        user: <%= ENV.fetch('MONGODB_USERNAME', Rails.application.credentials.mongodb.user) %>
 
         # The password of the user for authentication.
-        password: <%= Rails.application.credentials.mongodb.password %>
+        password: <%= ENV.fetch('MONGODB_PASSWORD', Rails.application.credentials.mongodb.password) %>
 
         # The user's database roles.
         roles:
@@ -178,7 +178,7 @@ test:
     default:
       database: doc_store_test
       hosts:
-        - localhost:16017
+        - "localhost:<%= ENV.fetch('MONGODB_TEST_PORT', Rails.application.credentials.mongodb.port) %>"
       options:
         user: <%= Rails.application.credentials.mongodb.user %>
         # The password of the user for authentication.
