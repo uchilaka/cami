@@ -6,6 +6,7 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
     "plugin:prettier/recommended"
   ],
   "parserOptions": {
@@ -20,7 +21,7 @@
     "prettier"
   ],
   "rules": {
-    "react/react-in-jsx-scope": "on",
+    "react/react-in-jsx-scope": 1,
     "no-mixed-spaces-and-tabs": 0,
     "camelcase": "off",
     "react/prop-types": "off",
