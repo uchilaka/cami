@@ -56,7 +56,7 @@
       {
         "bracketSpacing": true,
         "printWidth": 140,
-        "singleQuote": false,
+        "singleQuote": true,
         "semi": true,
         "trailingComma": "none",
         "tabWidth": 2,
