@@ -2,3 +2,4 @@ services: scripts/start-docker
 worker: bundle exec sidekiq
 web: bin/rails server -p 16006
 vite: bin/vite dev
+css: bin/rails tailwindcss:watch
