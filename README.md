@@ -94,14 +94,18 @@ docker exec -it mongodb.accounts.larcity mongosh \
 
 # Run the command to connect the mongodb container
 bin/thor lx-cli:db:connect --mongodb
+```
 
-# List databases
+Once connected to the database instance, run the following commands to setup test credentials:
+
+```js
+// List databases
 show dbs
 
-# Use the admin database
+// Use the admin database
 use admin
 
-# Create a new user
+// Create a new user
 db.createUser({
   user: "db_admin",
   pwd: `${process.env.MONGO_INITDB_ROOT_PASSWORD}`,
@@ -113,7 +117,7 @@ db.createUser({
 
 use doc_store_test
 
-# Create a new user (for testing purposes)
+// Create a new user (for testing purposes)
 db.createUser({
   user: "db_admin",
   pwd: passwordPrompt(),
@@ -133,7 +137,7 @@ db.createUser({
   ]
 })
 
-# Example: Grant roles to an existing user
+// Example: Grant roles to an existing user
 db.grantRolesToUser("db_admin", ["dbOwner"])
 ```
 

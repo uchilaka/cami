@@ -180,9 +180,6 @@ test:
       hosts:
         - "localhost:<%= ENV.fetch('MONGODB_TEST_PORT', Rails.application.credentials.mongodb.port) %>"
       options:
-        user: <%= Rails.application.credentials.mongodb.user %>
-        # The password of the user for authentication.
-        password: <%= Rails.application.credentials.mongodb.password %>
         roles:
          - 'dbOwner'
         read:
