@@ -228,6 +228,10 @@ end
   - [Active Record Scopes](https://guides.rubyonrails.org/active_record_querying.html#scopes)
   - [Multiple Databases](https://guides.rubyonrails.org/active_record_multiple_databases.html)
 - [Introduction to Sidekiq for Rails](https://blog.appsignal.com/2023/09/20/an-introduction-to-sidekiq-for-ruby-on-rails.html)
+- [The beginner's guide to magic links](https://postmarkapp.com/blog/magic-links)
+- [Devise OmniAuth](https://github.com/heartcombo/devise/wiki/OmniAuth:-Overview)
+    - [List of Strategies](https://github.com/omniauth/omniauth/wiki/List-of-Strategies)
+    - [Devise Omniauth Custom Strategies](https://github.com/heartcombo/devise/wiki/OmniAuth:-Overview#custom-strategies)
 
 ## Future Work
 

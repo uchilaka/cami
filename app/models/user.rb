@@ -37,6 +37,11 @@ class User < ApplicationRecord
     @profile ||= UserProfile.find_by(user_id: id)
   end
 
+  # https://github.com/heartcombo/devise?tab=readme-ov-file#active-job-integration
+  # def send_devise_notification(notification, *args)
+  #   devise_mailer.send(notification, self, *args).deliver_later
+  # end
+
   private
 
   def initialize_profile

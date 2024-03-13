@@ -90,11 +90,28 @@ group :test do
   gem 'climate_control'
 end
 
+# Flexible authentication solution for Rails with Warden https://github.com/heartcombo/devise
 gem 'devise'
+
+# Passwordless (email-only) login strategy for Devise https://github.com/abevoelker/devise-passwordless
+gem 'devise-passwordless'
+
+gem 'omniauth-rails_csrf_protection'
+
+# https://github.com/nhosoya/omniauth-apple
+# gem 'omniauth-apple'
+
+# A Google OAuth2 strategy for OmniAuth 1.x https://github.com/zquestz/omniauth-google-oauth2
+gem 'omniauth-google-oauth2'
+
+# Presenting names of people in full, familiar, abbreviated, and initialized forms (but without titulation etc)
 gem 'name_of_person'
+
+# A fast image processing library with low memory needs
 gem 'ruby-vips', '~> 2.1', '>= 2.1.4'
+
+# Use Vite in Rails for JS https://github.com/ElMassimo/vite_ruby
 gem 'vite_rails', '~> 3.0', '>= 3.0.17'
-gem 'vite_ruby', '~> 3.2', '>= 3.2.2'
 
 # Simple, efficient background processing for Ruby [https://github.com/sidekiq/sidekiq/wiki/Getting-Started]
 gem 'sidekiq', '~> 7.2', '>= 7.2.0'
