@@ -3,6 +3,7 @@
     <toRun name="Development: frontend" type="CommandRunConfigurationType" />
     <toRun name="Development: sidekiq" type="CommandRunConfigurationType" />
     <toRun name="Development: account_manager" type="RailsRunConfigurationType" />
+    <toRun name="Development: css" type="RakeRunConfigurationType" />
     <method v="2" />
   </configuration>
 </component>
