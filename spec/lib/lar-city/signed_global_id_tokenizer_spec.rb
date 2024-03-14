@@ -5,34 +5,17 @@ require 'rails_helper'
 module LarCity
   RSpec.describe SignedGlobalIdTokenizer, type: :model do
     describe '.encode' do
-      context 'with includes' do
-        it 'encodes a resource' do
-          resource = double
-          expires_in = 1.hour
-          purpose = 'sharing'
-          signed_global_id = double
-          includes = [:account]
-          options = {}
-          options[:expires_in] = expires_in.to_i
-          options[:for] = purpose
-          options[:includes] = includes
-          expect(resource).to receive(:to_signed_global_id).with(options).and_return(signed_global_id)
-          expect(described_class.encode(resource, expires_in:, purpose:, includes:)).to eq(signed_global_id)
-        end
-      end
+      # Expires in 2 hours
+      let(:expires_in) { 60 * 60 * 2 }
+      let(:purpose) { 'sharing' }
 
-      context 'without includes' do
-        it 'encodes a resource' do
-          resource = double
-          expires_in = 1.hour
-          purpose = 'sharing'
-          signed_global_id = double
-          options = {}
-          options[:expires_in] = expires_in.to_i
-          options[:for] = purpose
-          expect(resource).to receive(:to_signed_global_id).with(options).and_return(signed_global_id)
-          expect(described_class.encode(resource, expires_in:, purpose:)).to eq(signed_global_id)
-        end
+      it 'encodes a token' do
+        resource = double
+        options = {}
+        options[:expires_in] = expires_in if expires_in.positive?
+        options[:for] = purpose if purpose
+        expect(resource).to receive(:to_signed_global_id).with(options)
+        described_class.encode(resource, expires_in:, purpose:)
       end
 
       context 'for users' do
@@ -46,15 +29,28 @@ module LarCity
     end
 
     describe '.decode' do
-      it 'decodes a token' do
-        token = double
-        resource_class = double
-        includes = [:account]
-        options = { only: resource_class }
-        options[:includes] = includes
-        resource = double
-        expect(GlobalID::Locator).to receive(:locate_signed).with(token, options).and_return(resource)
-        expect(described_class.decode(token, resource_class, includes:)).to eq(resource)
+      context 'with includes' do
+        it 'decodes a token' do
+          token = double
+          resource_class = double
+          includes = [:account]
+          options = { only: resource_class }
+          options[:includes] = includes
+          resource = double
+          expect(GlobalID::Locator).to receive(:locate_signed).with(token, options).and_return(resource)
+          expect(described_class.decode(token, resource_class, includes:)).to eq(resource)
+        end
+      end
+
+      context 'without includes' do
+        it 'decodes a token' do
+          token = double
+          resource_class = double
+          options = { only: resource_class }
+          resource = double
+          expect(GlobalID::Locator).to receive(:locate_signed).with(token, options).and_return(resource)
+          expect(described_class.decode(token, resource_class)).to eq(resource)
+        end
       end
 
       context 'for users' do
@@ -62,7 +58,7 @@ module LarCity
         let(:token) { described_class.encode(user) }
 
         it 'decodes the token' do
-          expect(described_class.decode(token, 'User')).to eq(user)
+          expect(described_class.decode(token, User)).to eq(user)
         end
       end
     end
