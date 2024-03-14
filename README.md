@@ -232,6 +232,7 @@ end
 - [Devise OmniAuth](https://github.com/heartcombo/devise/wiki/OmniAuth:-Overview)
     - [List of Strategies](https://github.com/omniauth/omniauth/wiki/List-of-Strategies)
     - [Devise Omniauth Custom Strategies](https://github.com/heartcombo/devise/wiki/OmniAuth:-Overview#custom-strategies)
+- [Classic to Zeitwerk HOWTO](https://guides.rubyonrails.org/classic_to_zeitwerk_howto.html#why-switch-from-classic-to-zeitwerk-questionmark)
 
 ## Future Work
 
