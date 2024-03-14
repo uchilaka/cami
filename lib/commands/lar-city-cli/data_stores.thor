@@ -72,6 +72,9 @@ module LarCityCLI
     option :user,
            type: :string,
            desc: 'The username to use for the connection'
+    option :name,
+           type: :string,
+           desc: 'The data store name to connect to'
     def connect
       case current_store
       when 'mongodb'
@@ -84,6 +87,19 @@ module LarCityCLI
     end
 
     private
+
+    def database_name
+      return options[:name] if options[:name].present?
+
+      case current_store
+      when 'postgres'
+        "account_manager_#{Rails.env}"
+      when 'mongodb'
+        "doc_store_#{Rails.env}"
+      else
+        ENV.fetch('APP_DATABASE_NAME')
+      end
+    end
 
     def username
       options[:user] || ENV.fetch('APP_DATABASE_USER')
@@ -131,7 +147,7 @@ module LarCityCLI
     end
 
     def postgres_connect_cmd_prefix
-      "docker exec -it db.accounts.larcity psql --host=localhost --dbname=#{ENV.fetch('APP_DATABASE_NAME')}"
+      "docker exec -it db.accounts.larcity psql --host=localhost --dbname=#{database_name}"
     end
 
     def connect_to_mongodb
@@ -142,7 +158,7 @@ module LarCityCLI
         say "\n(dry-run)", Thor::Shell::Color::MAGENTA
         output_msg = <<~DRY_RUN
           docker exec -it mongodb.accounts.larcity mongosh \
-            --shell --authenticationDatabase admin \
+            --shell --authenticationDatabase #{database_name} \
             --username *** \
             --password ***
         DRY_RUN
@@ -150,7 +166,7 @@ module LarCityCLI
       else
         connect_cmd = <<~CMD
           docker exec -it mongodb.accounts.larcity mongosh \
-            --shell --authenticationDatabase admin \
+            --shell --authenticationDatabase #{database_name} \
             --username #{Rails.application.credentials.mongodb.user} \
             --password #{Rails.application.credentials.mongodb.password}
         CMD
@@ -170,7 +186,7 @@ module LarCityCLI
         say "\n(dry-run)", Thor::Shell::Color::MAGENTA if dry_run?
         output_msg = <<~DRY_RUN
           docker exec -it mongodb.accounts.larcity mongosh \
-            --authenticationDatabase admin \
+            --authenticationDatabase #{database_name} \
             --file #{mongosh_script_path} \
             --username *** \
             --password ***
@@ -182,7 +198,7 @@ module LarCityCLI
 
       init_mongodb_cmd = <<~CMD
         docker exec -it mongodb.accounts.larcity mongosh \
-          --authenticationDatabase admin \
+          --authenticationDatabase #{database_name} \
           --file #{mongosh_script_path} \
           --username #{Rails.application.credentials.mongodb.user} \
           --password #{Rails.application.credentials.mongodb.password}
