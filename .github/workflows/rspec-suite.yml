@@ -28,9 +28,9 @@ jobs:
         image: postgres:15.4
         env:
           POSTGRES_DB: ${{env.APP_DATABASE_NAME}}
-          POSTGRES_USER: ${{env.APP_DATABASE_USER}}
-          POSTGRES_PASSWORD: ${{env.APP_DATABASE_PASSWORD}}
-          #POSTGRES_HOST_AUTH_METHOD: trust # IMPORTANT allows all connections without a password - experimental only!
+          #POSTGRES_USER: ${{env.APP_DATABASE_USER}}
+          #POSTGRES_PASSWORD: ${{env.APP_DATABASE_PASSWORD}}
+          POSTGRES_HOST_AUTH_METHOD: trust # IMPORTANT allows all connections without a password - experimental only!
         ports:
          - '5432:5432'
         options: >- # Options for the service, in this case we want to make sure that the Postgres container passes a health check
