@@ -5,6 +5,7 @@ require 'sidekiq/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
+  resources :accounts, except: %i[index destroy]
   devise_for :users
 
   scope :admin, as: :admin do
@@ -15,8 +16,14 @@ Rails.application.routes.draw do
   end
 
   get 'pages/home'
+  get 'pages/dashboard'
+
+  # devise_scope :user do
+  #   root to: 'pages#dashboard'
+  # end
 
   root to: 'pages#home'
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

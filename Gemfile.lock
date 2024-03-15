@@ -107,6 +107,9 @@ GEM
     concurrent-ruby (1.2.3)
     connection_pool (2.4.1)
     crass (1.0.6)
+    dartsass-rails (0.5.0)
+      railties (>= 6.0.0)
+      sass-embedded (~> 1.63)
     data_migrate (9.2.0)
       activerecord (>= 6.1)
       railties (>= 6.1)
@@ -142,6 +145,8 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    google-protobuf (4.26.0-arm64-darwin)
+      rake (>= 13)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
@@ -295,6 +300,8 @@ GEM
       ffi (~> 1.12)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
+    sass-embedded (1.72.0-arm64-darwin)
+      google-protobuf (>= 3.25, < 5.0)
     selenium-webdriver (4.18.1)
       base64 (~> 0.2)
       rexml (~> 3.2, >= 3.2.5)
@@ -379,6 +386,7 @@ DEPENDENCIES
   capybara
   capybara_accessibility_audit
   climate_control
+  dartsass-rails
   data_migrate (~> 9.2, >= 9.2.0)
   database_cleaner-active_record
   debug

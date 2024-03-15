@@ -3,3 +3,4 @@ worker: bundle exec sidekiq
 web: bin/rails server -p 16006
 vite: bin/vite dev
 css: bin/rails tailwindcss:watch
+scss: bin/rails dartsass:watch
