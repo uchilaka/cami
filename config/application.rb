@@ -39,6 +39,9 @@ module AccountManager
     # config.eager_load_paths << Rails.root.join("extras")
     config.eager_load_paths << Rails.root.join('lib')
 
+    # Configure allowed hosts. See doc https://guides.rubyonrails.org/configuring.html#actiondispatch-hostauthorization
+    config.hosts += config_for(:allowed_hosts)
+
     # Don't generate system test files.
     config.generators.system_tests = nil
   end

@@ -1,4 +1,4 @@
-# LarCity Invoicing and Customer Accounts  Management Service MVP
+# LarCity Invoicing and Customer Accounts Management Service MVP
 
 - [LarCity Invoicing and Customer Accounts  Management Service MVP](#larcity-invoicing-and-customer-accounts--management-service-mvp)
   - [Ruby Version](#ruby-version)
@@ -128,7 +128,7 @@ db.createUser({
 
 use doc_store_development
 
-# Create a new user (for development purposes)
+// Create a new user (for development purposes)
 db.createUser({
   user: "db_admin",
   pwd: passwordPrompt(),
@@ -206,6 +206,12 @@ you can include the `DocumentRecord` concern in the model:
 class Invoice
   include DocumentRecord
 end
+```
+
+### Print key file
+
+```shell
+bin/thor help lx-cli:secrets:print_key
 ```
 
 ## Guides and References

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'thor'
+require 'thor/shell/color'
 require 'fileutils'
 
 module LarCityCLI
@@ -39,7 +40,7 @@ module LarCityCLI
            required: true
     def edit
       executable = Rails.root.join('bin', 'rails')
-      command_to_run = "EDITOR=\"#{editor}\" bundle exec #{executable} credentials:edit --environment=#{env}"
+      command_to_run = "EDITOR=\"#{editor}\" bundle exec #{executable} credentials:edit --environment=#{environment}"
 
       puts "Will execute#{dry_run? ? ' (Dry-run)' : ''}: #{command_to_run}" if verbose? || dry_run?
 
@@ -48,13 +49,27 @@ module LarCityCLI
       system(command_to_run, out: $stdout)
     end
 
-    desc 'print_keyfile', 'Print the contents of an input key file as a string'
+    desc 'backup', 'Backup the environment credentials file'
+    def backup
+      backup_file = Rails.root.join('config', 'credentials', "#{environment}_#{timestamp}.yml.enc")
+      FileUtils.cp(credentials_file, backup_file, verbose: verbose?)
+
+      say "Backed up #{credentials_file} to #{backup_file}", Color::GREEN
+    end
+
+    desc 'print_key', 'Print the contents of an input key file as a string'
+    long_desc <<~DESC
+      Print the contents of an input key file as a string. This is useful for copying the contents of a key file.
+
+      Example:
+        $ bin/thor lx-cli:secrets:print_key --key-file ~/.ssh/id_rsa
+    DESC
     option :keyfile,
            type: :string,
-           aliases: '-i',
-           desc: 'Keyfile to print',
+           aliases: %w[-i --key-file],
+           desc: 'Key file to print',
            required: true
-    def print_keyfile
+    def print_key
       file_name = options[:keyfile].gsub(/^~/, ENV['HOME'])
 
       unless File.exist?(file_name)
@@ -69,6 +84,15 @@ module LarCityCLI
     end
 
     private
+
+    def timestamp(style: :url_safe)
+      case style
+      when :url_safe
+        Time.now.strftime('%Y-%m-%dT%H%M%S')
+      else
+        Time.now.iso8601
+      end
+    end
 
     def rubymine?
       system('which rubymine')
@@ -86,25 +110,14 @@ module LarCityCLI
       options[:verbose]
     end
 
-    def env
-      return @env if @env.present?
-
-      if options[:environment].present?
-        puts <<~WARNING
-          WARNING: You are overriding the environment with "#{options[:environment]}", so#{' '}
-            the contents of the credentials file may not match the environment you are expecting.
-            When you close the file, the contents will be written to:
-            #{credentials_file}
-        WARNING
-
-        return options[:environment]
-      end
-
-      @env = options[:environment] || Rails.env
+    def environment
+      @environment = options[:environment]
+      @environment = Rails.env if @environment.blank?
+      @environment
     end
 
     def credentials_file
-      Rails.root.join('config', 'credentials', "#{options[:environment]}.yml.enc")
+      Rails.root.join('config', 'credentials', "#{environment}.yml.enc")
     end
 
     def editor

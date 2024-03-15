@@ -4,6 +4,7 @@
     <toRun name="Development: sidekiq" type="CommandRunConfigurationType" />
     <toRun name="Development: account_manager" type="RailsRunConfigurationType" />
     <toRun name="Development: css" type="RakeRunConfigurationType" />
+    <toRun name="Development: ngrok tunnel" type="ShConfigurationType" />
     <method v="2" />
   </configuration>
 </component>
