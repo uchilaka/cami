@@ -233,6 +233,7 @@ bin/thor help lx-cli:secrets:print_key
   - [Active Record Query Interface](https://guides.rubyonrails.org/active_record_querying.html)
   - [Active Record Scopes](https://guides.rubyonrails.org/active_record_querying.html#scopes)
   - [Multiple Databases](https://guides.rubyonrails.org/active_record_multiple_databases.html)
+  - [Asset pipeline](https://guides.rubyonrails.org/asset_pipeline.html)
 - [Introduction to Sidekiq for Rails](https://blog.appsignal.com/2023/09/20/an-introduction-to-sidekiq-for-ruby-on-rails.html)
 - [The beginner's guide to magic links](https://postmarkapp.com/blog/magic-links)
 - [Devise](https://github.com/heartcombo/devise?tab=readme-ov-file#getting-started)
@@ -241,10 +242,16 @@ bin/thor help lx-cli:secrets:print_key
       - [List of Strategies](https://github.com/omniauth/omniauth/wiki/List-of-Strategies)
       - [Devise Omniauth Custom Strategies](https://github.com/heartcombo/devise/wiki/OmniAuth:-Overview#custom-strategies)
 - [Classic to Zeitwerk HOWTO](https://guides.rubyonrails.org/classic_to_zeitwerk_howto.html#why-switch-from-classic-to-zeitwerk-questionmark)
+- [Pre-compiling assets](https://guides.rubyonrails.org/asset_pipeline.html#precompiling-assets)
+- [Dart Sass for Rails](https://github.com/rails/dartsass-rails?tab=readme-ov-file#dart-sass-for-rails)
+  - [Configuring builds](https://github.com/rails/dartsass-rails?tab=readme-ov-file#configuring-builds)
+- [Fontawesome Icons](https://fontawesome.com/icons/google?f=brands&s=solid)
 
 ## Future Work
 
+- [ ] Setup and update production credentials in the `config/credentials/production.yml.enc` file
 - [ ] Implement `:confirmable` to secure accounts when switching/adding auth providers
+- [x] Implement FontAwesome library for [SVG icons](https://fontawesome.com/icons/google?f=brands&s=solid)
 - [ ] Setup secrets using [docker images' compatibility with secret files](https://docs.docker.com/compose/use-secrets/) 
 - [ ] [Vite CJS API is deprecated](https://vitejs.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated). Update the `vite.config.js` file to use the ESM build instead
 - [ ] [New ESLint configuration system is available](https://eslint.org/docs/latest/use/configure/configuration-files-new). You will need to create a new `eslint.config.js` file to use the new configuration system

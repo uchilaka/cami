@@ -72,6 +72,8 @@ class User < ApplicationRecord
       )
 
       transaction do
+        # TODO: Update the customers array of providers after they are re-confirmed
+        #   when a new auth provider is detected
         # user.providers << provider unless user.providers.include?(provider)
         user.uids[provider] = uid if user.uids[provider].blank?
         if user.save!

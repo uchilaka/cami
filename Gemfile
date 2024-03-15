@@ -41,6 +41,9 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 # Use Tailwind CSS for stylesheets https://tailwindcss.com/docs/guides/ruby-on-rails
 gem 'tailwindcss-rails', '~> 2.3'
 
+# Integrate Dart Sass with the asset pipeline in Rails https://github.com/rails/dartsass-rails
+gem 'dartsass-rails'
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
