@@ -100,6 +100,8 @@ class User < ApplicationRecord
       # end
 
       # Returns either the user instance with errors or the persisted user record
+      # TODO: Add a spec that asserts that when the transaction fails, a user instance
+      #   with errors is returned
       user
     end
   end
