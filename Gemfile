@@ -35,8 +35,8 @@ gem 'jbuilder'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
-# Use Sass to process CSS
-# gem "sassc-rails"
+# Integrate Dart Sass with the asset pipeline in Rails https://github.com/rails/dartsass-rails
+gem 'dartsass-rails'
 
 # Use Tailwind CSS for stylesheets https://tailwindcss.com/docs/guides/ruby-on-rails
 gem 'tailwindcss-rails', '~> 2.3'
