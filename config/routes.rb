@@ -6,7 +6,8 @@ require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
   resources :accounts, except: %i[index destroy]
-  devise_for :users
+  devise_for :users,
+             controllers: { omniauth_callbacks: 'users/omniauth/callbacks' }
 
   scope :admin, as: :admin do
     constraints AdminScopeConstraint.new do
@@ -16,12 +17,13 @@ Rails.application.routes.draw do
   end
 
   get 'pages/home'
+  get 'pages/dashboard'
 
-  # root to: 'pages#home'
+  # devise_scope :user do
+  #   root to: 'pages#dashboard'
+  # end
 
-  devise_scope :user do
-    root to: 'devise/sessions#new'
-  end
+  root to: 'pages#home'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

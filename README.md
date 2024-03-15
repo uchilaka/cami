@@ -235,13 +235,16 @@ bin/thor help lx-cli:secrets:print_key
   - [Multiple Databases](https://guides.rubyonrails.org/active_record_multiple_databases.html)
 - [Introduction to Sidekiq for Rails](https://blog.appsignal.com/2023/09/20/an-introduction-to-sidekiq-for-ruby-on-rails.html)
 - [The beginner's guide to magic links](https://postmarkapp.com/blog/magic-links)
-- [Devise OmniAuth](https://github.com/heartcombo/devise/wiki/OmniAuth:-Overview)
-    - [List of Strategies](https://github.com/omniauth/omniauth/wiki/List-of-Strategies)
-    - [Devise Omniauth Custom Strategies](https://github.com/heartcombo/devise/wiki/OmniAuth:-Overview#custom-strategies)
+- [Devise](https://github.com/heartcombo/devise?tab=readme-ov-file#getting-started)
+  - [Configure views](https://github.com/heartcombo/devise?tab=readme-ov-file#configuring-views)
+  - [OmniAuth](https://github.com/heartcombo/devise/wiki/OmniAuth:-Overview)
+      - [List of Strategies](https://github.com/omniauth/omniauth/wiki/List-of-Strategies)
+      - [Devise Omniauth Custom Strategies](https://github.com/heartcombo/devise/wiki/OmniAuth:-Overview#custom-strategies)
 - [Classic to Zeitwerk HOWTO](https://guides.rubyonrails.org/classic_to_zeitwerk_howto.html#why-switch-from-classic-to-zeitwerk-questionmark)
 
 ## Future Work
 
+- [ ] Implement `:confirmable` to secure accounts when switching/adding auth providers
 - [ ] Setup secrets using [docker images' compatibility with secret files](https://docs.docker.com/compose/use-secrets/) 
 - [ ] [Vite CJS API is deprecated](https://vitejs.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated). Update the `vite.config.js` file to use the ESM build instead
 - [ ] [New ESLint configuration system is available](https://eslint.org/docs/latest/use/configure/configuration-files-new). You will need to create a new `eslint.config.js` file to use the new configuration system

@@ -9,9 +9,12 @@
 #  encrypted_password     :string           default(""), not null
 #  first_name             :string
 #  last_name              :string
+#  nickname               :string
+#  providers              :string           default([]), is an Array
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
+#  uids                   :jsonb
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #

@@ -158,7 +158,7 @@ module LarCityCLI
         say "\n(dry-run)", Thor::Shell::Color::MAGENTA
         output_msg = <<~DRY_RUN
           docker exec -it mongodb.accounts.larcity mongosh \
-            --shell --authenticationDatabase #{database_name} \
+            --shell --authenticationDatabase admin \
             --username *** \
             --password ***
         DRY_RUN
@@ -166,7 +166,7 @@ module LarCityCLI
       else
         connect_cmd = <<~CMD
           docker exec -it mongodb.accounts.larcity mongosh \
-            --shell --authenticationDatabase #{database_name} \
+            --shell --authenticationDatabase admin \
             --username #{Rails.application.credentials.mongodb.user} \
             --password #{Rails.application.credentials.mongodb.password}
         CMD
@@ -186,7 +186,7 @@ module LarCityCLI
         say "\n(dry-run)", Thor::Shell::Color::MAGENTA if dry_run?
         output_msg = <<~DRY_RUN
           docker exec -it mongodb.accounts.larcity mongosh \
-            --authenticationDatabase #{database_name} \
+            --authenticationDatabase admin \
             --file #{mongosh_script_path} \
             --username *** \
             --password ***
@@ -198,7 +198,7 @@ module LarCityCLI
 
       init_mongodb_cmd = <<~CMD
         docker exec -it mongodb.accounts.larcity mongosh \
-          --authenticationDatabase #{database_name} \
+          --authenticationDatabase admin \
           --file #{mongosh_script_path} \
           --username #{Rails.application.credentials.mongodb.user} \
           --password #{Rails.application.credentials.mongodb.password}

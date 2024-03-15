@@ -10,7 +10,8 @@ require 'active_record/railtie'
 require 'active_storage/engine'
 require 'action_controller/railtie'
 require 'action_mailer/railtie'
-require 'action_mailbox/engine'
+# Guide for ActionMailbox (processing inbound email): https://guides.rubyonrails.org/action_mailbox_basics.html
+# require 'action_mailbox/engine'
 require 'action_text/engine'
 require 'action_view/railtie'
 require 'action_cable/engine'
@@ -41,6 +42,9 @@ module AccountManager
 
     # Configure allowed hosts. See doc https://guides.rubyonrails.org/configuring.html#actiondispatch-hostauthorization
     config.hosts += config_for(:allowed_hosts)
+
+    # Return nil when a document record is not found
+    Mongoid.raise_not_found_error = false
 
     # Don't generate system test files.
     config.generators.system_tests = nil

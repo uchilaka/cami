@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import * as path from 'path';
 import FullReload from 'vite-plugin-full-reload';
 import RubyPlugin from 'vite-plugin-ruby';
+// TODO: Replace with https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react
 import ViteReact from '@vitejs/plugin-react-refresh';
 
 export default defineConfig({
