@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html class="h-full">
   <head>
-    <title>Rails + ReactJS + Vite</title>
+    <link rel="icon"
+          type="image/png"
+          href="<%= image_url('logo@1024px.png') %>">
+    <title>LarCity :: <%= page_title %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -18,13 +21,14 @@
       Visit the guide for more information: https://vite-ruby.netlify.app/guide/rails
     -->
     <style>html{visibility: hidden;opacity:0;}</style>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
   </head>
 
   <body class="h-full">
     <div class="flex flex-col h-screen">
       <%= render "shared/navbar" %>
       <%= render "shared/flash" %>
-      <main class="container flex flex-col flex-1 px-5 mx-auto my-12">
+      <main class="container flex flex-col flex-1 px-5 mx-auto mt-0 mb-12">
         <%= yield %>
       </main>
       <%= render "shared/footer" %>

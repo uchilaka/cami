@@ -11,6 +11,10 @@ gem 'rails', '~> 7.0.8', '>= 7.0.8.1'
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
 
+# Autoload dotenv in Rails https://github.com/bkeepers/dotenv
+# IMPORTANT: This should be loaded as early as possible
+gem 'dotenv', groups: %i[development test], require: 'dotenv/load'
+
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
 
@@ -35,14 +39,17 @@ gem 'jbuilder'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
-# Use Sass to process CSS
-# gem "sassc-rails"
-
 # Use Tailwind CSS for stylesheets https://tailwindcss.com/docs/guides/ruby-on-rails
 gem 'tailwindcss-rails', '~> 2.3'
 
+# Integrate Dart Sass with the asset pipeline in Rails https://github.com/rails/dartsass-rails
+gem 'dartsass-rails'
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
+
+# Refer to any model with a URI: gid://app/class/id
+gem 'globalid', '~> 1.2'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -52,6 +59,7 @@ group :development, :test do
   gem 'capybara_accessibility_audit'
   gem 'fabrication'
   gem 'faker'
+  gem 'open3'
   gem 'rspec-rails', '~> 6.1', '>= 6.1.1'
   gem 'rubocop'
   gem 'rubocop-performance'

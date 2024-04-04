@@ -1,4 +1,6 @@
 {
+  "name": "@larcity/account_manager",
+  "license": "UNLICENSED",
   "engines": {
     "yarn": ">= 1.22.21"
   },
