@@ -13,6 +13,10 @@ Rails.application.configure do
     File.exist?(file)
   end)
 
+  # https://github.com/heartcombo/devise?tab=readme-ov-file#testing
+  config.middleware.insert_before Warden::Manager, ActionDispatch::Cookies
+  config.middleware.insert_before Warden::Manager, ActionDispatch::Session::CookieStore
+
   # Turn false under Spring and add config.action_view.cache_template_loading = true.
   config.cache_classes = true
 

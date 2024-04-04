@@ -1,4 +1,9 @@
 {
+  "name": "@larcity/account_manager",
+  "license": "UNLICENSED",
+  "engines": {
+    "yarn": ">= 1.22.21"
+  },
   "dependencies": {
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
