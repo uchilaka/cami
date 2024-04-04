@@ -1,6 +1,10 @@
 name: RSpec
 
-on: [pull_request]
+on:
+  pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -13,6 +17,7 @@ jobs:
         mongodb-version: ['7.0.6-jammy']
     env:
       CI: true
+      PORT: 3000
       RAILS_ENV: test
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
       PROJECT_ROOT: .
