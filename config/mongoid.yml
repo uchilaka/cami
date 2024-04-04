@@ -180,6 +180,8 @@ test:
       hosts:
         - "localhost:<%= ENV.fetch('MONGODB_TEST_PORT', Rails.application.credentials.mongodb.port) %>"
       options:
+        roles:
+         - 'dbOwner'
         read:
           mode: :primary
         max_pool_size: 1
