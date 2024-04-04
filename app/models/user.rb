@@ -65,12 +65,12 @@ class User < ApplicationRecord
       access_token ||= Current.auth_provider
       uid = access_token.uid
       provider = access_token.provider
-      first_name, last_name, email, image_url = access_token.info.values_at(
+      given_name, family_name, email, image_url = access_token.info.values_at(
         'first_name', 'last_name', 'email', 'image'
       )
       user = User.find_by(email:)
       user ||= User.new(
-        first_name:, last_name:, email:,
+        given_name:, family_name:, email:,
         password: Devise.friendly_token[0, 20]
       )
 
