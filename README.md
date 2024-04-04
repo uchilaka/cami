@@ -1,27 +1,48 @@
-# LarCity Invoicing and Customer Accounts  Management Service MVP
+# Customer Accounts Management & Invoicing MVP
 
-- [LarCity Invoicing and Customer Accounts  Management Service MVP](#larcity-invoicing-and-customer-accounts--management-service-mvp)
+- [Customer Accounts Management \& Invoicing MVP](#customer-accounts-management--invoicing-mvp)
   - [Ruby Version](#ruby-version)
+  - [Service/Vendor dependencies](#servicevendor-dependencies)
   - [System Dependencies](#system-dependencies)
   - [Configuration](#configuration)
     - [Development service ports](#development-service-ports)
-  - [Database creation](#database-creation)
-  - [Database initialization](#database-initialization)
+  - [Running the app for the first time](#running-the-app-for-the-first-time)
+    - [1. Setup the environment](#1-setup-the-environment)
+    - [1. Install dependencies](#1-install-dependencies)
+    - [2. Setup your application secrets](#2-setup-your-application-secrets)
+    - [3. Start up the application's services](#3-start-up-the-applications-services)
+    - [4. Initialize the database](#4-initialize-the-database)
+    - [5. Start up the app](#5-start-up-the-app)
+  - [Database management](#database-management)
+    - [Test](#test)
   - [How to run the test suite](#how-to-run-the-test-suite)
   - [Services (job queues, cache servers, search engines, etc.)](#services-job-queues-cache-servers-search-engines-etc)
   - [Deployment instructions](#deployment-instructions)
   - [Development](#development)
     - [Managing application secrets](#managing-application-secrets)
     - [Using NGROK](#using-ngrok)
+    - [Generating a `Monogid` Model](#generating-a-monogid-model)
+    - [Print key file](#print-key-file)
   - [Guides and References](#guides-and-references)
+  - [Future Work](#future-work)
 
 ## Ruby Version
 
 - `3.2.2`
 
+## Service/Vendor dependencies
+
+- [**Ngrok**](https://dashboard.ngrok.com/cloud-edge/domains) for local development tunneling
+
 ## System Dependencies
 
-> TODO: Add system dependencies
+System dependencies are defined in the following configuration files:
+
+- `.tool-versions` (see `.tool-versions.example`)
+- `Gemfile`
+- `Brewfile`
+- `package.json`
+  - `yarn.lock`
 
 ## Configuration
 
@@ -53,15 +74,73 @@
     </tr>
 </table>
 
-## Database creation
+## Running the app for the first time
 
-> TODO: Add database creation instructions
+### 1. Setup the environment
 
-## Database initialization
+> If you use [asdf](https://asdf-vm.com/guide/introduction.html), you will also need to setup the following plugins
+> and install their corresponding versions with the `asdf install` command:
+>
+> - `asdf plugin add ruby`
+> - `asdf plugin add nodejs`
+> New to `asdf`? [here's a primer to get started](https://asdf-vm.com/guide/getting-started.html).
 
-> TODO: Add database initialization instructions
+Review the `.envrc.example` file to ensure the environment variables are set.
 
-## Database management 
+### 1. Install dependencies
+
+```shell
+# Install system dependencies
+brew bundle
+# Setup the ASDF dependencies file
+cp -v .tool-versions.example .tool-versions
+# Install Ruby dependencies
+bundle install
+# Install Node dependencies
+yarn install
+```
+
+### 2. Setup your application secrets
+
+Search for `development.yml.enc` to locate the entry in the KeePass store
+with the application's encrypted secrets files.
+
+Run the following code to update the application for the corresponding
+environments. **You will need to do this before running the test suite**.
+
+```shell
+# Help menu for the secrets command
+bin/thor help lx-cli:secrets:edit
+# Edit the secrets file (for the development environment)
+bin/thor lx-cli:secrets:edit --environment development
+```
+
+### 3. Start up the application's services
+
+```shell
+bin/start-docker
+```
+
+### 4. Initialize the database
+
+```shell
+# Get help with the DB setup command
+bin/thor help lx-cli:db:setup
+# Initialize the app store database
+bin/thor lx-cli:db:setup --postgres
+# Initialize the invoicing score database
+bin/thor lx-cli:db:setup --mongodb
+```
+
+### 5. Start up the app
+
+> You can also start up the app's non-dockerized services with the included IDE configurations for RubyMine in the `.ide-configs` folder.
+
+```shell
+bin/dev
+```
+
+## Database management
 
 Review the list of available rake tasks for managing the `MongoDB` database:
 
@@ -92,13 +171,32 @@ docker exec -it mongodb.accounts.larcity mongosh \
   --username <MONGO_INITDB_ROOT_USERNAME>
   --password <MONGO_INITDB_ROOT_PASSWORD>
 
-# List databases
+# Run the command to connect the mongodb container
+bin/thor lx-cli:db:connect --mongodb
+```
+
+Once connected to the database instance, run the following commands to setup test credentials:
+
+```js
+// List databases
 show dbs
 
-# Use the admin database
+// Use the admin database
+use admin
+
+// Create a new user
+db.createUser({
+  user: "db_admin",
+  pwd: `${process.env.MONGO_INITDB_ROOT_PASSWORD}`,
+  roles: [
+    { role: "dbOwner", db: "doc_store_development" },
+    { role: "dbOwner", db: "doc_store_test" },
+  ]
+})
+
 use doc_store_test
 
-# Create a new user
+// Create a new user (for testing purposes)
 db.createUser({
   user: "db_admin",
   pwd: passwordPrompt(),
@@ -107,7 +205,18 @@ db.createUser({
   ]
 })
 
-# Grant roles to an existing user
+use doc_store_development
+
+// Create a new user (for development purposes)
+db.createUser({
+  user: "db_admin",
+  pwd: passwordPrompt(),
+  roles: [
+    { role: "dbOwner", db: "doc_store_development" }
+  ]
+})
+
+// Example: Grant roles to an existing user
 db.grantRolesToUser("db_admin", ["dbOwner"])
 ```
 
@@ -130,7 +239,7 @@ db.grantRolesToUser("db_admin", ["dbOwner"])
 To edit credentials in your IDE, run the following command in your console:
 
 ```shell
-bin/thor lar-city-cli:secrets:edit
+bin/thor lx-cli:secrets:edit
 ```
 
 To view help information about managing application credentials, run the following command in your console:
@@ -160,7 +269,7 @@ Follow these steps to setup `ngrok` for your local environment:
 Then you can open a tunnel to your local environment by running:
 
 ```shell
-thor lar-city-cli:tunnel:open_all
+thor lx-cli:tunnel:open_all
 ```
 
 ### Generating a `Monogid` Model
@@ -169,13 +278,19 @@ thor lar-city-cli:tunnel:open_all
 rails g model Invoice --orm=mongoid
 ```
 
-After generating the model, if you would like to inherit application functionality for document records, 
+After generating the model, if you would like to inherit application functionality for document records,
 you can include the `DocumentRecord` concern in the model:
 
 ```ruby
 class Invoice
   include DocumentRecord
 end
+```
+
+### Print key file
+
+```shell
+bin/thor help lx-cli:secrets:print_key
 ```
 
 ## Guides and References
@@ -197,10 +312,27 @@ end
   - [Active Record Query Interface](https://guides.rubyonrails.org/active_record_querying.html)
   - [Active Record Scopes](https://guides.rubyonrails.org/active_record_querying.html#scopes)
   - [Multiple Databases](https://guides.rubyonrails.org/active_record_multiple_databases.html)
+  - [Asset pipeline](https://guides.rubyonrails.org/asset_pipeline.html)
 - [Introduction to Sidekiq for Rails](https://blog.appsignal.com/2023/09/20/an-introduction-to-sidekiq-for-ruby-on-rails.html)
+- [The beginner's guide to magic links](https://postmarkapp.com/blog/magic-links)
+- [Devise](https://github.com/heartcombo/devise?tab=readme-ov-file#getting-started)
+  - [Configure views](https://github.com/heartcombo/devise?tab=readme-ov-file#configuring-views)
+  - [OmniAuth](https://github.com/heartcombo/devise/wiki/OmniAuth:-Overview)
+    - [List of Strategies](https://github.com/omniauth/omniauth/wiki/List-of-Strategies)
+    - [Devise Omniauth Custom Strategies](https://github.com/heartcombo/devise/wiki/OmniAuth:-Overview#custom-strategies)
+- [Classic to Zeitwerk HOWTO](https://guides.rubyonrails.org/classic_to_zeitwerk_howto.html#why-switch-from-classic-to-zeitwerk-questionmark)
+- [Pre-compiling assets](https://guides.rubyonrails.org/asset_pipeline.html#precompiling-assets)
+- [Dart Sass for Rails](https://github.com/rails/dartsass-rails?tab=readme-ov-file#dart-sass-for-rails)
+  - [Configuring builds](https://github.com/rails/dartsass-rails?tab=readme-ov-file#configuring-builds)
+- [Fontawesome Icons](https://fontawesome.com/icons/google?f=brands&s=solid)
 
 ## Future Work
 
-- [ ] Setup secrets using [docker images' compatibility with secret files](https://docs.docker.com/compose/use-secrets/) 
+- [ ] Setup and update production credentials in the `config/credentials/production.yml.enc` file
+- [ ] Implement `:confirmable` to secure accounts when switching/adding auth providers
+- [x] Implement FontAwesome library for [SVG icons](https://fontawesome.com/icons/google?f=brands&s=solid)
+- [ ] Secure accounts with MFA
+- [ ] Setup secrets using [docker images' compatibility with secret files](https://docs.docker.com/compose/use-secrets/)
 - [ ] [Vite CJS API is deprecated](https://vitejs.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated). Update the `vite.config.js` file to use the ESM build instead
 - [ ] [New ESLint configuration system is available](https://eslint.org/docs/latest/use/configure/configuration-files-new). You will need to create a new `eslint.config.js` file to use the new configuration system
+- [ ] Knapsack Pro for parallelizing tests
