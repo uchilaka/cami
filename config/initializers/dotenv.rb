@@ -12,9 +12,13 @@ dotenv_required_keys = %w[
 ]
 
 if Rails.env.test?
-  dotenv_required_keys.delete 'MONGODB_USERNAME'
-  dotenv_required_keys.delete 'MONGODB_PASSWORD'
-  dotenv_required_keys.delete 'ADMIN_REMOTE_IP_ADDRESSES'
+  %w[
+    MONGODB_USERNAME
+    MONGODB_PASSWORD
+    MONGODB_DATABASE
+    MONGODB_PORT
+    ADMIN_REMOTE_IP_ADDRESSES
+  ].each { |key| dotenv_required_keys.delete key }
   dotenv_required_keys.unshift 'MONGODB_TEST_PORT' \
     unless Rails.application.credentials.mongodb.port.present?
 end
