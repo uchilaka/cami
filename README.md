@@ -90,6 +90,8 @@ Review the `.env.example` file to ensure the environment variables are set. You 
 - `.env.local`
 - `.env.test`
 
+The `.envrc` (see `.envrc.example`) file should be included for compatibility with other features like `docker compose` and simply sources the `.env.local` file.
+
 ### 1. Install dependencies
 
 ```shell

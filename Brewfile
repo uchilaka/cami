@@ -9,11 +9,12 @@ brew 'tree'
 tap 'heroku/brew' || true
 brew 'heroku'
 brew 'ruby-build'
-brew 'yarn'
+brew 'asdf'
 
 # install only on specified OS
 brew 'tree' if OS.mac?
 brew 'gnutls' if OS.mac?
 brew 'foreman' if OS.mac?
 
+cask 'docker'
 cask 'ngrok'

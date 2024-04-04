@@ -30,4 +30,9 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  accessibility:
+    main:
+      logo: "LarCity logo"
+  shared:
+    navbar:
+      sign_out: "Sign Out"
