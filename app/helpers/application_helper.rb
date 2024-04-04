@@ -5,7 +5,7 @@ module ApplicationHelper
     user_google_omniauth_authorize_path
   end
 
-  def application_title
+  def page_title
     Rails.application.class.module_parent_name
   end
 end
