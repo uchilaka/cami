@@ -1,4 +1,4 @@
-services: scripts/start-docker
+services: bin/start-docker
 worker: bundle exec sidekiq
 web: bin/rails server -p 16006
 vite: bin/vite dev
