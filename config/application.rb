@@ -3,7 +3,6 @@
 require_relative 'boot'
 
 require 'rails'
-# require 'dotenv'
 # Pick the frameworks you want:
 require 'active_model/railtie'
 require 'active_job/railtie'
@@ -21,13 +20,6 @@ require 'action_cable/engine'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
-
-# # Load environment variables from .env files
-# unless Rails.env.test?
-#   Dotenv.load(*%w[.env.local .env].select do |file|
-#     File.exist?(file)
-#   end)
-# end
 
 module AccountManager
   class Application < Rails::Application
