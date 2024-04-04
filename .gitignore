@@ -31,6 +31,10 @@
 /db/development/
 !db/development/mongodb/docker-entrypoint-initdb.d/
 
+###################################################################
+############################## Secrets ############################
+###################################################################
+
 # Ignore secret files
 /config/secrets/
 
@@ -49,8 +53,11 @@ node_modules
 
 # IDE files
 /.idea
-/.envrc
+/.env.local
+/.env*
+!/.env.example
 /*.code-workspace
+.tool-versions
 
 # General
 .DS_Store

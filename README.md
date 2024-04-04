@@ -85,7 +85,10 @@ System dependencies are defined in the following configuration files:
 > - `asdf plugin add nodejs`
 > New to `asdf`? [here's a primer to get started](https://asdf-vm.com/guide/getting-started.html).
 
-Review the `.envrc.example` file to ensure the environment variables are set.
+Review the `.env.example` file to ensure the environment variables are set. You can control which variables are made available in each environment while working locally using the following files:
+
+- `.env.local`
+- `.env.test`
 
 ### 1. Install dependencies
 
