@@ -1,7 +1,5 @@
 <nav class="navbar">
-  <div class="logo">
-    <%= Rails.application.class.module_parent_name %>
-  </div>
+  <%= render "shared/logo" %>
   <ul class="menu">
     <li>
       <%= nav_link_to "Home", root_path, class: "nav-link" %>
