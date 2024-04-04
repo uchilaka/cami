@@ -7,8 +7,8 @@
 #  id                     :uuid             not null, primary key
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
-#  first_name             :string
-#  last_name              :string
+#  family_name            :string
+#  given_name             :string
 #  nickname               :string
 #  providers              :string           default([]), is an Array
 #  remember_created_at    :datetime
@@ -32,6 +32,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: %i[google]
+
+  alias_attribute :first_name, :given_name
+  alias_attribute :last_name, :family_name
 
   # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
   has_person_name

@@ -7,8 +7,8 @@
 #  id                     :uuid             not null, primary key
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
-#  first_name             :string
-#  last_name              :string
+#  family_name            :string
+#  given_name             :string
 #  nickname               :string
 #  providers              :string           default([]), is an Array
 #  remember_created_at    :datetime
