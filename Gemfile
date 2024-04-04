@@ -11,6 +11,10 @@ gem 'rails', '~> 7.0.8', '>= 7.0.8.1'
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
 
+# Autoload dotenv in Rails https://github.com/bkeepers/dotenv
+# IMPORTANT: This should be loaded as early as possible
+gem 'dotenv', groups: %i[development test], require: 'dotenv/load'
+
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
 
