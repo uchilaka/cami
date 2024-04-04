@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'thor'
+require 'open3'
 
 module LarCityCLI
   # Manage NGROK tunnels for dev testing of the app and rails API
@@ -65,6 +66,13 @@ module LarCityCLI
         CMD
       end
 
+      # # Example: doing this with Open3
+      # Open3.popen2e(cmd) do |_stdin, stdout_stderr, wait_thread|
+      #   Thread.new do
+      #     stdout_stderr.each { |line| puts line }
+      #   end
+      #   wait_thread.value
+      # end
       system(cmd, out: $stdout) unless dry_run?
     end
 

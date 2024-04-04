@@ -1,11 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="run" type="CompoundRunConfigurationType">
     <toRun name="Development: frontend" type="CommandRunConfigurationType" />
-    <toRun name="Development: ngrok tunnel" type="CommandRunConfigurationType" />
     <toRun name="Development: sidekiq" type="CommandRunConfigurationType" />
     <toRun name="Development: account_manager" type="RailsRunConfigurationType" />
-    <toRun name="Development: sass" type="RakeRunConfigurationType" />
     <toRun name="Development: tailwind" type="RakeRunConfigurationType" />
+    <toRun name="Development: ngrok tunnel" type="ShConfigurationType" />
     <method v="2" />
   </configuration>
 </component>

@@ -59,6 +59,7 @@ group :development, :test do
   gem 'capybara_accessibility_audit'
   gem 'fabrication'
   gem 'faker'
+  gem 'open3'
   gem 'rspec-rails', '~> 6.1', '>= 6.1.1'
   gem 'rubocop'
   gem 'rubocop-performance'

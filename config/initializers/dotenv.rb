@@ -2,6 +2,7 @@
 
 # See https://github.com/bkeepers/dotenv?tab=readme-ov-file#customizing-rails
 dotenv_required_keys = %w[
+  PORT
   APP_DATABASE_NAME
   APP_DATABASE_USER
   APP_DATABASE_PASSWORD
