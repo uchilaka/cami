@@ -1,5 +1,20 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Development: frontend" type="CommandRunConfigurationType" factoryName="Gem Command">
+  <configuration default="false" name="Development: ngrok tunnel" type="ShConfigurationType">
+    <option name="SCRIPT_TEXT" value="ngrok start --all --config=config/ngrok.yml" />
+    <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+    <option name="SCRIPT_PATH" value="" />
+    <option name="SCRIPT_OPTIONS" value="" />
+    <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+    <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+    <option name="INTERPRETER_PATH" value="/bin/zsh" />
+    <option name="INTERPRETER_OPTIONS" value="" />
+    <option name="EXECUTE_IN_TERMINAL" value="true" />
+    <option name="EXECUTE_SCRIPT_FILE" value="false" />
+    <envs />
+    <method v="2" />
+  </configuration>
+  <configuration default="false" name="Development: ngrok tunnel" type="CommandRunConfigurationType" factoryName="Gem Command">
     <module name="account_manager" />
     <COMMAND_RUN_CONFIGURATION NAME="RUBY_ARGS" VALUE="" />
     <COMMAND_RUN_CONFIGURATION NAME="WORK DIR" VALUE="$MODULE_DIR$" />
@@ -17,9 +32,9 @@
       <option name="DIRENV_TRUSTED" value="true" />
     </EXTENSION>
     <EXTENSION ID="org.jetbrains.plugins.ruby.rails.run.RailsRunConfigurationExtension" SCRATCH_USE_RAILS_RUNNER="false" />
-    <COMMAND_CONFIG_SETTINGS_ID NAME="GEM_NAME" VALUE="vite_rails" />
-    <COMMAND_CONFIG_SETTINGS_ID NAME="EXECUTABLE_NAME" VALUE="vite" />
-    <COMMAND_CONFIG_SETTINGS_ID NAME="EXECUTABLE_ARGS" VALUE="dev" />
+    <COMMAND_CONFIG_SETTINGS_ID NAME="GEM_NAME" VALUE="thor" />
+    <COMMAND_CONFIG_SETTINGS_ID NAME="EXECUTABLE_NAME" VALUE="thor" />
+    <COMMAND_CONFIG_SETTINGS_ID NAME="EXECUTABLE_ARGS" VALUE="lx-cli:tunnel:open_all" />
     <COMMAND_CONFIG_SETTINGS_ID NAME="WORKING_DIR" VALUE="$MODULE_DIR$" />
     <method v="2" />
   </configuration>
