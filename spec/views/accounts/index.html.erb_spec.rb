@@ -6,11 +6,11 @@ RSpec.describe 'accounts/index', type: :view do
   before(:each) do
     assign(:accounts, [
              Account.create!(
-               business_name: 'Business Name',
+               display_name: 'Business Name',
                readme: 'MyText'
              ),
              Account.create!(
-               business_name: 'Business Name',
+               display_name: 'Business Name',
                readme: 'MyText'
              )
            ])

@@ -15,5 +15,12 @@
 require 'rails_helper'
 
 RSpec.describe Individual, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { should have_and_belong_to_many(:users) }
+
+  it 'should allow only one user' do
+    individual = Fabricate :individual
+    expect(individual).to be_valid
+    individual.users << Fabricate(:user)
+    expect(individual).not_to be_valid
+  end
 end

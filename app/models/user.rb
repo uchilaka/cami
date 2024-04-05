@@ -24,6 +24,7 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
+  include MaintainsProfile
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   #
@@ -40,9 +41,6 @@ class User < ApplicationRecord
   has_person_name
 
   has_and_belongs_to_many :accounts
-
-  after_create_commit :initialize_profile
-  after_destroy_commit :destroy_profile
 
   def profile
     @profile ||= UserProfile.find_by(user_id: id)
@@ -113,9 +111,5 @@ class User < ApplicationRecord
 
   def initialize_profile
     UserProfile.create(user_id: id) if profile.blank?
-  end
-
-  def destroy_profile
-    UserProfile.find_by(user_id: id).destroy
   end
 end

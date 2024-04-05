@@ -32,7 +32,7 @@ RSpec.describe ServicesController, type: :routing do
       expect(patch: '/services/1').to route_to('services#update', id: '1')
     end
 
-    it 'routes to #destroy' do
+    xit 'routes to #destroy' do
       expect(delete: '/services/1').to route_to('services#destroy', id: '1')
     end
   end

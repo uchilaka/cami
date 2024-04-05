@@ -12,8 +12,7 @@ Business.create(
   [
     {
       display_name: 'Acme Corporation',
-      email: Faker::Internet.email,
-      password: Faker::Internet.password
+      email: Faker::Internet.email
     }
   ]
 )

@@ -5,6 +5,8 @@ class AccountsController < ApplicationController
 
   # GET /accounts
   def index
+    # TODO: Limit the accounts returned to those the customer
+    #   has access through via a policy (Pundit)
     @accounts = Account.all
   end
 
@@ -67,6 +69,6 @@ class AccountsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def account_params
-    params.require(:account).permit(:business_name, :readme)
+    params.require(:account).permit(:display_name, :readme)
   end
 end

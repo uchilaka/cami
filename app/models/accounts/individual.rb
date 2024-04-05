@@ -13,4 +13,17 @@
 #  tax_id       :string
 #
 class Individual < Account
+  delegate :email, to: :user, allow_nil: true
+
+  validate :allows_one_user
+
+  def user
+    users.first
+  end
+
+  def allows_one_user
+    if users.count > 1
+      errors.add(:users, I18n.t('models.account.errors.user_limit_exceeded'))
+    end
+  end
 end

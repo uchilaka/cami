@@ -7,7 +7,7 @@ require 'sidekiq/cron/web'
 Rails.application.routes.draw do
   resources :services, except: %i[destroy]
   resources :products, except: %i[destroy]
-  resources :accounts, except: %i[index destroy]
+  resources :accounts, except: %i[destroy]
   devise_for :users,
              controllers: { omniauth_callbacks: 'users/omniauth/callbacks' }
 
@@ -20,10 +20,6 @@ Rails.application.routes.draw do
 
   get 'pages/home'
   get 'pages/dashboard'
-
-  # devise_scope :user do
-  #   root to: 'pages#dashboard'
-  # end
 
   root to: 'pages#home'
 

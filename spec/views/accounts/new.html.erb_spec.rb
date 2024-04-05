@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'accounts/new', type: :view do
   before(:each) do
     assign(:account, Account.new(
-                       business_name: 'MyString',
+                       display_name: 'MyString',
                        readme: 'MyText'
                      ))
   end
@@ -14,7 +14,7 @@ RSpec.describe 'accounts/new', type: :view do
     render
 
     assert_select 'form[action=?][method=?]', accounts_path, 'post' do
-      assert_select 'input[name=?]', 'account[business_name]'
+      assert_select 'input[name=?]', 'account[display_name]'
 
       assert_select 'textarea[name=?]', 'account[readme]'
     end

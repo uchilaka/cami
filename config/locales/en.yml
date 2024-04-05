@@ -36,3 +36,7 @@ en:
   shared:
     navbar:
       sign_out: "Sign Out"
+  models:
+    account:
+      errors:
+        user_limit_exceeded: "cannot have more than one user"

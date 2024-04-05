@@ -14,4 +14,5 @@
 #
 Fabricator(:account) do
   display_name { Faker::Company.name }
+  users { [Fabricate(:user)] }
 end

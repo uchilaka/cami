@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'accounts/show', type: :view do
   before(:each) do
     assign(:account, Account.create!(
-                       business_name: 'Business Name',
+                       display_name: 'Business Name',
                        readme: 'MyText'
                      ))
   end

@@ -23,4 +23,5 @@ Fabricator(:product) do
   display_name 'MyString'
   description  'MyText'
   data         ''
+  vendor       { Fabricate(:business) }
 end

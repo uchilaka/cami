@@ -13,8 +13,25 @@
 #  tax_id       :string
 #
 class Business < Account
+  include MaintainsProfile
+
+  delegate :email, to: :profile, allow_nil: true
+
   has_many :products, foreign_key: :vendor_id
-  has_and_belongs_to_many :users, class_name: 'Account'
 
   validates :tax_id, allow_blank: true, uniqueness: { case_sensitive: false }
+
+  def email=(value)
+    profile.email = value
+  end
+
+  def profile
+    @profile ||= BusinessProfile.find_or_create_by(account_id: id)
+  end
+
+  private
+
+  def initialize_profile
+    BusinessProfile.create(account_id: id) if profile.blank?
+  end
 end
