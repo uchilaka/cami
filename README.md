@@ -347,3 +347,4 @@ bin/thor help lx-cli:secrets:print_key
 - [ ] [New ESLint configuration system is available](https://eslint.org/docs/latest/use/configure/configuration-files-new). You will need to create a new `eslint.config.js` file to use the new configuration system
 - [ ] Knapsack Pro for parallelizing tests
 - [ ] Implement default authorization policies
+- [ ] **Consolidate vite configuration & dependencies** right now, vite is a dependency of both the front and backend separately. Is there a better way?
