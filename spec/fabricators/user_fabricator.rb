@@ -7,8 +7,8 @@
 #  id                     :uuid             not null, primary key
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
-#  first_name             :string
-#  last_name              :string
+#  family_name            :string
+#  given_name             :string
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
@@ -22,8 +22,8 @@
 #
 Fabricator(:user) do
   email { Faker::Internet.email }
-  first_name { Faker::Name.gender_neutral_first_name }
-  last_name  { Faker::Name.last_name }
+  given_name { Faker::Name.gender_neutral_first_name }
+  family_name { Faker::Name.last_name }
   password { Faker::Internet.password(min_length: 8) }
 
   # after_build do |attrs|
