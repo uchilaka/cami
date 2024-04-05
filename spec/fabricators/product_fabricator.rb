@@ -19,9 +19,9 @@
 #  fk_rails_...  (vendor_id => accounts.id)
 #
 Fabricator(:product) do
-  sku          'MyString'
-  display_name 'MyString'
-  description  'MyText'
-  data         ''
+  sku { Faker::Barcode.ean }
+  display_name { Faker::Commerce.product_name }
+  description { Faker::Marketing.buzzwords }
+  data         '{}'
   vendor       { Fabricate(:business) }
 end

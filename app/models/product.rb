@@ -19,6 +19,9 @@
 #  fk_rails_...  (vendor_id => accounts.id)
 #
 class Product < ApplicationRecord
+  attribute :type, :string, default: 'Product'
+
   belongs_to :vendor, class_name: 'Account'
+
   has_and_belongs_to_many :services
 end

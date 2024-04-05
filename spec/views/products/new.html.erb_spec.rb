@@ -4,12 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'products/new', type: :view do
   before(:each) do
-    assign(:product, Product.new(
-                       sku: 'MyString',
-                       display_name: 'MyString',
-                       description: 'MyText',
-                       data: ''
-                     ))
+    assign(:product, Fabricate(:product))
   end
 
   it 'renders new product form' do

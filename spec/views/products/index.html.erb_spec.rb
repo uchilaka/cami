@@ -4,20 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'products/index', type: :view do
   before(:each) do
-    assign(:products, [
-             Product.create!(
-               sku: 'Sku',
-               display_name: 'Display Name',
-               description: 'MyText',
-               data: ''
-             ),
-             Product.create!(
-               sku: 'Sku',
-               display_name: 'Display Name',
-               description: 'MyText',
-               data: ''
-             )
-           ])
+    assign(:products, [Fabricate(:product), Fabricate(:product)])
   end
 
   it 'renders a list of products' do

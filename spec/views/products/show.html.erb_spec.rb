@@ -3,12 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe 'products/show', type: :view do
+  let(:vendor) { Fabricate :business }
+
   before(:each) do
     assign(:product, Product.create!(
                        sku: 'Sku',
                        display_name: 'Display Name',
                        description: 'MyText',
-                       data: ''
+                       data: '',
+                       vendor:
                      ))
   end
 

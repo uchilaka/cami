@@ -3,14 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'products/edit', type: :view do
-  let(:product) do
-    Product.create!(
-      sku: 'MyString',
-      display_name: 'MyString',
-      description: 'MyText',
-      data: ''
-    )
-  end
+  let(:product) { Fabricate :product }
 
   before(:each) do
     assign(:product, product)
