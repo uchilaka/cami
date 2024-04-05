@@ -4,22 +4,21 @@ require 'rails_helper'
 
 RSpec.describe 'products/show', type: :view do
   let(:vendor) { Fabricate :business }
+  let(:product) { Fabricate :product, vendor: }
 
   before(:each) do
-    assign(:product, Product.create!(
-                       sku: 'Sku',
-                       display_name: 'Display Name',
-                       description: 'MyText',
-                       data: '',
-                       vendor:
-                     ))
+    assign(:product, product)
+  end
+
+  it 'renders vendor name' do
+    render
+    expect(rendered).to match(Regexp.new(vendor.display_name.to_s))
   end
 
   it 'renders attributes in <p>' do
     render
-    expect(rendered).to match(/Sku/)
-    expect(rendered).to match(/Display Name/)
-    expect(rendered).to match(/MyText/)
-    expect(rendered).to match(//)
+    expect(rendered).to match(Regexp.new(product.sku.to_s))
+    expect(rendered).to match(Regexp.new(product.display_name.to_s))
+    expect(rendered).to match(Regexp.new(product.description.to_s))
   end
 end

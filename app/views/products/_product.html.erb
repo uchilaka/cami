@@ -1,5 +1,13 @@
 <div id="<%= dom_id product %>" class="bg-white p-6 shadow-sm rounded overflow-hidden">
-<p class="my-5">
+
+  <section class="my-5 vendor">
+    <h3 class="font-medium mb-1">
+      <strong class="block">Vendor:</strong>
+      <%= product.vendor.display_name %>
+    </h3>
+  </section>
+
+  <p class="my-5">
     <strong class="block font-medium mb-1">Sku:</strong>
     <%= product.sku %>
   </p>
@@ -12,11 +20,6 @@
   <p class="my-5">
     <strong class="block font-medium mb-1">Description:</strong>
     <%= product.description %>
-  </p>
-
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Data:</strong>
-    <%= product.data %>
   </p>
 
   <% if action_name != "show" %>
