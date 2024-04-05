@@ -330,6 +330,11 @@ bin/thor help lx-cli:secrets:print_key
 - [Dart Sass for Rails](https://github.com/rails/dartsass-rails?tab=readme-ov-file#dart-sass-for-rails)
   - [Configuring builds](https://github.com/rails/dartsass-rails?tab=readme-ov-file#configuring-builds)
 - [Fontawesome Icons](https://fontawesome.com/icons/google?f=brands&s=solid)
+- [Pundit](https://github.com/varvet/pundit?tab=readme-ov-file#policies)
+  - [Scopes](https://github.com/varvet/pundit?tab=readme-ov-file#scopes)
+  - [Ensuring policies and scopes are used](https://github.com/varvet/pundit?tab=readme-ov-file#ensuring-policies-and-scopes-are-used)
+  - [Closed systems](https://github.com/varvet/pundit?tab=readme-ov-file#closed-systems)
+  - [Handling nil objects](https://github.com/varvet/pundit?tab=readme-ov-file#nilclasspolicy)
 
 ## Future Work
 
@@ -341,3 +346,4 @@ bin/thor help lx-cli:secrets:print_key
 - [ ] [Vite CJS API is deprecated](https://vitejs.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated). Update the `vite.config.js` file to use the ESM build instead
 - [ ] [New ESLint configuration system is available](https://eslint.org/docs/latest/use/configure/configuration-files-new). You will need to create a new `eslint.config.js` file to use the new configuration system
 - [ ] Knapsack Pro for parallelizing tests
+- [ ] Implement default authorization policies
