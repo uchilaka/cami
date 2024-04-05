@@ -76,7 +76,8 @@ group :development do
 end
 
 group :test do
-  # Record your test suite's HTTP interactions and replay them during future test runs for fast, deterministic, accurate tests
+  # Record your test suite's HTTP interactions and replay them during future test runs for fast,
+  #   deterministic, accurate tests
   gem 'vcr', '~> 6.2'
 
   gem 'shoulda-matchers'
