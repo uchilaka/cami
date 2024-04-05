@@ -117,16 +117,16 @@ module LarCityCLI
         say output_msg, Thor::Shell::Color::YELLOW
       end
 
-      unless dry_run?
-        init_mongodb_cmd = <<~CMD
-          docker exec -it mongodb.accounts.larcity mongosh \
-            --authenticationDatabase admin \
-            --file #{mongosh_script_path} \
-            --username #{Rails.application.credentials.mongodb.user} \
-            --password #{Rails.application.credentials.mongodb.password}
-        CMD
-        system init_mongodb_cmd, out: $stdout, err: :out
-      end
+      return if dry_run?
+
+      init_mongodb_cmd = <<~CMD
+        docker exec -it mongodb.accounts.larcity mongosh \
+          --authenticationDatabase admin \
+          --file #{mongosh_script_path} \
+          --username #{Rails.application.credentials.mongodb.user} \
+          --password #{Rails.application.credentials.mongodb.password}
+      CMD
+      system init_mongodb_cmd, out: $stdout, err: :out
     end
 
     def current_store
