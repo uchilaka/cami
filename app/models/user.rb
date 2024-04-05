@@ -7,8 +7,8 @@
 #  id                     :uuid             not null, primary key
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
-#  first_name             :string
-#  last_name              :string
+#  family_name            :string
+#  given_name             :string
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
@@ -26,10 +26,11 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  alias_attribute :first_name, :given_name
+  alias_attribute :last_name, :family_name
+
   # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
   has_person_name
-
-  has_and_belongs_to_many :accounts
 
   after_create_commit :initialize_profile
 
