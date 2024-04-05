@@ -19,7 +19,10 @@ AllCops:
   #  NewCops: disable
   Exclude:
     - '.spec'
+    - 'spec/*.rb'
     - 'db/schema.rb'
+    - 'config/initializers/content_security_policy.rb'
+    - 'config/initializers/devise.rb'
 
 Metrics:
   Enabled: false
