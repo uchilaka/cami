@@ -148,6 +148,8 @@ GEM
       activesupport (>= 6.1)
     google-protobuf (4.26.0-arm64-darwin)
       rake (>= 13)
+    google-protobuf (4.26.0-x86_64-linux)
+      rake (>= 13)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
@@ -192,15 +194,7 @@ GEM
     net-smtp (0.4.0.1)
       net-protocol
     nio4r (2.7.0)
-    nokogiri (1.16.2-aarch64-linux)
-      racc (~> 1.4)
-    nokogiri (1.16.2-arm-linux)
-      racc (~> 1.4)
     nokogiri (1.16.2-arm64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.16.2-x86-linux)
-      racc (~> 1.4)
-    nokogiri (1.16.2-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.16.2-x86_64-linux)
       racc (~> 1.4)
@@ -254,7 +248,7 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.1.0)
-    rdoc (6.6.2)
+    rdoc (6.6.3.1)
       psych (>= 4.0.0)
     redis-client (0.18.0)
       connection_pool
@@ -305,6 +299,8 @@ GEM
     rubyzip (2.3.2)
     sass-embedded (1.72.0-arm64-darwin)
       google-protobuf (>= 3.25, < 5.0)
+    sass-embedded (1.72.0-x86_64-linux-gnu)
+      google-protobuf (>= 3.25, < 5.0)
     selenium-webdriver (4.18.1)
       base64 (~> 0.2)
       rexml (~> 3.2, >= 3.2.5)
@@ -331,15 +327,7 @@ GEM
     stringio (3.1.0)
     strong_migrations (1.7.0)
       activerecord (>= 5.2)
-    tailwindcss-rails (2.3.0)
-      railties (>= 6.0.0)
-    tailwindcss-rails (2.3.0-aarch64-linux)
-      railties (>= 6.0.0)
-    tailwindcss-rails (2.3.0-arm-linux)
-      railties (>= 6.0.0)
     tailwindcss-rails (2.3.0-arm64-darwin)
-      railties (>= 6.0.0)
-    tailwindcss-rails (2.3.0-x86_64-darwin)
       railties (>= 6.0.0)
     tailwindcss-rails (2.3.0-x86_64-linux)
       railties (>= 6.0.0)
@@ -377,11 +365,7 @@ GEM
     zeitwerk (2.6.13)
 
 PLATFORMS
-  aarch64-linux
-  arm-linux
   arm64-darwin
-  x86-linux
-  x86_64-darwin
   x86_64-linux
 
 DEPENDENCIES
