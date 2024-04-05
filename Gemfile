@@ -21,6 +21,9 @@ gem 'pg', '~> 1.1'
 # Elegant Persistence in Ruby for MongoDB.
 gem 'mongoid', '~> 8.1.0'
 
+# OO authorization for Rails [https://github.com/varvet/pundit]
+gem 'pundit', '~> 2.3'
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '~> 5.0'
 
@@ -80,7 +83,8 @@ group :development do
 end
 
 group :test do
-  # Record your test suite's HTTP interactions and replay them during future test runs for fast, deterministic, accurate tests
+  # Record your test suite's HTTP interactions and replay them during future test runs for fast,
+  #   deterministic, accurate tests
   gem 'vcr', '~> 6.2'
 
   gem 'shoulda-matchers'

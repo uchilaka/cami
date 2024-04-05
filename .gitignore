@@ -88,6 +88,3 @@ Temporary Items
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
-
-# Dev tools
-.tool-versions
