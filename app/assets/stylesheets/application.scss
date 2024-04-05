@@ -15,9 +15,6 @@
  */
 @import "fontawesome";
 
-#main_logo {
-  img {
-    height: 2.5rem;
-    width: auto;
-  }
+#main_logo > img, footer img.logo {
+  width: auto;
 }
