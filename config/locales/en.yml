@@ -33,6 +33,13 @@ en:
   accessibility:
     main:
       logo: "LarCity logo"
+    footer:
+      logo: "LarCity logo (footer)"
+      about: "About"
+      contact: "Contact"
+      privacy: "Privacy Policy"
+      licensing: "Licensing"
+      terms: "Terms"
   shared:
     navbar:
       sign_out: "Sign Out"

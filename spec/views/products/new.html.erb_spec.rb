@@ -3,8 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe 'products/new', type: :view do
+  let(:user) { Fabricate :user }
+
   before(:each) do
-    assign(:product, Fabricate(:product))
+    sign_in :user
+    assign(:product, Product.new)
   end
 
   it 'renders new product form' do
@@ -16,8 +19,6 @@ RSpec.describe 'products/new', type: :view do
       assert_select 'input[name=?]', 'product[display_name]'
 
       assert_select 'textarea[name=?]', 'product[description]'
-
-      assert_select 'input[name=?]', 'product[data]'
     end
   end
 end

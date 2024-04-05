@@ -73,6 +73,7 @@ RSpec.configure do |config|
 
   # Devise integration helpers https://github.com/heartcombo/devise?tab=readme-ov-file#integration-tests
   config.include Devise::Test::IntegrationHelpers, type: :feature
+  config.include Devise::Test::IntegrationHelpers, type: :view
 
   config.before(:suite) do
     # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example

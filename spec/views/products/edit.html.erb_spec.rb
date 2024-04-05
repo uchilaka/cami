@@ -3,9 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe 'products/edit', type: :view do
-  let(:product) { Fabricate :product }
+  let(:user) { Fabricate :user }
+  let(:vendor) { Fabricate :business, users: [user] }
+  let(:product) { Fabricate :product, vendor: }
 
   before(:each) do
+    sign_in :user
     assign(:product, product)
   end
 
