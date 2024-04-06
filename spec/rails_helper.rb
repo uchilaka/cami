@@ -13,6 +13,7 @@ require 'rspec/rails'
 require 'database_cleaner/active_record'
 require 'sidekiq/testing'
 require 'devise/test/integration_helpers'
+require 'vcr'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -35,6 +36,13 @@ begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
+end
+
+# VCR usage docs https://benoittgt.github.io/vcr
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/cassettes'
+  c.hook_into :faraday
+  c.configure_rspec_metadata!
 end
 
 RSpec.configure do |config|
@@ -90,6 +98,11 @@ RSpec.configure do |config|
 
   config.around(:each) do |example|
     DatabaseCleaner.cleaning do
+      # TODO: Fix NotImplementedError being thrown by Business model's
+      #   implementation of MaintainsMetadata
+      # # Load seeds
+      # Rails.application.load_seed
+      # Run example
       example.run
     end
   end

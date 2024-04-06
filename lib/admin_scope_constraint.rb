@@ -10,12 +10,6 @@ class AdminScopeConstraint
   end
 
   def matches?(request)
-    # return true if allow_by_ip.matches?(request)
-    #
-    # raise Errors::ElevatedPrivilegesRequired, 'Forbidden Access to admin scope' \
-    #   if %r{/admin/}.match(request.path)
-    #
-    # false
     allow_by_ip.matches?(request)
   end
 end

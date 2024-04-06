@@ -9,4 +9,14 @@ module Errors
   class UnprocessableEntity < StandardError; end
   class InternalServerError < StandardError; end
   class Unsupported < StandardError; end
+
+  class IntegrationRequestFailed < StandardError
+    attr_reader :status, :vendor
+
+    def initialize(message, status:, vendor:)
+      super(message)
+      @status = status
+      @vendor = vendor
+    end
+  end
 end

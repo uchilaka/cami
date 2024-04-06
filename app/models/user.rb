@@ -24,7 +24,7 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
-  include MaintainsProfile
+  include MaintainsMetadata
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   #
@@ -37,13 +37,19 @@ class User < ApplicationRecord
   alias_attribute :first_name, :given_name
   alias_attribute :last_name, :family_name
 
+  # TODO: Add an implementation specific spec that asserts that
+  #   these accessors are working as expected
+  alias profile metadata
+  alias save_profile save_metadata
+  alias destroy_profile destroy_metadata
+
   # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
   has_person_name
 
   has_and_belongs_to_many :accounts
 
-  def profile
-    @profile ||= UserProfile.find_by(user_id: id)
+  def metadata
+    @metadata ||= Metadata::Profile.find_by(user_id: id)
   end
 
   def matching_auth_provider
@@ -57,6 +63,10 @@ class User < ApplicationRecord
   # def send_devise_notification(notification, *args)
   #   devise_mailer.send(notification, self, *args).deliver_later
   # end
+
+  def initialize_metadata
+    Metadata::Profile.create(user_id: id) if profile.blank?
+  end
 
   class << self
     def from_omniauth(access_token = nil)
@@ -78,7 +88,7 @@ class User < ApplicationRecord
         # user.providers << provider unless user.providers.include?(provider)
         user.uids[provider] = uid if user.uids[provider].blank?
         if user.save!
-          profile = UserProfile.find_or_initialize_by(user_id: user.id)
+          profile = Metadata::Profile.find_or_initialize_by(user_id: user.id)
           profile.image_url = image_url
           profile[provider] = {
             **access_token.info,
@@ -105,11 +115,5 @@ class User < ApplicationRecord
       #   with errors is returned
       user
     end
-  end
-
-  private
-
-  def initialize_profile
-    UserProfile.create(user_id: id) if profile.blank?
   end
 end

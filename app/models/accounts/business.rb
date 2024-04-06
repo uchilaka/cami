@@ -7,15 +7,18 @@
 #  id           :uuid             not null, primary key
 #  display_name :string           not null
 #  readme       :text
+#  slug         :string
 #  type         :string           not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  tax_id       :string
 #
 class Business < Account
-  include MaintainsProfile
+  include MaintainsMetadata
 
-  delegate :email, to: :profile, allow_nil: true
+  delegate :email, to: :metadata, allow_nil: true
+
+  alias profile metadata
 
   has_many :products, foreign_key: :vendor_id
 
@@ -25,13 +28,12 @@ class Business < Account
     profile.email = value
   end
 
-  def profile
-    @profile ||= BusinessProfile.find_or_create_by(account_id: id)
+  def metadata
+    @metadata ||= BusinessProfile.find_or_create_by(account_id: id)
   end
 
-  private
-
-  def initialize_profile
+  def initialize_metadata
+    # TODO: Refactor this to Metadata::BusinessProfile
     BusinessProfile.create(account_id: id) if profile.blank?
   end
 end
