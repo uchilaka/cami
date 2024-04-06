@@ -12,6 +12,9 @@ Rails.application.configure do
     File.exist?(file)
   end)
 
+  # Enable web console for all IP addresses (see https://stackoverflow.com/a/71292229)
+  config.web_console.permissions = '0.0.0.0/0'
+
   config.cache_classes = false
 
   # Do not eager load code on boot.
