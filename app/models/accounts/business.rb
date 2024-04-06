@@ -18,8 +18,6 @@ class Business < Account
 
   delegate :email, to: :metadata, allow_nil: true
 
-  alias profile metadata
-
   has_many :products, foreign_key: :vendor_id
 
   validates :tax_id, allow_blank: true, uniqueness: { case_sensitive: false }
@@ -28,12 +26,16 @@ class Business < Account
     profile.email = value
   end
 
-  def metadata
+  def profile
     @metadata ||= BusinessProfile.find_or_create_by(account_id: id)
   end
 
-  def initialize_metadata
+  alias metadata profile
+
+  def initialize_profile
     # TODO: Refactor this to Metadata::BusinessProfile
     BusinessProfile.create(account_id: id) if profile.blank?
   end
+
+  alias initialize_metadata initialize_profile
 end

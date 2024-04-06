@@ -37,20 +37,17 @@ class User < ApplicationRecord
   alias_attribute :first_name, :given_name
   alias_attribute :last_name, :family_name
 
-  # TODO: Add an implementation specific spec that asserts that
-  #   these accessors are working as expected
-  alias profile metadata
-  alias save_profile save_metadata
-  alias destroy_profile destroy_metadata
-
   # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
   has_person_name
 
   has_and_belongs_to_many :accounts
 
-  def metadata
-    @metadata ||= Metadata::Profile.find_by(user_id: id)
+  def profile
+    @profile ||= Metadata::Profile.find_by(user_id: id)
   end
+
+  alias metadata profile
+
 
   def matching_auth_provider
     return nil if profile.blank?
@@ -64,9 +61,11 @@ class User < ApplicationRecord
   #   devise_mailer.send(notification, self, *args).deliver_later
   # end
 
-  def initialize_metadata
+  def initialize_profile
     Metadata::Profile.create(user_id: id) if profile.blank?
   end
+
+  alias initialize_metadata initialize_profile
 
   class << self
     def from_omniauth(access_token = nil)
@@ -88,7 +87,8 @@ class User < ApplicationRecord
         # user.providers << provider unless user.providers.include?(provider)
         user.uids[provider] = uid if user.uids[provider].blank?
         if user.save!
-          profile = Metadata::Profile.find_or_initialize_by(user_id: user.id)
+          # profile = Metadata::Profile.find_or_initialize_by(user_id: user.id)
+          profile = user.profile
           profile.image_url = image_url
           profile[provider] = {
             **access_token.info,
