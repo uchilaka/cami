@@ -8,6 +8,8 @@ class ApplicationController < ActionController::Base
   # For more on action controller filters, see https://guides.rubyonrails.org/action_controller_overview.html#filters
   before_action :initialize_web_console, only: %i[index new show edit], if: -> { Rails.env.development? }
 
+  # rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up) do |u|
       u.permit(:first_name, :last_name, :name, :email, :password)

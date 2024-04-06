@@ -36,10 +36,10 @@ module Fixtures
         ap result.reject(&:valid?) if verbose?
       end
 
-      if verbose?
-        tally = Business.count
-        say "There are now #{tally} #{things(tally)} in the database.", Color::MAGENTA
-      end
+      return unless verbose?
+
+      tally = Business.count
+      say "There are now #{tally} #{things(tally)} in the database.", Color::MAGENTA
     end
 
     private

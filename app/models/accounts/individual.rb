@@ -22,8 +22,8 @@ class Individual < Account
   end
 
   def allows_one_user
-    if users.count > 1
-      errors.add(:users, I18n.t('models.account.errors.user_limit_exceeded'))
-    end
+    return unless users.count > 1
+
+    errors.add(:users, I18n.t('models.account.errors.user_limit_exceeded'))
   end
 end

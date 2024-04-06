@@ -333,7 +333,7 @@ bin/thor help lx-cli:secrets:print_key
 - [Pre-compiling assets](https://guides.rubyonrails.org/asset_pipeline.html#precompiling-assets)
 - [Dart Sass for Rails](https://github.com/rails/dartsass-rails?tab=readme-ov-file#dart-sass-for-rails)
   - [Configuring builds](https://github.com/rails/dartsass-rails?tab=readme-ov-file#configuring-builds)
-- [Fontawesome Icons](https://fontawesome.com/icons/google?f=brands&s=solid)
+- [Fontawesome Icons](https://fontawesome.com/icons)
 - [Pundit](https://github.com/varvet/pundit?tab=readme-ov-file#policies)
   - [Scopes](https://github.com/varvet/pundit?tab=readme-ov-file#scopes)
   - [Ensuring policies and scopes are used](https://github.com/varvet/pundit?tab=readme-ov-file#ensuring-policies-and-scopes-are-used)
@@ -342,6 +342,7 @@ bin/thor help lx-cli:secrets:print_key
 
 ## Future Work
 
+- [ ] Implement forbidden rescue page (or just set a flash message and redirect to the root path)
 - [ ] Setup and update production credentials in the `config/credentials/production.yml.enc` file
 - [ ] Implement `:confirmable` to secure accounts when switching/adding auth providers
 - [x] Implement FontAwesome library for [SVG icons](https://fontawesome.com/icons/google?f=brands&s=solid)
