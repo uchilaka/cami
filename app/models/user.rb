@@ -43,7 +43,7 @@ class User < ApplicationRecord
   has_and_belongs_to_many :accounts
 
   def profile
-    @profile ||= Metadata::Profile.find_by(user_id: id)
+    @profile ||= Metadata::Profile.find_or_initialize_by(user_id: id)
   end
 
   alias metadata profile
@@ -62,7 +62,12 @@ class User < ApplicationRecord
   # end
 
   def initialize_profile
-    Metadata::Profile.create(user_id: id) if profile.blank?
+    if profile.present?
+      profile.user_id ||= id
+      profile.save if profile.changed? && profile.user.persisted?
+    else
+      Metadata::Profile.create(user_id: id)
+    end
   end
 
   alias initialize_metadata initialize_profile

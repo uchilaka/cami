@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe PayPal::SyncProductsJob, type: :job do
   before do
-    allow_any_instance_of(described_class).to receive(:vendor) do
+    allow_any_instance_of(described_class).to receive(:vendor_credentials) do
       OpenStruct.new(
         base_url: 'https://api-m.paypal.com',
         client_id: ENV.fetch('PAYPAL_CLIENT_ID'),
@@ -27,7 +27,7 @@ RSpec.describe PayPal::SyncProductsJob, type: :job do
 
   # TODO: Make this insert 7 product records
   it 'syncs products' do
-    expect { described_class.perform_now }.to change { Product.count }.by(0).and \
-      change { Metadata::Product.count }.by(0)
+    expect { described_class.perform_now }.to change { Product.count }.by(7).and \
+      change { Metadata::Product.count }.by(7)
   end
 end

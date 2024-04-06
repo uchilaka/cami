@@ -73,4 +73,69 @@ http_interactions:
         user\nSecurity and management controls\nStandard Support (paid upgrade to
         Enhanced Support)","create_time":"2021-03-23T10:11:20Z","links":[{"href":"https://api.paypal.com/v1/catalogs/products/GW-BUSINESS-STANDARD","rel":"self","method":"GET"}]}],"links":[{"href":"https://api.paypal.com/v1/catalogs/products?page_size=10&page=1","rel":"self","method":"GET"}]}'
   recorded_at: Sat, 06 Apr 2024 15:43:34 GMT
+- request:
+    method: get
+    uri: https://api-m.sandbox.paypal.com/v1/catalogs/products
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Content-type:
+      - application/json
+      User-Agent:
+      - Faraday v2.9.0
+      Authorization:
+      - Basic QWFDdHhhUDhVVkFZWTRzQVl2MHJkTkgyaEJmVWtiZ3VwWk13TXpaNW1UWk50eElMOFl5OG50aGQxX3NIdW5IaVAxUHBaOWd4QjgzalZhOW86RUJheDJQUGcybS1NYjF4SGdscFlRYnBmX2ppSWRMeEl6ZGJ2Tkk2Mkc3MW5EUlp6cG92dmZEY2JCRWdrWXIwSUtFc1FZOE40clExTG4zaEc=
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      connection:
+      - keep-alive
+      content-length:
+      - '2469'
+      content-type:
+      - application/json
+      server:
+      - nginx
+      cache-control:
+      - max-age=0, no-cache, no-store, must-revalidate
+      paypal-debug-id:
+      - d5705fb9d7b08
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      edge-control:
+      - max-age=0
+      accept-ranges:
+      - bytes
+      date:
+      - Sat, 06 Apr 2024 18:08:21 GMT
+      via:
+      - 1.1 varnish
+      x-served-by:
+      - cache-chi-kigq8000083-CHI
+      x-cache:
+      - MISS
+      x-cache-hits:
+      - '0'
+      x-timer:
+      - S1712426902.579437,VS0,VE386
+      vary:
+      - Accept-Encoding
+    body:
+      encoding: UTF-8
+      string: '{"products":[{"id":"PROD-2M794202NE430142S","name":"On-brand Inbox
+        @Zoho","description":"Associate e-mail service at your custom domain","create_time":"2020-10-06T01:59:19Z","links":[{"href":"https://api.sandbox.paypal.com/v1/catalogs/products/PROD-2M794202NE430142S","rel":"self","method":"GET"}]},{"id":"PROD-5P807035FF539434J","name":"G-Suite
+        Basic E-Mail Inbox","description":"Associate e-mail service at your custom
+        domain, with the popular GMail app","create_time":"2020-10-06T07:28:14Z","links":[{"href":"https://api.sandbox.paypal.com/v1/catalogs/products/PROD-5P807035FF539434J","rel":"self","method":"GET"}]},{"id":"PROD-4DH22719VG611792R","name":"On-brand
+        Inbox @Gandi","description":"Associate e-mail service at your custom domain","create_time":"2020-10-06T07:30:08Z","links":[{"href":"https://api.sandbox.paypal.com/v1/catalogs/products/PROD-4DH22719VG611792R","rel":"self","method":"GET"}]},{"id":"PROD-7EM66969YK4861014","name":"Domain
+        Registration","description":"Register a domain name for your project, at TLDs
+        supported by Google and Gandi","create_time":"2020-10-06T10:17:03Z","links":[{"href":"https://api.sandbox.paypal.com/v1/catalogs/products/PROD-7EM66969YK4861014","rel":"self","method":"GET"}]},{"id":"PROD-21950187B3358442J","name":"Wordpress
+        Site Setup","create_time":"2020-10-06T10:57:51Z","links":[{"href":"https://api.sandbox.paypal.com/v1/catalogs/products/PROD-21950187B3358442J","rel":"self","method":"GET"}]},{"id":"PROD-65J473852L150750L","name":"Portfolio
+        Site Setup","create_time":"2020-10-06T11:00:12Z","links":[{"href":"https://api.sandbox.paypal.com/v1/catalogs/products/PROD-65J473852L150750L","rel":"self","method":"GET"}]},{"id":"PROD-2MV35388C31009819","name":"Portfolio
+        Site Setup","create_time":"2020-10-06T11:00:28Z","links":[{"href":"https://api.sandbox.paypal.com/v1/catalogs/products/PROD-2MV35388C31009819","rel":"self","method":"GET"}]},{"id":"PROD-0GN962407V053612A","name":"Starter
+        Landing Page","create_time":"2020-10-06T11:04:25Z","links":[{"href":"https://api.sandbox.paypal.com/v1/catalogs/products/PROD-0GN962407V053612A","rel":"self","method":"GET"}]},{"id":"PROD-9JJ61089FW454252S","name":"5-Hour
+        Technical Consultation","create_time":"2020-10-06T11:05:00Z","links":[{"href":"https://api.sandbox.paypal.com/v1/catalogs/products/PROD-9JJ61089FW454252S","rel":"self","method":"GET"}]}],"links":[{"href":"https://api.sandbox.paypal.com/v1/catalogs/products?page_size=10&page=1","rel":"self","method":"GET"}]}'
+  recorded_at: Sat, 06 Apr 2024 18:08:22 GMT
 recorded_with: VCR 6.2.0

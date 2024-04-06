@@ -92,6 +92,9 @@ RSpec.configure do |config|
     system "RAILS_ENV=test #{Rails.root}/bin/rails db:mongoid:drop"
     system "RAILS_ENV=test #{Rails.root}/bin/rails db:mongoid:create_collections"
 
+    # Load seeds
+    Rails.application.load_seed
+
     # Sidekiq setup
     Sidekiq::Testing.fake!
   end
@@ -100,8 +103,6 @@ RSpec.configure do |config|
     DatabaseCleaner.cleaning do
       # TODO: Fix NotImplementedError being thrown by Business model's
       #   implementation of MaintainsMetadata
-      # # Load seeds
-      # Rails.application.load_seed
       # Run example
       example.run
     end

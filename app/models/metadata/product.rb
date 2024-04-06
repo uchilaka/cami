@@ -8,5 +8,9 @@ module Metadata
     field :links, type: Hash
 
     validates :product_id, presence: true, uniqueness: { case_sensitive: false }
+
+    def product
+      @product ||= ::Product.find(product_id)
+    end
   end
 end

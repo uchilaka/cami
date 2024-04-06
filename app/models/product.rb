@@ -38,6 +38,11 @@ class Product < ApplicationRecord
   end
 
   def initialize_metadata
-    Metadata::Product.create(product_id: id) if metadata.blank?
+    if metadata.present?
+      metadata.product_id ||= id
+      metadata.save if metadata.changed? && metadata.product.persisted?
+    else
+      Metadata::Product.create(product_id: id)
+    end
   end
 end

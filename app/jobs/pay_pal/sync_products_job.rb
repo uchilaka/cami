@@ -10,7 +10,7 @@ module PayPal
     def perform(*_args)
       response = connection.get('/v1/catalogs/products')
       data = response.body
-      records_to_save = []
+      saved_records = []
       error_records = []
 
       handle_request_error(response) unless response.success?
@@ -24,6 +24,7 @@ module PayPal
         next if Product.exists?(sku: sku.downcase)
 
         new_record = Product.new(
+          vendor_id: vendor.id,
           sku: sku.downcase,
           display_name:,
           description:,
@@ -32,7 +33,8 @@ module PayPal
         new_record.links = links
 
         if new_record.valid?
-          records_to_save << new_record
+          new_record.save!
+          saved_records << new_record
         else
           puts "Record with SKU #{new_record.sku} is invalid:"
           ap new_record.errors.full_messages
@@ -45,12 +47,8 @@ module PayPal
         ap error_records
       end
 
-      puts "Found #{records_to_save.count} records to save"
-      ap records_to_save
-
-      # TODO: Failing with this weird error:
-      #   ActiveModel::UnknownAttributeError: unknown attribute 'name' for Product.
-      Product.create!(records_to_save) unless records_to_save.empty?
+      puts "Found #{saved_records.count} records to save"
+      ap saved_records
     end
 
     private
@@ -73,22 +71,26 @@ module PayPal
 
     def connection
       @connection ||= Faraday.new(
-        url: vendor.base_url,
+        url: vendor_credentials.base_url,
         headers: {
           'Content-Type': 'application/json'
         }
       ) do |builder|
         builder.request :authorization, :basic,
-                        vendor.client_id,
-                        vendor.client_secret
+                        vendor_credentials.client_id,
+                        vendor_credentials.client_secret
         builder.request :json
         builder.response :json
         builder.response :logger if Rails.env.development?
       end
     end
 
+    def vendor_credentials
+      @vendor_credentials ||= Rails.application.credentials.paypal
+    end
+
     def vendor
-      @vendor ||= Rails.application.credentials.paypal
+      @vendor ||= Business.find_by(slug: 'paypal')
     end
   end
 end
