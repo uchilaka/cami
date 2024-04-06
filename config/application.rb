@@ -16,6 +16,7 @@ require 'action_text/engine'
 require 'action_view/railtie'
 require 'action_cable/engine'
 # require "rails/test_unit/railtie"
+require_relative '../lib/virtual_office_manager'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -38,9 +39,11 @@ module AccountManager
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-    config.eager_load_paths += [Rails.root.join('lib')]
+    config.eager_load_paths << "#{root}/lib"
 
-    config.assets.paths += [Rails.root.join('vendor', 'assets')]
+    config.autoload_paths << "#{root}/lib/commands"
+
+    config.assets.paths << "#{root}/vendor/assets"
 
     # Configure allowed hosts. See doc https://guides.rubyonrails.org/configuring.html#actiondispatch-hostauthorization
     config.hosts += config_for(:allowed_hosts)
@@ -50,5 +53,8 @@ module AccountManager
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Setup default business entity
+    config.default_entity = VirtualOfficeManager.default_entity
   end
 end

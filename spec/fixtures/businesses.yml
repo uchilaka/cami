@@ -1,0 +1,7 @@
+---
+- display_name: Acme Corporation
+  email: <%= Faker::Internet.email %>
+  tax_id: 40-6874064
+- display_name: LarCity LLC
+  email: support@lar.city
+  tax_id: <%= VirtualOfficeManager.default_entity[:tax_id] %>

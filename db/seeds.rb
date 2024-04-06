@@ -8,11 +8,13 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-Business.create(
-  [
-    {
-      display_name: 'Acme Corporation',
-      email: Faker::Internet.email
-    }
-  ]
-)
+# Load all thor fixture tasks
+Dir[Rails.root.join('lib', 'tasks', 'fixtures', '*.thor')].each { |file| load file }
+
+# Load business fixtures
+Fixtures::Businesses.new.invoke(:load, [], verbose: true)
+
+# Load all seed files in db/seeds
+Dir[Rails.root.join('db', 'seeds', '**', '*.rb')].sort.each do |seed|
+  load seed
+end
