@@ -43,9 +43,6 @@ class User < ApplicationRecord
 
   has_and_belongs_to_many :accounts
 
-  after_create_commit :initialize_profile
-  after_destroy_commit :destroy_profile
-
   def profile
     @profile ||= Metadata::Profile.find_or_initialize_by(user_id: id)
   end
@@ -55,7 +52,7 @@ class User < ApplicationRecord
   def initialize_profile
     if profile.present?
       profile.user_id ||= id
-      profile.save if profile.changed? && profile.user.persisted?
+      profile.save if profile.changed? && profile.user&.persisted?
     else
       Metadata::Profile.create(user_id: id)
     end
@@ -95,7 +92,7 @@ class User < ApplicationRecord
         # user.providers << provider unless user.providers.include?(provider)
         user.uids[provider] = uid if user.uids[provider].blank?
         if user.save!
-          profile = UserProfile.find_or_initialize_by(user_id: user.id)
+          profile = Metadata::Profile.find_or_initialize_by(user_id: user.id)
           profile.image_url = image_url
           profile[provider] = {
             **access_token.info,

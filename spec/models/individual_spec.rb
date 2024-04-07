@@ -7,6 +7,7 @@
 #  id           :uuid             not null, primary key
 #  display_name :string           not null
 #  readme       :text
+#  slug         :string
 #  type         :string           not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null

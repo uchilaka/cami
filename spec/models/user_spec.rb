@@ -48,7 +48,7 @@ RSpec.describe User, type: :model do
 
       it 'destroys the user profile' do
         expect(subject.profile.present?).to be(true)
-        expect { subject.destroy }.to change { UserProfile.count }.by(-1)
+        expect { subject.destroy }.to change { Metadata::Profile.count }.by(-1)
       end
     end
   end
