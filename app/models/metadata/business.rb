@@ -5,7 +5,6 @@ module Metadata
     include DocumentRecord
 
     field :account_id, type: String
-
     field :email, type: String
 
     validates :email, presence: true

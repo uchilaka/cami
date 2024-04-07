@@ -18,4 +18,5 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'URL'
   inflect.acronym 'API'
   inflect.acronym 'CLI'
+  inflect.acronym 'VAT'
 end
