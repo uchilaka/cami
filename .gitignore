@@ -43,6 +43,8 @@
 # NOTE: Ignore development environment secrets file. This should allow engineers to maintain
 #   versions of this configuration file without inadvertent conflicts with source control
 /config/credentials/development*.yml.enc
+# Ignore backups of secrets file. See the command: bin/thor help lx-cli:secrets:backup
+/config/credentials/*--**-*-*T*.yml.enc
 
 # Vite Ruby
 /public/vite*
@@ -88,6 +90,3 @@ Temporary Items
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
-
-# Dev tools
-.tool-versions
