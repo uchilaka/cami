@@ -17,8 +17,10 @@ module PayPal
     end
 
     it 'syncs products' do
-      expect { described_class.perform_now }.to change { Product.count }.by(7).and \
-        change { Metadata::Product.count }.by(7)
+      # TODO: Make this less brittle - assert on specific records that are in the
+      #   PayPal sandbox account (and/or VCR cassette)
+      expect { described_class.perform_now }.to change { Product.count }.by(9).and \
+        change { Metadata::Product.count }.by(9)
     end
   end
 end
