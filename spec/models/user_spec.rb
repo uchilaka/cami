@@ -39,7 +39,7 @@ RSpec.describe User, type: :model do
       end
 
       it 'initializes a user profile' do
-        expect { subject }.to change { UserProfile.count }.by(1)
+        expect { subject }.to change { Metadata::Profile.count }.by(1)
       end
     end
 
@@ -57,7 +57,7 @@ RSpec.describe User, type: :model do
     subject { find_or_create_mock_user!(email:) }
 
     it 'returns the expected user profile' do
-      expect(subject.profile).to eq(UserProfile.find_by(user_id: subject.id))
+      expect(subject.profile).to eq(Metadata::Profile.find_by(user_id: subject.id))
     end
   end
 end

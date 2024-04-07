@@ -24,6 +24,8 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
+  include MaintainsMetadata
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   #
@@ -45,8 +47,21 @@ class User < ApplicationRecord
   after_destroy_commit :destroy_profile
 
   def profile
-    @profile ||= UserProfile.find_by(user_id: id)
+    @profile ||= Metadata::Profile.find_or_initialize_by(user_id: id)
   end
+
+  alias metadata profile
+
+  def initialize_profile
+    if profile.present?
+      profile.user_id ||= id
+      profile.save if profile.changed? && profile.user.persisted?
+    else
+      Metadata::Profile.create(user_id: id)
+    end
+  end
+
+  alias initialize_metadata initialize_profile
 
   def matching_auth_provider
     return nil if profile.blank?
@@ -107,15 +122,5 @@ class User < ApplicationRecord
       #   with errors is returned
       user
     end
-  end
-
-  private
-
-  def initialize_profile
-    UserProfile.create(user_id: id) if profile.blank?
-  end
-
-  def destroy_profile
-    UserProfile.find_by(user_id: id).destroy
   end
 end
