@@ -14,3 +14,7 @@
  *= require_self
  */
 @import "fontawesome";
+
+#main_logo > img, footer img.logo {
+  width: auto;
+}
