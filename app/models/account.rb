@@ -26,5 +26,5 @@ class Account < ApplicationRecord
   validates :display_name, presence: true
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
 
-  has_and_belongs_to_many :users
+  has_and_belongs_to_many :users, join_table: 'accounts_users'
 end

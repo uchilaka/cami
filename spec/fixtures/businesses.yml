@@ -14,7 +14,6 @@
 ---
 - display_name: Acme Corporation
   email: <%= Faker::Internet.email %>
-  tax_id: 40-6874064
   slug: acme
 - display_name: LarCity LLC
   email: support@lar.city
@@ -23,5 +22,5 @@
 # SEC archive doc: https://www.sec.gov/Archives/edgar/data/1103415/000091205702037693/a2090698z8-k.htm
 - display_name: PayPal, Inc.
   email: support@paypal.com
-  tax_id: 77-0510487
+  tax_id: <%= VirtualOfficeManager.entities.dig(:paypal, :tax_id) %>
   slug: paypal

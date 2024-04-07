@@ -14,7 +14,7 @@ module Fixtures
               Color::CYAN
           fixtures
         else
-          fixtures_to_load = fixtures.reject { |b| Business.exists?(tax_id: b['tax_id']) }
+          fixtures_to_load = fixtures.reject { |b| Business.exists?(slug: b['slug']) }
           tally = fixtures_to_load.count
           say "Found #{tally} new #{things(tally)} in the fixtures file.",
               Color::CYAN
@@ -53,7 +53,12 @@ module Fixtures
         ERB.new(
           File.read(Rails.root.join('spec/fixtures/businesses.yml').to_s)
         ).result
-      )
+      ).map do |b|
+        b.symbolize_keys!
+        b[:slug] ||= b[:name].parameterize
+        b[:tax_id] ||= Faker::Company.ein
+        b
+      end
     end
   end
 end

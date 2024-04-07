@@ -141,6 +141,8 @@ bin/thor lx-cli:db:setup --mongodb
 
 > You can also start up the app's non-dockerized services with the included IDE configurations for RubyMine in the `.ide-configs` folder.
 
+This is the same command you'll need any time you want to start up the application:
+
 ```shell
 bin/dev
 ```
@@ -163,7 +165,9 @@ rake db:mongoid:remove_undefined_indexes       # Remove indexes that exist in th
 rake db:mongoid:shard_collections              # Shard collections with shard keys specified in Mongoid models
 ```
 
-### Test
+### Setting up the document store in the test environment
+
+> This guide is intended as a temporary solution until we can come up with something better for bringing up the document store with the right set of permissions the first time the application setup is run.
 
 ```shell
 # Show help menu for mongosh

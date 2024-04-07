@@ -8,5 +8,15 @@ class VirtualOfficeManager
     def default_entity
       Rails.application.credentials&.entities&.larcity
     end
+
+    def entities
+      Rails.application.credentials&.entities
+    end
+
+    def entity_by_key(entity_key)
+      return nil if entity_key.blank?
+
+      entities&.send(entity_key)
+    end
   end
 end

@@ -40,7 +40,7 @@ class User < ApplicationRecord
   # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
   has_person_name
 
-  has_and_belongs_to_many :accounts
+  has_and_belongs_to_many :accounts, join_table: 'accounts_users'
 
   def profile
     @profile ||= Metadata::Profile.find_or_initialize_by(user_id: id)
