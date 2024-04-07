@@ -102,6 +102,9 @@ group :test do
   # gem 'database_cleaner-redis'
 
   gem 'climate_control'
+
+  # RSpec matchers for Mongoid https://github.com/mongoid/mongoid-rspec
+  gem 'mongoid-rspec'
 end
 
 # Flexible authentication solution for Rails with Warden https://github.com/heartcombo/devise

@@ -201,6 +201,16 @@ GEM
       concurrent-ruby (>= 1.0.5, < 2.0)
       mongo (>= 2.18.0, < 3.0.0)
       ruby2_keywords (~> 0.0.5)
+    mongoid-compatibility (0.6.0)
+      activesupport
+      mongoid (>= 2.0)
+    mongoid-rspec (4.1.0)
+      activesupport (>= 3.0.0)
+      mongoid (>= 3.1)
+      mongoid-compatibility (>= 0.5.1)
+      rspec-core (~> 3.3)
+      rspec-expectations (~> 3.3)
+      rspec-mocks (~> 3.3)
     multi_xml (0.6.0)
     name_of_person (1.1.3)
       activesupport (>= 5.2.0)
@@ -467,6 +477,7 @@ DEPENDENCIES
   globalid (~> 1.2)
   jbuilder
   mongoid (~> 8.1.0)
+  mongoid-rspec
   name_of_person
   omniauth-google-oauth2
   omniauth-rails_csrf_protection

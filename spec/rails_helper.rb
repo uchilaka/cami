@@ -48,6 +48,8 @@ end
 RSpec.configure do |config|
   config.fail_fast = ENV.fetch('CI', false) ? true : false
 
+  config.include Mongoid::Matchers, type: :model
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = Rails.root.join('spec/fixtures')
 
@@ -101,9 +103,6 @@ RSpec.configure do |config|
 
   config.around(:each) do |example|
     DatabaseCleaner.cleaning do
-      # TODO: Fix NotImplementedError being thrown by Business model's
-      #   implementation of MaintainsMetadata
-      # Run example
       example.run
     end
   end

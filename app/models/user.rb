@@ -25,6 +25,7 @@
 #
 class User < ApplicationRecord
   include MaintainsMetadata
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   #
@@ -48,6 +49,16 @@ class User < ApplicationRecord
 
   alias metadata profile
 
+  def initialize_profile
+    if profile.present?
+      profile.user_id ||= id
+      profile.save if profile.changed? && profile.user&.persisted?
+    else
+      Metadata::Profile.create(user_id: id)
+    end
+  end
+
+  alias initialize_metadata initialize_profile
 
   def matching_auth_provider
     return nil if profile.blank?
@@ -60,17 +71,6 @@ class User < ApplicationRecord
   # def send_devise_notification(notification, *args)
   #   devise_mailer.send(notification, self, *args).deliver_later
   # end
-
-  def initialize_profile
-    if profile.present?
-      profile.user_id ||= id
-      profile.save if profile.changed? && profile.user.persisted?
-    else
-      Metadata::Profile.create(user_id: id)
-    end
-  end
-
-  alias initialize_metadata initialize_profile
 
   class << self
     def from_omniauth(access_token = nil)
@@ -92,7 +92,6 @@ class User < ApplicationRecord
         # user.providers << provider unless user.providers.include?(provider)
         user.uids[provider] = uid if user.uids[provider].blank?
         if user.save!
-          # profile = Metadata::Profile.find_or_initialize_by(user_id: user.id)
           profile = user.profile
           profile.image_url = image_url
           profile[provider] = {
