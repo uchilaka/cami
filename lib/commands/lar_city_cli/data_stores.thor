@@ -1,23 +1,11 @@
 # frozen_string_literal: true
 
-require 'thor'
+require_relative 'base'
 require 'fileutils'
 
 module LarCityCLI
   # Manage data stores for the project
-  class DataStores < Thor
-    class_option :verbose,
-                 type: :boolean,
-                 aliases: '-v',
-                 desc: 'Verbose output',
-                 default: true, # TODO: Change this to false before shipping
-                 required: false
-    class_option :dry_run,
-                 type: :boolean,
-                 aliases: '-d',
-                 desc: 'Dry run',
-                 default: false,
-                 required: false
+  class DataStores < Base
     class_option :store,
                  desc: 'The data store to connect to',
                  type: :string,
@@ -31,10 +19,6 @@ module LarCityCLI
                  desc: 'Connect to the PostgreSQL data store'
 
     namespace :'lx-cli:db'
-
-    def self.exit_on_failure?
-      true
-    end
 
     desc 'setup', 'Initialize the data stores for the project'
     def setup
@@ -219,14 +203,6 @@ module LarCityCLI
 
     def postgres?
       options[:postgres] || %w[postgres postgresql psql].include?(options[:store])
-    end
-
-    def verbose?
-      options[:verbose]
-    end
-
-    def dry_run?
-      options[:dry_run]
     end
   end
 end

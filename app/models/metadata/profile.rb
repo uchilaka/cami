@@ -17,7 +17,7 @@ module Metadata
     validates :user_id, presence: true, uniqueness: { case_sensitive: false }
 
     def user
-      @user ||= User.find(user_id)
+      @user ||= User.find_by(id: user_id)
     end
   end
 end

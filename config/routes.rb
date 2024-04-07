@@ -6,7 +6,8 @@ require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
   resources :accounts, except: %i[index destroy]
-  devise_for :users
+  devise_for :users,
+             controllers: { omniauth_callbacks: 'users/omniauth/callbacks' }
 
   scope :admin, as: :admin do
     constraints AdminScopeConstraint.new do

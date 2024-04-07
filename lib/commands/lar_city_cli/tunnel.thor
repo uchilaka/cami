@@ -1,28 +1,12 @@
 # frozen_string_literal: true
 
-require 'thor'
+require_relative 'base'
+require 'open3'
 
 module LarCityCLI
   # Manage NGROK tunnels for dev testing of the app and rails API
-  class Tunnel < Thor
-    class_option :verbose,
-                 type: :boolean,
-                 aliases: '-v',
-                 desc: 'Verbose output',
-                 default: true, # TODO: Change this to false before shipping
-                 required: false
-    class_option :dry_run,
-                 type: :boolean,
-                 aliases: '-d',
-                 desc: 'Dry run',
-                 default: false,
-                 required: false
-
+  class Tunnel < Base
     namespace :'lx-cli:tunnel'
-
-    def self.exit_on_failure?
-      true
-    end
 
     desc 'open_all', 'Open ngrok tunnels for the project'
     def open_all
@@ -65,6 +49,13 @@ module LarCityCLI
         CMD
       end
 
+      # # Example: doing this with Open3
+      # Open3.popen2e(cmd) do |_stdin, stdout_stderr, wait_thread|
+      #   Thread.new do
+      #     stdout_stderr.each { |line| puts line }
+      #   end
+      #   wait_thread.value
+      # end
       system(cmd, out: $stdout) unless dry_run?
     end
 
@@ -103,14 +94,6 @@ module LarCityCLI
       end
 
       @project_root
-    end
-
-    def verbose?
-      options[:verbose]
-    end
-
-    def dry_run?
-      options[:dry_run]
     end
 
     def has_realpath_cmd?

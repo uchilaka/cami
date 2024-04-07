@@ -9,9 +9,12 @@
 #  encrypted_password     :string           default(""), not null
 #  family_name            :string
 #  given_name             :string
+#  nickname               :string
+#  providers              :string           default([]), is an Array
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
+#  uids                   :jsonb
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
@@ -32,11 +35,20 @@ RSpec.describe User, type: :model do
   describe 'callbacks' do
     describe ':after_create_commit' do
       subject do
-        Fabricate :user, email:
+        Fabricate(:user, email:)
       end
 
       it 'initializes a user profile' do
         expect { subject }.to change { Metadata::Profile.count }.by(1)
+      end
+    end
+
+    describe ':after_destroy_commit' do
+      subject { Fabricate(:user, email:) }
+
+      it 'destroys the user profile' do
+        expect(subject.profile.present?).to be(true)
+        expect { subject.destroy }.to change { Metadata::Profile.count }.by(-1)
       end
     end
   end
