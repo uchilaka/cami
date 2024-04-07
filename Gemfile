@@ -133,7 +133,7 @@ gem 'vite_rails', '~> 3.0', '>= 3.0.17'
 # Simple, efficient background processing for Ruby [https://github.com/sidekiq/sidekiq/wiki/Getting-Started]
 gem 'sidekiq', '~> 7.2', '>= 7.2.0'
 
-# Scheduler/Cron for Sidekiq jobs
+# Scheduler/Cron for Sidekiq jobs [https://github.com/sidekiq-cron/sidekiq-cron?tab=readme-ov-file#adding-cron-job]
 gem 'sidekiq-cron'
 
 # Process manager for applications with multiple components

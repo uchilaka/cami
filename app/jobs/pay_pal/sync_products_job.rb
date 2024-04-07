@@ -4,13 +4,15 @@ require 'awesome_print'
 require 'faraday'
 
 module PayPal
+  # TODO: Refactor to a thor task (invoking that task here instead)
+  #   runnable with: bin/thor lx-cli:paypal:sync_products
   class SyncProductsJob < ApplicationJob
     queue_as :yeet
 
     def perform(*_args)
       response = connection.get('/v1/catalogs/products')
       data = response.body
-      saved_records = []
+      records_to_save = []
       error_records = []
 
       handle_request_error(response) unless response.success?
@@ -33,8 +35,7 @@ module PayPal
         new_record.links = links
 
         if new_record.valid?
-          new_record.save!
-          saved_records << new_record
+          records_to_save << new_record
         else
           puts "Record with SKU #{new_record.sku} is invalid:"
           ap new_record.errors.full_messages
@@ -47,8 +48,13 @@ module PayPal
         ap error_records
       end
 
-      puts "Found #{saved_records.count} records to save"
-      ap saved_records
+      puts "Found #{records_to_save.count} records to save"
+
+      results = Product.transaction do
+        records_to_save.map(&:save!)
+      end
+
+      puts "Saved #{results.count} records" if results.all?
     end
 
     private
@@ -86,7 +92,14 @@ module PayPal
     end
 
     def vendor_credentials
-      @vendor_credentials ||= Rails.application.credentials.paypal
+      @vendor_credentials ||=
+        if (credentials = Rails.application.credentials&.paypal&.presence)
+          OpenStruct.new(
+            base_url: ENV.fetch('PAYPAL_BASE_URL', credentials.base_url),
+            client_id: ENV.fetch('PAYPAL_CLIENT_ID', credentials.client_id),
+            client_secret: ENV.fetch('PAYPAL_CLIENT_SECRET', credentials.client_secret)
+          )
+        end
     end
 
     def vendor

@@ -30,6 +30,8 @@ module AccountManager
 
     config.active_storage.variant_processor = :vips
 
+    config.time_zone = 'Eastern Time (US & Canada)'
+
     config.active_job.queue_adapter = :sidekiq
 
     # Configuration for the application, engines, and railties goes here.
