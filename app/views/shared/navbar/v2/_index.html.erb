@@ -21,7 +21,10 @@
             <%= nav_link_to item[:label], item[:path], class: "#{profile_link_classes}" %>
           <% end %>
           <% if user_signed_in? %>
-            <%= button_to t('shared.navbar.sign_out'), destroy_user_session_path, method: :delete, class: "text-red-400 hover-text-red-600 #{profile_link_classes}" %>
+            <!-- TODO: Fix button full width styling & apply then apply hover:bg-gray-100 -->
+            <%= button_to t('shared.navbar.sign_out'), destroy_user_session_path,
+                          method: :delete,
+                          class: "block px-4 py-2 text-sm text-red-400 hover:text-red-600" %>
           <% end %>
         </ul>
       </div>
