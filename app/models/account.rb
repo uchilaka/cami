@@ -16,6 +16,7 @@
 
 # Doc on Rails STI: https://guides.rubyonrails.org/association_basics.html#single-table-inheritance-sti
 class Account < ApplicationRecord
+  has_rich_text :readme
   # There are security implications to consider when using deterministic encryption.
   # See https://guides.rubyonrails.org/active_record_encryption.html#deterministic-and-non-deterministic-encryption
   encrypts :tax_id, deterministic: true

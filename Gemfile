@@ -49,7 +49,7 @@ gem 'tailwindcss-rails', '~> 2.3'
 gem 'dartsass-rails'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+gem 'image_processing', '~> 1.2'
 
 # Refer to any model with a URI: gid://app/class/id
 gem 'globalid', '~> 1.2'

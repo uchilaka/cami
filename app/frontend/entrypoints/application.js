@@ -1,4 +1,6 @@
 import './main.scss';
+import 'trix';
+import '@rails/actiontext';
 
 import { createElement } from 'react';
 import { createRoot } from 'react-dom/client';

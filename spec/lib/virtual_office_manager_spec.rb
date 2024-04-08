@@ -25,7 +25,7 @@ RSpec.describe VirtualOfficeManager do
     context 'when entity_key is :some_other_key' do
       let(:entity_key) { :some_other_key }
       let(:mock_entity) do
-        OpenStruct.new(
+        Struct::Company.new(
           name: Faker::Company.name,
           email: Faker::Internet.email,
           tax_id: Faker::Company.ein

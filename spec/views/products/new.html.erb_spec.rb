@@ -18,7 +18,9 @@ RSpec.describe 'products/new', type: :view do
 
       assert_select 'input[name=?]', 'product[display_name]'
 
-      assert_select 'textarea[name=?]', 'product[description]'
+      assert_select 'input[name=?][type=?]', 'product[description]', 'hidden'
+
+      assert_select 'trix-editor[id=?][input=?]', 'product_description', 'product_description_trix_input_product'
     end
   end
 end

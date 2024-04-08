@@ -1,15 +1,15 @@
 <div id="<%= dom_id product %>" class="bg-white p-6 shadow-sm rounded overflow-hidden">
 
   <section class="my-5 vendor">
-    <h4 class="font-bold mb-1" aria-label="product name">
+    <h4 class="mb-1" aria-label="product name">
       <%= product.display_name %>
     </h4>
   </section>
 
-  <p class="my-5">
+  <section class="my-5">
     <strong class="block font-medium mb-1">Description:</strong>
-    <%= product.description %>
-  </p>
+    <div class="trix-content"><%= product.description %></div>
+  </section>
 
   <p class="my-5">
     <strong class="block font-medium mb-1">Vendor:</strong>

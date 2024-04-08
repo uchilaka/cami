@@ -16,7 +16,9 @@ RSpec.describe 'accounts/new', type: :view do
     assert_select 'form[action=?][method=?]', accounts_path, 'post' do
       assert_select 'input[name=?]', 'account[display_name]'
 
-      assert_select 'textarea[name=?]', 'account[readme]'
+      assert_select 'input[name=?][type=?]', 'account[readme]', 'hidden'
+
+      assert_select 'trix-editor[id=?]', 'account_readme'
     end
   end
 end

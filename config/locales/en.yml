@@ -47,6 +47,11 @@ en:
       return_home: "Return Home"
   shared:
     navbar:
+      home: "Home"
+      dashboard: "Dashboard"
+      services: "Services"
+      products: "Products"
+      accounts: "Accounts"
       sign_out: "Sign Out"
   models:
     account:

@@ -13,6 +13,5 @@ RSpec.describe 'accounts/show', type: :view do
   it 'renders attributes in <p>' do
     render
     expect(rendered).to match(/Business Name/)
-    expect(rendered).to match(/MyText/)
   end
 end

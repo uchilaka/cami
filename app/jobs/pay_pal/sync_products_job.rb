@@ -55,6 +55,8 @@ module PayPal
       end
 
       puts "Saved #{results.count} records" if results.all?
+      # Showing the last 10 records
+      ap records_to_save.last(10).map(&:reload)
     end
 
     private
@@ -94,7 +96,7 @@ module PayPal
     def vendor_credentials
       @vendor_credentials ||=
         if (credentials = Rails.application.credentials&.paypal&.presence)
-          OpenStruct.new(
+          Struct::VendorConfig.new(
             base_url: ENV.fetch('PAYPAL_BASE_URL', credentials.base_url),
             client_id: ENV.fetch('PAYPAL_CLIENT_ID', credentials.client_id),
             client_secret: ENV.fetch('PAYPAL_CLIENT_SECRET', credentials.client_secret)

@@ -20,7 +20,7 @@ RSpec.describe 'products/index', type: :view do
     render
     cell_selector = Rails::VERSION::STRING >= '7' ? 'div>p' : 'tr>td'
     assert_select cell_selector, text: Regexp.new(sku.to_s), count: 2
-    assert_select cell_selector, text: Regexp.new(display_name.to_s), count: 2
-    assert_select cell_selector, text: Regexp.new(description.to_s), count: 2
+    assert_select 'section>h4', text: Regexp.new(display_name.to_s), count: 2
+    assert_select 'section>div.trix-content', text: Regexp.new(description.to_s), count: 2
   end
 end
