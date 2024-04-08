@@ -1,7 +1,7 @@
 <% content_for :centered_form_layout do %>
   <h3 class="mb-4">Log in</h3>
 
-  <%= render("devise/shared/omniauth_links") %>
+  <%= render "devise/shared/omniauth/links" %>
   <hr class="my-5">
   <%= form_for(
         resource,
