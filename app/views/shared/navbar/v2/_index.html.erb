@@ -41,8 +41,8 @@
           <%= render 'shared/navbar/v2/menu_item', item: %>
         <% end %>
         <% unless user_signed_in? %>
-          <%= nav_link_to render("shared/buttons/login"), new_user_session_path, class: "nav-link #{navbar_link_classes}" %>
-          <%= nav_link_to render("shared/buttons/sign_up"), new_user_registration_path, class: "nav-link #{navbar_link_classes}" %>
+          <li><%= nav_link_to render("shared/buttons/login"), new_user_session_path, class: "nav-link #{navbar_link_classes}" %></li>
+          <li><%= nav_link_to render("shared/buttons/sign_up"), new_user_registration_path, class: "nav-link #{navbar_link_classes}" %></li>
         <% end %>
       </ul>
     </div>

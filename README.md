@@ -349,6 +349,8 @@ bin/thor help lx-cli:secrets:print_key
 - [x] Implement forbidden rescue page (or just set a flash message and redirect to the root path)
 - [ ] Setup and update production credentials in the `config/credentials/production.yml.enc` file
 - [ ] Implement `:confirmable` to secure accounts when switching/adding auth providers
+- [ ] Implement magic links
+- [ ] Implement omniauth via apple
 - [x] Implement FontAwesome library for [SVG icons](https://fontawesome.com/icons/google?f=brands&s=solid)
 - [ ] Secure accounts with MFA
 - [ ] Setup secrets using [docker images' compatibility with secret files](https://docs.docker.com/compose/use-secrets/)
