@@ -5,9 +5,6 @@ require 'sidekiq/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
-  resources :services, except: %i[destroy]
-  resources :products, except: %i[destroy]
-  resources :accounts, except: %i[destroy]
   devise_for :users,
              controllers: { omniauth_callbacks: 'users/omniauth/callbacks' }
 
@@ -17,6 +14,16 @@ Rails.application.routes.draw do
       mount Sidekiq::Web => '/sidekiq'
     end
   end
+
+  resources :services, except: %i[destroy]
+  resources :products, except: %i[destroy]
+  resources :accounts, except: %i[destroy]
+  get 'businesses', to: 'accounts#index', as: :businesses
+  get 'businesses/new', to: 'accounts#new', as: :new_business
+  get 'businesses/:id', to: 'accounts#show', as: :business
+  get 'businesses/:id/edit', to: 'accounts#edit', as: :edit_business
+  post 'businesses', to: 'accounts#create'
+  match 'businesses/:id', to: 'accounts#update', via: %i[patch put]
 
   get 'pages/home'
   get 'pages/dashboard'

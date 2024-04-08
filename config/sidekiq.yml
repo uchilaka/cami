@@ -1,5 +1,4 @@
 # Options here can still be overridden by cmd line args.
----
 :verbose: <%= ENV['RAILS_ENV'] == 'development' %>
 :concurrency: 5
 :timeout: 25

@@ -1,0 +1,17 @@
+<div id="<%= dom_id business %>" class="bg-white p-6 shadow-sm rounded overflow-hidden">
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Business name:</strong>
+    <%= business.display_name %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Readme:</strong>
+    <%= business.readme %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this business", account_path(business), class: "btn btn-primary" %>
+    <%= link_to 'Edit this business', edit_account_path(business), class: "btn btn-secondary" %>
+    <hr class="mt-6">
+  <% end %>
+</div>

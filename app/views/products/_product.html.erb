@@ -1,25 +1,24 @@
 <div id="<%= dom_id product %>" class="bg-white p-6 shadow-sm rounded overflow-hidden">
 
   <section class="my-5 vendor">
-    <h3 class="font-medium mb-1">
-      <strong class="block">Vendor:</strong>
-      <%= product.vendor.display_name %>
-    </h3>
+    <h4 class="font-bold mb-1" aria-label="product name">
+      <%= product.display_name %>
+    </h4>
   </section>
-
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Sku:</strong>
-    <%= product.sku %>
-  </p>
-
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Display name:</strong>
-    <%= product.display_name %>
-  </p>
 
   <p class="my-5">
     <strong class="block font-medium mb-1">Description:</strong>
     <%= product.description %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Vendor:</strong>
+    <%= product.vendor.display_name %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Sku:</strong>
+    <%= product.sku %>
   </p>
 
   <% if action_name != "show" %>
