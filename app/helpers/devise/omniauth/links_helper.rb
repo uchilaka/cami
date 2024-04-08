@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'omniauth'
-
 module Devise
   module Omniauth
     module LinksHelper

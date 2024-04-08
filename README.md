@@ -14,7 +14,7 @@
     - [4. Initialize the database](#4-initialize-the-database)
     - [5. Start up the app](#5-start-up-the-app)
   - [Database management](#database-management)
-    - [Test](#test)
+    - [Setting up the document store in the test environment](#setting-up-the-document-store-in-the-test-environment)
   - [How to run the test suite](#how-to-run-the-test-suite)
   - [Services (job queues, cache servers, search engines, etc.)](#services-job-queues-cache-servers-search-engines-etc)
   - [Deployment instructions](#deployment-instructions)
@@ -23,6 +23,8 @@
     - [Using NGROK](#using-ngrok)
     - [Generating a `Monogid` Model](#generating-a-monogid-model)
     - [Print key file](#print-key-file)
+  - [Integration Partners](#integration-partners)
+    - [PayPal](#paypal)
   - [Guides and References](#guides-and-references)
   - [Future Work](#future-work)
 
@@ -301,6 +303,16 @@ end
 ```shell
 bin/thor help lx-cli:secrets:print_key
 ```
+
+## Integration Partners
+
+### PayPal
+
+- [Developer portal](https://developer.paypal.com/developer)
+  - [Sandbox](https://developer.paypal.com/dashboard/applications/sandbox)
+  - [Live](https://developer.paypal.com/dashboard/applications/live)
+- [Invoicing API](https://developer.paypal.com/docs/api/invoicing/v2/)
+  - [Webhooks](https://developer.paypal.com/docs/invoicing/webhooks/)
 
 ## Guides and References
 
