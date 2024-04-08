@@ -13,6 +13,7 @@ require 'rspec/rails'
 require 'database_cleaner/active_record'
 require 'sidekiq/testing'
 require 'devise/test/integration_helpers'
+require 'vcr'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -37,8 +38,17 @@ rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
 
+# VCR usage docs https://benoittgt.github.io/vcr
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/cassettes'
+  c.hook_into :faraday
+  c.configure_rspec_metadata!
+end
+
 RSpec.configure do |config|
-  config.fail_fast = true
+  config.fail_fast = ENV.fetch('CI', false) ? true : false
+
+  config.include Mongoid::Matchers, type: :model
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = Rails.root.join('spec/fixtures')
@@ -73,6 +83,7 @@ RSpec.configure do |config|
 
   # Devise integration helpers https://github.com/heartcombo/devise?tab=readme-ov-file#integration-tests
   config.include Devise::Test::IntegrationHelpers, type: :feature
+  config.include Devise::Test::IntegrationHelpers, type: :view
 
   config.before(:suite) do
     # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example
@@ -83,12 +94,18 @@ RSpec.configure do |config|
     system "RAILS_ENV=test #{Rails.root}/bin/rails db:mongoid:drop"
     system "RAILS_ENV=test #{Rails.root}/bin/rails db:mongoid:create_collections"
 
+    # Load seeds
+    Rails.application.load_seed
+
     # Sidekiq setup
     Sidekiq::Testing.fake!
   end
 
   config.around(:each) do |example|
     DatabaseCleaner.cleaning do
+      # TODO: Fix NotImplementedError being thrown by Business model's
+      #   implementation of MaintainsMetadata
+      # Run example
       example.run
     end
   end

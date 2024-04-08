@@ -42,14 +42,19 @@ gem 'jbuilder'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
-# Integrate Dart Sass with the asset pipeline in Rails https://github.com/rails/dartsass-rails
-gem 'dartsass-rails'
-
 # Use Tailwind CSS for stylesheets https://tailwindcss.com/docs/guides/ruby-on-rails
 gem 'tailwindcss-rails', '~> 2.3'
 
+# Integrate Dart Sass with the asset pipeline in Rails https://github.com/rails/dartsass-rails
+gem 'dartsass-rails'
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
+
+# Refer to any model with a URI: gid://app/class/id
+gem 'globalid', '~> 1.2'
+
+gem 'awesome_print'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -59,6 +64,7 @@ group :development, :test do
   gem 'capybara_accessibility_audit'
   gem 'fabrication'
   gem 'faker'
+  gem 'open3'
   gem 'rspec-rails', '~> 6.1', '>= 6.1.1'
   gem 'rubocop'
   gem 'rubocop-performance'
@@ -96,13 +102,33 @@ group :test do
   # gem 'database_cleaner-redis'
 
   gem 'climate_control'
+
+  # RSpec matchers for Mongoid https://github.com/mongoid/mongoid-rspec
+  gem 'mongoid-rspec'
 end
 
+# Flexible authentication solution for Rails with Warden https://github.com/heartcombo/devise
 gem 'devise'
+
+# Passwordless (email-only) login strategy for Devise https://github.com/abevoelker/devise-passwordless
+gem 'devise-passwordless'
+
+gem 'omniauth-rails_csrf_protection'
+
+# https://github.com/nhosoya/omniauth-apple
+# gem 'omniauth-apple'
+
+# A Google OAuth2 strategy for OmniAuth 1.x https://github.com/zquestz/omniauth-google-oauth2
+gem 'omniauth-google-oauth2'
+
+# Presenting names of people in full, familiar, abbreviated, and initialized forms (but without titulation etc)
 gem 'name_of_person'
+
+# A fast image processing library with low memory needs
 gem 'ruby-vips', '~> 2.1', '>= 2.1.4'
+
+# Use Vite in Rails for JS https://github.com/ElMassimo/vite_ruby
 gem 'vite_rails', '~> 3.0', '>= 3.0.17'
-gem 'vite_ruby', '~> 3.2', '>= 3.2.2'
 
 # Simple, efficient background processing for Ruby [https://github.com/sidekiq/sidekiq/wiki/Getting-Started]
 gem 'sidekiq', '~> 7.2', '>= 7.2.0'

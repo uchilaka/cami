@@ -1,24 +1,10 @@
 # frozen_string_literal: true
 
-require 'thor'
-require 'thor/shell/color'
-require 'fileutils'
+require_relative 'base'
 
 module LarCityCLI
   # Manage credentials for the rails app
-  class KeyChain < Thor
-    class_option :verbose,
-                 type: :boolean,
-                 aliases: '-v',
-                 desc: 'Verbose output',
-                 default: true,
-                 required: false
-    class_option :dry_run,
-                 type: :boolean,
-                 aliases: '-d',
-                 desc: 'Dry run',
-                 default: false,
-                 required: false
+  class KeyChain < Base
     class_option :environment,
                  type: :string,
                  aliases: '-e',
@@ -26,10 +12,6 @@ module LarCityCLI
                  required: false
 
     namespace :'lx-cli:secrets'
-
-    def self.exit_on_failure?
-      true
-    end
 
     desc 'edit', 'Manage the secrets in the environment credentials file'
     option :editor,
@@ -49,9 +31,18 @@ module LarCityCLI
       system(command_to_run, out: $stdout)
     end
 
-    desc 'backup', 'Backup the environment credentials file'
+    desc 'backup', 'Backup an environment credentials file'
+    long_desc <<~DESC
+      Backup an environment credentials file. The backup file is saved
+      in the config/credentials directory.
+
+      This command supports the --environment option to specify the
+      environment credentials file to backup. These files will also be
+      saved with a timestamp in the filename and ignored when committing
+      changes to source control.
+    DESC
     def backup
-      backup_file = Rails.root.join('config', 'credentials', "#{environment}_#{timestamp}.yml.enc")
+      backup_file = Rails.root.join('config', 'credentials', "#{environment}--#{timestamp}.yml.enc")
       FileUtils.cp(credentials_file, backup_file, verbose: verbose?)
 
       say "Backed up #{credentials_file} to #{backup_file}", Color::GREEN
@@ -100,14 +91,6 @@ module LarCityCLI
 
     def vscode?
       system('which code')
-    end
-
-    def dry_run?
-      options[:dry_run]
-    end
-
-    def verbose?
-      options[:verbose]
     end
 
     def environment

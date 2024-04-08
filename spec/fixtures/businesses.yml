@@ -1,0 +1,26 @@
+# == Schema Information
+#
+# Table name: accounts
+#
+#  id           :uuid             not null, primary key
+#  display_name :string           not null
+#  readme       :text
+#  slug         :string
+#  type         :string           not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  tax_id       :string
+#
+---
+- display_name: Acme Corporation
+  email: <%= Faker::Internet.email %>
+  slug: acme
+- display_name: LarCity LLC
+  email: support@lar.city
+  tax_id: <%= VirtualOfficeManager.default_entity[:tax_id] %>
+  slug: larcity
+# SEC archive doc: https://www.sec.gov/Archives/edgar/data/1103415/000091205702037693/a2090698z8-k.htm
+- display_name: PayPal, Inc.
+  email: support@paypal.com
+  tax_id: <%= VirtualOfficeManager.entities.dig(:paypal, :tax_id) %>
+  slug: paypal

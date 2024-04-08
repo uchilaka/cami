@@ -3,11 +3,13 @@
 require_relative 'restricted_ips_constraint'
 
 class AdminScopeConstraint
+  attr_reader :allow_by_ip
+
   def initialize
-    @restricted_ips_constraint = RestrictedIpsConstraint.new
+    @allow_by_ip = RestrictedIpsConstraint.new
   end
 
   def matches?(request)
-    @restricted_ips_constraint.matches?(request)
+    allow_by_ip.matches?(request)
   end
 end

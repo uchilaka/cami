@@ -2,19 +2,21 @@ import './main.scss';
 
 import { createElement } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from '@/components/views/home';
+import Home from '@/components/views/home';
+import Dashboard from '@/components/views/dashboard';
 
-const renderHomeComponent = () => {
-  const domContainer = document.querySelector('#home');
+function mountIfContainerIsLoaded(containerId, Component) {
+  const domContainer = document.querySelector(`#${containerId}`);
   if (domContainer) {
-    const home = createRoot(domContainer);
-    home.render(createElement(App));
+    const component = createRoot(domContainer);
+    component.render(createElement(Component));
   }
-};
+}
 
 window.addEventListener('DOMContentLoaded', () => {
   console.debug('DOM fully loaded and parsed');
-  renderHomeComponent();
+  mountIfContainerIsLoaded('home', Home);
+  mountIfContainerIsLoaded('dashboard', Dashboard);
 });
 
 window.addEventListener('load', () => {
