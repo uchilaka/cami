@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module NavbarHelper
+  def navbar_version
+    '1.0'
+  end
+
   def main_menu
     # TODO: Internationalize these link labels
     # TODO: Include accessibility information for screen readers
