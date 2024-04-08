@@ -20,7 +20,7 @@ class ErrorsController < ApplicationController
       raise Errors::UnprocessableEntity
     end
 
-    raise Errors::NotFound
+    raise Errors::ResourceNotFound
   end
 
   def unprocessable_entity

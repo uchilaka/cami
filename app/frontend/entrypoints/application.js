@@ -1,6 +1,8 @@
-import './main.scss';
+import 'flowbite';
 import 'trix';
 import '@rails/actiontext';
+
+import './main.scss';
 
 import { createElement } from 'react';
 import { createRoot } from 'react-dom/client';
