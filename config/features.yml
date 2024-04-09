@@ -10,3 +10,7 @@ development:
   <<: *default
   feat__navbar_v2:
     enabled: true
+test:
+  <<: *default
+production:
+  <<: *default
