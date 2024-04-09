@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     constraints AdminScopeConstraint.new do
       # Setting up sidekiq web: https://github.com/sidekiq/sidekiq/wiki/Monitoring#web-ui
       mount Sidekiq::Web => '/sidekiq'
+      mount Flipper::Api.app(Flipper) => '/flipper/api'
+      mount Flipper::UI.app(Flipper) => '/flipper'
     end
   end
 

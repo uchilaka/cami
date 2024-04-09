@@ -15,6 +15,11 @@ gem 'sprockets-rails'
 # IMPORTANT: This should be loaded as early as possible
 gem 'dotenv', groups: %i[development test], require: 'dotenv/load'
 
+# Redis feature flag adapter for Flipper
+gem 'flipper-api', '~> 1.2'
+gem 'flipper-redis', '~> 1.2'
+gem 'flipper-ui', '~> 1.2'
+
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
 
@@ -56,6 +61,9 @@ gem 'globalid', '~> 1.2'
 
 gem 'awesome_print'
 
+# Roles library with resource scoping
+gem 'rolify', '~> 6.0'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
@@ -81,7 +89,11 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
 
+  # Annotates Rails Models, routes, fixtures, and others based on the database schema.
   gem 'annotate'
+
+  # Preview mail in browser instead of sending.
+  gem 'letter_opener'
 end
 
 group :test do
