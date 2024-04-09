@@ -11,7 +11,13 @@ default: &default
 development:
   <<: *default
   feat__navbar_v2:
-    enabled: !!bool true
+    enabled: true
+  feat__services:
+    enabled: true
+  feat_products:
+    enabled: true
+  feat__accounts:
+    enabled: true
 test:
   <<: *default
 production:

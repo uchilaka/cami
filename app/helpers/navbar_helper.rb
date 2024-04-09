@@ -48,10 +48,20 @@ module NavbarHelper
         path: accounts_path,
         enabled: Flipper.enabled?(:feat__accounts, current_user)
       },
-      # { label: t('shared.navbar.services'), path: services_path, public: true },
+      {
+        label: t('shared.navbar.services'),
+        path: services_path,
+        public: true,
+        enabled: Flipper.enabled?(:feat__services, current_user)
+      },
       # TODO: Eventually take products off this list - intended navigation
       #   is to traverse via services to the component products
-      # { label: t('shared.navbar.products'), path: products_path, public: true },
+      {
+        label: t('shared.navbar.products'),
+        path: products_path,
+        public: true,
+        enabled: Flipper.enabled?(:feat__products, current_user)
+      },
     ].map { |item| Struct::NavbarItem.new(item) }.filter(&:enabled)
   end
 
@@ -61,6 +71,7 @@ module NavbarHelper
 
   def admin_menu
     @admin_menu ||= [
+      { label: 'Products', path: '/products', admin: true },
       { label: 'Features', path: '/admin/flipper', admin: true },
       { label: 'Sidekiq', path: '/admin/sidekiq', admin: true },
     ].map { |item| Struct::NavbarItem.new(item) }
