@@ -6,10 +6,12 @@ default: &default
     enabled: true
   feat__navbar_v2:
     enabled: false
+  feat__accounts:
+    enabled: false
 development:
   <<: *default
   feat__navbar_v2:
-    enabled: true
+    enabled: !!bool true
 test:
   <<: *default
 production:

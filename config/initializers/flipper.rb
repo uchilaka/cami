@@ -12,7 +12,13 @@ Flipper.configure do |config|
 end
 
 Rails.application.config.after_initialize do |app|
+  current_features = Flipper.features.map(&:key)
   app.config_for(:features).each do |feature, options|
-    Flipper.enable(feature) if options[:enabled]
+    Flipper.add(feature) unless current_features.include?(feature)
+    if options[:enabled]
+      Flipper.enable(feature)
+    else
+      Flipper.disable(feature)
+    end
   end
 end

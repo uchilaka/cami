@@ -1,0 +1,11 @@
+<% is_current_page = item[:path] == current_path %>
+<% if is_current_page  %>
+  <%= nav_link_to item[:label],
+                  item[:path],
+                  class: "nav-link #{navbar_link_classes(is_current_page:)}",
+                  "aria-current": "page" %>
+<% else %>
+  <%= nav_link_to item[:label],
+                  item[:path],
+                  class: "nav-link #{navbar_link_classes(is_current_page:)}" %>
+<% end %>

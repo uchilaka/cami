@@ -40,8 +40,18 @@ en:
       privacy: "Privacy Policy"
       licensing: "Licensing"
       terms: "Terms"
+  ctas:
+    main:
+      sign_up: "Sign Up"
+      sign_in: "Sign In"
+      return_home: "Return Home"
   shared:
     navbar:
+      home: "Home"
+      dashboard: "Dashboard"
+      services: "Services"
+      products: "Products"
+      accounts: "Accounts"
       sign_out: "Sign Out"
   models:
     account:
