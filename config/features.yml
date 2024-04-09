@@ -1,0 +1,12 @@
+# Persisting the default state of features in this config file since
+#   the feature flags may not persisted across restarts in the data
+#   store (e.g. redis in low rent environments).
+default: &default
+  feat__google_omniauth:
+    enabled: true
+  feat__navbar_v2:
+    enabled: false
+development:
+  <<: *default
+  feat__navbar_v2:
+    enabled: true
