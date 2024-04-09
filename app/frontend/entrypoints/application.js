@@ -1,3 +1,5 @@
+import 'flowbite';
+
 import './main.scss';
 
 import { createElement } from 'react';
