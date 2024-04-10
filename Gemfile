@@ -64,6 +64,9 @@ gem 'awesome_print'
 # Roles library with resource scoping
 gem 'rolify', '~> 6.0'
 
+# State machine mixin for Ruby objects
+gem 'aasm', '~> 5.5'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
