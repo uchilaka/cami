@@ -15,4 +15,7 @@
 #
 Fabricator(:account) do
   display_name { Faker::Company.name }
+  users { [Fabricate(:user)] }
+  slug { Faker::Internet.slug }
+  type 'Account'
 end

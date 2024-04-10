@@ -46,7 +46,7 @@ class User < ApplicationRecord
   # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
   has_person_name
 
-  has_and_belongs_to_many :accounts
+  has_and_belongs_to_many :accounts, join_table: 'accounts_users'
 
   def profile
     @profile ||= Metadata::Profile.find_or_initialize_by(user_id: id)
@@ -103,7 +103,7 @@ class User < ApplicationRecord
         # user.providers << provider unless user.providers.include?(provider)
         user.uids[provider] = uid if user.uids[provider].blank?
         if user.save!
-          profile = Metadata::Profile.find_or_initialize_by(user_id: user.id)
+          profile = user.profile
           profile.image_url = image_url
           profile[provider] = {
             **access_token.info,

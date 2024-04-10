@@ -18,5 +18,32 @@
 #  fk_rails_...  (vendor_id => accounts.id)
 #
 class Product < ApplicationRecord
+  include MaintainsMetadata
+
+  attribute :type, :string, default: 'Product'
+
   belongs_to :vendor, class_name: 'Account'
+
+  has_and_belongs_to_many :services, join_table: 'products_services'
+
+  delegate :links, to: :metadata
+
+  has_rich_text :description
+
+  def links=(value)
+    metadata.links = value
+  end
+
+  def metadata
+    @metadata ||= Metadata::Product.find_or_initialize_by(product_id: id)
+  end
+
+  def initialize_metadata
+    if metadata.present?
+      metadata.product_id ||= id
+      metadata.save if metadata.changed? && metadata.product.persisted?
+    else
+      Metadata::Product.create(product_id: id)
+    end
+  end
 end

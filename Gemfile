@@ -54,7 +54,7 @@ gem 'tailwindcss-rails', '~> 2.3'
 gem 'dartsass-rails'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+gem 'image_processing', '~> 1.2'
 
 # Refer to any model with a URI: gid://app/class/id
 gem 'globalid', '~> 1.2'
@@ -148,7 +148,7 @@ gem 'vite_rails', '~> 3.0', '>= 3.0.17'
 # Simple, efficient background processing for Ruby [https://github.com/sidekiq/sidekiq/wiki/Getting-Started]
 gem 'sidekiq', '~> 7.2', '>= 7.2.0'
 
-# Scheduler/Cron for Sidekiq jobs
+# Scheduler/Cron for Sidekiq jobs [https://github.com/sidekiq-cron/sidekiq-cron?tab=readme-ov-file#adding-cron-job]
 gem 'sidekiq-cron'
 
 # Process manager for applications with multiple components

@@ -92,4 +92,8 @@ class Account < ApplicationRecord
       transitions from: %i[active payment_due overdue suspended], to: :deactivated
     end
   end
+
+  def email
+    nil
+  end
 end

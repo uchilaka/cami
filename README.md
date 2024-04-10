@@ -14,7 +14,7 @@
     - [4. Initialize the database](#4-initialize-the-database)
     - [5. Start up the app](#5-start-up-the-app)
   - [Database management](#database-management)
-    - [Test](#test)
+    - [Setting up the document store in the test environment](#setting-up-the-document-store-in-the-test-environment)
   - [How to run the test suite](#how-to-run-the-test-suite)
   - [Services (job queues, cache servers, search engines, etc.)](#services-job-queues-cache-servers-search-engines-etc)
   - [Deployment instructions](#deployment-instructions)
@@ -23,6 +23,8 @@
     - [Using NGROK](#using-ngrok)
     - [Generating a `Monogid` Model](#generating-a-monogid-model)
     - [Print key file](#print-key-file)
+  - [Integration Partners](#integration-partners)
+    - [PayPal](#paypal)
   - [Guides and References](#guides-and-references)
   - [Future Work](#future-work)
 
@@ -141,6 +143,8 @@ bin/thor lx-cli:db:setup --mongodb
 
 > You can also start up the app's non-dockerized services with the included IDE configurations for RubyMine in the `.ide-configs` folder.
 
+This is the same command you'll need any time you want to start up the application:
+
 ```shell
 bin/dev
 ```
@@ -163,7 +167,9 @@ rake db:mongoid:remove_undefined_indexes       # Remove indexes that exist in th
 rake db:mongoid:shard_collections              # Shard collections with shard keys specified in Mongoid models
 ```
 
-### Test
+### Setting up the document store in the test environment
+
+> This guide is intended as a temporary solution until we can come up with something better for bringing up the document store with the right set of permissions the first time the application setup is run.
 
 ```shell
 # Show help menu for mongosh
@@ -298,6 +304,16 @@ end
 bin/thor help lx-cli:secrets:print_key
 ```
 
+## Integration Partners
+
+### PayPal
+
+- [Developer portal](https://developer.paypal.com/developer)
+  - [Sandbox](https://developer.paypal.com/dashboard/applications/sandbox)
+  - [Live](https://developer.paypal.com/dashboard/applications/live)
+- [Invoicing API](https://developer.paypal.com/docs/api/invoicing/v2/)
+  - [Webhooks](https://developer.paypal.com/docs/invoicing/webhooks/)
+
 ## Guides and References
 
 - [MongoDB Tutorial](https://www.w3schools.com/mongodb/)
@@ -307,17 +323,21 @@ bin/thor help lx-cli:secrets:print_key
   - [Autoloading and Reloading Constants](https://guides.rubyonrails.org/autoloading_and_reloading_constants.html)
     - [Single Table Inheritance](https://guides.rubyonrails.org/autoloading_and_reloading_constants.html#single-table-inheritance)
     - [Customizing Inflections](https://guides.rubyonrails.org/autoloading_and_reloading_constants.html#customizing-inflections)
-  - [Rails Routing from the Outside In](https://guides.rubyonrails.org/routing.html)
-  - [Active Record Migrations](https://guides.rubyonrails.org/active_record_migrations.html)
-  - [Active Record Validations](https://guides.rubyonrails.org/active_record_validations.html)
-  - [Active Record Callbacks](https://guides.rubyonrails.org/active_record_callbacks.html)
-  - [Active Record Associations](https://guides.rubyonrails.org/association_basics.html)
-    - [Single Table Inheritance](https://guides.rubyonrails.org/association_basics.html#single-table-inheritance-sti)
-    - [Delegated Types](https://guides.rubyonrails.org/association_basics.html#delegated-types)
-  - [Active Record Query Interface](https://guides.rubyonrails.org/active_record_querying.html)
-  - [Active Record Scopes](https://guides.rubyonrails.org/active_record_querying.html#scopes)
+  - [Routing from the Outside In](https://guides.rubyonrails.org/routing.html)
+  - [Active Record](https://guides.rubyonrails.org/active_record_basics.html)
+    - [Migrations](https://guides.rubyonrails.org/active_record_migrations.html)
+    - [Validations](https://guides.rubyonrails.org/active_record_validations.html)
+    - [Callbacks](https://guides.rubyonrails.org/active_record_callbacks.html)
+    - [Associations](https://guides.rubyonrails.org/association_basics.html)
+      - [Single Table Inheritance](https://guides.rubyonrails.org/association_basics.html#single-table-inheritance-sti)
+      - [Delegated Types](https://guides.rubyonrails.org/association_basics.html#delegated-types)
+    - [Query Interface](https://guides.rubyonrails.org/active_record_querying.html)
+    - [Scopes](https://guides.rubyonrails.org/active_record_querying.html#scopes)
+    - [Encryption](https://guides.rubyonrails.org/active_record_encryption.html)
   - [Multiple Databases](https://guides.rubyonrails.org/active_record_multiple_databases.html)
   - [Asset pipeline](https://guides.rubyonrails.org/asset_pipeline.html)
+  - [The Flash](https://guides.rubyonrails.org/action_controller_overview.html#the-flash)
+  - [Action Text](https://guides.rubyonrails.org/v7.1/action_text_overview.html)
 - [Introduction to Sidekiq for Rails](https://blog.appsignal.com/2023/09/20/an-introduction-to-sidekiq-for-ruby-on-rails.html)
 - [The beginner's guide to magic links](https://postmarkapp.com/blog/magic-links)
 - [Devise](https://github.com/heartcombo/devise?tab=readme-ov-file#getting-started)
@@ -329,7 +349,7 @@ bin/thor help lx-cli:secrets:print_key
 - [Pre-compiling assets](https://guides.rubyonrails.org/asset_pipeline.html#precompiling-assets)
 - [Dart Sass for Rails](https://github.com/rails/dartsass-rails?tab=readme-ov-file#dart-sass-for-rails)
   - [Configuring builds](https://github.com/rails/dartsass-rails?tab=readme-ov-file#configuring-builds)
-- [Fontawesome Icons](https://fontawesome.com/icons/google?f=brands&s=solid)
+- [Fontawesome Icons](https://fontawesome.com/icons)
 - [Pundit](https://github.com/varvet/pundit?tab=readme-ov-file#policies)
   - [Scopes](https://github.com/varvet/pundit?tab=readme-ov-file#scopes)
   - [Ensuring policies and scopes are used](https://github.com/varvet/pundit?tab=readme-ov-file#ensuring-policies-and-scopes-are-used)
@@ -341,13 +361,19 @@ bin/thor help lx-cli:secrets:print_key
 
 ## Future Work
 
+- [x] Implement forbidden rescue page (or just set a flash message and redirect to the root path)
+- [ ] "Continue with Google" quick link in the profile dropdown
 - [ ] Setup and update production credentials in the `config/credentials/production.yml.enc` file
 - [ ] Implement `:confirmable` to secure accounts when switching/adding auth providers
+- [ ] Implement magic links
+- [ ] Implement omniauth via apple
 - [x] Implement FontAwesome library for [SVG icons](https://fontawesome.com/icons/google?f=brands&s=solid)
 - [ ] Secure accounts with MFA
 - [ ] Setup secrets using [docker images' compatibility with secret files](https://docs.docker.com/compose/use-secrets/)
-- [ ] [Vite CJS API is deprecated](https://vitejs.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated). Update the `vite.config.js` file to use the ESM build instead
+- [ ] [Vite CJS API is deprecated and will be removed in v6](https://vitejs.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated). Update the `vite.config.js` file to use the ESM build instead
 - [ ] [New ESLint configuration system is available](https://eslint.org/docs/latest/use/configure/configuration-files-new). You will need to create a new `eslint.config.js` file to use the new configuration system
+- [ ] Setup RSwag for baller request specs & API tools
+- [ ] Setup flipper for feature flags
 - [ ] Knapsack Pro for parallelizing tests
 - [ ] Playwright E2E test suite
 - [ ] Implement default authorization policies

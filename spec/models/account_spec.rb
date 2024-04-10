@@ -19,6 +19,9 @@ RSpec.describe Account, type: :model do
   subject { Fabricate :account }
 
   it { should validate_presence_of :display_name }
+  it { should validate_presence_of :slug }
+  it { should validate_uniqueness_of(:slug).case_insensitive }
+  it { should have_and_belong_to_many(:users) }
 
   describe '#state' do
     it { transition_from(%i[demo guest]).to(:active).on_event(:activate) }

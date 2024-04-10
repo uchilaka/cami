@@ -18,3 +18,7 @@
 #main_logo > img, footer img.logo {
   width: auto;
 }
+
+.product-summary section:first-child {
+  min-height: 280px;
+}

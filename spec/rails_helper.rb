@@ -84,6 +84,7 @@ RSpec.configure do |config|
 
   # Devise integration helpers https://github.com/heartcombo/devise?tab=readme-ov-file#integration-tests
   config.include Devise::Test::IntegrationHelpers, type: :feature
+  config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Devise::Test::IntegrationHelpers, type: :view
 
   config.before(:suite) do
@@ -104,9 +105,6 @@ RSpec.configure do |config|
 
   config.around(:each) do |example|
     DatabaseCleaner.cleaning do
-      # TODO: Fix NotImplementedError being thrown by Business model's
-      #   implementation of MaintainsMetadata
-      # Run example
       example.run
     end
   end
