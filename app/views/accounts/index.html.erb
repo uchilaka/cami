@@ -10,7 +10,7 @@
 
   <div id="accounts" class="min-w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
     <% @accounts.each do |account| %>
-      <%= render partial: 'account_summary', locals: { account: account } %>
+      <%= render partial: account_summary_template, locals: { account: account } %>
     <% end %>
   </div>
 </div>
