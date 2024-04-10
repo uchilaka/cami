@@ -5,6 +5,9 @@
 # Table name: users
 #
 #  id                     :uuid             not null, primary key
+#  confirmation_sent_at   :datetime
+#  confirmation_token     :string
+#  confirmed_at           :datetime
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  family_name            :string
@@ -15,11 +18,13 @@
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  uids                   :jsonb
+#  unconfirmed_email      :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
 # Indexes
 #
+#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
@@ -30,9 +35,9 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   #
   # Source code for confirmable: https://github.com/heartcombo/devise/blob/main/lib/devise/models/confirmable.rb
-  # Guide on adding confirmable: https://tommcfarlin.com/adding-confirmable-to-users-in-devise/
+  # Guide on adding confirmable: https://github.com/heartcombo/devise/wiki/How-To:-Add-:confirmable-to-Users
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
+         :recoverable, :rememberable, :validatable, :confirmable,
          :omniauthable, omniauth_providers: %i[google]
 
   alias_attribute :first_name, :given_name
@@ -41,7 +46,7 @@ class User < ApplicationRecord
   # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
   has_person_name
 
-  has_and_belongs_to_many :accounts
+  has_and_belongs_to_many :accounts, join_table: 'accounts_users'
 
   def profile
     @profile ||= Metadata::Profile.find_or_initialize_by(user_id: id)
@@ -72,6 +77,12 @@ class User < ApplicationRecord
   #   devise_mailer.send(notification, self, *args).deliver_later
   # end
 
+  # TODO: Test attempting to activate several accounts and ensure only the ones
+  #   that are not already activated are activated
+  # def after_confirmation
+  #   accounts.each(&:activate!)
+  # end
+
   class << self
     def from_omniauth(access_token = nil)
       access_token ||= Current.auth_provider
@@ -92,7 +103,7 @@ class User < ApplicationRecord
         # user.providers << provider unless user.providers.include?(provider)
         user.uids[provider] = uid if user.uids[provider].blank?
         if user.save!
-          profile = Metadata::Profile.find_or_initialize_by(user_id: user.id)
+          profile = user.profile
           profile.image_url = image_url
           profile[provider] = {
             **access_token.info,

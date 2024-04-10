@@ -1,0 +1,17 @@
+<%= form_with(model: service) do |form| %>
+<%= render "shared/error_messages", resource: form.object %>
+
+  <div class="my-5">
+    <%= form.label :display_name %>
+    <%= form.text_field :display_name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :readme %>
+    <%= form.text_area :readme, rows: 4, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="inline">
+    <%= form.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

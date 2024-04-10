@@ -20,7 +20,7 @@ Rails.application.configure do
   # Do not eager load code on boot.
   config.eager_load = true
 
-  # Show full error reports.
+  # Show full error reports. See https://guides.rubyonrails.org/configuring.html#config-consider-all-requests-local
   config.consider_all_requests_local = true
 
   # Enable server timing

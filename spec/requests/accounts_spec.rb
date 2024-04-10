@@ -43,6 +43,12 @@ RSpec.describe '/accounts', type: :request do
   end
 
   describe 'GET /new' do
+    let(:user) { Fabricate :user }
+
+    before do
+      sign_in user
+    end
+
     it 'renders a successful response' do
       get new_account_url
       expect(response).to be_successful

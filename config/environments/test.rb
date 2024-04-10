@@ -45,6 +45,8 @@ Rails.application.configure do
   # Store uploaded files on the local file system in a temporary directory.
   config.active_storage.service = :test
 
+  config.action_mailer.default_url_options = { host: 'accounts.larcity.test', port: ENV.fetch('PORT') }
+
   config.action_mailer.perform_caching = false
 
   # Tell Action Mailer not to deliver emails to the real world.
@@ -66,4 +68,7 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+
+  # Encrypt all encryptable attributes in fixtures. See https://guides.rubyonrails.org/active_record_encryption.html#fixtures
+  config.active_record.encryption.encrypt_fixtures = true
 end

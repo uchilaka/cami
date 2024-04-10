@@ -41,3 +41,6 @@ Style:
 
 Style/Documentation:
   Enabled: false
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false

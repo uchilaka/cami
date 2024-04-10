@@ -6,8 +6,8 @@
 #
 #  id           :uuid             not null, primary key
 #  display_name :string           not null
-#  readme       :text
 #  slug         :string
+#  status       :integer
 #  type         :string           not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
@@ -19,4 +19,6 @@ RSpec.describe Business, type: :model do
   subject { Fabricate :business }
 
   it { should validate_uniqueness_of(:tax_id).case_insensitive }
+  it { should have_and_belong_to_many(:users) }
+  it { should have_many(:products).with_foreign_key(:vendor_id) }
 end

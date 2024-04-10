@@ -16,6 +16,7 @@ require 'action_text/engine'
 require 'action_view/railtie'
 require 'action_cable/engine'
 # require "rails/test_unit/railtie"
+require_relative '../lib/virtual_office_manager'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -28,6 +29,8 @@ module AccountManager
     config.load_defaults 7.0
 
     config.active_storage.variant_processor = :vips
+
+    config.time_zone = 'Eastern Time (US & Canada)'
 
     config.active_job.queue_adapter = :sidekiq
 
@@ -52,5 +55,8 @@ module AccountManager
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Setup default business entity
+    config.default_entity = VirtualOfficeManager.default_entity
   end
 end

@@ -5,9 +5,9 @@ module Metadata
     include DocumentRecord
 
     field :account_id, type: String
-
     field :email, type: String
 
+    validates :account_id, presence: true, uniqueness: { case_sensitive: false }
     validates :email, presence: true
 
     def business

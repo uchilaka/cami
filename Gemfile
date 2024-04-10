@@ -15,6 +15,11 @@ gem 'sprockets-rails'
 # IMPORTANT: This should be loaded as early as possible
 gem 'dotenv', groups: %i[development test], require: 'dotenv/load'
 
+# Redis feature flag adapter for Flipper
+gem 'flipper-api', '~> 1.2'
+gem 'flipper-redis', '~> 1.2'
+gem 'flipper-ui', '~> 1.2'
+
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
 
@@ -49,12 +54,18 @@ gem 'tailwindcss-rails', '~> 2.3'
 gem 'dartsass-rails'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+gem 'image_processing', '~> 1.2'
 
 # Refer to any model with a URI: gid://app/class/id
 gem 'globalid', '~> 1.2'
 
 gem 'awesome_print'
+
+# Roles library with resource scoping
+gem 'rolify', '~> 6.0'
+
+# State machine mixin for Ruby objects
+gem 'aasm', '~> 5.5'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -81,7 +92,11 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
 
+  # Annotates Rails Models, routes, fixtures, and others based on the database schema.
   gem 'annotate'
+
+  # Preview mail in browser instead of sending.
+  gem 'letter_opener'
 end
 
 group :test do
@@ -133,7 +148,7 @@ gem 'vite_rails', '~> 3.0', '>= 3.0.17'
 # Simple, efficient background processing for Ruby [https://github.com/sidekiq/sidekiq/wiki/Getting-Started]
 gem 'sidekiq', '~> 7.2', '>= 7.2.0'
 
-# Scheduler/Cron for Sidekiq jobs
+# Scheduler/Cron for Sidekiq jobs [https://github.com/sidekiq-cron/sidekiq-cron?tab=readme-ov-file#adding-cron-job]
 gem 'sidekiq-cron'
 
 # Process manager for applications with multiple components

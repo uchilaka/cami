@@ -4,7 +4,8 @@
       <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
     <% end %>
 
-    <%= render @account %>
+    <%= render 'account', account: @account %>
+
     <hr class="my-4">
     <div class="flex justify-between items-center space-x-4">
       <%= link_to 'Edit this account', edit_account_path(@account), class: "btn btn-primary" %>

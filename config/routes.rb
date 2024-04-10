@@ -5,7 +5,6 @@ require 'sidekiq/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
-  resources :accounts, except: %i[index destroy]
   devise_for :users,
              controllers: { omniauth_callbacks: 'users/omniauth/callbacks' }
 
@@ -13,15 +12,23 @@ Rails.application.routes.draw do
     constraints AdminScopeConstraint.new do
       # Setting up sidekiq web: https://github.com/sidekiq/sidekiq/wiki/Monitoring#web-ui
       mount Sidekiq::Web => '/sidekiq'
+      mount Flipper::Api.app(Flipper) => '/flipper/api'
+      mount Flipper::UI.app(Flipper) => '/flipper'
     end
   end
 
+  resources :services, except: %i[destroy]
+  resources :products, except: %i[destroy]
+  resources :accounts, except: %i[destroy]
+  get 'businesses', to: 'accounts#index', as: :businesses
+  get 'businesses/new', to: 'accounts#new', as: :new_business
+  get 'businesses/:id', to: 'accounts#show', as: :business
+  get 'businesses/:id/edit', to: 'accounts#edit', as: :edit_business
+  post 'businesses', to: 'accounts#create'
+  match 'businesses/:id', to: 'accounts#update', via: %i[patch put]
+
   get 'pages/home'
   get 'pages/dashboard'
-
-  # devise_scope :user do
-  #   root to: 'pages#dashboard'
-  # end
 
   root to: 'pages#home'
 
@@ -29,4 +36,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
+
+  match '*unmatched', to: 'errors#emit_routing_exception', via: :all
 end
