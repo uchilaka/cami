@@ -28,4 +28,8 @@ class Account < ApplicationRecord
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
 
   has_and_belongs_to_many :users, join_table: 'accounts_users'
+
+  def email
+    nil
+  end
 end
