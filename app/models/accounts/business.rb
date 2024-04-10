@@ -18,7 +18,7 @@ class Business < Account
 
   delegate :email, to: :metadata, allow_nil: true
 
-  has_many :products, foreign_key: :vendor_id
+  has_many :products, foreign_key: :vendor_id, dependent: :nullify
 
   validates :tax_id, allow_blank: true, uniqueness: { case_sensitive: false }
 

@@ -30,6 +30,8 @@ class Account < ApplicationRecord
 
   has_and_belongs_to_many :users, join_table: 'accounts_users'
 
+  has_rich_text :readme
+
   def primary_users_confirmed?
     # TODO: Check that all primary users have confirmed their email addresses
     true
