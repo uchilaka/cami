@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module NavbarHelper
+  include UserProfileHelper
+
   def navbar_version
     '1.0'
   end
@@ -14,9 +16,7 @@ module NavbarHelper
   end
 
   def profile_photo_url
-    return current_user.profile.image_url if user_signed_in?
-
-    image_url 'person-default.svg'
+    avatar_url(current_user)
   end
 
   def show_admin_menu?
