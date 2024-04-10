@@ -2,6 +2,7 @@ development:
   - accounts.larcity.ngrok.dev
 test:
   - accounts.larcity.ngrok.test
+  - accounts.larcity.test
   - www.example.com
 production:
   - accounts.larcity.com

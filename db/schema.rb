@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_06_150932) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_10_120807) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -19,10 +19,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_06_150932) do
     t.string "tax_id"
     t.string "display_name", null: false
     t.string "type", null: false
-    t.text "readme"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
+    t.integer "status"
   end
 
   create_table "accounts_users", id: false, force: :cascade do |t|
@@ -30,6 +30,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_06_150932) do
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "action_text_rich_texts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.text "body"
+    t.string "record_type", null: false
+    t.uuid "record_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
   end
 
   create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -64,9 +74,22 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_06_150932) do
     t.string "sku"
     t.string "display_name", null: false
     t.string "type", null: false
-    t.text "description"
     t.json "data"
     t.uuid "vendor_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "products_services", id: false, force: :cascade do |t|
+    t.uuid "service_id", null: false
+    t.uuid "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "services", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "display_name", null: false
+    t.text "readme"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -84,6 +107,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_06_150932) do
     t.string "nickname"
     t.string "providers", default: [], array: true
     t.jsonb "uids", default: {}
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
