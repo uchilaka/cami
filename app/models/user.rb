@@ -5,6 +5,9 @@
 # Table name: users
 #
 #  id                     :uuid             not null, primary key
+#  confirmation_sent_at   :datetime
+#  confirmation_token     :string
+#  confirmed_at           :datetime
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  family_name            :string
@@ -15,11 +18,13 @@
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  uids                   :jsonb
+#  unconfirmed_email      :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
 # Indexes
 #
+#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
@@ -30,9 +35,9 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   #
   # Source code for confirmable: https://github.com/heartcombo/devise/blob/main/lib/devise/models/confirmable.rb
-  # Guide on adding confirmable: https://tommcfarlin.com/adding-confirmable-to-users-in-devise/
+  # Guide on adding confirmable: https://github.com/heartcombo/devise/wiki/How-To:-Add-:confirmable-to-Users
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
+         :recoverable, :rememberable, :validatable, :confirmable,
          :omniauthable, omniauth_providers: %i[google]
 
   alias_attribute :first_name, :given_name
@@ -70,6 +75,12 @@ class User < ApplicationRecord
   # https://github.com/heartcombo/devise?tab=readme-ov-file#active-job-integration
   # def send_devise_notification(notification, *args)
   #   devise_mailer.send(notification, self, *args).deliver_later
+  # end
+
+  # TODO: Test attempting to activate several accounts and ensure only the ones
+  #   that are not already activated are activated
+  # def after_confirmation
+  #   accounts.each(&:activate!)
   # end
 
   class << self
