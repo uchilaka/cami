@@ -4,10 +4,12 @@
     <%= account.display_name %>
   </p>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Email:</strong>
-    <%= account.email %>
-  </p>
+  <% if account.is_a?(Business) %>
+    <p class="my-5">
+      <strong class="block font-medium mb-1">Email:</strong>
+      <%= account.email %>
+    </p>
+  <% end %>
 
   <p class="my-5">
     <strong class="block font-medium mb-1">Readme:</strong>
