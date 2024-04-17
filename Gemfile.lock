@@ -523,7 +523,7 @@ DEPENDENCIES
   pundit (~> 2.3)
   rails (~> 7.0.8, >= 7.0.8.1)
   rolify (~> 6.0)
-  rspec-rails (~> 6.1, >= 6.1.1)
+  rspec-rails (~> 6.1)
   rubocop
   rubocop-performance
   ruby-vips (~> 2.1, >= 2.1.4)

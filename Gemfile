@@ -76,7 +76,7 @@ group :development, :test do
   gem 'fabrication'
   gem 'faker'
   gem 'open3'
-  gem 'rspec-rails', '~> 6.1', '>= 6.1.1'
+  gem 'rspec-rails', '~> 6.1'
   gem 'rubocop'
   gem 'rubocop-performance'
   gem 'strong_migrations'
