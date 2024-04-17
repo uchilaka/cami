@@ -24,3 +24,7 @@
   email: support@paypal.com
   tax_id: <%= VirtualOfficeManager.entities.dig(:paypal, :tax_id) %>
   slug: paypal
+- display_name: Google, Inc.
+  email: support@google.com
+  tax_id: <%= VirtualOfficeManager.entities.dig(:google, :tax_id) %>
+  slug: google
