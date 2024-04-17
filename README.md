@@ -363,6 +363,7 @@ bin/thor help lx-cli:secrets:print_key
 
 - [x] Implement forbidden rescue page (or just set a flash message and redirect to the root path)
 - [ ] "Continue with Google" quick link in the profile dropdown
+- [ ] AASM for account status
 - [ ] Setup and update production credentials in the `config/credentials/production.yml.enc` file
 - [ ] Implement `:confirmable` to secure accounts when switching/adding auth providers
 - [ ] Implement magic links
