@@ -250,15 +250,7 @@ GEM
     net-smtp (0.4.0.1)
       net-protocol
     nio4r (2.7.0)
-    nokogiri (1.16.2-aarch64-linux)
-      racc (~> 1.4)
-    nokogiri (1.16.2-arm-linux)
-      racc (~> 1.4)
     nokogiri (1.16.2-arm64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.16.2-x86-linux)
-      racc (~> 1.4)
-    nokogiri (1.16.2-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.16.2-x86_64-linux)
       racc (~> 1.4)
@@ -337,7 +329,7 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.1.0)
-    rdoc (6.6.2)
+    rdoc (6.6.3.1)
       psych (>= 4.0.0)
     redis (5.1.0)
       redis-client (>= 0.17.0)
@@ -433,15 +425,7 @@ GEM
     stringio (3.1.0)
     strong_migrations (1.7.0)
       activerecord (>= 5.2)
-    tailwindcss-rails (2.3.0)
-      railties (>= 6.0.0)
-    tailwindcss-rails (2.3.0-aarch64-linux)
-      railties (>= 6.0.0)
-    tailwindcss-rails (2.3.0-arm-linux)
-      railties (>= 6.0.0)
     tailwindcss-rails (2.3.0-arm64-darwin)
-      railties (>= 6.0.0)
-    tailwindcss-rails (2.3.0-x86_64-darwin)
       railties (>= 6.0.0)
     tailwindcss-rails (2.3.0-x86_64-linux)
       railties (>= 6.0.0)
@@ -481,11 +465,7 @@ GEM
     zeitwerk (2.6.13)
 
 PLATFORMS
-  aarch64-linux
-  arm-linux
   arm64-darwin
-  x86-linux
-  x86_64-darwin
   x86_64-linux
 
 DEPENDENCIES
