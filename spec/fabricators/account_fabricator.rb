@@ -16,6 +16,6 @@
 Fabricator(:account) do
   display_name { Faker::Company.name }
   users { [Fabricate(:user)] }
-  slug { Faker::Internet.slug }
+  slug { SecureRandom.alphanumeric(4).downcase }
   type 'Account'
 end
