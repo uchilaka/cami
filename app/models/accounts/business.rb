@@ -20,8 +20,6 @@ class Business < Account
 
   has_many :products, foreign_key: :vendor_id, dependent: :nullify
 
-  validates :tax_id, allow_blank: true, uniqueness: { case_sensitive: false }
-
   def email=(value)
     profile.email = value
   end

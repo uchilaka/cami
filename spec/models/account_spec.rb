@@ -21,6 +21,8 @@ RSpec.describe Account, type: :model do
   it { should validate_presence_of :display_name }
   it { should validate_presence_of :slug }
   it { should validate_uniqueness_of(:slug).case_insensitive }
+  # TODO: Figure out how to test a model with several unique constraints
+  xit { should validate_uniqueness_of(:tax_id).allow_blank.case_insensitive }
   it { should have_and_belong_to_many(:users) }
 
   describe '#state' do
