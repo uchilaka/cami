@@ -32,9 +32,11 @@ class Account < ApplicationRecord
 
   validates :display_name, presence: true
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
-  validates :tax_id, allow_blank: true, uniqueness: { case_sensitive: false }
+  validates :tax_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
 
   has_and_belongs_to_many :users, join_table: 'accounts_users'
+
+  before_validation :format_tax_id, if: :tax_id_changed?
 
   has_rich_text :readme
 
@@ -101,5 +103,11 @@ class Account < ApplicationRecord
 
   def email
     nil
+  end
+
+  private
+
+  def format_tax_id
+    self.tax_id = tax_id.upcase if tax_id.present?
   end
 end
