@@ -13,6 +13,11 @@
 #  updated_at   :datetime         not null
 #  tax_id       :string
 #
+# Indexes
+#
+#  index_accounts_on_slug    (slug) UNIQUE
+#  index_accounts_on_tax_id  (tax_id) UNIQUE WHERE (tax_id IS NOT NULL)
+#
 require 'rails_helper'
 
 RSpec.describe Business, type: :model do
