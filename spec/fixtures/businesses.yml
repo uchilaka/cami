@@ -28,3 +28,17 @@
   email: support@google.com
   tax_id: <%= VirtualOfficeManager.entities.dig(:google, :tax_id) %>
   slug: google
+- display_name: Gandi US, Inc.
+  slug: gandi
+- display_name: Amazon.com, Inc.
+  slug: amazon
+- display_name: Microsoft Corporation
+  slug: microsoft
+- display_name: Apple Inc.
+  slug: apple
+- display_name: Zoho Corporation
+  slug: zoho
+- display_name: Squarespace, Inc.
+  slug: squarespace
+- display_name: Shopify, Inc.
+  slug: shopify

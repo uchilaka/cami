@@ -22,7 +22,7 @@ class Product < ApplicationRecord
 
   attribute :type, :string, default: 'Product'
 
-  belongs_to :vendor, class_name: 'Account'
+  belongs_to :vendor, class_name: 'Account', optional: true
 
   has_and_belongs_to_many :services, join_table: 'products_services'
 

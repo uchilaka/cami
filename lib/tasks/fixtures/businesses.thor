@@ -56,7 +56,6 @@ module Fixtures
       ).map do |b|
         b.symbolize_keys!
         b[:slug] ||= b[:name].parameterize
-        b[:tax_id] ||= Faker::Company.ein
         b
       end
     end
