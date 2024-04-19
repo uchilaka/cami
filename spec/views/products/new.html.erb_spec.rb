@@ -4,10 +4,12 @@ require 'rails_helper'
 
 RSpec.describe 'products/new', type: :view do
   let(:user) { Fabricate :user }
+  let(:vendors) { Business.all }
 
   before(:each) do
     sign_in :user
     assign(:product, Product.new)
+    assign(:vendors, vendors)
   end
 
   it 'renders new product form' do

@@ -87,6 +87,10 @@ RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Devise::Test::IntegrationHelpers, type: :view
 
+  # Internationalization guide: https://guides.rubyonrails.org/i18n.html
+  config.include AbstractController::Translation, type: :view
+  config.include AbstractController::Translation, type: :helper
+
   config.before(:suite) do
     # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example
     DatabaseCleaner.strategy = :transaction

@@ -10,6 +10,8 @@ class AdminScopeConstraint
   end
 
   def matches?(request)
+    return true if Rails.env.development?
+
     allow_by_ip.matches?(request)
   end
 end

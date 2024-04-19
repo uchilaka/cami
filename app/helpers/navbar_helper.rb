@@ -46,23 +46,19 @@ module NavbarHelper
       {
         label: t('shared.navbar.accounts'),
         path: accounts_path,
-        enabled: Flipper.enabled?(:feat__accounts, current_user)
+        enabled: true
       },
       {
         label: t('shared.navbar.services'),
-        path: services_path,
-        public: true,
-        enabled: Flipper.enabled?(:feat__services, current_user)
+        path: services_path
       },
       # TODO: Eventually take products off this list - intended navigation
       #   is to traverse via services to the component products
       {
         label: t('shared.navbar.products'),
-        path: products_path,
-        public: true,
-        enabled: Flipper.enabled?(:feat__products, current_user)
+        path: products_path
       },
-    ].map { |item| Struct::NavbarItem.new(item) }.filter(&:enabled)
+    ].map { |item| build_menu_item(item) }.filter(&:enabled)
   end
 
   def public_menu
@@ -71,9 +67,30 @@ module NavbarHelper
 
   def admin_menu
     @admin_menu ||= [
-      { label: 'Products', path: '/products', admin: true },
-      { label: 'Features', path: '/admin/flipper', admin: true },
-      { label: 'Sidekiq', path: '/admin/sidekiq', admin: true },
-    ].map { |item| Struct::NavbarItem.new(item) }
+      { label: 'Products', path: '/products', admin: true, enabled: true },
+      { label: 'Features', path: '/admin/flipper', admin: true, enabled: true },
+      { label: 'Sidekiq', path: '/admin/sidekiq', admin: true, enabled: true },
+    ].map { |item| build_menu_item(item) }.filter(&:enabled)
+  end
+
+  private
+
+  def build_menu_item(item)
+    item[:enabled] ||= calculate_enabled(item)
+    item[:admin] ||= false
+    item[:public] ||= false
+    # Return a new Struct::NavbarItem instance
+    Struct::NavbarItem.new(item)
+  end
+
+  def calculate_enabled(item)
+    return true if item[:public]
+
+    # Compose feature flag for menu item
+    feat_flag = "feat__#{item[:label].to_s.parameterize(separator: '_')}".to_sym
+    return Flipper.enabled?(feat_flag) if current_user.blank?
+
+    # Check if feature flag is enabled for current user
+    Flipper.enabled?(feat_flag, current_user)
   end
 end
