@@ -3,7 +3,10 @@
 class ProductsController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[index show]
 
+  before_action :set_vendors, only: %i[new show edit]
   before_action :set_product, only: %i[show edit update destroy]
+
+  attr_reader :vendors
 
   # GET /products
   def index
@@ -60,6 +63,10 @@ class ProductsController < ApplicationController
 
   private
 
+  def set_vendors
+    @vendors = Business.all
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_product
     @product = Product.find(params[:id])
@@ -69,6 +76,6 @@ class ProductsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def product_params
-    params.require(:product).permit(:sku, :display_name, :description, :data)
+    params.require(:product).permit(:sku, :display_name, :description, :data, :vendor_id)
   end
 end

@@ -12,11 +12,16 @@
   </div>
 
   <div class="my-5">
+    <%= form.label :vendor %>
+    <%= form.select :vendor_id, vendor_options, { prompt: "Select Vendor" }, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
     <%= form.label :description %>
     <%= form.rich_text_area :description, rows: 5, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
   </div>
 
   <div class="inline">
-    <%= form.submit class: "btn btn-primary" %>
+    <%= form.submit class: alt_primary_btn_classes %>
   </div>
 <% end %>

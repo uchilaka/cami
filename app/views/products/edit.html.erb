@@ -3,6 +3,9 @@
 
   <%= render "form", product: @product %>
   <hr class="my-8">
-  <%= link_to "Show this product", @product, class: "btn btn-secondary" %>
-  <%= link_to "Back to products", products_path, class: "btn btn-secondary" %>
+
+  <div class="inline btn-group">
+    <%= link_to "Show this product", @product, class: secondary_btn_classes %>
+    <%= link_to "Back to products", products_path, class: secondary_btn_classes %>
+  </div>
 </div>
