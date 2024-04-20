@@ -11,17 +11,12 @@
         <li>
           <a href="#" class="hover:underline me-4 md:me-6"><%= t('accessibility.footer.privacy') %></a>
         </li>
-        <!--
-        <li>
-          <a href="#" class="hover:underline me-4 md:me-6"><%= t('accessibility.footer.licensing') %></a>
-        </li>
-        -->
         <li>
           <a href="#" class="hover:underline"><%= t('accessibility.footer.contact') %></a>
         </li>
       </ul>
     </div>
     <hr class="my-6 border-transparent sm:mx-auto dark:border-gray-200 lg:my-8" />
-    <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://madebylar.city/" class="hover:underline">LarCity LLC</a>. All Rights Reserved.</span>
+    <%= render partial: 'shared/footer/copywright' %>
   </div>
 </footer>
