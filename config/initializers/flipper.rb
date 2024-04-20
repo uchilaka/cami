@@ -14,7 +14,9 @@ end
 Rails.application.config.after_initialize do |app|
   current_features = Flipper.features.map(&:key)
   app.config_for(:features).each do |feature, options|
-    Flipper.add(feature) unless current_features.include?(feature)
+    next if current_features.include?(feature)
+
+    Flipper.add(feature)
     if options[:enabled]
       Flipper.enable(feature)
     else

@@ -35,18 +35,15 @@ module NavbarHelper
       {
         label: t('shared.navbar.home'),
         path: root_path,
-        enabled: true,
         public: true
       },
       {
         label: t('shared.navbar.dashboard'),
-        path: pages_dashboard_path,
-        enabled: true
+        path: pages_dashboard_path
       },
       {
         label: t('shared.navbar.accounts'),
-        path: accounts_path,
-        enabled: true
+        path: accounts_path
       },
       {
         label: t('shared.navbar.services'),
@@ -67,7 +64,15 @@ module NavbarHelper
 
   def admin_menu
     @admin_menu ||= [
-      { label: 'Products', path: '/products', admin: true, enabled: true },
+      { label: 'Products', path: '/products', admin: true },
+      # TODO: Decide on whether services will be needed to bundle products
+      #   together - or if this is redundant with invoices and the invoice
+      #   template feature of PayPal (the flagship payment gateway). An argument
+      #   could be made that services are needed to bundle products together
+      #   for a subscription-based model, but this is not the primary use case.
+      #   Another argument could be made that services are needed to bundle products
+      #   as an abstraction layer for what PayPal's invoice templates already do.
+      { label: 'Services', path: '/services', admin: true },
       { label: 'Features', path: '/admin/flipper', admin: true, enabled: true },
       { label: 'Sidekiq', path: '/admin/sidekiq', admin: true, enabled: true },
     ].map { |item| build_menu_item(item) }.filter(&:enabled)
@@ -86,7 +91,7 @@ module NavbarHelper
   def calculate_enabled(item)
     return true if item[:public]
 
-    # Compose feature flag for menu item
+    # Optionally compose feature flag for menu item
     item[:feature_flag] ||= "feat__#{item[:label].to_s.parameterize(separator: '_')}".to_sym
     return Flipper.enabled?(item[:feature_flag]) if current_user.blank?
 
