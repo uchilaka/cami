@@ -19,6 +19,7 @@ require 'action_cable/engine'
 require 'active_support/core_ext/integer/time'
 require_relative '../lib/virtual_office_manager'
 require_relative '../lib/app_utils'
+require_relative '../lib/log_utils'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

@@ -6,3 +6,9 @@ sync_paypal_products_job:
   class: 'PayPal::SyncProductsJob'
   source: schedule # default: dynamic
   queue: yeet
+
+fetch_paypal_invoices_job:
+  cron: '0 18 * * 1-6' # At 18:00 from Monday to Saturday
+  class: 'PayPal::FetchInvoicesJob'
+  source: schedule # default: dynamic
+  queue: yeet

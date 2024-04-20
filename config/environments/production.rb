@@ -52,13 +52,10 @@ Rails.application.configure do
   config.rails_semantic_logger.processing = true
   config.rails_semantic_logger.rendered   = true
   config.semantic_logger.backtrace_level = :error
-  config.log_level = :warn
-
-  AppUtils.initialize_log_streaming
 
   # Include generic and useful information about system operation, but avoid logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII).
-  config.log_level = :info
+  config.log_level = :warn
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
