@@ -31,14 +31,6 @@ Rails.application.configure do
   config.semantic_logger.backtrace_level = :info
   config.log_level = :debug
 
-  AppUtils.initialize_log_streaming
-
-  # Semantic logger additional appenders: https://logger.rocketjob.io/rails.html#additional-appenders
-  config.semantic_logger.add_appender(
-    file_name: AppUtils.filesystem_log_file,
-    formatter: :color
-  )
-
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
   if Rails.root.join('tmp/caching-dev.txt').exist?
