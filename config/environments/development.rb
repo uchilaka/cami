@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'active_support/core_ext/integer/time'
-
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -26,6 +24,17 @@ Rails.application.configure do
 
   # Enable server timing
   config.server_timing = true
+
+  config.rails_semantic_logger.started    = true
+  config.rails_semantic_logger.processing = true
+  config.rails_semantic_logger.rendered   = true
+  config.semantic_logger.backtrace_level = :info
+  config.log_level = :debug
+
+  AppUtils.initialize_log_streaming
+
+  # Semantic logger additional appenders: https://logger.rocketjob.io/rails.html#additional-appenders
+  config.semantic_logger.add_appender(file_name: "log/#{Rails.env}.json", formatter: :json)
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
