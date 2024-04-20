@@ -3,16 +3,16 @@
 require 'rails_helper'
 
 module PayPal
-  # Faraday RSpec example: https://github.com/lostisland/faraday/blob/main/examples/client_spec.rb
-  RSpec.describe SyncProductsJob, type: :job do
+  RSpec.describe FetchInvoicesJob, type: :job do
     around do |example|
       Sidekiq::Testing.inline! { example.run }
     end
 
     context 'when the request is authorized' do
       around do |example|
+        # API docs: https://rubydoc.info/gems/vcr/6.2.0/VCR#use_cassette-instance_method
         VCR.use_cassette(
-          'paypal/sync_products',
+          'paypal/fetch_invoices',
           # in development, change to `record: :new_episodes` to update the cassette
           record: :none
         ) do
@@ -20,11 +20,8 @@ module PayPal
         end
       end
 
-      it 'syncs products' do
-        # TODO: Make this less brittle - assert on specific records that are in the
-        #   PayPal sandbox account (and/or VCR cassette)
-        expect { described_class.perform_now }.to change { Product.count }.by(7).and \
-          change { Metadata::Product.count }.by(7)
+      it 'fetches invoices' do
+        expect { described_class.perform_now }.to change { Invoice.count }.by(48)
       end
     end
 
@@ -42,7 +39,7 @@ module PayPal
       end
 
       it 'the expected exception is handled' do
-        stubs.get(%r{/v1/catalogs/products}) do
+        stubs.get(%r{/v2/invoicing/invoices}) do
           raise Faraday::UnauthorizedError, 'Unauthorized'
         end
 

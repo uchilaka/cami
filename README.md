@@ -318,6 +318,8 @@ bin/thor help lx-cli:secrets:print_key
 
 - [MongoDB Tutorial](https://www.w3schools.com/mongodb/)
   - [Release: Official Atlas Github Action](https://www.mongodb.com/community/forums/t/introducing-the-offical-github-action-and-docker-image-for-atlas-cli/253891)
+  - [Mongoid](https://www.mongodb.com/docs/mongoid/current/)
+    - [Customer Field Types](https://www.mongodb.com/docs/mongoid/current/reference/fields/#custom-field-types)
 - [Rails API](https://api.rubyonrails.org/)
 - [Rails Guides](https://guides.rubyonrails.org/)
   - [Autoloading and Reloading Constants](https://guides.rubyonrails.org/autoloading_and_reloading_constants.html)

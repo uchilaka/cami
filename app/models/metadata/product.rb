@@ -3,9 +3,10 @@
 module Metadata
   class Product
     include DocumentRecord
+    include Mongoid::Attributes::Dynamic
 
     field :product_id, type: String
-    field :links, type: Hash
+    field :links, type: Array, overwrite: true
 
     validates :product_id, presence: true, uniqueness: { case_sensitive: false }
 

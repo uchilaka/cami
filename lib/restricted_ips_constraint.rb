@@ -2,8 +2,10 @@
 
 class RestrictedIpsConstraint
   def matches?(request)
-    Rails.logger.info "#{log_prefix(__method__)} request.remote_ip=#{request.remote_ip}"\
-      " request.forwarded_for=#{request.forwarded_for}"
+    Rails.logger.info log_prefix(__method__), request: {
+      remote_ip: request.remote_ip,
+      forwarded_for: request.forwarded_for
+    }
     # NOTE: Debug here to see the request.remote_ip and request.forwarded_for values
     #   if you are having trouble accessing admin restricted resources
     # TODO: Implement a Cloud VPN or other secure connection to access admin restricted resources
