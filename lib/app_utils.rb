@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'fileutils'
+
 class AppUtils
   def self.yes?(value)
     return true if [true, 1].include?(value)
@@ -20,5 +22,15 @@ class AppUtils
       }
     )
     Rails.application.config.semantic_logger.add_appender(appender:)
+  end
+
+  def self.filesystem_log_path
+    log_path = Rails.root.join('log', Time.now.strftime('%Y-%m-%d')).to_s
+    FileUtils.mkdir_p(log_path) unless Dir.exist?(log_path)
+    log_path
+  end
+
+  def self.filesystem_log_file(ext: 'log')
+    "#{filesystem_log_path}/#{Rails.env}.#{ext}"
   end
 end
