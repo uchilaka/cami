@@ -68,6 +68,18 @@ module NavbarHelper
     @public_menu ||= main_menu.filter(&:public)
   end
 
+  def developer_menu
+    @developer_menu ||= [
+      {
+        label: 'Flowbite :: Integration Guide',
+        url: 'https://flowbite.com/docs/getting-started/rails/',
+        section: 'UI Library',
+        public: true
+      },
+      { label: 'Flowbite :: Blocks', url: 'https://flowbite.com/blocks/', section: 'UI Library', public: true },
+    ].map { |item| build_menu_item(item) }
+  end
+
   def admin_menu
     @admin_menu ||= [
       { label: 'Products', path: '/products', admin: true },

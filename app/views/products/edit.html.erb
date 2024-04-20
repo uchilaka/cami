@@ -1,11 +1,9 @@
 <div class="mx-auto sm:w-9/12 md:w-6/12 w-full">
   <h1 class="font-bold text-4xl">Editing product</h1>
-
   <%= render "form", product: @product %>
   <hr class="my-8">
-
   <div class="inline btn-group">
-    <%= link_to "Show this product", @product, class: secondary_btn_classes %>
-    <%= link_to "Back to products", products_path, class: secondary_btn_classes %>
+    <%= link_to "Show this product", @product, class: secondary_btn_classes('px-5 py-2.5') %>
+    <%= link_to "Back to products", products_path, class: secondary_btn_classes('px-5 py-2.5') %>
   </div>
 </div>

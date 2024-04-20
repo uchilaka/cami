@@ -8,9 +8,9 @@
 
     <hr class="my-4">
     <div class="flex justify-between items-center space-x-4">
-      <%= link_to 'Edit this account', edit_account_path(@account), class: "btn btn-primary" %>
-      <%= button_to 'Destroy this account', account_path(@account), method: :delete, class: "btn btn-secondary" %>
-      <%= link_to 'Back to accounts', accounts_path, class: "btn btn-danger" %>
+      <%= link_to 'Edit this account', edit_account_path(@account), class: primary_btn_classes('px-5 py-2.5') %>
+      <%= button_to 'Destroy this account', account_path(@account), method: :delete, class: secondary_btn_classes('px-5 py-2.5', style: :danger) %>
+      <%= link_to 'Back to accounts', accounts_path, class: secondary_btn_classes('px-5 py-2.5') %>
     </div>
   </div>
 </div>

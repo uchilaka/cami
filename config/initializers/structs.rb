@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# TODO: Implement Danger CI linting to call out when this file is changed and
+#   require an additional review as well as updates to the deployment plan for
+#   the needed outage to deploy the changes (requires a full restart of the
+#   application server to reload the initializers)
 # Initialize a struct for the Business model
 Struct.new('Company', :name, :email, :tax_id, keyword_init: true)
 # Initialize a struct for vendor API credentials & config combos
@@ -10,4 +14,4 @@ Struct.new('VendorConfig', :base_url, :client_id, :client_secret, keyword_init: 
 #   with support for I18n, accessibility features, icons, pundit and
 #   rolify policy checks, Redis caching (with a 1-hour and menu record
 #   change cache expiration)
-Struct.new('NavbarItem', :label, :path, :feature_flag, :enabled, :public, :admin, keyword_init: true)
+Struct.new('NavbarItem', :label, :url, :path, :section, :feature_flag, :enabled, :public, :admin, keyword_init: true)
