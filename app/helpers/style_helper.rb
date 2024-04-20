@@ -18,20 +18,43 @@ module StyleHelper
       'dark:hover:text-white'
     )
     case style
-      when :danger
-        append_classes.append(
-          'text-red-700 border-red-700 hover:bg-red-800 focus:ring-red-300',
-          'dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900'
-        ).join(' ')
-      else
-        append_classes.append(
-          'text-gray-800 border-gray-800 hover:bg-gray-900 focus:ring-gray-300',
-          'dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:focus:ring-gray-800'
-        ).join(' ')
+    when :danger
+      append_classes.append(
+        'text-red-700 border-red-700 hover:bg-red-800 focus:ring-red-300',
+        'dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900'
+      ).join(' ')
+    else
+      append_classes.append(
+        'text-gray-800 border-gray-800 hover:bg-gray-900 focus:ring-gray-300',
+        'dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:focus:ring-gray-800'
+      ).join(' ')
     end
   end
 
-  def secondary_danger_btn_classes(append_classes = 'px-5 py-3')
-    "text-red-700 #{append_classes} hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+  def item_action_btn_classes(style: :default)
+    append_classes = [
+      'text-xs font-medium hover:text-white border dark:hover:text-white focus:ring-4',
+      'focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-3 py-1.5 text-center me-2'
+    ]
+    case style
+    when :danger
+      append_classes.append(
+        'text-red-700 border-red-700 hover:bg-red-800 focus:ring-red-300',
+        'dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900'
+      ).join(' ')
+    else
+      append_classes.append(
+        'text-blue-700 border-blue-700 hover:bg-blue-800',
+        'dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500 dark:focus:ring-blue-800'
+      ).join(' ')
+    end
+  end
+
+  def default_item_action_btn_classes
+    @default_action_btn_classes ||= item_action_btn_classes
+  end
+
+  def danger_item_action_btn_classes
+    @danger_action_btn_classes ||= item_action_btn_classes(style: :danger)
   end
 end

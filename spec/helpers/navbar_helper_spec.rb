@@ -21,6 +21,20 @@ RSpec.describe NavbarHelper, type: :helper do
 
   subject { mock_class.new }
 
+  shared_examples 'a navbar with the expected menu items' do |enabled_feature_flags, expected_menu_labels|
+    before do
+      enabled_feature_flags.each { |feature_flag| Flipper.enable feature_flag.to_sym }
+    end
+
+    after do
+      enabled_feature_flags.each { |feature_flag| Flipper.disable feature_flag.to_sym }
+    end
+
+    it "returns the expected menu items with [#{enabled_feature_flags.join(', ')}] enabled" do
+      expect(subject.main_menu.pluck(:label)).to match_array expected_menu_labels
+    end
+  end
+
   describe '#main_menu' do
     it 'returns an array of menu items' do
       expect(subject.main_menu).to be_an_instance_of(Array)
@@ -31,7 +45,17 @@ RSpec.describe NavbarHelper, type: :helper do
     end
 
     it 'returns the expected menu items enabled by default' do
-      expect(subject.main_menu.pluck(:label)).to match_array %w[Home Dashboard Accounts]
+      expect(subject.main_menu.pluck(:label)).to match_array %w[Home]
     end
+
+    it_should_behave_like 'a navbar with the expected menu items',
+                          %i[feat__products],
+                          %w[Home Products]
+    it_should_behave_like 'a navbar with the expected menu items',
+                          %i[feat__products feat__dashboard],
+                          %w[Home Products Dashboard]
+    it_should_behave_like 'a navbar with the expected menu items',
+                          %i[feat__products feat__dashboard feat__accounts],
+                          %w[Home Products Dashboard Accounts]
   end
 end
