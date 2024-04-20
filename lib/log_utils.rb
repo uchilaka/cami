@@ -21,7 +21,7 @@ module LogUtils
           Authorization: "Bearer #{source_token}"
         }
       )
-      Rails.configuration.semantic_logger.add_appender(appender:)
+      SemanticLogger.add_appender(appender:)
     end
 
     def log_path
