@@ -7,9 +7,12 @@
     <%= render @product %>
     <hr class="my-4">
     <div class="flex justify-between items-center space-x-4">
-      <%= link_to 'Edit this product', edit_product_path(@product), class: "btn btn-primary" %>
-      <%= button_to 'Destroy this product', product_path(@product), method: :delete, class: "btn btn-secondary" %>
-      <%= link_to 'Back to products', products_path, class: "btn btn-danger" %>
+      <%= link_to 'Edit this product', edit_product_path(@product), class: primary_btn_classes %>
+      <%= button_to 'Destroy this product',
+                    product_path(@product),
+                    method: :delete,
+                    class: secondary_btn_classes('px-5 py-2.5', style: :danger) %>
+      <%= link_to 'Back to products', products_path, class: secondary_btn_classes('px-5 py-2.5') %>
     </div>
   </div>
 </div>

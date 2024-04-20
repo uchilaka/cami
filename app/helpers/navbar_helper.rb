@@ -35,45 +35,85 @@ module NavbarHelper
       {
         label: t('shared.navbar.home'),
         path: root_path,
-        enabled: true,
         public: true
       },
       {
         label: t('shared.navbar.dashboard'),
-        path: pages_dashboard_path,
-        enabled: true
+        path: pages_dashboard_path
       },
       {
         label: t('shared.navbar.accounts'),
-        path: accounts_path,
-        enabled: Flipper.enabled?(:feat__accounts, current_user)
+        path: accounts_path
       },
       {
         label: t('shared.navbar.services'),
-        path: services_path,
-        public: true,
-        enabled: Flipper.enabled?(:feat__services, current_user)
+        path: services_path
       },
       # TODO: Eventually take products off this list - intended navigation
       #   is to traverse via services to the component products
       {
         label: t('shared.navbar.products'),
-        path: products_path,
-        public: true,
-        enabled: Flipper.enabled?(:feat__products, current_user)
+        path: products_path
       },
-    ].map { |item| Struct::NavbarItem.new(item) }.filter(&:enabled)
+    ].map { |item| build_menu_item(item) }.filter(&:enabled)
+  end
+
+  def profile_menu
+    @profile_menu ||= [
+      { label: t('shared.navbar.registration'), path: edit_user_registration_path }
+    ].map { |item| build_menu_item(item) }
   end
 
   def public_menu
     @public_menu ||= main_menu.filter(&:public)
   end
 
+  def developer_menu
+    @developer_menu ||= [
+      {
+        label: 'Flowbite :: Integration Guide',
+        url: 'https://flowbite.com/docs/getting-started/rails/',
+        section: 'UI Library',
+        public: true
+      },
+      { label: 'Flowbite :: Blocks', url: 'https://flowbite.com/blocks/', section: 'UI Library', public: true },
+    ].map { |item| build_menu_item(item) }
+  end
+
   def admin_menu
     @admin_menu ||= [
       { label: 'Products', path: '/products', admin: true },
-      { label: 'Features', path: '/admin/flipper', admin: true },
-      { label: 'Sidekiq', path: '/admin/sidekiq', admin: true },
-    ].map { |item| Struct::NavbarItem.new(item) }
+      # TODO: Decide on whether services will be needed to bundle products
+      #   together - or if this is redundant with invoices and the invoice
+      #   template feature of PayPal (the flagship payment gateway). An argument
+      #   could be made that services are needed to bundle products together
+      #   for a subscription-based model, but this is not the primary use case.
+      #   Another argument could be made that services are needed to bundle products
+      #   as an abstraction layer for what PayPal's invoice templates already do.
+      { label: 'Services', path: '/services', admin: true },
+      { label: 'Features', path: '/admin/flipper', admin: true, enabled: true },
+      { label: 'Sidekiq', path: '/admin/sidekiq', admin: true, enabled: true },
+    ].map { |item| build_menu_item(item) }.filter(&:enabled)
+  end
+
+  private
+
+  def build_menu_item(item)
+    item[:enabled] ||= calculate_enabled(item)
+    item[:admin] ||= false
+    item[:public] ||= false
+    # Return a new Struct::NavbarItem instance
+    Struct::NavbarItem.new(item)
+  end
+
+  def calculate_enabled(item)
+    return true if item[:public]
+
+    # Optionally compose feature flag for menu item
+    item[:feature_flag] ||= "feat__#{item[:label].to_s.parameterize(separator: '_')}".to_sym
+    return Flipper.enabled?(item[:feature_flag]) if current_user.blank?
+
+    # Check if feature flag is enabled for current user
+    Flipper.enabled?(item[:feature_flag], current_user)
   end
 end

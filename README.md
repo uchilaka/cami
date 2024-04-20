@@ -376,6 +376,7 @@ bin/thor help lx-cli:secrets:print_key
 - [ ] Setup RSwag for baller request specs & API tools
 - [ ] Setup flipper for feature flags
 - [ ] Knapsack Pro for parallelizing tests
+- [ ] Check out [Redis Stack for docker](https://hub.docker.com/r/redis/redis-stack) for advanced indexing & search features with redis data
 - [ ] Playwright E2E test suite
 - [ ] Implement default authorization policies
 - [ ] **Consolidate vite configuration & dependencies** right now, vite is a dependency of both the front and backend separately. Is there a better way?

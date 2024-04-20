@@ -8,12 +8,17 @@ RSpec.describe 'products/index', type: :view do
   let(:description) { Faker::Marketing.buzzwords }
 
   before(:each) do
+    Flipper.enable :feat__product_cards
     assign(
       :products, [
         Fabricate(:product, sku:, display_name:, description:),
         Fabricate(:product, sku:, display_name:, description:)
       ]
     )
+  end
+
+  after(:each) do
+    Flipper.disable :feat__product_cards
   end
 
   it 'renders a list of products' do

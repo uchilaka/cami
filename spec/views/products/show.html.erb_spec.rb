@@ -5,9 +5,11 @@ require 'rails_helper'
 RSpec.describe 'products/show', type: :view do
   let(:vendor) { Fabricate :business }
   let(:product) { Fabricate :product, vendor: }
+  let(:vendors) { Business.where(id: [vendor.id]) }
 
   before(:each) do
     assign(:product, product)
+    assign(:vendors, vendors)
   end
 
   it 'renders vendor name' do

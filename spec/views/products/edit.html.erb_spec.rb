@@ -5,11 +5,13 @@ require 'rails_helper'
 RSpec.describe 'products/edit', type: :view do
   let(:user) { Fabricate :user }
   let(:vendor) { Fabricate :business, users: [user] }
+  let(:vendors) { Business.where(id: [vendor.id]) }
   let(:product) { Fabricate :product, vendor: }
 
   before(:each) do
     sign_in :user
     assign(:product, product)
+    assign(:vendors, vendors)
   end
 
   it 'renders the edit product form' do
