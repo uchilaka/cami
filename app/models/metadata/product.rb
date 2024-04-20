@@ -3,6 +3,7 @@
 module Metadata
   class Product
     include DocumentRecord
+    include Mongoid::Attributes::Dynamic
 
     field :product_id, type: String
     field :links, type: Array, overwrite: true

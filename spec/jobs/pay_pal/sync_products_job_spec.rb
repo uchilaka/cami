@@ -47,7 +47,7 @@ module PayPal
         end
 
         described_class.perform_now
-        expect(Rails.logger).to have_received(:error).with(/failed: Unauthorized/)
+        expect(Rails.logger).to have_received(:error).with(/failed/, { message: 'Unauthorized' })
       end
     end
   end

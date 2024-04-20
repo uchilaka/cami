@@ -33,28 +33,29 @@ module PayPal
         if new_record.valid?
           records_to_save << new_record
         else
-          puts "Record with SKU #{new_record.sku} is invalid:"
+          Rails.logger.error "Record with SKU #{new_record.sku} is invalid",
+                             errors: new_record.errors.full_messages
           ap new_record.errors.full_messages
           error_records << new_record
         end
       end
 
       if error_records.any?
-        puts "Found #{error_records.count} error records"
+        Rails.logger.info "Found #{error_records.count} error records"
         ap error_records
       end
 
-      puts "Found #{records_to_save.count} records to save"
+      Rails.logger.info "Found #{records_to_save.count} records to save"
 
       results = Product.transaction do
         records_to_save.map(&:save!)
       end
 
-      puts "Saved #{results.count} records" if results.all?
+      Rails.logger.info "Saved #{results.count} records" if results.all?
       # Showing the last 10 records
       ap records_to_save.last(10).map(&:reload)
     rescue StandardError => e
-      Rails.logger.error "#{self.class.name} failed: #{e.message}"
+      Rails.logger.error "#{self.class.name} failed", message: e.message
     end
   end
 end

@@ -9,18 +9,18 @@ module PayPal
     end
 
     context 'when the request is authorized' do
-      # around do |example|
-      #   VCR.use_cassette(
-      #     'paypal/fetch_invoices',
-      #     record: :new_episodes,
-      #     re_record_interval: 3.months
-      #   ) do
-      #     example.run
-      #   end
-      # end
+      around do |example|
+        VCR.use_cassette(
+          'paypal/fetch_invoices',
+          record: :new_episodes,
+          re_record_interval: 3.months
+        ) do
+          example.run
+        end
+      end
 
       it 'fetches invoices' do
-        expect { described_class.perform_now }.to change { Invoice.count }.by(5)
+        expect { described_class.perform_now }.to change { Invoice.count }.by(48)
       end
     end
 
@@ -43,7 +43,7 @@ module PayPal
         end
 
         described_class.perform_now
-        expect(Rails.logger).to have_received(:error).with(/failed: Unauthorized/)
+        expect(Rails.logger).to have_received(:error).with(/failed/, { message: 'Unauthorized' })
       end
     end
   end

@@ -31,5 +31,9 @@ module PayPal
           )
         end
     end
+
+    def vendor
+      @vendor ||= Business.find_by(slug: 'paypal')
+    end
   end
 end

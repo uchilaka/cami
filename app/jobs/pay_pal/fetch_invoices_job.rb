@@ -4,13 +4,15 @@ module PayPal
   # TODO: Works in tandem with invoice update webhooks to fetch invoices
   #   and keep invoicing data in sync with PayPal
   class FetchInvoicesJob < AbstractJob
-    attr_accessor :enqueued_records, :error_records
+    attr_accessor :skipped_records, :enqueued_records, :error_records
 
     PAGE_LIMIT = 10
 
     def perform(*_args)
-      @account_records = []
       @enqueued_records = []
+      @processed_records = []
+      # TODO: Implement a way to perform cherry-picked upserts for records that already exist
+      @skipped_records = []
       @error_records = []
       # TODO: Calculate the page number to start fetching from based on
       #   the number of invoice records in the database
@@ -23,8 +25,36 @@ module PayPal
       end
 
       Rails.logger.info "Found #{enqueued_records.count} records to process"
+
+      @enqueued_records.each do |record|
+        if Invoice.exists?(vendor_record_id: record['id'])
+          @skipped_records << record
+          Rails.logger.info("Skipping record with ID #{record['id']} because it already exists", record:)
+          next
+        end
+
+        @processed_records << process_record(record)
+      rescue StandardError => e
+        Rails.logger.error "#{self.class.name} invoice record(s) failed to process",
+                           record:, message: e.message
+        @error_records << record
+      end
+
+      Rails.logger.info "#{skipped_records.count} invoice records were skipped" if skipped_records.any?
+
+      if @error_records.any?
+        Rails.logger.error "#{error_records.count} invoice records that failed to process"
+      else
+        # TODO: Generate batch ID from starting page range and timestamp
+        Rails.logger.info 'All enqueued invoice records were processed successfully'
+      end
+
+      # Batch create the records
+      results = Invoice.create(@processed_records)
+
+      Rails.logger.info "Saved #{results.count} records" if results.all?
     rescue StandardError => e
-      Rails.logger.error "#{self.class.name} failed: #{e.message}"
+      Rails.logger.error "#{self.class.name} failed", message: e.message
     end
 
     def fetch(page: 1)
@@ -43,10 +73,11 @@ module PayPal
     end
 
     def process_record(record)
-      vendor_record_id, status, detail, invoicer, primary_recipients,
-        amount, due_amount, payments = record.values_at(
-          'id', 'status', 'detail', 'invoicer', 'primary_recipients',
-          'amount', 'due_amount', 'payments'
+      vendor_record_id = record['id']
+      status, detail, invoicer, primary_recipients,
+        amount, due_amount, payments, links = record.values_at(
+          'status', 'detail', 'invoicer', 'primary_recipients',
+          'amount', 'due_amount', 'payments', 'links'
         )
       invoice_number, invoiced_at, viewed_by_recipient,
         currency_code, note = detail.values_at(
@@ -54,21 +85,40 @@ module PayPal
           'currency_code', 'note'
         )
       due_at = detail.dig('payment_term', 'due_date')
+      accounts = []
       # Extract individual accounts
-      primary_recipients.each do |recipient|
+      (primary_recipients || []).each do |recipient|
         given_name = recipient.dig('billing_info', 'name', 'given_name')
         family_name = recipient.dig('billing_info', 'name', 'surname')
         display_name = recipient.dig('billing_info', 'name', 'full_name')
         email = recipient.dig('billing_info', 'email_address')
-        @account_records << {
+        accounts << {
           given_name:, family_name:, display_name:,
           email:, type: 'Individual'
         }
         business_name = recipient.dig('billing_info', 'business_name')
         next unless business_name.present?
 
-        @account_records << { display_name: business_name, type: 'Business' }
+        accounts << { display_name: business_name, type: 'Business' }
       end
+
+      {
+        vendor_record_id:,
+        invoice_number:,
+        vendor_id: vendor.id,
+        status:,
+        invoicer:,
+        accounts:,
+        viewed_by_recipient:,
+        invoiced_at:,
+        due_at:,
+        currency_code:,
+        amount:,
+        due_amount:,
+        payments:,
+        note:,
+        links:
+      }
     end
   end
 end
