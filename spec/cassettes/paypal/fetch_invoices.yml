@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api-m.paypal.com/v2/invoicing/invoices?page=1&page_size=25
+    uri: https://api-m.sandbox.paypal.com/v2/invoicing/invoices?page=1&page_size=25
     body:
       encoding: US-ASCII
       string: ''
@@ -11,38 +11,48 @@ http_interactions:
       - application/json
       User-Agent:
       - Faraday v2.9.0
-      Authorization:
-      - Basic QVpGLU81U0xSNmlELWo3OUVpWjdyT3V6ekljV3RkQmQ5TGFkbkdnTGlZcTB4WGc2b1FlbDdTUHlULV9jNEdFQXQ3djJLZ05Na29ySG83MHI6RU9rc182RmpIZTlHLVNpdmYxZER5bVFJSTFvR3l2R1dCNjY2RE5sX19zVkhOc0JyTGFwV0o0YmlFODFDMlg4bUNPbTQ2eUUtNmRxdGZVOUo=
   response:
     status:
       code: 200
       message: OK
     headers:
-      content-encoding:
-      - gzip
+      connection:
+      - keep-alive
       cache-control:
       - max-age=0, no-cache, no-store, must-revalidate
       content-type:
       - application/json
-      date:
-      - Sat, 20 Apr 2024 12:50:25 GMT
       paypal-debug-id:
-      - 6c2213fb215ca
-      server:
-      - ECAcc (chf/16A1)
+      - ba401ec6fa623
       set-cookie:
-      - l7_az=ccg13.slc; Path=/; Domain=paypal.com; Expires=Sat, 20 Apr 2024 13:20:26
+      - l7_az=ccg14.slc; Path=/; Domain=paypal.com; Expires=Sat, 20 Apr 2024 13:41:29
         GMT; HttpOnly; Secure
+      traceparent:
+      - 00-0000000000000000000ba401ec6fa623-c18e1dbdb0864daf-01
+      edge-control:
+      - max-age=0
+      accept-ranges:
+      - bytes
+      date:
+      - Sat, 20 Apr 2024 13:11:29 GMT
+      via:
+      - 1.1 varnish
       strict-transport-security:
       - max-age=63072000; includeSubDomains; preload
-      traceparent:
-      - 00-00000000000000000006c2213fb215ca-494da59449105a95-01
+      x-served-by:
+      - cache-chi-kigq8000162-CHI
+      x-cache:
+      - MISS
+      x-cache-hits:
+      - '0'
+      x-timer:
+      - S1713618689.345801,VS0,VE219
       vary:
       - Accept-Encoding
       transfer-encoding:
       - chunked
     body:
-      encoding: ASCII-8BIT
+      encoding: UTF-8
       string: '{"items":[{"id":"INV2-MG8P-GMSG-JNK2-G3WX","status":"SENT","detail":{"currency_code":"USD","note":"Hi
         Chuji!\r\n\r\nYour current registration for 360supplychain.com is good until
         09/2019.","invoice_number":"2021-EST014","invoice_date":"2024-03-09","payment_term":{"due_date":"2024-03-09"},"viewed_by_recipient":true,"group_draft":false,"metadata":{"create_time":"2024-03-09T12:00:19Z"}},"invoicer":{"email_address":"paypal@larcity.com"},"primary_recipients":[{"billing_info":{"business_name":"360
@@ -123,10 +133,10 @@ http_interactions:
         Let me know if you have any trouble accessing.","invoice_number":"2019-INV0057","invoice_date":"2019-10-27","payment_term":{"due_date":"2019-10-27"},"viewed_by_recipient":false,"group_draft":false,"metadata":{"create_time":"2019-08-27T00:52:57Z"}},"invoicer":{"email_address":"support@larcity.com"},"primary_recipients":[{"billing_info":{"business_name":"Track
         Side Schedule","name":{"given_name":"Tom","surname":"Van Winkle","full_name":"Tom
         Van Winkle"},"email_address":"info@tracksideschedule.com"}}],"amount":{"currency_code":"USD","value":"431.00"},"due_amount":{"currency_code":"USD","value":"0.00"},"payments":{"paid_amount":{"currency_code":"USD","value":"431.00"}},"links":[{"href":"https://api.paypal.com/v2/invoicing/invoices/INV2-B6AC-CE82-YRDU-LHQQ","rel":"self","method":"GET"}],"unilateral":false}],"links":[{"href":"https://api.paypal.com/v2/invoicing/invoices?page=1&page_size=25&total_required=false","rel":"self","method":"GET"},{"href":"https://api.paypal.com/v2/invoicing/invoices?page=2&page_size=25&total_required=false","rel":"next","method":"GET"}]}'
-  recorded_at: Sat, 20 Apr 2024 12:50:26 GMT
+  recorded_at: Sat, 20 Apr 2024 13:11:29 GMT
 - request:
     method: get
-    uri: https://api-m.paypal.com/v2/invoicing/invoices?page=2&page_size=25
+    uri: https://api-m.sandbox.paypal.com/v2/invoicing/invoices?page=2&page_size=25
     body:
       encoding: US-ASCII
       string: ''
@@ -135,38 +145,48 @@ http_interactions:
       - application/json
       User-Agent:
       - Faraday v2.9.0
-      Authorization:
-      - Basic QVpGLU81U0xSNmlELWo3OUVpWjdyT3V6ekljV3RkQmQ5TGFkbkdnTGlZcTB4WGc2b1FlbDdTUHlULV9jNEdFQXQ3djJLZ05Na29ySG83MHI6RU9rc182RmpIZTlHLVNpdmYxZER5bVFJSTFvR3l2R1dCNjY2RE5sX19zVkhOc0JyTGFwV0o0YmlFODFDMlg4bUNPbTQ2eUUtNmRxdGZVOUo=
   response:
     status:
       code: 200
       message: OK
     headers:
-      content-encoding:
-      - gzip
+      connection:
+      - keep-alive
       cache-control:
       - max-age=0, no-cache, no-store, must-revalidate
       content-type:
       - application/json
-      date:
-      - Sat, 20 Apr 2024 12:50:25 GMT
       paypal-debug-id:
-      - 0a18841a36aef
-      server:
-      - ECAcc (chf/16EC)
+      - 2a0cd40e3450a
       set-cookie:
-      - l7_az=ccg01.phx; Path=/; Domain=paypal.com; Expires=Sat, 20 Apr 2024 13:20:26
+      - l7_az=ccg14.slc; Path=/; Domain=paypal.com; Expires=Sat, 20 Apr 2024 13:41:29
         GMT; HttpOnly; Secure
+      traceparent:
+      - 00-00000000000000000002a0cd40e3450a-2cd16cc127a5da3c-01
+      edge-control:
+      - max-age=0
+      accept-ranges:
+      - bytes
+      date:
+      - Sat, 20 Apr 2024 13:11:29 GMT
+      via:
+      - 1.1 varnish
       strict-transport-security:
       - max-age=63072000; includeSubDomains; preload
-      traceparent:
-      - 00-00000000000000000000a18841a36aef-d0744dee2ddab200-01
+      x-served-by:
+      - cache-chi-kigq8000079-CHI
+      x-cache:
+      - MISS
+      x-cache-hits:
+      - '0'
+      x-timer:
+      - S1713618690.715514,VS0,VE140
       vary:
       - Accept-Encoding
       transfer-encoding:
       - chunked
     body:
-      encoding: ASCII-8BIT
+      encoding: UTF-8
       string: '{"items":[{"id":"INV2-9E3C-DPSK-2H9Y-4VA6","status":"PAID","detail":{"currency_code":"USD","note":"Thank
         you for your business! Looking forward to collaborating with you as your Startup
         begins it''s journey \uD83D\uDC4D\uD83C\uDFFE","invoice_number":"2019-INV0056","invoice_date":"2019-06-14","payment_term":{"due_date":"2019-06-14"},"viewed_by_recipient":false,"group_draft":false,"metadata":{"create_time":"2019-06-14T10:23:26Z"}},"invoicer":{"email_address":"paypal@larcity.com"},"primary_recipients":[{"billing_info":{"business_name":"SlayLengths
@@ -246,5 +266,5 @@ http_interactions:
         later this week.","invoice_number":"0002","invoice_date":"2015-04-24","payment_term":{"due_date":"2015-04-23"},"viewed_by_recipient":false,"group_draft":false,"metadata":{"create_time":"2015-04-23T12:28:07Z"}},"primary_recipients":[{"billing_info":{"email_address":"uche@larcity.com"}}],"amount":{"currency_code":"USD","value":"1057.50"},"due_amount":{"currency_code":"USD","value":"1057.50"},"links":[{"href":"https://api.paypal.com/v2/invoicing/invoices/INV2-4UQH-48Y7-B4ZP-7NAS","rel":"self","method":"GET"}],"unilateral":false},{"id":"INV2-SYMT-EZ7X-GTUC-2FCG","status":"CANCELLED","detail":{"currency_code":"USD","note":"Instructions
         for using Shadowbox to update website content will be available via email
         later this week.","invoice_number":"201404-INV0008","invoice_date":"2015-04-24","payment_term":{"due_date":"2015-04-23"},"viewed_by_recipient":false,"group_draft":false,"metadata":{"create_time":"2015-04-23T12:28:06Z"}},"primary_recipients":[{"billing_info":{"email_address":"c.billman@icloud.com"}}],"amount":{"currency_code":"USD","value":"1057.50"},"due_amount":{"currency_code":"USD","value":"1057.50"},"links":[{"href":"https://api.paypal.com/v2/invoicing/invoices/INV2-SYMT-EZ7X-GTUC-2FCG","rel":"self","method":"GET"}],"unilateral":false}],"links":[{"href":"https://api.paypal.com/v2/invoicing/invoices?page=2&page_size=25&total_required=false","rel":"self","method":"GET"},{"href":"https://api.paypal.com/v2/invoicing/invoices?page=1&page_size=25&total_required=false","rel":"prev","method":"GET"}]}'
-  recorded_at: Sat, 20 Apr 2024 12:50:26 GMT
+  recorded_at: Sat, 20 Apr 2024 13:11:29 GMT
 recorded_with: VCR 6.2.0

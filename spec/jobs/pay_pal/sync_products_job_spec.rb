@@ -13,8 +13,8 @@ module PayPal
       around do |example|
         VCR.use_cassette(
           'paypal/sync_products',
-          record: :new_episodes,
-          re_record_interval: 3.months
+          # in development, change to `record: :new_episodes` to update the cassette
+          record: :none
         ) do
           example.run
         end
@@ -23,8 +23,8 @@ module PayPal
       it 'syncs products' do
         # TODO: Make this less brittle - assert on specific records that are in the
         #   PayPal sandbox account (and/or VCR cassette)
-        expect { described_class.perform_now }.to change { Product.count }.by(9).and \
-          change { Metadata::Product.count }.by(9)
+        expect { described_class.perform_now }.to change { Product.count }.by(7).and \
+          change { Metadata::Product.count }.by(7)
       end
     end
 

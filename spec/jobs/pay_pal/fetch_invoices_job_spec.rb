@@ -10,10 +10,11 @@ module PayPal
 
     context 'when the request is authorized' do
       around do |example|
+        # API docs: https://rubydoc.info/gems/vcr/6.2.0/VCR#use_cassette-instance_method
         VCR.use_cassette(
           'paypal/fetch_invoices',
-          record: :new_episodes,
-          re_record_interval: 3.months
+          # in development, change to `record: :new_episodes` to update the cassette
+          record: :none
         ) do
           example.run
         end
