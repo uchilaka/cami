@@ -35,8 +35,8 @@ Rails.application.configure do
 
   # Semantic logger additional appenders: https://logger.rocketjob.io/rails.html#additional-appenders
   config.semantic_logger.add_appender(
-    file_name: AppUtils.filesystem_log_file(ext: 'json'),
-    formatter: :json
+    file_name: AppUtils.filesystem_log_file,
+    formatter: :color
   )
 
   # Enable/disable caching. By default caching is disabled.
