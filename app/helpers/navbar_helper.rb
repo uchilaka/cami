@@ -93,10 +93,15 @@ module NavbarHelper
       { label: 'Services', path: '/services', admin: true },
       { label: 'Features', path: '/admin/flipper', admin: true, enabled: true },
       { label: 'Sidekiq', path: '/admin/sidekiq', admin: true, enabled: true },
+      { label: 'System Logs', url: system_log_url, admin: true, enabled: true },
     ].map { |item| build_menu_item(item) }.filter(&:enabled)
   end
 
   private
+
+  def system_log_url
+    @system_log_url ||= VirtualOfficeManager.logstream_vendor_url
+  end
 
   def build_menu_item(item)
     item[:enabled] ||= calculate_enabled(item)
