@@ -18,5 +18,20 @@ class VirtualOfficeManager
 
       entities&.send(entity_key)
     end
+
+    def logstream_vendor_url
+      return nil if logstream_vendor&.team_id.blank? || logstream_vendor&.source_id.blank?
+
+      [
+        'https://logs.betterstack.com/team/',
+        logstream_vendor.team_id,
+        '/tail?s=',
+        logstream_vendor.source_id
+      ].join
+    end
+
+    def logstream_vendor
+      Rails.application.credentials.betterstack
+    end
   end
 end

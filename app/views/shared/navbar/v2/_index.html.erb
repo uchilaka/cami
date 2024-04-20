@@ -25,7 +25,7 @@
         <!-- Main profile menu -->
         <ul class="py-2" aria-labelledby="user-menu-button">
           <% (user_signed_in? ? profile_menu : public_menu).each do |item| %>
-            <%= nav_link_to item[:label], item[:path], class: "#{profile_link_classes}" %>
+            <%= render partial: 'shared/navbar/v2/profile_menu_item', locals: { item: } %>
           <% end %>
         </ul>
 
@@ -33,7 +33,7 @@
           <!-- Admin menu -->
           <ul class="py-2">
             <% admin_menu.each do |item| %>
-              <%= nav_link_to item[:label], item[:path], class: "#{profile_link_classes}" %>
+              <%= render partial: 'shared/navbar/v2/profile_menu_item', locals: {item:} %>
             <% end %>
           </ul>
 
@@ -41,10 +41,7 @@
           <!-- TODO: Show only to folks with the developer role -->
           <ul class="py-2">
             <% developer_menu.each do |item| %>
-              <%= nav_link_to item[:label],
-                              item[:path] || item[:url],
-                              class: "#{profile_link_classes}",
-                              target: item[:url].present? ? "_blank" : "_self" %>
+              <%= render partial: 'shared/navbar/v2/profile_menu_item', locals: { item: } %>
             <% end %>
           </ul>
         <% end %>
