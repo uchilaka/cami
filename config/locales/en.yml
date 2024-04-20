@@ -53,6 +53,7 @@ en:
       products: "Products"
       accounts: "Accounts"
       sign_out: "Sign Out"
+      registration: "Settings"
   models:
     account:
       errors:

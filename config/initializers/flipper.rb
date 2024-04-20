@@ -12,7 +12,7 @@ Flipper.configure do |config|
 end
 
 Rails.application.config.after_initialize do |app|
-  current_features = Flipper.features.map(&:key)
+  current_features = Flipper.features.map(&:key).map(&:to_sym)
   app.config_for(:features).each do |feature, options|
     next if current_features.include?(feature)
 

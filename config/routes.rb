@@ -8,6 +8,10 @@ Rails.application.routes.draw do
   devise_for :users,
              controllers: { omniauth_callbacks: 'users/omniauth/callbacks' }
 
+  devise_scope :user do
+    get 'users/:id', as: :user_profile, to: 'devise/registrations#show'
+  end
+
   scope :admin, as: :admin do
     constraints AdminScopeConstraint.new do
       # Setting up sidekiq web: https://github.com/sidekiq/sidekiq/wiki/Monitoring#web-ui

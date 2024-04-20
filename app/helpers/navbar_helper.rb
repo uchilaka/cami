@@ -58,6 +58,12 @@ module NavbarHelper
     ].map { |item| build_menu_item(item) }.filter(&:enabled)
   end
 
+  def profile_menu
+    @profile_menu ||= [
+      { label: t('shared.navbar.registration'), path: edit_user_registration_path, enabled: true }
+    ].map { |item| build_menu_item(item) }.filter(&:enabled)
+  end
+
   def public_menu
     @public_menu ||= main_menu.filter(&:public)
   end
