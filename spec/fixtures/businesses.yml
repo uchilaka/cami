@@ -11,6 +11,11 @@
 #  updated_at   :datetime         not null
 #  tax_id       :string
 #
+# Indexes
+#
+#  index_accounts_on_slug    (slug) UNIQUE
+#  index_accounts_on_tax_id  (tax_id) UNIQUE WHERE (tax_id IS NOT NULL)
+#
 ---
 - display_name: Acme Corporation
   email: <%= Faker::Internet.email %>
@@ -24,3 +29,21 @@
   email: support@paypal.com
   tax_id: <%= VirtualOfficeManager.entities.dig(:paypal, :tax_id) %>
   slug: paypal
+- display_name: Google, Inc.
+  email: support@google.com
+  tax_id: <%= VirtualOfficeManager.entities.dig(:google, :tax_id) %>
+  slug: google
+- display_name: Gandi US, Inc.
+  slug: gandi
+- display_name: Amazon.com, Inc.
+  slug: amazon
+- display_name: Microsoft Corporation
+  slug: microsoft
+- display_name: Apple Inc.
+  slug: apple
+- display_name: Zoho Corporation
+  slug: zoho
+- display_name: Squarespace, Inc.
+  slug: squarespace
+- display_name: Shopify, Inc.
+  slug: shopify

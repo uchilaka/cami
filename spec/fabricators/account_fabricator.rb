@@ -13,9 +13,14 @@
 #  updated_at   :datetime         not null
 #  tax_id       :string
 #
+# Indexes
+#
+#  index_accounts_on_slug    (slug) UNIQUE
+#  index_accounts_on_tax_id  (tax_id) UNIQUE WHERE (tax_id IS NOT NULL)
+#
 Fabricator(:account) do
   display_name { Faker::Company.name }
   users { [Fabricate(:user)] }
-  slug { Faker::Internet.slug }
+  slug { SecureRandom.alphanumeric(4).downcase }
   type 'Account'
 end

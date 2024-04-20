@@ -13,14 +13,17 @@
 #  updated_at   :datetime         not null
 #  tax_id       :string
 #
+# Indexes
+#
+#  index_accounts_on_slug    (slug) UNIQUE
+#  index_accounts_on_tax_id  (tax_id) UNIQUE WHERE (tax_id IS NOT NULL)
+#
 class Business < Account
   include MaintainsMetadata
 
   delegate :email, to: :metadata, allow_nil: true
 
   has_many :products, foreign_key: :vendor_id, dependent: :nullify
-
-  validates :tax_id, allow_blank: true, uniqueness: { case_sensitive: false }
 
   def email=(value)
     profile.email = value

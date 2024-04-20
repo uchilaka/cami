@@ -26,7 +26,6 @@ module PayPal
         next if Product.exists?(sku: sku.downcase)
 
         new_record = Product.new(
-          vendor_id: vendor.id,
           sku: sku.downcase,
           display_name:,
           description:,
@@ -102,10 +101,6 @@ module PayPal
             client_secret: ENV.fetch('PAYPAL_CLIENT_SECRET', credentials.client_secret)
           )
         end
-    end
-
-    def vendor
-      @vendor ||= Business.find_by(slug: 'paypal')
     end
   end
 end
