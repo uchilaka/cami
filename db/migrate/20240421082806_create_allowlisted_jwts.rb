@@ -10,7 +10,7 @@ class CreateAllowlistedJwts < ActiveRecord::Migration[7.0]
       # If you want to leverage the `aud` claim, add to it a `NOT NULL` constraint:
       # t.string :aud, null: false
       t.datetime :exp, null: false
-      t.references :users, foreign_key: { on_delete: :cascade }, type: :uuid, null: false
+      t.references :user, foreign_key: { on_delete: :cascade }, type: :uuid, null: false
     end
 
     add_index :allowlisted_jwts, :jti, unique: true

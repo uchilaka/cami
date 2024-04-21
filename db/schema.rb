@@ -76,9 +76,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_21_082806) do
     t.string "jti", null: false
     t.string "aud"
     t.datetime "exp", null: false
-    t.uuid "users_id", null: false
+    t.uuid "user_id", null: false
     t.index ["jti"], name: "index_allowlisted_jwts_on_jti", unique: true
-    t.index ["users_id"], name: "index_allowlisted_jwts_on_users_id"
+    t.index ["user_id"], name: "index_allowlisted_jwts_on_user_id"
   end
 
   create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -134,6 +134,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_21_082806) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "allowlisted_jwts", "users", column: "users_id", on_delete: :cascade
+  add_foreign_key "allowlisted_jwts", "users", on_delete: :cascade
   add_foreign_key "products", "accounts", column: "vendor_id"
 end
