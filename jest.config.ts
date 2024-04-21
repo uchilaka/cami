@@ -3,14 +3,20 @@
  * https://jestjs.io/docs/configuration
  */
 
-import type { Config } from 'jest'
+import fs from 'fs'
+import path from 'path'
+import { parse } from 'comment-json'
+import type { CompilerOptions } from 'typescript'
+// import type { Config } from 'jest'
 /**
  * TODO: Configure path mapping from tsconfig.json for Jest: https://kulshekhar.github.io/ts-jest/docs/getting-started/paths-mapping/
  */
-// import { pathsToModuleNameMapper, JestConfigWithTsJest } from 'ts-jest'
-import { compilerOptions } from './tsconfig.json'
+import { pathsToModuleNameMapper, JestConfigWithTsJest } from 'ts-jest'
+const tsConfigFile = path.join(path.resolve('./'), 'tsconfig.json')
+const tsConfig = parse(fs.readFileSync(tsConfigFile).toString(), undefined, true) as Record<string, unknown>
+const compilerOptions = tsConfig!.compilerOptions as CompilerOptions
 
-const config: Config = {
+const config: JestConfigWithTsJest = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -95,21 +101,21 @@ const config: Config = {
   // ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-  // modulePaths: [compilerOptions.baseUrl], // <-- This will be set to 'baseUrl' value
-  // moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
+  modulePaths: [compilerOptions.baseUrl!], // <-- This will be set to 'baseUrl' value
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths! /*, { prefix: '<rootDir>/' } */),
   /**
    * TODO: Create an abstraction for this to re-use across TSConfig, Jest & Vite
    */
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/app/frontend/$1',
-    '^@/components/(.*)$': '<rootDir>/app/frontend/components/$1',
-    '^@/features/(.*)$': '<rootDir>/app/frontend/features/$1',
-    '^@/hooks/(.*)$': '<rootDir>/app/frontend/hooks/$1',
-    '^@/lib/(.*)$': '<rootDir>/app/frontend/lib/$1',
-    '^@/pages/(.*)$': '<rootDir>/app/frontend/pages/$1',
-    '^@/routes/(.*)$': '<rootDir>/app/frontend/routes/$1',
-    '^@/views/(.*)$': '<rootDir>/app/frontend/views/$1',
-  },
+  // moduleNameMapper: {
+  //   '^@/(.*)$': '<rootDir>/app/frontend/$1',
+  //   '^@/components/(.*)$': '<rootDir>/app/frontend/components/$1',
+  //   '^@/features/(.*)$': '<rootDir>/app/frontend/features/$1',
+  //   '^@/hooks/(.*)$': '<rootDir>/app/frontend/hooks/$1',
+  //   '^@/lib/(.*)$': '<rootDir>/app/frontend/lib/$1',
+  //   '^@/pages/(.*)$': '<rootDir>/app/frontend/pages/$1',
+  //   '^@/routes/(.*)$': '<rootDir>/app/frontend/routes/$1',
+  //   '^@/views/(.*)$': '<rootDir>/app/frontend/views/$1',
+  // },
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
 
