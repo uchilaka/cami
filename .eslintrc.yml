@@ -40,4 +40,17 @@ rules:
   'react-hooks/rules-of-hooks': 'error'
   'react-hooks/exhaustive-deps': 'warn'
   'no-use-before-define': ['error', { 'functions': false, 'classes': true, 'variables': false }]
-  'no-unused-vars': [1, { 'ignoreRestSiblings': false }]
+  'no-unused-vars': 'off'
+  '@typescript-eslint/no-unused-vars':
+    [
+      'warn',
+      {
+        'args': 'all',
+        'argsIgnorePattern': '^_',
+        'caughtErrors': 'all',
+        'caughtErrorsIgnorePattern': '^_',
+        'destructuredArrayIgnorePattern': '^_',
+        'varsIgnorePattern': '^_',
+        'ignoreRestSiblings': false,
+      },
+    ]
