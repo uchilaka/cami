@@ -91,3 +91,6 @@ Temporary Items
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Jest
+/coverage

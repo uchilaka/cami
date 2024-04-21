@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
@@ -42,12 +43,18 @@
     "jest-environment-jsdom": "^29.7.0",
     "path": "^0.12.7",
     "prettier": "^3.2.5",
+    "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
     "vite-plugin-full-reload": "^1.1.0",
-    "vite-plugin-ruby": "^5.0.0"
+    "vite-plugin-ruby": "^5.0.0",
+    "@testing-library/react": "~15.0",
+    "@testing-library/react-hooks": "~8.0",
+    "@testing-library/jest-dom": "~6.4"
   },
   "scripts": {
+    "finstall": "yarn install --force",
+    "prefinstall": "if [ -f ./yarn.lock ]; then rm -v yarn.lock; fi",
     "test": "jest"
   }
 }

@@ -1,9 +1,9 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-import Root from '../routes/Root'
-import AboutUs from '../routes/AboutUs'
-import LangingPage from '../routes/LandingPage'
+import Root from '@/component/Root'
+import AboutUs from '@/routes/AboutUs'
+import LangingPage from '@/routes/LandingPage'
 
 const router = createBrowserRouter([
   {

@@ -3,7 +3,12 @@
  * https://jestjs.io/docs/configuration
  */
 
-import type {Config} from 'jest';
+import type { Config } from 'jest'
+/**
+ * TODO: Configure path mapping from tsconfig.json for Jest: https://kulshekhar.github.io/ts-jest/docs/getting-started/paths-mapping/
+ */
+// import { pathsToModuleNameMapper, JestConfigWithTsJest } from 'ts-jest'
+import { compilerOptions } from './tsconfig.json'
 
 const config: Config = {
   // All imported modules in your tests should be mocked automatically
@@ -25,7 +30,7 @@ const config: Config = {
   // collectCoverageFrom: undefined,
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: "coverage",
+  coverageDirectory: 'coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
@@ -33,7 +38,7 @@ const config: Config = {
   // ],
 
   // Indicates which provider should be used to instrument code for coverage
-  coverageProvider: "v8",
+  coverageProvider: 'v8',
 
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
@@ -90,8 +95,18 @@ const config: Config = {
   // ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-  // moduleNameMapper: {},
-
+  // modulePaths: [compilerOptions.baseUrl], // <-- This will be set to 'baseUrl' value
+  // moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/app/frontend/$1',
+    '^@/components/(.*)$': '<rootDir>/app/frontend/components/$1',
+    '^@/features/(.*)$': '<rootDir>/app/frontend/features/$1',
+    '^@/hooks/(.*)$': '<rootDir>/app/frontend/hooks/$1',
+    '^@/lib/(.*)$': '<rootDir>/app/frontend/lib/$1',
+    '^@/pages/(.*)$': '<rootDir>/app/frontend/pages/$1',
+    '^@/routes/(.*)$': '<rootDir>/app/frontend/routes/$1',
+    '^@/views/(.*)$': '<rootDir>/app/frontend/views/$1',
+  },
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
 
@@ -102,7 +117,7 @@ const config: Config = {
   // notifyMode: "failure-change",
 
   // A preset that is used as a base for Jest's configuration
-  // preset: undefined,
+  preset: 'ts-jest/presets/js-with-ts',
 
   // Run tests from one or more projects
   // projects: undefined,
@@ -137,7 +152,7 @@ const config: Config = {
   // setupFiles: [],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  // setupFilesAfterEnv: [],
+  setupFilesAfterEnv: ['<rootDir>/app/frontend/__tests__/setup.ts'],
 
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,
@@ -146,7 +161,7 @@ const config: Config = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment: "jsdom",
+  testEnvironment: 'jsdom',
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
@@ -155,15 +170,13 @@ const config: Config = {
   // testLocationInResults: false,
 
   // The glob patterns Jest uses to detect test files
-  // testMatch: [
-  //   "**/__tests__/**/*.[jt]s?(x)",
-  //   "**/?(*.)+(spec|test).[tj]s?(x)"
-  // ],
+  testMatch: [
+    // "**/__tests__/**/*.[jt]s?(x)",
+    '**/?(*.)+(spec|test).[tj]s?(x)',
+  ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  testPathIgnorePatterns: [
-    "/node_modules/", "/vendor/"
-  ],
+  testPathIgnorePatterns: ['/node_modules/', '/vendor/'],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
   // testRegex: [],
@@ -178,11 +191,7 @@ const config: Config = {
   // transform: undefined,
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-  transformIgnorePatterns: [
-    "/node_modules/",
-    "/vendor/",
-    "\\.pnp\\.[^\\/]+$"
-  ],
+  transformIgnorePatterns: ['/node_modules/', '/vendor/', '\\.pnp\\.[^\\/]+$'],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,
@@ -195,6 +204,6 @@ const config: Config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-};
+}
 
-export default config;
+export default config

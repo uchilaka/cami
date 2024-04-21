@@ -7,7 +7,7 @@ import './main.scss'
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import Home from '@/views/home'
-import Dashboard from '@/components/views/dashboard'
+import Dashboard from '@/views/dashboard'
 
 function mountIfContainerIsLoaded(containerId, Component) {
   const domContainer = document.querySelector(`#${containerId}`)
