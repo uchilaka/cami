@@ -24,6 +24,7 @@ rules:
   "react/react-in-jsx-scope": 1
   "no-mixed-spaces-and-tabs": 0
   "camelcase": "off"
+  comma-dangle: ["warn", "always-multiline"]
   "react/prop-types": "off"
   "react/forbid-prop-types": 0
   "react/require-default-props": 0
@@ -49,7 +50,6 @@ rules:
         "printWidth": 140,
         "singleQuote": true,
         "semi": false,
-        "trailingComma": "none",
         "tabWidth": 2,
         "useTabs": false,
         "endOfLine": "auto",

@@ -386,3 +386,4 @@ bin/thor help lx-cli:secrets:print_key
 - [ ] Playwright E2E test suite
 - [ ] Implement default authorization policies
 - [ ] **Consolidate vite configuration & dependencies** right now, vite is a dependency of both the front and backend separately. Is there a better way?
+- [ ] Address error from working on rails project in VSCode: `/Users/localadmin/.asdf/installs/ruby/3.2.2/bin/ruby: warning: Ruby was built without YJIT support. You may need to install rustc to build Ruby with YJIT.`
