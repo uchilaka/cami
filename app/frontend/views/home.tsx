@@ -1,7 +1,7 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-import Root from '@/component/Root'
+import Root from '@/components/Root'
 import AboutUs from '@/routes/AboutUs'
 import LangingPage from '@/routes/LandingPage'
 

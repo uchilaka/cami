@@ -97,6 +97,9 @@ const config: Config = {
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   // modulePaths: [compilerOptions.baseUrl], // <-- This will be set to 'baseUrl' value
   // moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
+  /**
+   * TODO: Create an abstraction for this to re-use across TSConfig, Jest & Vite
+   */
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/app/frontend/$1',
     '^@/components/(.*)$': '<rootDir>/app/frontend/components/$1',
