@@ -28,6 +28,8 @@
   - [Integration Partners](#integration-partners)
     - [PayPal](#paypal)
   - [Guides and References](#guides-and-references)
+  - [Known issues](#known-issues)
+    - [Issues with ESM Support](#issues-with-esm-support)
   - [Future Work](#future-work)
 
 ## Ruby Version
@@ -364,6 +366,24 @@ bin/thor help lx-cli:secrets:print_key
 - [CanCanCan developer guide](https://github.com/CanCanCommunity/cancancan/blob/develop/docs/README.md) - an alternative to `Pundit`
 - [Feature flags for backup providers](https://www.flippercloud.io/docs/guides/backup-providers) e.g. with feature flagging payment providers like Stripe, PayPal & SplitIt or auth providers like Apple, Google & native passwordless authentication
 - [Dynamic roles in a Rails app](https://nicholusmuwonge.medium.com/dynamic-roles-in-a-rails-app-using-rolify-devise-invitable-and-pundit-b72011451239)
+
+## Known issues
+
+### Issues with ESM Support
+
+> Link to a helpful comment on a related Github issue: <https://github.com/yarnpkg/yarn/issues/8994#issuecomment-1870052819>
+
+Each time a new dependency is added, you'll need to nuke the `yarn.lock` file before `yarn test` is able to run successfully again. The error looks like this:
+
+```shell
+yarn run v1.22.21
+$ jest
+Error [ERR_REQUIRE_ESM]: require() of ES Module /opt/Developer/@larcity/account_manager/node_modules/string-width/index.js from /opt/Developer/@larcity/account_manager/node_modules/cliui/build/index.cjs not supported.
+Instead change the require of index.js in /opt/Developer/@larcity/account_manager/node_modules/cliui/build/index.cjs to a dynamic import() which is available in all CommonJS modules.
+    at Object.<anonymous> (/opt/Developer/@larcity/account_manager/node_modules/cliui/build/index.cjs:291:21)
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+```
 
 ## Future Work
 

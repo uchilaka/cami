@@ -6,7 +6,12 @@ extends:
   - "plugin:react/recommended"
   - "plugin:react-hooks/recommended"
   - "plugin:prettier/recommended"
-parser: "@typescript-eslint/parser"
+# overrides:
+#   - files:
+#       - "app/frontend/**/*.spec.{ts,js,tsx,jsx}"
+#       - "test/**/*"
+#     env:
+#       jest: true
 parserOptions:
   ecmaFeatures:
     jsx: true
