@@ -87,6 +87,8 @@ group :development, :test do
 end
 
 group :development do
+  # A Ruby language server
+  gem 'solargraph'
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
 
