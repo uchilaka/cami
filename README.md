@@ -366,6 +366,7 @@ bin/thor help lx-cli:secrets:print_key
 - [ ] Review Yahoo + Google [updated email sender requirements](https://help.brevo.com/hc/en-us/articles/14925263522578-Prepare-for-Gmail-and-Yahoo-s-new-requirements-for-email-senders) and make any needed changes to the Brevo configs
 - [x] Implement forbidden rescue page (or just set a flash message and redirect to the root path)
 - [ ] "Continue with Google" quick link in the profile dropdown
+- [ ] Fix web concurrency support (issues here might be related to log streaming). Here's the error message: `objc[97397]: +[NSCharacterSet initialize] may have been in progress in another thread when fork() was called. We cannot safely call it or ignore it in the fork() child process. Crashing instead. Set a breakpoint on objc_initializeAfterForkError to debug`
 - [ ] AASM for account status
 - [ ] Setup and update production credentials in the `config/credentials/production.yml.enc` file
 - [ ] Implement `:confirmable` to secure accounts when switching/adding auth providers
