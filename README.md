@@ -363,6 +363,7 @@ bin/thor help lx-cli:secrets:print_key
 
 ## Future Work
 
+- [ ] Review Yahoo + Google [updated email sender requirements](https://help.brevo.com/hc/en-us/articles/14925263522578-Prepare-for-Gmail-and-Yahoo-s-new-requirements-for-email-senders) and make any needed changes to the Brevo configs
 - [x] Implement forbidden rescue page (or just set a flash message and redirect to the root path)
 - [ ] "Continue with Google" quick link in the profile dropdown
 - [ ] AASM for account status
