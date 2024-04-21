@@ -1,4 +1,5 @@
 import React from 'react'
+// Usage docs: https://github.com/bendotcodes/cookies/tree/main/packages/react-cookie
 import { useCookies } from 'react-cookie'
 
 import { User } from '../types'
