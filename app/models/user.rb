@@ -43,6 +43,7 @@ class User < ApplicationRecord
   # User: Has access to the user dashboard and can manage their own account, invoices and subscriptions.
   # :role => :privilege_level
   SUPPORTED_ROLES = {
+    # role => [privilege_level, display_name]
     admin: [100, 'Admin'],
     manager: [90, 'Manager'],
     subscriber: [80, 'Subscriber'],
