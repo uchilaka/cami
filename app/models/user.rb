@@ -10,15 +10,20 @@
 #  confirmed_at           :datetime
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
+#  failed_attempts        :integer          default(0), not null
 #  family_name            :string
 #  given_name             :string
+#  last_request_at        :datetime
+#  locked_at              :datetime
 #  nickname               :string
 #  providers              :string           default([]), is an Array
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
+#  timeout_in             :integer          default(1800)
 #  uids                   :jsonb
 #  unconfirmed_email      :string
+#  unlock_token           :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
@@ -31,13 +36,13 @@
 class User < ApplicationRecord
   include MaintainsMetadata
 
-  # Include default devise modules. Others available are: :timeoutable, :lockable, :trackable
+  # Include default devise modules. Others available are: :trackable
   #
   # Source code for confirmable: https://github.com/heartcombo/devise/blob/main/lib/devise/models/confirmable.rb
   # Guide on adding confirmable: https://github.com/heartcombo/devise/wiki/How-To:-Add-:confirmable-to-Users
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :confirmable,
-         :omniauthable, omniauth_providers: %i[google]
+  devise :database_authenticatable, :registerable, :validatable,
+         :recoverable, :confirmable, :timeoutable, :lockable,
+         :rememberable, :omniauthable, omniauth_providers: %i[google]
 
   alias_attribute :first_name, :given_name
   alias_attribute :last_name, :family_name
