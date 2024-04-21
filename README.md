@@ -387,6 +387,7 @@ info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this comm
 
 ## Future Work
 
+- [ ] A JS Auth flow to emit and retain the JWT token for frontend access control features and initialize the rails session for everything else
 - [x] Implement forbidden rescue page (or just set a flash message and redirect to the root path)
 - [ ] "Continue with Google" quick link in the profile dropdown
 - [ ] AASM for account status
