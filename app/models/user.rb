@@ -41,8 +41,8 @@ class User < ApplicationRecord
   # Source code for confirmable: https://github.com/heartcombo/devise/blob/main/lib/devise/models/confirmable.rb
   # Guide on adding confirmable: https://github.com/heartcombo/devise/wiki/How-To:-Add-:confirmable-to-Users
   devise :database_authenticatable, :registerable, :validatable,
-         :recoverable, :confirmable, :timeoutable, :lockable,
-         :rememberable, :omniauthable, omniauth_providers: %i[google]
+         :recoverable, :confirmable, :timeoutable, :lockable, :rememberable,
+         :magic_link_authenticatable, :omniauthable, omniauth_providers: %i[google]
 
   alias_attribute :first_name, :given_name
   alias_attribute :last_name, :family_name
@@ -88,6 +88,11 @@ class User < ApplicationRecord
   # end
 
   class << self
+    # Docs on Devise passwordless customization: https://github.com/abevoelker/devise-passwordless#customization
+    def passwordless_login_within
+      15.minutes
+    end
+
     def from_omniauth(access_token = nil)
       access_token ||= Current.auth_provider
       uid = access_token.uid
