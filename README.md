@@ -1,5 +1,7 @@
 # Customer Accounts Management & Invoicing MVP
 
+> Reference template: <https://github.com/IsraelDCastro/rails-vite-tailwindcss-template>
+
 - [Customer Accounts Management \& Invoicing MVP](#customer-accounts-management--invoicing-mvp)
   - [Ruby Version](#ruby-version)
   - [Service/Vendor dependencies](#servicevendor-dependencies)
@@ -101,6 +103,8 @@ The `.envrc` (see `.envrc.example`) file should be included for compatibility wi
 brew bundle
 # Setup the ASDF dependencies file
 cp -v .tool-versions.example .tool-versions
+# Set bundler location
+bundle config set --local path ./vendor/bundle
 # Install Ruby dependencies
 bundle install
 # Install Node dependencies

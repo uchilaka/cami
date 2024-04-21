@@ -1,7 +1,7 @@
 {
   "terminal.integrated.fontSize": 15,
   "editor.tabSize": 2,
-  "eslint.experimental.useFlatConfig": true,
+  "eslint.experimental.useFlatConfig": false,
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "[javascript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
@@ -12,6 +12,16 @@
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "modifications"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file"
   },
   "[markdown]": {
     "editor.codeActionsOnSave": {
