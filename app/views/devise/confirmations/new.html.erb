@@ -1,7 +1,7 @@
-<% content_for :form_layout do %>
+<% content_for :centered_form_layout do %>
   <h3 class="mb-5">Resend confirmation instructions</h3>
 
-  <%= form_for(resource, as: resource_name, url: user_confirmation_path(resource_name), html: { method: :post }) do |f| %>
+  <%= form_for(resource, as: resource_name, url: user_confirmation_path, html: { method: :post }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
 
     <div class="field">
@@ -10,10 +10,10 @@
     </div>
 
     <div class="field">
-      <%= f.submit "Resend confirmation instructions", class: "btn btn-primary" %>
+      <%= f.submit "Resend confirmation instructions", class: "btn btn-primary block w-full" %>
     </div>
   <% end %>
   <hr class="my-5">
   <%= render "devise/shared/links" %>
 <% end %>
-<%= render "devise/shared/form-layout" %>
+<%= render "devise/shared/centered-form-layout" %>
