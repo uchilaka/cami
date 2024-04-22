@@ -1,4 +1,8 @@
 <%- if controller_name != 'sessions' %>
+  <%= link_to "Log in with password", new_user_fallback_session_path, class: "btn" %><br>
+<% end %>
+
+<%- if devise_mapping.magic_link_authenticatable? && controller_name != 'passwordless' %>
   <%= link_to "Log in", new_session_path(resource_name), class: "btn" %><br>
 <% end %>
 

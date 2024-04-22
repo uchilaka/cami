@@ -1,12 +1,12 @@
 <% content_for :centered_form_layout do %>
   <h3 class="mb-4">Log in</h3>
   <%= render "devise/shared/omniauth/links" %>
-  <%= link_to "Sign in via Email", users_passwordless_sign_in_path, class: "btn block w-full mb-4" %>
+  <%= link_to "Sign in via Email", user_session_path, class: "btn block w-full mb-4" %>
   <%= render "shared/separator-with-text", content: "OR" %>
   <%= form_for(
         resource,
         as: resource_name,
-        url: session_path(resource_name),
+        url: user_fallback_session_path,
         html: { class: "space-y-6" }
       ) do |f| %>
     <div class="field">

@@ -7,7 +7,7 @@ require 'sidekiq/cron/web'
 Rails.application.routes.draw do
   devise_for :users,
              controllers: {
-               sessions: 'users/sessions',
+               sessions: 'users/passwordless',
                registrations: 'users/registrations',
                confirmations: 'users/confirmations',
                unlocks: 'users/unlocks',
@@ -15,9 +15,9 @@ Rails.application.routes.draw do
              }
 
   devise_scope :user do
-    get 'users/passwordless/sign_in', to: 'users/passwordless#new'
-    post 'users/passwordless/sign_in', to: 'users/passwordless#create'
-    get 'users/passwordless/sign_out', to: 'users/passwordless#destroy'
+    get 'users/fallback/sign_in', as: :new_user_fallback_session, to: 'users/sessions#new'
+    post 'users/fallback/sign_in', as: :user_fallback_session, to: 'users/sessions#create'
+    delete 'users/fallback/sign_out', as: :destroy_user_fallback_session, to: 'users/sessions#destroy'
   end
 
   scope :admin, as: :admin do
