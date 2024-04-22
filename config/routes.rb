@@ -14,6 +14,12 @@ Rails.application.routes.draw do
                omniauth_callbacks: 'users/omniauth/callbacks'
              }
 
+  devise_scope :user do
+    get 'users/passwordless/sign_in', to: 'users/passwordless#new'
+    post 'users/passwordless/sign_in', to: 'users/passwordless#create'
+    get 'users/passwordless/sign_out', to: 'users/passwordless#destroy'
+  end
+
   scope :admin, as: :admin do
     constraints AdminScopeConstraint.new do
       # Setting up sidekiq web: https://github.com/sidekiq/sidekiq/wiki/Monitoring#web-ui

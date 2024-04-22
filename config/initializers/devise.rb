@@ -320,7 +320,7 @@ Devise.setup do |config|
   config.mailer = "Devise::Passwordless::Mailer"
 
   # Which algorithm to use for tokenizing magic links. See README for descriptions
-  config.passwordless_tokenizer = "LarCity::SignedGlobalIDTokenizer"
+  config.passwordless_tokenizer = "::LarCity::SignedGlobalIdTokenizer"
 
   # Time period after a magic login link is sent out that it will be valid for.
   # config.passwordless_login_within = 20.minutes

@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+# require_relative '../../../lib/lar_city/signed_global_id_tokenizer'
+
 module Users
-  class SessionsController < Devise::SessionsController
+  class PasswordlessController < Devise::Passwordless::SessionsController
     # before_action :configure_sign_in_params, only: [:create]
 
     # GET /resource/sign_in

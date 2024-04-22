@@ -1,0 +1,33 @@
+<% content_for :centered_form_layout do %>
+  <h3 class="mb-4">Log in</h3>
+  <%= render "users/shared/omniauth/links" %>
+  <%= render "shared/separator-with-text", content: "OR" %>
+
+  <p class="my-4">Enter email address and we'll send you a magic link to sign in.</p>
+
+  <%= form_for(
+        resource,
+        as: resource_name,
+        url: users_passwordless_sign_in_path,
+        html: { class: "space-y-6" }
+      ) do |f| %>
+    <div class="field">
+      <%= f.label :email, class: "label" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input" %>
+    </div>
+
+    <% if devise_mapping.rememberable? %>
+      <div class="field">
+        <%= f.check_box :remember_me %>
+        <%= f.label :remember_me %>
+      </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.submit "Send me an access link", class: "btn btn-primary block w-full" %>
+    </div>
+  <% end %>
+  <hr class="my-5">
+  <%= render "users/shared/links" %>
+<% end %>
+<%= render "users/shared/centered-form-layout" %>
