@@ -16,9 +16,8 @@ module SetCurrentRequestDetails
     private
 
     def excluded_controllers
-      %w[
-        devise/magic_links
-      ]
+      # E.g. controller for magic links: devise/magic_links
+      []
     end
   end
 end
