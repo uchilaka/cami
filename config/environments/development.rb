@@ -62,7 +62,7 @@ Rails.application.configure do
     end
 
   if config.action_mailer.delivery_method == :smtp
-    # Configure the mailer to use the SMTP server
+    # Configure the mailer to use the SMTP server. Docs: https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
     config.action_mailer.smtp_settings = {
       address: ENV.fetch('SMTP_SERVER', Rails.application.credentials.brevo.smtp_server),
       port: ENV.fetch('SMTP_PORT', Rails.application.credentials.brevo.smtp_port),
@@ -73,12 +73,13 @@ Rails.application.configure do
   end
 
   config.after_initialize do
-    # Configure logging for the app's mail service. ActionMailer config docs: https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+    # Configure logging for the app's mail service.
     config.action_mailer.logger = Rails.logger
   end
 
   # IMPORTANT: This will affect whether letter_opener can open the email in the browser or not
-  config.action_mailer.default_url_options = { host: 'localhost', port: ENV.fetch('PORT') }
+  # TODO: Spec this config across development, staging and production
+  config.action_mailer.default_url_options = VirtualOfficeManager.default_url_options
 
   config.action_mailer.perform_caching = false
 

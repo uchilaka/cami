@@ -9,6 +9,6 @@ if Rails.env.development?
     # Default value is `:default` that renders styled message with showing useful metadata.
     config.message_template = :light
     # Set the file URI scheme for macOS
-    config.file_uri_scheme = 'file://'
+    # config.file_uri_scheme = 'file://'
   end
 end

@@ -17,7 +17,7 @@ class AppUtils
     end
 
     def send_emails?
-      yes?(ENV.fetch('SEND_EMAIL_ENABLED', Rails.env.production? ? 'yes' : 'no'))
+      yes?(ENV.fetch('SEND_EMAILS_ENABLED', Rails.env.production? ? 'yes' : 'no'))
     end
   end
 end
