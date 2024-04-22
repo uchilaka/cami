@@ -4,7 +4,6 @@ module Devise
   module Omniauth
     module LinksHelper
       def omniauth_cta_label(provider)
-        # TODO: Check what resource is
         if current_path == new_registration_path(resource)
           t('devise.omniauth.ctas.sign_up_with_provider', provider: provider_name(provider))
         else
