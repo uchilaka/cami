@@ -348,6 +348,7 @@ bin/thor help lx-cli:secrets:print_key
   - [Asset pipeline](https://guides.rubyonrails.org/asset_pipeline.html)
   - [The Flash](https://guides.rubyonrails.org/action_controller_overview.html#the-flash)
   - [Action Text](https://guides.rubyonrails.org/v7.1/action_text_overview.html)
+  - [Time.now vs Time.current vs. DateTime.now](https://discuss.rubyonrails.org/t/time-now-vs-time-current-vs-datetime-now/75183)
 - [Introduction to Sidekiq for Rails](https://blog.appsignal.com/2023/09/20/an-introduction-to-sidekiq-for-ruby-on-rails.html)
 - [The beginner's guide to magic links](https://postmarkapp.com/blog/magic-links)
 - [Devise](https://github.com/heartcombo/devise?tab=readme-ov-file#getting-started)

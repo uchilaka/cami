@@ -80,12 +80,18 @@ class User < ApplicationRecord
   # def send_devise_notification(notification, *args)
   #   devise_mailer.send(notification, self, *args).deliver_later
   # end
-
+  #
   # TODO: Test attempting to activate several accounts and ensure only the ones
   #   that are not already activated are activated
   # def after_confirmation
   #   accounts.each(&:activate!)
   # end
+  #
+  def after_magic_link_authentication
+    # NOTE: Consider the successful completion of a magic link authentication
+    #  as a confirmation of the user's email address
+    confirm unless confirmed?
+  end
 
   class << self
     # Docs on Devise passwordless customization: https://github.com/abevoelker/devise-passwordless#customization
