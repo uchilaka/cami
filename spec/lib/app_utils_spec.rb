@@ -3,6 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe AppUtils do
+  describe '.ping?' do
+    it 'returns true if host is reachable' do
+      expect(described_class.ping?('google.com')).to eq(true)
+    end
+
+    it 'returns false if host is not reachable' do
+      expect(described_class.ping?('notarealhost')).to eq(false)
+    end
+  end
+
   describe '.yes?' do
     it 'returns true if value is true' do
       expect(described_class.yes?(true)).to eq(true)

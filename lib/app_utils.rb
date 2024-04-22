@@ -19,5 +19,19 @@ class AppUtils
     def send_emails?
       yes?(ENV.fetch('SEND_EMAILS_ENABLED', Rails.env.production? ? 'yes' : 'no'))
     end
+
+    def ping?(host)
+      result = system("ping -c 1 -t 3 -W 1 #{host}", out: '/dev/null', err: '/dev/null')
+      result.nil? ? false : result
+    end
+
+    def healthy?(resource_url)
+      response = Faraday.get(resource_url) do |options|
+        options.headers = {
+          'User-Agent' => 'VirtualOfficeManager health check bot v1.0'
+        }
+      end
+      response.success?
+    end
   end
 end

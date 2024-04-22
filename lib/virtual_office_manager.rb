@@ -12,8 +12,9 @@ class VirtualOfficeManager
     end
 
     def default_url_options
-      # TODO: ONLY set the port number if on localhost
-      { host: hostname }
+      return { host: hostname } if AppUtils.ping?(hostname)
+
+      { host: 'localhost', port: ENV.fetch('PORT') }
     end
 
     def default_entity

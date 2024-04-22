@@ -5,6 +5,8 @@ require 'sidekiq/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
+  get 'healthz', to: 'healthz#show'
+
   devise_for :users,
              controllers: {
                sessions: 'users/passwordless',

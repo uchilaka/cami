@@ -77,9 +77,13 @@ Rails.application.configure do
     config.action_mailer.logger = Rails.logger
   end
 
-  # IMPORTANT: This will affect whether letter_opener can open the email in the browser or not
-  # TODO: Spec this config across development, staging and production
-  config.action_mailer.default_url_options = VirtualOfficeManager.default_url_options
+  if defined?(Rails::Server)
+    config.after_initialize do
+      # IMPORTANT: This will affect whether letter_opener can open the email in the browser or not
+      # TODO: Spec this config across development, staging and production
+      config.action_mailer.default_url_options = VirtualOfficeManager.default_url_options
+    end
+  end
 
   config.action_mailer.perform_caching = false
 
