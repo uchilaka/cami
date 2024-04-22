@@ -8,5 +8,7 @@ if Rails.env.development?
     # To render only the message body, without any metadata or extra containers or styling.
     # Default value is `:default` that renders styled message with showing useful metadata.
     config.message_template = :light
+    # Set the file URI scheme for macOS
+    config.file_uri_scheme = 'file://'
   end
 end
