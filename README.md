@@ -310,7 +310,7 @@ bin/thor help lx-cli:secrets:print_key
 
 #### How do I disable these "Missing type signature" errors? 
 
-Review [this guide on Ruby and RBS](https://blog.jetbrains.com/ruby/2022/03/rubymine-2022-1-eap5/#ruby_and_rbs).
+> Go to `Settngs | Editor | Inspections | Ruby | RBS` and uncheck `Missing type signature`
 
 ## Integration Partners
 
