@@ -74,6 +74,7 @@ Rails.application.configure do
     config.action_mailer.logger = Rails.logger
   end
 
+  # IMPORTANT: This will affect whether letter_opener can open the email in the browser or not
   config.action_mailer.default_url_options = { host: 'localhost', port: ENV.fetch('PORT') }
 
   config.action_mailer.perform_caching = false
