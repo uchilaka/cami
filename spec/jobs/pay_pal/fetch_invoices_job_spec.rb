@@ -14,21 +14,20 @@ module PayPal
         VCR.use_cassette(
           'paypal/fetch_invoices',
           # NOTE: in development, change to `record: :new_episodes` to update the cassette
-          # record: :none,
-          record: :new_episodes,
+          record: :none,
           tag: :obfuscate
         ) do
-          # # NOTE: When working in development to update the cassette, disable this block
-          # with_modified_env(
-          #   PAYPAL_BASE_URL: Rails.application.credentials.paypal.base_url,
-          #   PAYPAL_CLIENT_ID: Rails.application.credentials.paypal.client_id,
-          #   PAYPAL_CLIENT_SECRET: Rails.application.credentials.paypal.client_secret
-          # ) do
-          #   example.run
-          # end
+          # NOTE: When working in development to update the cassette, disable this block
+          with_modified_env(
+            PAYPAL_BASE_URL: Rails.application.credentials.paypal.base_url,
+            PAYPAL_CLIENT_ID: Rails.application.credentials.paypal.client_id,
+            PAYPAL_CLIENT_SECRET: Rails.application.credentials.paypal.client_secret
+          ) do
+            example.run
+          end
           # NOTE: When working in development to update the cassette, enable this line
           #   after disabling ☝🏾 block
-          example.run
+          # example.run
         end
       end
 
