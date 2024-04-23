@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api-m.paypal.com/v2/invoicing/invoices?page=1&page_size=25
+    uri: https://api-m.sandbox.paypal.com/v2/invoicing/invoices?page=1&page_size=25
     body:
       encoding: US-ASCII
       string: ''
@@ -12,7 +12,7 @@ http_interactions:
       User-Agent:
       - Faraday v2.9.0
       Authorization:
-      - Basic QVpGLU81U0xSNmlELWo3OUVpWjdyT3V6ekljV3RkQmQ5TGFkbkdnTGlZcTB4WGc2b1FlbDdTUHlULV9jNEdFQXQ3djJLZ05Na29ySG83MHI6RU9rc182RmpIZTlHLVNpdmYxZER5bVFJSTFvR3l2R1dCNjY2RE5sX19zVkhOc0JyTGFwV0o0YmlFODFDMlg4bUNPbTQ2eUUtNmRxdGZVOUo=
+        - Basic NotARealToken
   response:
     status:
       code: 200
@@ -110,7 +110,7 @@ http_interactions:
   recorded_at: Tue, 23 Apr 2024 11:21:10 GMT
 - request:
     method: get
-    uri: https://api-m.paypal.com/v2/invoicing/invoices?page=2&page_size=25
+    uri: https://api-m.sandbox.paypal.com/v2/invoicing/invoices?page=2&page_size=25
     body:
       encoding: US-ASCII
       string: ''
@@ -120,7 +120,7 @@ http_interactions:
       User-Agent:
       - Faraday v2.9.0
       Authorization:
-      - Basic QVpGLU81U0xSNmlELWo3OUVpWjdyT3V6ekljV3RkQmQ5TGFkbkdnTGlZcTB4WGc2b1FlbDdTUHlULV9jNEdFQXQ3djJLZ05Na29ySG83MHI6RU9rc182RmpIZTlHLVNpdmYxZER5bVFJSTFvR3l2R1dCNjY2RE5sX19zVkhOc0JyTGFwV0o0YmlFODFDMlg4bUNPbTQ2eUUtNmRxdGZVOUo=
+      - Basic NotARealToken
   response:
     status:
       code: 200
