@@ -82,6 +82,8 @@ Rails.application.configure do
       # IMPORTANT: This will affect whether letter_opener can open the email in the browser or not
       # TODO: Spec this config across development, staging and production
       config.action_mailer.default_url_options = VirtualOfficeManager.default_url_options
+      # Schedule an NGROK tunnel check to update the mailer default URL options
+      UpdateMailerDefaultURLOptionsJob.set(wait: 15.seconds).perform_later
     end
   end
 

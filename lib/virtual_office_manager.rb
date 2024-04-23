@@ -12,7 +12,12 @@ class VirtualOfficeManager
     end
 
     def default_url_options
-      return { host: hostname } if AppUtils.ping?(hostname)
+      # Only run this in the context of a job
+      unless defined?(Rails::Server)
+        healthz_endpoint = "https://#{hostname}/healthz"
+        return { host: hostname } if AppUtils.healthy?(healthz_endpoint)
+      end
+      return { host: hostname } unless Rails.env.development?
 
       { host: 'localhost', port: ENV.fetch('PORT') }
     end

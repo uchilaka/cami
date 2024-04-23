@@ -351,6 +351,7 @@ bin/thor help lx-cli:secrets:print_key
   - [Time.now vs Time.current vs. DateTime.now](https://discuss.rubyonrails.org/t/time-now-vs-time-current-vs-datetime-now/75183)
 - [Introduction to Sidekiq for Rails](https://blog.appsignal.com/2023/09/20/an-introduction-to-sidekiq-for-ruby-on-rails.html)
 - [The beginner's guide to magic links](https://postmarkapp.com/blog/magic-links)
+- [The complete guide for Deprecation Warnings in Rails](https://www.fastruby.io/blog/rails/upgrades/deprecation-warnings-rails-guide.html)
 - [Devise](https://github.com/heartcombo/devise?tab=readme-ov-file#getting-started)
   - [Configure views](https://github.com/heartcombo/devise?tab=readme-ov-file#configuring-views)
   - [OmniAuth](https://github.com/heartcombo/devise/wiki/OmniAuth:-Overview)

@@ -31,7 +31,11 @@ class AppUtils
           'User-Agent' => 'VirtualOfficeManager health check bot v1.0'
         }
       end
+      Rails.logger.info "Health check for #{resource_url}", response: response.inspect
       response.success?
+    rescue Faraday::ConnectionFailed => e
+      Rails.logger.error "Health check for #{resource_url} failed", error: e.message
+      false
     end
   end
 end

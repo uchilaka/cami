@@ -91,4 +91,4 @@ jobs:
         run: |
           bundle exec rake db:create db:migrate
           # Run all specs except those with the option devtool: true
-          bundle exec rspec --tag "~devtool"
+          bundle exec rspec --tag ~skip_in_ci:true
