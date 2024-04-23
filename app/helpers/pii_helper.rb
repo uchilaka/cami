@@ -13,10 +13,10 @@ module PIIHelper
     sanitize_hash(parsed_data)
   end
 
-  def sanitize_hash(hash, debug: false)
+  def sanitize_hash(hash, debug: true)
     _old_hash = hash.deep_dup if debug
     hash.each do |label, value|
-      _old_value = value
+      _old_value = value if debug
       case value
       when Hash
         sanitize_hash(value)

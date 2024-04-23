@@ -85,7 +85,8 @@ RSpec.describe PIIHelper do
       end
 
       it 'sanitizes PII from JSON data' do
-        expect(subject).not_to match(data)
+        old_value = data.clone
+        expect(subject).not_to match(old_value)
       end
     end
 
@@ -134,8 +135,9 @@ RSpec.describe PIIHelper do
       end
 
       it 'sanitizes PII from JSON data' do
+        old_value = data[:items].first.clone
         # Assert the first record in items is obfuscated
-        expect(subject[:items].first).not_to match(data[:items].first)
+        expect(subject[:items].first).not_to match(old_value)
       end
     end
   end
