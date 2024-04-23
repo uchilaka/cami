@@ -66,6 +66,7 @@ VCR.configure do |c|
       interaction.response.body = PIISanitizer.sanitize(interaction.response.body)
     end
   end
+  # TODO: Ensure Authorization header data with tokens don't end up in a cassette
 end
 
 RSpec.configure do |config|
