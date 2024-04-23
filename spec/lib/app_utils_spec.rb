@@ -76,30 +76,30 @@ RSpec.describe AppUtils do
   end
 
   describe '.send_emails?' do
-    let(:send_email_enabled) { nil }
+    let(:send_emails_enabled) { nil }
 
     around do |example|
-      with_modified_env(SEND_EMAIL_ENABLED: send_email_enabled) do
+      with_modified_env(SEND_EMAILS_ENABLED: send_emails_enabled) do
         example.run
       end
     end
 
-    context 'when SEND_EMAIL_ENABLED is nil' do
+    context 'when SEND_EMAILS_ENABLED is nil' do
       it 'returns false' do
         expect(described_class.send_emails?).to eq(false)
       end
     end
 
-    context 'when SEND_EMAIL_ENABLED is "no"' do
-      let(:send_email_enabled) { 'no' }
+    context 'when SEND_EMAILS_ENABLED is "no"' do
+      let(:send_emails_enabled) { 'no' }
 
       it 'returns false' do
         expect(described_class.send_emails?).to eq(false)
       end
     end
 
-    context 'when SEND_EMAIL_ENABLED is "yes"' do
-      let(:send_email_enabled) { 'yes' }
+    context 'when SEND_EMAILS_ENABLED is "yes"' do
+      let(:send_emails_enabled) { 'yes' }
 
       it 'returns true' do
         expect(described_class.send_emails?).to eq(true)
