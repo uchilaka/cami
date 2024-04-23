@@ -44,7 +44,28 @@ VCR.configure do |c|
   c.cassette_library_dir = 'spec/cassettes'
   c.hook_into :faraday
   c.allow_http_connections_when_no_cassette = true
+
+  # IMPORTANT: Enables automatic cassette naming based on tags
   c.configure_rspec_metadata!
+
+  # Setup :before_record hook to intercept PII data and prevent it from leaking into the cassettes
+  c.before_record(:obfuscate) do |interaction, cassette|
+    if interaction.response.body.present?
+      if cassette.name.present? &&
+        interaction.response.headers['content-type'].any? { |t| %r{application/json}.match?(t) }
+        # Some housekeeping to prepare for making a dub of the original response
+        dub_file = Rails.root.join('spec', 'fixtures', 'pii', "#{cassette.name}.json").to_s
+        pii_path = File.dirname(dub_file)
+        FileUtils.mkdir_p(pii_path) unless File.directory?(pii_path)
+        # Prettify the JSON data for easier reading by humans
+        og_response_data = JSON.pretty_generate(JSON.parse(interaction.response.body))
+        # Save the original response body to a fixture location that can be
+        #  validated but not committed to source control
+        File.write(dub_file, og_response_data)
+      end
+      interaction.response.body = PIISanitizer.sanitize(interaction.response.body)
+    end
+  end
 end
 
 RSpec.configure do |config|

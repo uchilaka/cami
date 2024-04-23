@@ -113,7 +113,7 @@ GEM
     dartsass-rails (0.5.0)
       railties (>= 6.0.0)
       sass-embedded (~> 1.63)
-    data_migrate (9.2.0)
+    data_migrate (9.3.0)
       activerecord (>= 6.1)
       railties (>= 6.1)
     database_cleaner-active_record (2.1.0)
@@ -478,7 +478,7 @@ DEPENDENCIES
   capybara_accessibility_audit
   climate_control
   dartsass-rails
-  data_migrate (~> 9.2, >= 9.2.0)
+  data_migrate (~> 9, >= 9.3.0)
   database_cleaner-active_record
   debug
   devise
