@@ -37,13 +37,15 @@
             <% end %>
           </ul>
 
-          <!-- Developer menu -->
-          <!-- TODO: Show only to folks with the developer role -->
-          <ul class="py-2">
-            <% developer_menu.each do |item| %>
-              <%= render partial: 'shared/navbar/v2/profile_menu_item', locals: { item: } %>
-            <% end %>
-          </ul>
+          <% if Flipper.enabled? :feat__developer_menu, current_user %>
+            <!-- Developer menu -->
+            <!-- TODO: Show only to folks with the developer role -->
+            <ul class="py-2">
+              <% developer_menu.each do |item| %>
+                <%= render partial: 'shared/navbar/v2/profile_menu_item', locals: { item: } %>
+              <% end %>
+            </ul>
+          <% end %>
         <% end %>
 
         <% if user_signed_in? %>

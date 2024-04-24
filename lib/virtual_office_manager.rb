@@ -5,12 +5,29 @@
 #   data from secure or encrypted sources.
 class VirtualOfficeManager
   class << self
+    def hostname
+      # TODO: Check if tunnel is available and use the NGROK hostname if so
+      #   otherwise, fallback to the configured hostname 👇🏾
+      ENV.fetch('HOSTNAME', Rails.application.credentials.hostname)
+    end
+
+    def default_url_options
+      # Only run this in the context of a job
+      unless defined?(Rails::Server)
+        healthz_endpoint = "https://#{hostname}/healthz"
+        return { host: hostname } if AppUtils.healthy?(healthz_endpoint)
+      end
+      return { host: hostname } unless Rails.env.development?
+
+      { host: 'localhost', port: ENV.fetch('PORT') }
+    end
+
     def default_entity
-      Rails.application.credentials&.entities&.larcity
+      entities&.larcity
     end
 
     def entities
-      Rails.application.credentials&.entities
+      Rails.application.credentials.entities
     end
 
     def entity_by_key(entity_key)
