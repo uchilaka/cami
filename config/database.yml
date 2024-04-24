@@ -22,6 +22,8 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   host: <%= ENV.fetch('APP_DATABASE_HOST', 'localhost') %>
   port: <%= ENV.fetch('APP_DATABASE_PORT', 5432) %>
+  # Related issue: https://github.com/rails/rails/issues/38560
+  gssencmode: disable
 
 development:
   <<: *default
