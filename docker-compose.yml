@@ -1,6 +1,12 @@
-version: '3.7'
-
 services:
+  mailhog:
+    container_name: mailhog.accounts.larcity
+    image: mailhog/mailhog
+    restart: unless-stopped
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+
   redis-store:
     container_name: redis.accounts.larcity
     image: redis:7
