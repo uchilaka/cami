@@ -2,7 +2,73 @@
 
 require 'rails_helper'
 
-RSpec.describe AppUtils do
+RSpec.describe AppUtils, utility: true, skip_in_ci: true do
+  describe '.healthy?' do
+    context 'when the resource is healthy' do
+      let(:stubs) { Faraday::Adapter::Test::Stubs.new }
+      let(:conn) { Faraday.new { |b| b.adapter(:test, stubs) } }
+
+      before do
+        allow(Faraday).to receive(:get) { |url| conn.get(url) }
+      end
+
+      after do
+        allow(Faraday).to receive(:get).and_call_original
+      end
+
+      it 'returns true' do
+        stubs.get(%r{/healthz}) { [200, {}, 'OK'] }
+        expect(described_class.healthy?('https://accounts.larcity.test/healthz')).to eq(true)
+      end
+    end
+
+    context 'when the resource is not healthy' do
+      let(:stubs) { Faraday::Adapter::Test::Stubs.new }
+      let(:conn) { Faraday.new { |b| b.adapter(:test, stubs) } }
+
+      before do
+        allow(Faraday).to receive(:get) { |url| conn.get(url) }
+      end
+
+      after do
+        allow(Faraday).to receive(:get).and_call_original
+      end
+
+      it 'returns false' do
+        stubs.get(%r{/healthz}) { [500, {}, 'Internal Server Error'] }
+        expect(described_class.healthy?('https://accounts.larcity.test/healthz')).to eq(false)
+      end
+    end
+
+    context 'when the resource is unavailable' do
+      let(:stubs) { Faraday::Adapter::Test::Stubs.new }
+      let(:conn) { Faraday.new { |b| b.adapter(:test, stubs) } }
+
+      before do
+        allow(Faraday).to receive(:get) { |url| conn.get(url) }
+      end
+
+      after do
+        allow(Faraday).to receive(:get).and_call_original
+      end
+
+      it 'returns false' do
+        stubs.get(%r{/healthz}) { raise Faraday::ConnectionFailed, 'Connection failed' }
+        expect(described_class.healthy?('https://accounts.larcity.test/healthz')).to eq(false)
+      end
+    end
+  end
+
+  describe '.ping?' do
+    it 'returns true if host is reachable' do
+      expect(described_class.ping?('google.com')).to eq(true)
+    end
+
+    it 'returns false if host is not reachable' do
+      expect(described_class.ping?('notarealhost')).to eq(false)
+    end
+  end
+
   describe '.yes?' do
     it 'returns true if value is true' do
       expect(described_class.yes?(true)).to eq(true)

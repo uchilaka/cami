@@ -31,6 +31,10 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def public_resource?
+    %w[/up].include?(request.path)
+  end
+
   def initialize_web_console
     console
   end

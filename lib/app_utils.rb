@@ -34,5 +34,23 @@ class AppUtils
 
       /^Y(es)?|^T(rue)|^On$/i.match?(value.to_s.strip)
     end
+
+    def ping?(host)
+      result = system("ping -c 1 -t 3 -W 1 #{host}", out: '/dev/null', err: '/dev/null')
+      result.nil? ? false : result
+    end
+
+    def healthy?(resource_url)
+      response = Faraday.get(resource_url) do |options|
+        options.headers = {
+          'User-Agent' => 'VirtualOfficeManager health check bot v1.0'
+        }
+      end
+      Rails.logger.info "Health check for #{resource_url}", response: response.inspect
+      response.success?
+    rescue Faraday::ConnectionFailed => e
+      Rails.logger.error "Health check for #{resource_url} failed", error: e.message
+      false
+    end
   end
 end

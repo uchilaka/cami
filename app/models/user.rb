@@ -10,15 +10,20 @@
 #  confirmed_at           :datetime
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
+#  failed_attempts        :integer          default(0), not null
 #  family_name            :string
 #  given_name             :string
+#  last_request_at        :datetime
+#  locked_at              :datetime
 #  nickname               :string
 #  providers              :string           default([]), is an Array
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
+#  timeout_in             :integer          default(1800)
 #  uids                   :jsonb
 #  unconfirmed_email      :string
+#  unlock_token           :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
@@ -31,14 +36,13 @@
 class User < ApplicationRecord
   include MaintainsMetadata
 
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # Include default devise modules. Others available are: :trackable
   #
   # Source code for confirmable: https://github.com/heartcombo/devise/blob/main/lib/devise/models/confirmable.rb
   # Guide on adding confirmable: https://github.com/heartcombo/devise/wiki/How-To:-Add-:confirmable-to-Users
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :confirmable,
-         :omniauthable, omniauth_providers: %i[google]
+  devise :database_authenticatable, :registerable, :validatable,
+         :recoverable, :confirmable, :timeoutable, :lockable, :rememberable,
+         :magic_link_authenticatable, :omniauthable, omniauth_providers: %i[google]
 
   alias_attribute :first_name, :given_name
   alias_attribute :last_name, :family_name
@@ -76,14 +80,25 @@ class User < ApplicationRecord
   # def send_devise_notification(notification, *args)
   #   devise_mailer.send(notification, self, *args).deliver_later
   # end
-
+  #
   # TODO: Test attempting to activate several accounts and ensure only the ones
   #   that are not already activated are activated
   # def after_confirmation
   #   accounts.each(&:activate!)
   # end
+  #
+  def after_magic_link_authentication
+    # NOTE: Consider the successful completion of a magic link authentication
+    #  as a confirmation of the user's email address
+    confirm unless confirmed?
+  end
 
   class << self
+    # Docs on Devise passwordless customization: https://github.com/abevoelker/devise-passwordless#customization
+    def passwordless_login_within
+      15.minutes
+    end
+
     def from_omniauth(access_token = nil)
       access_token ||= Current.auth_provider
       uid = access_token.uid

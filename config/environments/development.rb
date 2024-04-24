@@ -80,11 +80,19 @@ Rails.application.configure do
     end
 
   config.after_initialize do
-    # Configure logging for the app's mail service. ActionMailer config docs: https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+    # Configure logging for the app's mail service.
     config.action_mailer.logger = Rails.logger
   end
 
-  config.action_mailer.default_url_options = { host: 'localhost', port: ENV.fetch('PORT') }
+  if defined?(Rails::Server)
+    config.after_initialize do
+      # IMPORTANT: This will affect whether letter_opener can open the email in the browser or not
+      # TODO: Spec this config across development, staging and production
+      config.action_mailer.default_url_options = VirtualOfficeManager.default_url_options
+      # Schedule an NGROK tunnel check to update the mailer default URL options
+      UpdateMailerDefaultURLOptionsJob.set(wait: 15.seconds).perform_later
+    end
+  end
 
   config.action_mailer.perform_caching = false
 

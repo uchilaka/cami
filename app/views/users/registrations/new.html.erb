@@ -5,7 +5,7 @@
 
   <hr class="my-5">
 
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= form_for(resource, as: resource_name, url: user_registration_path(resource_name)) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
 
     <div class="field">
@@ -41,6 +41,6 @@
     </div>
   <% end %>
   <hr class="my-5">
-  <%= render "devise/shared/links" %>
+  <%= render "users/shared/links" %>
 <% end %>
-<%= render "devise/shared/centered-form-layout" %>
+<%= render "layouts/centered-form-layout" %>
