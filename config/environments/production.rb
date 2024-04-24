@@ -69,6 +69,14 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
   config.action_mailer.perform_deliveries = AppUtils.send_emails?
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: ENV.fetch('SMTP_SERVER', Rails.application.credentials.brevo.smtp_server),
+    port: ENV.fetch('SMTP_PORT', Rails.application.credentials.brevo.smtp_port),
+    user_name: ENV.fetch('SMTP_USERNAME', Rails.application.credentials.brevo.smtp_user),
+    password: ENV.fetch('SMTP_PASSWORD', Rails.application.credentials.brevo.smtp_password),
+    enable_starttls_auto: true
+  }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
