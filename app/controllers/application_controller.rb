@@ -5,11 +5,15 @@ class ApplicationController < ActionController::Base
   include Pundit::Authorization
 
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :authenticate_user!
+  before_action :authenticate_user!, unless: :public_resource?
   # For more on action controller filters, see https://guides.rubyonrails.org/action_controller_overview.html#filters
   before_action :initialize_web_console, only: %i[index new show edit], if: -> { Rails.env.development? }
 
   # rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
+  def public_resource?
+    false
+  end
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up) do |u|

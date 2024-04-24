@@ -94,6 +94,14 @@ module NavbarHelper
       { label: 'Features', path: '/admin/flipper', admin: true, enabled: true },
       { label: 'Sidekiq', path: '/admin/sidekiq', admin: true, enabled: true },
       { label: 'System Logs', url: system_log_url, admin: true, enabled: true },
+      # TODO: Update AppUtils to compose the application's URL based on whether
+      #   the NGINX tunnel is running or not.
+      {
+        label: 'Mailhog (Testing email inbox)',
+        url: 'http://localhost:8025',
+        admin: true,
+        enabled: Rails.env.development?
+      },
     ].map { |item| build_menu_item(item) }.filter(&:enabled)
   end
 
