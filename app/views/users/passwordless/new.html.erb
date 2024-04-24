@@ -1,22 +1,16 @@
 <% content_for :centered_form_layout do %>
   <h3 class="mb-4">Log in</h3>
+  <p class="my-4">Enter email address and we'll send you a magic link to sign in.</p>
 
-  <%= render "devise/shared/omniauth/links" %>
-  <hr class="my-5">
   <%= form_for(
         resource,
         as: resource_name,
-        url: session_path(resource_name),
+        url: user_session_path,
         html: { class: "space-y-6" }
       ) do |f| %>
     <div class="field">
       <%= f.label :email, class: "label" %>
       <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input" %>
-    </div>
-
-    <div class="field">
-      <%= f.label :password, class: "label" %>
-      <%= f.password_field :password, autocomplete: "current-password", class: "input" %>
     </div>
 
     <% if devise_mapping.rememberable? %>
@@ -27,10 +21,16 @@
     <% end %>
 
     <div class="field">
-      <%= f.submit "Log in", class: "btn btn-primary block w-full" %>
+      <%= f.submit "Send me an access link", class: "btn btn-primary block w-full" %>
     </div>
   <% end %>
-  <hr class="my-5">
-  <%= render "devise/shared/links" %>
+  <div class="my-3">
+    <%= render "shared/separator-with-text", content: "OR" %>
+  </div>
+  <%= render "users/shared/omniauth/links" %>
+  <div class="mb-4">
+    <%= render "shared/separator-with-text", content: "Need something else?" %>
+  </div>
+  <%= render "users/shared/links" %>
 <% end %>
-<%= render "layouts/centered-form" %>
+<%= render "layouts/centered-form-layout" %>

@@ -38,7 +38,7 @@ module LarCity
           options[:includes] = includes
           resource = double
           expect(GlobalID::Locator).to receive(:locate_signed).with(token, options).and_return(resource)
-          expect(described_class.decode(token, resource_class, includes:)).to eq(resource)
+          expect(described_class.decode(token, resource_class, includes:)).to eq([resource, {}])
         end
       end
 
@@ -49,7 +49,7 @@ module LarCity
           options = { only: resource_class }
           resource = double
           expect(GlobalID::Locator).to receive(:locate_signed).with(token, options).and_return(resource)
-          expect(described_class.decode(token, resource_class)).to eq(resource)
+          expect(described_class.decode(token, resource_class)).to eq([resource, {}])
         end
       end
 
@@ -58,7 +58,7 @@ module LarCity
         let(:token) { described_class.encode(user) }
 
         it 'decodes the token' do
-          expect(described_class.decode(token, User)).to eq(user)
+          expect(described_class.decode(token, User)).to eq([user, {}])
         end
       end
     end

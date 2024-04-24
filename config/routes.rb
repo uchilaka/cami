@@ -5,11 +5,23 @@ require 'sidekiq/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
+  get 'healthz', to: 'healthz#show'
+
   devise_for :users,
              controllers: {
+               sessions: 'users/passwordless',
+               passwords: 'users/passwords',
                registrations: 'users/registrations',
+               confirmations: 'users/confirmations',
+               unlocks: 'users/unlocks',
                omniauth_callbacks: 'users/omniauth/callbacks'
              }
+
+  devise_scope :user do
+    get 'users/fallback/sign_in', as: :new_user_fallback_session, to: 'users/sessions#new'
+    post 'users/fallback/sign_in', as: :user_fallback_session, to: 'users/sessions#create'
+    delete 'users/fallback/sign_out', as: :destroy_user_fallback_session, to: 'users/sessions#destroy'
+  end
 
   scope :admin, as: :admin do
     constraints AdminScopeConstraint.new do

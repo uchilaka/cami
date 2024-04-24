@@ -60,21 +60,32 @@ Rails.application.configure do
     else
       :letter_opener
     end
-  # Configure the mailer to use the SMTP server
-  config.action_mailer.smtp_settings = {
-    address: ENV.fetch('SMTP_SERVER', Rails.application.credentials.brevo.smtp_server),
-    port: ENV.fetch('SMTP_PORT', Rails.application.credentials.brevo.smtp_port),
-    user_name: ENV.fetch('SMTP_USERNAME', Rails.application.credentials.brevo.smtp_user),
-    password: ENV.fetch('SMTP_PASSWORD', Rails.application.credentials.brevo.smtp_password),
-    enable_starttls_auto: true
-  }
+
+  if config.action_mailer.delivery_method == :smtp
+    # Configure the mailer to use the SMTP server. Docs: https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+    config.action_mailer.smtp_settings = {
+      address: ENV.fetch('SMTP_SERVER', Rails.application.credentials.brevo.smtp_server),
+      port: ENV.fetch('SMTP_PORT', Rails.application.credentials.brevo.smtp_port),
+      user_name: ENV.fetch('SMTP_USERNAME', Rails.application.credentials.brevo.smtp_user),
+      password: ENV.fetch('SMTP_PASSWORD', Rails.application.credentials.brevo.smtp_password),
+      enable_starttls_auto: true
+    }
+  end
 
   config.after_initialize do
-    # Configure logging for the app's mail service. ActionMailer config docs: https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+    # Configure logging for the app's mail service.
     config.action_mailer.logger = Rails.logger
   end
 
-  config.action_mailer.default_url_options = { host: 'localhost', port: ENV.fetch('PORT') }
+  if defined?(Rails::Server)
+    config.after_initialize do
+      # IMPORTANT: This will affect whether letter_opener can open the email in the browser or not
+      # TODO: Spec this config across development, staging and production
+      config.action_mailer.default_url_options = VirtualOfficeManager.default_url_options
+      # Schedule an NGROK tunnel check to update the mailer default URL options
+      UpdateMailerDefaultURLOptionsJob.set(wait: 15.seconds).perform_later
+    end
+  end
 
   config.action_mailer.perform_caching = false
 

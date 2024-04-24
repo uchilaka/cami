@@ -58,7 +58,7 @@ class Account < ApplicationRecord
     deactivated: 40
   }, scopes: true
 
-  aasm column: :status, enum: true do
+  aasm column: :status, enum: true, logger: Rails.logger do
     state :demo
     state :guest, initial: true
     state :active

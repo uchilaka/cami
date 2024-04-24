@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# frozen_string_literal: true
-
 require 'sib-api-v3-sdk'
 
 SibApiV3Sdk.configure do |config|
