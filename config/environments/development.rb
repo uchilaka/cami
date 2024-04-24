@@ -55,10 +55,10 @@ Rails.application.configure do
 
   config.action_mailer.perform_deliveries = AppUtils.mailhog_enabled? || AppUtils.letter_opener_enabled?
   config.action_mailer.delivery_method =
-    if AppUtils.send_emails?
-      :smtp
-    else
+    if AppUtils.letter_opener_enabled?
       :letter_opener
+    else
+      :smtp
     end
 
   # IMPORTANT: If you will be using the mailhog service for testing emails locally,

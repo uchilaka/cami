@@ -1,8 +1,6 @@
-version: '3.7'
-
 services:
   mailhog:
-    container_name: smtp.accounts.larcity
+    container_name: mailhog.accounts.larcity
     image: mailhog/mailhog
     restart: unless-stopped
     ports:
