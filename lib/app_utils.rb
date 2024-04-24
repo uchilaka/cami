@@ -18,14 +18,10 @@ class AppUtils
     end
 
     def send_emails?
-      # NOTE: This is because letter opener intercepts the messages and writes
-      #   them to disk at <appRoot>/tmp/email/inbox.
-      return false if letter_opener_enabled?
-
       default_value =
         if Rails.env.production?
           'yes'
-        elsif mailhog_enabled?
+        elsif mailhog_enabled? || letter_opener_enabled?
           'yes'
         else
           'no'
