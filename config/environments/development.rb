@@ -53,6 +53,27 @@ Rails.application.configure do
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
+  config.action_mailer.perform_deliveries = AppUtils.letter_opener_enabled?
+  config.action_mailer.delivery_method =
+    if AppUtils.send_emails?
+      :smtp
+    else
+      :letter_opener
+    end
+  # Configure the mailer to use the SMTP server
+  config.action_mailer.smtp_settings = {
+    address: ENV.fetch('SMTP_SERVER', Rails.application.credentials.brevo.smtp_server),
+    port: ENV.fetch('SMTP_PORT', Rails.application.credentials.brevo.smtp_port),
+    user_name: ENV.fetch('SMTP_USERNAME', Rails.application.credentials.brevo.smtp_user),
+    password: ENV.fetch('SMTP_PASSWORD', Rails.application.credentials.brevo.smtp_password),
+    enable_starttls_auto: true
+  }
+
+  config.after_initialize do
+    # Configure logging for the app's mail service. ActionMailer config docs: https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+    config.action_mailer.logger = Rails.logger
+  end
+
   config.action_mailer.default_url_options = { host: 'localhost', port: ENV.fetch('PORT') }
 
   config.action_mailer.perform_caching = false

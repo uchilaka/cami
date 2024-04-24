@@ -61,6 +61,8 @@ gem 'globalid', '~> 1.2'
 
 gem 'awesome_print'
 
+gem 'sib-api-v3-sdk'
+
 # Roles library with resource scoping
 gem 'rolify', '~> 6.0'
 
