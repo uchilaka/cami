@@ -161,4 +161,4 @@ gem 'sidekiq-cron'
 gem 'foreman'
 
 # Rake tasks to migrate data alongside schema changes [https://github.com/ilyakatz/data-migrate]
-gem 'data_migrate', '~> 9.2', '>= 9.2.0'
+gem 'data_migrate', '~> 9', '>= 9.3.0'

@@ -26,7 +26,7 @@ module PayPal
           end
           # NOTE: When working in development to update the cassette, enable this line
           #   after disabling ☝🏾 block
-          # example run
+          # example.run
         end
       end
 
