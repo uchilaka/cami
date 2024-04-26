@@ -26,7 +26,7 @@ class Invoice
 
   validates :payment_vendor,
             presence: true,
-            inclusion: { in: %i[paypal] }
+            inclusion: { in: %w[paypal] }
 
   PAYPAL_BASE_URL = ENV.fetch('PAYPAL_BASE_URL', Rails.application.credentials.paypal&.base_url).freeze
 

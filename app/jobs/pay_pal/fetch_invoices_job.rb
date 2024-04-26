@@ -52,7 +52,16 @@ module PayPal
       # Batch create the records
       results = Invoice.create(@processed_records)
 
-      Rails.logger.info "Saved #{results.count} records" if results.all?
+      if results&.all?(&:valid?)
+        Rails.logger.info "Saved #{results.count} records"
+      else
+        saved_records = results.reject { |record| record.errors.any? }
+        Rails.logger.warn "Saved #{saved_records.count} of #{@processed_records.count} records"
+        # IMPORTANT: Error records will now have contents that are either
+        #   hashes or invalid instances of Invoice
+        @error_records += results.select { |record| record.errors.any? }
+        Rails.logger.error "Failed to save #{error_records.count} records"
+      end
     rescue StandardError => e
       Rails.logger.error "#{self.class.name} failed", message: e.message
     end
