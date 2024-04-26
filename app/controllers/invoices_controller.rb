@@ -1,5 +1,5 @@
 class InvoicesController < ApplicationController
-  before_action :set_invoice, only: [:show, :edit, :update, :destroy]
+  before_action :set_invoice, only: %i[show edit update destroy]
 
   # GET /invoices
   def index
@@ -66,6 +66,17 @@ class InvoicesController < ApplicationController
   # Only allow a list of trusted parameters through.
   def invoice_params
     params.fetch(:invoice, {})
+  end
 
+  def filter_params
+    params.permit(
+      f: %i[billingType]
+    )[:f]
+  end
+
+  def sort_params
+    params.permit(
+      s: %i[field direction]
+    )[:s]
   end
 end

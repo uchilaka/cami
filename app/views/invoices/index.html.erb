@@ -81,15 +81,13 @@
           Invoice #
         </th>
         <th scope="col" class="px-6 py-3">
-          Due Date
+          <%= render partial: 'invoices/header-content/due-date' %>
         </th>
         <th scope="col" class="px-6 py-3">
-          Status
+          <%= render partial: 'invoices/header-content/status' %>
         </th>
         <th scope="col" class="px-6 py-3">
-          <div class="flex justify-end">
-            Amount
-          </div>
+          <%= render partial: 'invoices/header-content/amount' %>
         </th>
         <th scope="col" class="px-6 py-3 flex justify-end">
           <div class="flex justify-end">
@@ -110,7 +108,11 @@
           <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
             <div class="ps-3">
               <div class="text-base font-semibold"><%= invoice.invoice_number || invoice.vendor_record_id %></div>
-              <%= render partial: 'billing-type-badge', locals: { invoice: } %>
+              <% if Flipper.enabled?(:feat__filterable_billing_type_badge) %>
+              <%= render partial: 'invoices/billing-type/filterable-badge', locals: { invoice: } %>
+              <% else %>
+                <%= render partial: 'invoices/billing-type/badge', locals: { invoice: } %>
+              <% end %>
             </div>
           </th>
           <td class="px-6 py-4">
@@ -133,7 +135,6 @@
               <%= link_to "View", invoice.payment_vendor_url,
                           target: "_blank",
                           class: default_item_action_btn_classes %>
-              <%= link_to "Edit", edit_invoice_path(invoice), class: default_item_action_btn_classes %>
             </div>
           </td>
         </tr>
