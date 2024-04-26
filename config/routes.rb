@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :invoices, except: %i[destroy]
   resources :services, except: %i[destroy]
   resources :products, except: %i[destroy]
   resources :accounts, except: %i[destroy]

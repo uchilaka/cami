@@ -52,6 +52,7 @@ en:
       services: "Services"
       products: "Products"
       accounts: "Accounts"
+      invoices: "Invoices"
       sign_out: "Sign Out"
       registration: "Settings"
   models:
