@@ -14,7 +14,8 @@ module PayPal
         VCR.use_cassette(
           'paypal/fetch_invoices',
           # NOTE: in development, change to `record: :new_episodes` to update the cassette
-          record: :none
+          record: :none,
+          tag: :obfuscate
         ) do
           # NOTE: When working in development to update the cassette, disable this block
           with_modified_env(
@@ -26,7 +27,7 @@ module PayPal
           end
           # NOTE: When working in development to update the cassette, enable this line
           #   after disabling ☝🏾 block
-          # example run
+          # example.run
         end
       end
 
