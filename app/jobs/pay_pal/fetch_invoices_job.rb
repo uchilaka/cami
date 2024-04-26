@@ -75,9 +75,9 @@ module PayPal
     def process_record(record)
       vendor_record_id = record['id']
       status, detail, invoicer, primary_recipients,
-        amount, due_amount, payments, links = record.values_at(
+        amount, due_amount, payments, links, vendor_recurring_group_id = record.values_at(
           'status', 'detail', 'invoicer', 'primary_recipients',
-          'amount', 'due_amount', 'payments', 'links'
+          'amount', 'due_amount', 'payments', 'links', 'recurring_Id'
         )
       invoice_number, invoiced_at, viewed_by_recipient,
         currency_code, note = detail.values_at(
@@ -104,8 +104,10 @@ module PayPal
 
       {
         vendor_record_id:,
+        vendor_recurring_group_id:,
         invoice_number:,
         vendor_id: vendor.id,
+        payment_vendor: 'paypal',
         status:,
         invoicer:,
         accounts:,
