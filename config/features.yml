@@ -10,6 +10,12 @@ default: &default
     enabled: false
   feat__dashboard:
     enabled: false
+  feat__products:
+    enabled: false
+  feat__services:
+    enabled: false
+  feat__invoices:
+    enabled: true
   feat__filterable_billing_type_badge:
     enabled: false
   feat__sortable_invoice_index:
@@ -20,10 +26,6 @@ development:
     enabled: true
   feat__navbar_v2:
     enabled: true
-  feat__services:
-    enabled: false
-  feat__products:
-    enabled: false
   feat__accounts:
     enabled: true
   feat__filterable_billing_type_badge:
