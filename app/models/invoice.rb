@@ -17,6 +17,7 @@ class Invoice
   field :viewed_by_recipient, type: Boolean
   field :invoiced_at, type: Time
   field :due_at, type: Time
+  field :updated_accounts_at, type: Time
   field :currency_code, type: String
   # { currency_code, value }
   field :amount, type: Hash

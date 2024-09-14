@@ -9,8 +9,9 @@
 :queues:
   - critical
   - <%= `hostname`.strip %>
-  - default
   - yeet
+  - default
+  - whenever
 
 development:
   :concurrency: 2
