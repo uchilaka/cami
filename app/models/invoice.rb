@@ -4,6 +4,8 @@ class Invoice
   include DocumentRecord
   include Mongoid::Attributes::Dynamic
 
+  after_initialize :initialize_amount
+
   field :vendor_record_id, type: String
   field :vendor_recurring_group_id, type: String
   field :invoice_number, type: String
@@ -36,5 +38,11 @@ class Invoice
 
   def recurring?
     vendor_recurring_group_id.present?
+  end
+
+  private
+
+  def initialize_amount
+    self.amount ||= { currency_code: 'USD', value: 0.0 }
   end
 end
