@@ -3,6 +3,7 @@
 require 'thor'
 require 'thor/shell/color'
 require 'awesome_print'
+require 'rbconfig'
 
 # Conventions for command or task implementation classes:
 # - Use the namespace method to define a namespace for the Thor class.
@@ -11,6 +12,8 @@ require 'awesome_print'
 # - Use the say method to output text to the console.
 # - All text verbose output should be in Thor::Shell::Color::MAGENTA.
 module LarCityCLI
+  class UnsupportedOSError < StandardError; end
+
   class Base < Thor
     class_option :verbose,
                  type: :boolean,
@@ -35,6 +38,28 @@ module LarCityCLI
 
     def dry_run?
       options[:dry_run]
+    end
+
+    # Check OS with Ruby: https://gist.github.com/havenwood/4161944
+    def mac?
+      friendly_os_name? == :macos
+    end
+
+    def friendly_os_name?
+      case RbConfig::CONFIG['host_os']
+      when /linux/
+        :linux
+      when /darwin/
+        :macos
+      when /mswin|mingw32|windows/
+        :windows
+      when /solaris/
+        :solaris
+      when /bsd/
+        :bsd
+      else
+        :unsupported
+      end
     end
   end
 end
