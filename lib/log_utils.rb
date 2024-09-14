@@ -11,17 +11,20 @@ module LogUtils
     end
 
     def initialize_stream
-      source_token = ENV.fetch('BETTERSTACK_SOURCE_TOKEN', Rails.application.credentials.betterstack.source_token)
+      # Stdout appender
+      SemanticLogger.add_appender(io: $stdout, level: :debug, formatter: :color)
       # BetterStack via HTTPS Appender
-      appender = SemanticLogger::Appender::Http.new(
-        url: 'https://in.logs.betterstack.com',
-        ssl: { verify: OpenSSL::SSL::VERIFY_NONE },
-        header: {
-          'Content-Type': 'application/json',
-          Authorization: "Bearer #{source_token}"
-        }
+      source_token = ENV.fetch('BETTERSTACK_SOURCE_TOKEN', Rails.application.credentials.betterstack.source_token)
+      SemanticLogger.add_appender(
+        appender: SemanticLogger::Appender::Http.new(
+          url: 'https://in.logs.betterstack.com',
+          ssl: { verify: OpenSSL::SSL::VERIFY_NONE },
+          header: {
+            'Content-Type': 'application/json',
+            Authorization: "Bearer #{source_token}"
+          }
+        )
       )
-      SemanticLogger.add_appender(appender:)
     end
 
     def log_path
