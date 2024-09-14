@@ -31,6 +31,7 @@ module LarCityCLI
       system(command_to_run, out: $stdout)
     end
 
+    # TODO: Add interactive :history command to peek into backup credential files
     desc 'backup', 'Backup an environment credentials file'
     long_desc <<~DESC
       Backup an environment credentials file. The backup file is saved
@@ -61,7 +62,7 @@ module LarCityCLI
            desc: 'Key file to print',
            required: true
     def print_key
-      file_name = options[:keyfile].gsub(/^~/, ENV['HOME'])
+      file_name = options[:keyfile].gsub(/^~/, Dir.home)
 
       unless File.exist?(file_name)
         raise ActiveStorage::FileNotFoundError,

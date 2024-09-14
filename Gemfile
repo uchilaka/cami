@@ -83,15 +83,17 @@ group :development, :test do
   gem 'faker'
   gem 'open3'
   gem 'rspec-rails', '~> 6.1'
-  gem 'strong_migrations'
   gem 'rubocop'
+  gem 'rubocop-capybara', require: false
   gem 'rubocop-performance'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
-  gem 'rubocop-capybara', require: false
+  gem 'strong_migrations'
 end
 
 group :development do
+  # A Ruby language server
+  gem 'solargraph'
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
 
@@ -133,6 +135,12 @@ end
 
 # Flexible authentication solution for Rails with Warden https://github.com/heartcombo/devise
 gem 'devise'
+# JWT authentication for devise
+gem 'devise-jwt', '~> 0.11'
+# Middleware for enabling Cross-Origin Resource Sharing in Rack apps
+gem 'rack-cors', '~> 2.0'
+
+# OmniAuth is a flexible authentication system utilizing Rack middleware [
 
 # Passwordless (email-only) login strategy for Devise https://github.com/abevoelker/devise-passwordless
 gem 'devise-passwordless'
@@ -164,4 +172,4 @@ gem 'sidekiq-cron'
 gem 'foreman'
 
 # Rake tasks to migrate data alongside schema changes [https://github.com/ilyakatz/data-migrate]
-gem 'data_migrate', '~> 9.2', '>= 9.2.0'
+gem 'data_migrate', '~> 9', '>= 9.3.0'

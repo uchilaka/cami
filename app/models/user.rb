@@ -35,14 +35,18 @@
 #
 class User < ApplicationRecord
   include MaintainsMetadata
-
-  # Include default devise modules. Others available are: :trackable
+  # JWT model configuration docs: https://github.com/waiting-for-dev/devise-jwt?tab=readme-ov-file#model-configuration
+  include Devise::JWT::RevocationStrategies::Allowlist
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   #
   # Source code for confirmable: https://github.com/heartcombo/devise/blob/main/lib/devise/models/confirmable.rb
   # Guide on adding confirmable: https://github.com/heartcombo/devise/wiki/How-To:-Add-:confirmable-to-Users
-  devise :database_authenticatable, :registerable, :validatable,
-         :recoverable, :confirmable, :timeoutable, :lockable, :rememberable,
-         :magic_link_authenticatable, :omniauthable, omniauth_providers: %i[google]
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable, :confirmable,
+         :timeoutable, :lockable, :magic_link_authenticatable
+  devise :jwt_authenticatable, jwt_revocation_strategy: self
+  devise :omniauthable, omniauth_providers: %i[google]
 
   alias_attribute :first_name, :given_name
   alias_attribute :last_name, :family_name
@@ -75,6 +79,10 @@ class User < ApplicationRecord
 
     profile[Current.auth_provider.provider]
   end
+
+  # def jwt_payload
+  #   super.merge(foo: 'bar')
+  # end
 
   # https://github.com/heartcombo/devise?tab=readme-ov-file#active-job-integration
   # def send_devise_notification(notification, *args)
