@@ -414,10 +414,10 @@ info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this comm
 - [ ] [New ESLint configuration system is available](https://eslint.org/docs/latest/use/configure/configuration-files-new). You will need to create a new `eslint.config.js` file to use the new configuration system
 - [ ] Confirm account changes with OTP (email, TOTP), magic links, or passkey
 - [ ] Setup RSwag for baller request specs & API tools
-- [ ] Setup flipper for feature flags
-- [ ] Knapsack Pro for parallelizing tests
+- [ ] Setup [Flipper](https://www.flippercloud.io/docs/features) for feature flags
+- [ ] [Knapsack Pro](https://docs.knapsackpro.com/knapsack_pro-ruby/guide/?rails=yes) for parallelizing tests
 - [ ] Check out [Redis Stack for docker](https://hub.docker.com/r/redis/redis-stack) for advanced indexing & search features with redis data
-- [ ] Playwright E2E test suite
+- [ ] [Playwright](https://playwright.dev/docs/intro) E2E test suite
 - [ ] Implement default authorization policies
 - [ ] **Consolidate vite configuration & dependencies** right now, vite is a dependency of both the front and backend separately. Is there a better way?
 - [ ] Address error from working on rails project in VSCode: `/Users/localadmin/.asdf/installs/ruby/3.2.2/bin/ruby: warning: Ruby was built without YJIT support. You may need to install rustc to build Ruby with YJIT.`

@@ -78,7 +78,8 @@ gem 'logtail-rails'
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
-
+  # Security vulnerability scanner for Ruby on Rails. https://github.com/presidentbeef/brakeman
+  gem 'brakeman'
   gem 'capybara'
   gem 'capybara_accessibility_audit'
   gem 'fabrication'
@@ -118,8 +119,9 @@ group :test do
   gem 'vcr', '~> 6.2'
 
   gem 'shoulda-matchers'
-  # Selenium is a browser automation tool for automated testing of
-  #     webapps and more [https://www.selenium.dev/documentation/en/]
+
+  # Selenium is a browser automation tool for automated
+  #   testing of webapps and more [https://www.selenium.dev/documentation/en/]
   gem 'selenium-webdriver'
 
   gem 'database_cleaner-active_record'
@@ -137,19 +139,20 @@ end
 
 # Flexible authentication solution for Rails with Warden https://github.com/heartcombo/devise
 gem 'devise'
+
 # JWT authentication for devise
 gem 'devise-jwt', '~> 0.11'
+
 # Middleware for enabling Cross-Origin Resource Sharing in Rack apps
 gem 'rack-cors', '~> 2.0'
-
-# OmniAuth is a flexible authentication system utilizing Rack middleware [
 
 # Passwordless (email-only) login strategy for Devise https://github.com/abevoelker/devise-passwordless
 gem 'devise-passwordless'
 
+# Provides CSRF protection on OmniAuth request endpoint on Rails application.
 gem 'omniauth-rails_csrf_protection'
 
-# https://github.com/nhosoya/omniauth-apple
+# OmniAuth strategy for Sign in with Apple https://github.com/nhosoya/omniauth-apple
 # gem 'omniauth-apple'
 
 # A Google OAuth2 strategy for OmniAuth 1.x https://github.com/zquestz/omniauth-google-oauth2
@@ -175,3 +178,6 @@ gem 'foreman'
 
 # Rake tasks to migrate data alongside schema changes [https://github.com/ilyakatz/data-migrate]
 gem 'data_migrate', '~> 9', '>= 9.3.0'
+
+# Simple interactor implementation
+gem 'interactor', '~> 3.1'
