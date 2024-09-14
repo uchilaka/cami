@@ -47,6 +47,7 @@ module AccountManager
     config.eager_load_paths << "#{root}/lib"
 
     config.autoload_paths << "#{root}/lib/commands"
+    config.autoload_paths << "#{root}/config/vcr"
 
     config.assets.paths << "#{root}/vendor/assets"
 

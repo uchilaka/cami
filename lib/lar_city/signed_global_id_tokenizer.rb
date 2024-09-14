@@ -15,7 +15,7 @@ module LarCity
         options = { only: resource_class }
         options[:includes] = includes unless includes.blank?
         options[:for] = purpose if purpose
-        GlobalID::Locator.locate_signed(token, options)
+        [GlobalID::Locator.locate_signed(token, options), _extra_data = {}]
       end
     end
   end

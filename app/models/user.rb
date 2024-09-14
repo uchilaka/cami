@@ -44,7 +44,8 @@ class User < ApplicationRecord
   # Guide on adding confirmable: https://github.com/heartcombo/devise/wiki/How-To:-Add-:confirmable-to-Users
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :confirmable,
-         :jwt_authenticatable, jwt_revocation_strategy: self
+         :timeoutable, :lockable, :magic_link_authenticatable
+  devise :jwt_authenticatable, jwt_revocation_strategy: self
   devise :omniauthable, omniauth_providers: %i[google]
 
   alias_attribute :first_name, :given_name
@@ -87,14 +88,25 @@ class User < ApplicationRecord
   # def send_devise_notification(notification, *args)
   #   devise_mailer.send(notification, self, *args).deliver_later
   # end
-
+  #
   # TODO: Test attempting to activate several accounts and ensure only the ones
   #   that are not already activated are activated
   # def after_confirmation
   #   accounts.each(&:activate!)
   # end
+  #
+  def after_magic_link_authentication
+    # NOTE: Consider the successful completion of a magic link authentication
+    #  as a confirmation of the user's email address
+    confirm unless confirmed?
+  end
 
   class << self
+    # Docs on Devise passwordless customization: https://github.com/abevoelker/devise-passwordless#customization
+    def passwordless_login_within
+      15.minutes
+    end
+
     def from_omniauth(access_token = nil)
       access_token ||= Current.auth_provider
       uid = access_token.uid

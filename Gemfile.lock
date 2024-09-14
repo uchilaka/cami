@@ -115,7 +115,7 @@ GEM
     dartsass-rails (0.5.0)
       railties (>= 6.0.0)
       sass-embedded (~> 1.63)
-    data_migrate (9.2.0)
+    data_migrate (9.3.0)
       activerecord (>= 6.1)
       railties (>= 6.1)
     database_cleaner-active_record (2.1.0)
@@ -157,6 +157,8 @@ GEM
     erubi (1.12.0)
     et-orbi (1.2.7)
       tzinfo
+    ethon (0.16.0)
+      ffi (>= 1.15.0)
     fabrication (2.30.0)
     faker (3.2.2)
       i18n (>= 1.8.11, < 2)
@@ -430,6 +432,10 @@ GEM
       concurrent-ruby (~> 1.0)
     shoulda-matchers (6.1.0)
       activesupport (>= 5.2.0)
+    sib-api-v3-sdk (9.1.0)
+      addressable (~> 2.3, >= 2.3.0)
+      json (~> 2.1, >= 2.1.0)
+      typhoeus (~> 1.0, >= 1.0.1)
     sidekiq (7.2.0)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
@@ -476,6 +482,8 @@ GEM
     thread_safe (0.3.6)
     tilt (2.3.0)
     timeout (0.4.1)
+    typhoeus (1.4.1)
+      ethon (>= 0.9.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
@@ -526,7 +534,7 @@ DEPENDENCIES
   capybara_accessibility_audit
   climate_control
   dartsass-rails
-  data_migrate (~> 9.2, >= 9.2.0)
+  data_migrate (~> 9, >= 9.3.0)
   database_cleaner-active_record
   debug
   devise
@@ -563,6 +571,7 @@ DEPENDENCIES
   ruby-vips (~> 2.1, >= 2.1.4)
   selenium-webdriver
   shoulda-matchers
+  sib-api-v3-sdk
   sidekiq (~> 7.2, >= 7.2.0)
   sidekiq-cron
   solargraph

@@ -310,6 +310,14 @@ end
 bin/thor help lx-cli:secrets:print_key
 ```
 
+## FAQs 
+
+### RubyMine
+
+#### How do I disable these "Missing type signature" errors? 
+
+> Go to `Settngs | Editor | Inspections | Ruby | RBS` and uncheck `Missing type signature`
+
 ## Integration Partners
 
 ### PayPal
@@ -346,8 +354,10 @@ bin/thor help lx-cli:secrets:print_key
   - [Asset pipeline](https://guides.rubyonrails.org/asset_pipeline.html)
   - [The Flash](https://guides.rubyonrails.org/action_controller_overview.html#the-flash)
   - [Action Text](https://guides.rubyonrails.org/v7.1/action_text_overview.html)
+  - [Time.now vs Time.current vs. DateTime.now](https://discuss.rubyonrails.org/t/time-now-vs-time-current-vs-datetime-now/75183)
 - [Introduction to Sidekiq for Rails](https://blog.appsignal.com/2023/09/20/an-introduction-to-sidekiq-for-ruby-on-rails.html)
 - [The beginner's guide to magic links](https://postmarkapp.com/blog/magic-links)
+- [The complete guide for Deprecation Warnings in Rails](https://www.fastruby.io/blog/rails/upgrades/deprecation-warnings-rails-guide.html)
 - [Devise](https://github.com/heartcombo/devise?tab=readme-ov-file#getting-started)
   - [Configure views](https://github.com/heartcombo/devise?tab=readme-ov-file#configuring-views)
   - [OmniAuth](https://github.com/heartcombo/devise/wiki/OmniAuth:-Overview)
@@ -388,13 +398,15 @@ info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this comm
 ## Future Work
 
 - [ ] A JS Auth flow to emit and retain the JWT token for frontend access control features and initialize the rails session for everything else
+- [ ] Review Yahoo + Google [updated email sender requirements](https://help.brevo.com/hc/en-us/articles/14925263522578-Prepare-for-Gmail-and-Yahoo-s-new-requirements-for-email-senders) and make any needed changes to the Brevo configs
 - [x] Implement forbidden rescue page (or just set a flash message and redirect to the root path)
 - [ ] "Continue with Google" quick link in the profile dropdown
+- [ ] Fix web concurrency support (issues here might be related to log streaming). Here's the error message: `objc[97397]: +[NSCharacterSet initialize] may have been in progress in another thread when fork() was called. We cannot safely call it or ignore it in the fork() child process. Crashing instead. Set a breakpoint on objc_initializeAfterForkError to debug`
 - [ ] AASM for account status
 - [ ] Setup and update production credentials in the `config/credentials/production.yml.enc` file
 - [ ] Implement `:confirmable` to secure accounts when switching/adding auth providers
-- [ ] Implement magic links
-- [ ] Implement omniauth via apple
+- [x] Implement magic links
+- [ ] Implement Omniauth via apple
 - [x] Implement FontAwesome library for [SVG icons](https://fontawesome.com/icons/google?f=brands&s=solid)
 - [ ] Secure accounts with MFA
 - [ ] Setup secrets using [docker images' compatibility with secret files](https://docs.docker.com/compose/use-secrets/)
