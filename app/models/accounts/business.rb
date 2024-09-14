@@ -19,7 +19,7 @@
 #  index_accounts_on_tax_id  (tax_id) UNIQUE WHERE (tax_id IS NOT NULL)
 #
 class Business < Account
-  resourcify
+  # resourcify
 
   include MaintainsMetadata
 
