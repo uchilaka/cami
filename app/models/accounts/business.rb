@@ -19,6 +19,7 @@
 #  index_accounts_on_tax_id  (tax_id) UNIQUE WHERE (tax_id IS NOT NULL)
 #
 class Business < Account
+  # TODO: Is there any scenario where we would want to resourcify a business account?
   # resourcify
 
   include MaintainsMetadata

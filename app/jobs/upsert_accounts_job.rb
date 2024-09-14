@@ -11,7 +11,7 @@ class UpsertAccountsJob < ApplicationJob
       .each do |invoice|
       next if invoice.accounts.none?
 
-      Workflows::UpsertInvoiceRecords.call(invoice)
+      UpsertInvoiceRecords.call(invoice)
     end
   end
 end
