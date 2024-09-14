@@ -1,16 +1,15 @@
 require 'rails_helper'
 
-RSpec.describe "invoices/edit", type: :view do
+RSpec.describe 'invoices/edit', type: :view do
   let(:invoice) { Fabricate :invoice }
 
   before(:each) do
     assign(:invoice, invoice)
   end
 
-  it "renders the edit invoice form" do
+  it 'renders the edit invoice form' do
     render
 
-    assert_select "form[action=?][method=?]", invoice_path(invoice), "post" do
-    end
+    assert_select 'form[action=?][method=?]', invoice_path(invoice), 'post' do; end
   end
 end
