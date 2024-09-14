@@ -117,18 +117,18 @@ RSpec.describe PIIHelper do
               full_address: '456 Elm St, SomeTown, USA'
             }
           ],
-          "links": [
+          links: [
             {
               # TODO: Support obfuscating URLs
-              "href": 'https://api.paypal.com/v2/invoicing/invoices?page=2&page_size=25&total_required=false',
-              "rel": 'self',
-              "method": 'GET'
+              href: 'https://api.paypal.com/v2/invoicing/invoices?page=2&page_size=25&total_required=false',
+              rel: 'self',
+              method: 'GET'
             },
             {
               # TODO: Support obfuscating URLs
-              "href": 'https://api.paypal.com/v2/invoicing/invoices?page=1&page_size=25&total_required=false',
-              "rel": 'prev',
-              "method": 'GET'
+              href: 'https://api.paypal.com/v2/invoicing/invoices?page=1&page_size=25&total_required=false',
+              rel: 'prev',
+              method: 'GET'
             }
           ]
         }

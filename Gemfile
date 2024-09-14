@@ -84,7 +84,10 @@ group :development, :test do
   gem 'open3'
   gem 'rspec-rails', '~> 6.1'
   gem 'rubocop'
+  gem 'rubocop-capybara', require: false
   gem 'rubocop-performance'
+  gem 'rubocop-rails'
+  gem 'rubocop-rspec'
   gem 'strong_migrations'
 end
 
