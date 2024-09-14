@@ -62,7 +62,7 @@ module LarCityCLI
            desc: 'Key file to print',
            required: true
     def print_key
-      file_name = options[:keyfile].gsub(/^~/, ENV['HOME'])
+      file_name = options[:keyfile].gsub(/^~/, Dir.home)
 
       unless File.exist?(file_name)
         raise ActiveStorage::FileNotFoundError,
