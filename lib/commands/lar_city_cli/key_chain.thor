@@ -31,6 +31,7 @@ module LarCityCLI
       system(command_to_run, out: $stdout)
     end
 
+    # TODO: Add interactive :history command to peek into backup credential files
     desc 'backup', 'Backup an environment credentials file'
     long_desc <<~DESC
       Backup an environment credentials file. The backup file is saved
