@@ -69,7 +69,9 @@ gem 'rolify', '~> 6.0'
 # State machine mixin for Ruby objects
 gem 'aasm', '~> 5.5'
 
+# Feature rich logging framework that replaces the Rails logger.
 gem 'rails_semantic_logger'
+
 # Better Stack Rails integration
 gem 'logtail-rails'
 

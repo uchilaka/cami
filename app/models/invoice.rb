@@ -5,7 +5,10 @@ class Invoice
   include Mongoid::Attributes::Dynamic
 
   after_initialize :initialize_amount
+  after_create :initialize_record!
 
+  # TODO: Consider making :record_id required before saving any invoice document
+  field :record_id, type: String
   field :vendor_record_id, type: String
   field :vendor_recurring_group_id, type: String
   field :invoice_number, type: String
@@ -37,13 +40,29 @@ class Invoice
     "#{PAYPAL_BASE_URL}/invoice/s/details/#{vendor_record_id}"
   end
 
+  def record
+    InvoiceRecord.find(record_id)
+  end
+
   def recurring?
     vendor_recurring_group_id.present?
+  end
+
+  def initialize_record!
+    return if record_id.present?
+
+    record = InvoiceRecord.find_or_create_by!(document_id: id.to_s)
+    update!(record_id: record.id)
   end
 
   private
 
   def initialize_amount
     self.amount ||= { currency_code: 'USD', value: 0.0 }
+  end
+
+  def create_record
+    record = InvoiceRecord.create(document_id: id)
+    update(record_id: record.id)
   end
 end
