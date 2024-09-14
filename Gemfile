@@ -83,9 +83,12 @@ group :development, :test do
   gem 'faker'
   gem 'open3'
   gem 'rspec-rails', '~> 6.1'
+  gem 'strong_migrations'
   gem 'rubocop'
   gem 'rubocop-performance'
-  gem 'strong_migrations'
+  gem 'rubocop-rails'
+  gem 'rubocop-rspec'
+  gem 'rubocop-capybara', require: false
 end
 
 group :development do

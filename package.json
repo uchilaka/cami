@@ -29,9 +29,19 @@
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
     "path": "^0.12.7",
     "prettier": "^3.2.5",
     "vite-plugin-full-reload": "^1.1.0",
     "vite-plugin-ruby": "^5.0.0"
+  },
+  "scripts": {
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.rb" : [
+      "./bin/lint-ruby"
+    ]
   }
 }

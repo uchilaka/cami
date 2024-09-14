@@ -1,0 +1,4 @@
+# Husky docs: https://typicode.github.io/husky/get-started.html
+
+# lint-staged docs: https://github.com/lint-staged/lint-staged
+npx lint-staged
