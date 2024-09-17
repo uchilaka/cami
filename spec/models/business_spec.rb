@@ -30,11 +30,6 @@ RSpec.describe Business, type: :model do
     expect(subject).to delegate_method(:email).to(:metadata)
   end
 
-  it 'aliases metadata to profile' do
-    expect(subject.metadata).to eq(subject.profile)
-    expect(subject.profile).to be_a(Metadata::Business)
-  end
-
   context 'when setting email' do
     let(:email) { Faker::Internet.email }
 
@@ -65,6 +60,25 @@ RSpec.describe Business, type: :model do
     it 'reports an error' do
       expect { subject.valid? }.to \
         change { subject.errors[:email] }.to include('is not a valid email address')
+    end
+  end
+
+  describe '#profile' do
+    it 'aliases metadata' do
+      expect(subject.metadata).to eq(subject.profile)
+      expect(subject.profile).to be_a(Metadata::Business)
+    end
+
+    it 'returns the expected user profile' do
+      expect(subject.profile).to eq(Metadata::Business.find_by(account_id: subject.id))
+    end
+
+    it 'returns a Metadata::Business' do
+      expect(subject.profile).to be_a(Metadata::Business)
+    end
+
+    it 'is persisted' do
+      expect(subject.profile).to be_persisted
     end
   end
 end

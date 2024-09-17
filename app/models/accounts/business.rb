@@ -51,7 +51,7 @@ class Business < Account
   def initialize_profile
     if profile.present?
       profile.account_id ||= id
-      profile.save if profile.changed? && profile.business&.persisted?
+      profile.save if profile.changed? && persisted?
     else
       Metadata::Business.create(account_id: id)
     end

@@ -64,10 +64,19 @@ RSpec.describe User, type: :model do
   end
 
   describe '#profile' do
-    subject { find_or_create_mock_user!(email:) }
+    # subject { find_or_create_mock_user!(email:) }
+    subject { Fabricate(:user, email:) }
 
     it 'returns the expected user profile' do
       expect(subject.profile).to eq(Metadata::Profile.find_by(user_id: subject.id))
+    end
+
+    it 'returns a Metadata::Profile' do
+      expect(subject.profile).to be_a(Metadata::Profile)
+    end
+
+    it 'is persisted' do
+      expect(subject.profile).to be_persisted
     end
   end
 end
