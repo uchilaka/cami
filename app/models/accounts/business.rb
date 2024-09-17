@@ -19,10 +19,20 @@
 #  index_accounts_on_tax_id  (tax_id) UNIQUE WHERE (tax_id IS NOT NULL)
 #
 class Business < Account
-  # TODO: Is there any scenario where we would want to resourcify a business account?
-  # resourcify
+  # TODO: Articulate the scenario(s) for which we would want to
+  #   resourcify a Business, especially considering that the
+  #   parent Account class is rolified?
+  # TODO: Add specs to assert that the Business being
+  #   resourcified is compatible with the rolify functionality
+  #   of the parent Account class.
+  resourcify
 
   include MaintainsMetadata
+
+  # TODO: Determine best way to ensure business emails are captured
+  #   without breaking automation for ingesting account information
+  #   through invoice integration(s).
+  validates :email, email: true, allow_nil: true
 
   delegate :email, to: :metadata, allow_nil: true
 

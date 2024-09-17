@@ -330,6 +330,9 @@ bin/thor help lx-cli:secrets:print_key
 
 ## Guides and References
 
+- [RSpec](https://github.com/rspec/rspec-rails)
+  - [RSwag](https://github.com/rswag/rswag)
+  - [Shoulda Matchers](https://github.com/thoughtbot/shoulda-matchers?tab=readme-ov-file#activemodel-matchers)
 - [MongoDB Tutorial](https://www.w3schools.com/mongodb/)
   - [Release: Official Atlas Github Action](https://www.mongodb.com/community/forums/t/introducing-the-offical-github-action-and-docker-image-for-atlas-cli/253891)
   - [Mongoid](https://www.mongodb.com/docs/mongoid/current/)

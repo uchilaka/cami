@@ -25,4 +25,46 @@ RSpec.describe Business, type: :model do
 
   it { should have_and_belong_to_many(:users) }
   it { should have_many(:products).with_foreign_key(:vendor_id) }
+
+  it 'delegates email to metadata' do
+    expect(subject).to delegate_method(:email).to(:metadata)
+  end
+
+  it 'aliases metadata to profile' do
+    expect(subject.metadata).to eq(subject.profile)
+    expect(subject.profile).to be_a(Metadata::Business)
+  end
+
+  context 'when setting email' do
+    let(:email) { Faker::Internet.email }
+
+    it 'updates the profile' do
+      expect { subject.update(email:) }.to change { subject.profile.email }.to(email)
+    end
+  end
+
+  context 'when initializing' do
+    let(:email) { Faker::Internet.email }
+
+    subject { Fabricate(:business, email:) }
+
+    it 'captures the business email in metadata' do
+      expect(subject.metadata.email).to eq(email)
+    end
+  end
+
+  context 'when email is invalid' do
+    let(:email) { 'not-a-valid-email' }
+
+    subject { Fabricate.build(:business, email:) }
+
+    it 'validation fails' do
+      expect(subject).to be_invalid
+    end
+
+    it 'reports an error' do
+      expect { subject.valid? }.to \
+        change { subject.errors[:email] }.to include('is not a valid email address')
+    end
+  end
 end

@@ -62,3 +62,8 @@ en:
     invoice:
       errors:
         invalid_payment_vendor: "is not a valid payment vendor"
+  validators:
+    errors:
+      invalid_email: "is not a valid email address"
+      invalid_password: "is not a valid password"
+      invalid_username: "is not a valid username"
