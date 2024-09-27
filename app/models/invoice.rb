@@ -13,6 +13,8 @@ class Invoice
   field :vendor_recurring_group_id, type: String
   field :invoice_number, type: String
   field :payment_vendor, type: String
+  # Payment vendor documentation for invoice status:
+  # https://developer.paypal.com/docs/api/invoicing/v2/#definition-invoice_status
   field :status, type: String
   # { email_address }
   field :invoicer, type: Hash
@@ -29,6 +31,7 @@ class Invoice
   # { payments: { paid_amount: { currency_code, value } } }
   field :payments, type: Hash
   field :links, type: Array
+  field :note, type: String
 
   validates :payment_vendor,
             presence: true,

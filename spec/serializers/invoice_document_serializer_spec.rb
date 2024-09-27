@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe InvoiceDocumentSerializer do
+RSpec.describe InvoiceDocumentSerializer, skip_in_ci: true do
   let(:invoice_data) do
     YAML.load_file('spec/fixtures/pii/paypal/fetch_invoices.yml')
   end

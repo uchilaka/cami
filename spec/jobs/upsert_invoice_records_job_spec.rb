@@ -18,7 +18,6 @@ RSpec.describe UpsertInvoiceRecordsJob, type: :job, skip_in_ci: true do
 
   describe '#perform' do
     it 'creates new account records' do
-      skip 'TODO: move away from using encrypted fixtures for invoice data' if ENV.fetch('CI', false)
       expect { described_class.perform_now }.to change(Account, :count).by(10)
     end
   end
