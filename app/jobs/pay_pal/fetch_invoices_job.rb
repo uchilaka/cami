@@ -33,7 +33,7 @@ module PayPal
           next
         end
 
-        @processed_records << process_record(record)
+        @processed_records << InvoiceSerializer.new(record).serializable_hash
       rescue StandardError => e
         Rails.logger.error "#{self.class.name} invoice record(s) failed to process",
                            record:, message: e.message
@@ -81,6 +81,11 @@ module PayPal
       links.find { |link| link['rel'] == 'next' }
     end
 
+    # @deprecated
+    # This method is no longer used in the current implementation.
+    # It will be deleted before the 1.0.0 application release.
+    # It is kept here for reference purposes only.
+    # To serialize an invoice record, use the InvoiceSerializer class.
     def process_record(record)
       vendor_record_id = record['id']
       status, detail, invoicer, primary_recipients,

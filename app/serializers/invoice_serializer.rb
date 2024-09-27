@@ -6,20 +6,33 @@ class InvoiceSerializer < BaseSerializer
       vendor_record_id:,
       vendor_recurring_group_id:,
       invoice_number:,
-      invoicer:,
-      due_amount:,
-      accounts:,
-      amount:,
-      payments:,
+      vendor_id:,
       payment_vendor:,
-      links:,
+      status:,
+      invoicer:,
+      accounts:,
+      viewed_by_recipient:,
       invoiced_at:,
-      due_at:
+      due_at:,
+      currency_code:,
+      amount:,
+      due_amount:,
+      payments:,
+      note:,
+      links:
     }
+  end
+
+  def status
+    object['status']
   end
 
   def vendor_record_id
     object['id']
+  end
+
+  def vendor_id
+    vendor.id
   end
 
   def vendor_recurring_group_id
@@ -81,6 +94,10 @@ class InvoiceSerializer < BaseSerializer
   end
 
   private
+
+  def vendor
+    @vendor ||= Vendor.find_by(slug: payment_vendor)
+  end
 
   def primary_recipients
     object['primary_recipients'] || []
