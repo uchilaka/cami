@@ -77,7 +77,7 @@ module LarCityCLI
             your GitHub account. Check out this guide for more information:
             https://bit.ly/gh-new-gpg-key
 
-            Contact your team lead or system administrator for assistance.
+            Contact your Team Lead or a Staff Engineer for assistance.
           MSG
           say no_secret_file_msg
         end

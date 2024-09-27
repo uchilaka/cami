@@ -13,6 +13,7 @@ brew 'ruby-build'
 brew 'asdf'
 brew 'coreutils'
 brew 'git-crypt'
+brew 'yq'
 
 # install only on specified OS
 brew 'tree' if OS.mac?
