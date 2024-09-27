@@ -13,4 +13,10 @@ class AdhocSerializer
   def attributes
     {}
   end
+
+  protected
+
+  def serialize(value, to:)
+    "#{to}Serializer".constantize.new(value).serializable_hash
+  end
 end

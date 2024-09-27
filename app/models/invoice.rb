@@ -37,6 +37,10 @@ class Invoice
             presence: true,
             inclusion: { in: %w[paypal] }
 
+  before_validation :convert_amount,
+                    :convert_due_amount,
+                    :convert_payments, on: %i[create update]
+
   PAYPAL_BASE_URL = ENV.fetch('PAYPAL_BASE_URL', Rails.application.credentials.paypal&.base_url).freeze
 
   def payment_vendor_url
@@ -59,6 +63,22 @@ class Invoice
   end
 
   private
+
+  def convert_amount
+    self.amount = Amount.new(amount).to_h
+  end
+
+  def convert_due_amount
+    self.due_amount = Amount.new(due_amount).to_h
+  end
+
+  def convert_payments
+    return unless payments.is_a?(Hash)
+
+    self.payments = {
+      paid_amount: Amount.new(payments[:paid_amount]).to_h
+    }
+  end
 
   def initialize_amount
     self.amount ||= { currency_code: 'USD', value: 0.0 }

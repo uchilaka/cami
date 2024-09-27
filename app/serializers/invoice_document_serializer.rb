@@ -88,9 +88,7 @@ class InvoiceDocumentSerializer < AdhocSerializer
   end
 
   def accounts
-    primary_recipients.map do |recipient|
-      InvoiceAccountSerializer.new(recipient).serializable_hash
-    end
+    primary_recipients.map { |recipient| serialize(recipient, to: 'InvoiceAccount') }
   end
 
   private

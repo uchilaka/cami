@@ -42,10 +42,13 @@ Fabricator(:invoice) do
     # Generate random invoice amount
     dollars = rand(125..550)
     cents = rand(15..95) / 100.0
-    value = dollars + cents
-    invoice.amount = { currency_code: invoice.currency_code, value: }
-    invoice.due_amount = { currency_code: invoice.currency_code, value: }
-
+    value = NumberUtils.as_money(dollars + cents)
+    if invoice.amount.nil? || invoice.amount[:value].nil?
+      invoice.amount = { currency_code: invoice.currency_code, value: }
+    end
+    if invoice.due_amount.nil? || invoice.due_amount[:value].nil?
+      invoice.due_amount = { currency_code: invoice.currency_code, value: }
+    end
     # Compose account display names
     invoice.accounts.each do |account|
       next if account[:type] == 'Business'
@@ -62,7 +65,7 @@ Fabricator :paid_in_full_invoice, from: :invoice do
     invoice.payments = {
       paid_amount: {
         currency_code: invoice.currency_code,
-        value: invoice.amount[:value]
+        value: NumberUtils.as_money(invoice.amount[:value])
       }
     }
   end
@@ -76,12 +79,12 @@ Fabricator :partially_paid_invoice, from: :invoice do
     invoice.payments = {
       paid_amount: {
         currency_code: invoice.currency_code,
-        value: amount_value
+        value: NumberUtils.as_money(amount_value)
       }
     }
     invoice.due_amount = {
       currency_code: invoice.currency_code,
-      value: invoice.amount[:value] - amount_value
+      value: NumberUtils.as_money(invoice.amount[:value] - amount_value)
     }
   end
 end
