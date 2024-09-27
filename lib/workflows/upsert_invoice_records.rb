@@ -5,20 +5,24 @@ module Workflows
     include Interactor
 
     def call
-      return if context.accounts.none?
+      invoice = context.invoice
+      accounts = invoice.accounts
+      return if accounts.none?
 
-      Rails.logger.info "Found accounts for #{context.id}", accounts: context.accounts
-      context.accounts.each do |account|
+      Rails.logger.info("Found accounts for #{invoice.id}", accounts:)
+      accounts.each do |account|
         matching_accounts = lookup_accounts(account)
         if matching_accounts.any?
           Rails.logger.warn('Found matching account(s)', accounts: matching_accounts)
           next
         end
-        new_account = Account.new(account)
-        new_account.display_name ||= new_account.email
+        display_name, email, type = account.values_at 'display_name', 'email', 'type'
+        display_name ||= email
+        new_account = Account.create(display_name:, type:)
         new_account.save!
+        new_account.profile.update(email:) if new_account.is_a?(Business)
         Rails.logger.info "Created account #{account['id']} from invoice #{invoice.id}", account: new_account
-        new_account.add_role(:customer, context.record) if record.present?
+        new_account.add_role(:customer, invoice.record) if invoice.record.present?
       end
     end
 
@@ -27,9 +31,15 @@ module Workflows
     def lookup_accounts(params)
       params = params.symbolize_keys
       if params[:email].present?
-        Account.where(email: params[:email], type: params[:type])
+        # Check for a business
+        record = Metadata::Business.find_by(email: params[:email])&.business
+        return [record] if record.present?
+
+        # Check for an individual account
+        User.find_by(email: params[:email])&.accounts || []
       else
-        Account.where(display_name: params[:display_name], type: params[:type])
+        filter_params = params.slice(:display_name, :type).reverse_merge(type: 'Business')
+        Account.where(filter_params)
       end
     end
   end

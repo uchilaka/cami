@@ -33,7 +33,7 @@ module PayPal
           next
         end
 
-        @processed_records << InvoiceSerializer.new(record).serializable_hash
+        @processed_records << InvoiceDocumentSerializer.new(record).serializable_hash
       rescue StandardError => e
         Rails.logger.error "#{self.class.name} invoice record(s) failed to process",
                            record:, message: e.message

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BaseSerializer
+class AdhocSerializer
   include ActiveModel::Serialization
 
   attr_reader :object

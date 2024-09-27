@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class InvoiceAccountSerializer < BaseSerializer
+class InvoiceAccountSerializer < AdhocSerializer
   def attributes
     if business?
       return {
@@ -28,6 +28,8 @@ class InvoiceAccountSerializer < BaseSerializer
   end
 
   def display_name
+    return business_name if business?
+
     object.dig('billing_info', 'name', 'full_name')
   end
 
