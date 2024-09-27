@@ -98,7 +98,7 @@ Review the `.env.example` file to ensure the environment variables are set. You 
 
 The `.envrc` (see `.envrc.example`) file should be included for compatibility with other features like `docker compose` and simply sources the `.env.local` file.
 
-### 1. Install dependencies
+### 2. Install dependencies
 
 ```shell
 # Install system dependencies
@@ -113,7 +113,12 @@ bundle install
 yarn install
 ```
 
-### 2. Setup your application secrets
+### 3. Setup a GPG key for your Github account 
+
+Follow [this guide](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account). This will be needed by the application when it uses the `git-crypt` command to secure secret fixture files.
+
+
+### 4. Setup your application secrets
 
 Search for `development.yml.enc` to locate the entry in the KeePass store
 with the application's encrypted secrets files.
@@ -128,13 +133,13 @@ bin/thor help lx-cli:secrets:edit
 bin/thor lx-cli:secrets:edit --environment development
 ```
 
-### 3. Start up the application's services
+### 5. Start up the application's services
 
 ```shell
 bin/start-docker
 ```
 
-### 4. Initialize the database
+### 6. Initialize the database
 
 ```shell
 # Get help with the DB setup command
@@ -145,7 +150,7 @@ bin/thor lx-cli:db:setup --postgres
 bin/thor lx-cli:db:setup --mongodb
 ```
 
-### 5. Start up the app
+### 7. Start up the app
 
 > You can also start up the app's non-dockerized services with the included IDE configurations for RubyMine in the `.ide-configs` folder.
 

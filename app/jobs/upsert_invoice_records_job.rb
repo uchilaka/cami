@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UpsertAccountsJob < ApplicationJob
+class UpsertInvoiceRecordsJob < ApplicationJob
   queue_as :whenever
 
   BATCH_LIMIT = 10

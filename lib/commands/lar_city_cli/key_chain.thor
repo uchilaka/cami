@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'fileutils'
 require_relative 'base'
 
 module LarCityCLI
@@ -24,7 +25,7 @@ module LarCityCLI
       executable = Rails.root.join('bin', 'rails')
       command_to_run = "EDITOR=\"#{editor}\" bundle exec #{executable} credentials:edit --environment=#{environment}"
 
-      puts "Will execute#{dry_run? ? ' (Dry-run)' : ''}: #{command_to_run}" if verbose? || dry_run?
+      say("Will execute#{dry_run? ? ' (Dry-run)' : ''}: #{command_to_run}", Color::YELLOW) if verbose? || dry_run?
 
       return if dry_run?
 
@@ -42,11 +43,53 @@ module LarCityCLI
       saved with a timestamp in the filename and ignored when committing
       changes to source control.
     DESC
+    option :git_crypt,
+           type: :boolean,
+           default: false
     def backup
-      backup_file = Rails.root.join('config', 'credentials', "#{environment}--#{timestamp}.yml.enc")
-      FileUtils.cp(credentials_file, backup_file, verbose: verbose?)
+      if options[:git_crypt]
+        source_file = Rails.root.join('.git', 'git-crypt', 'keys', 'default').to_s
+        secrets_path = Rails.root.join('config', 'secrets', timestamp).to_s
+        backup_file = "#{secrets_path}/git-crypt.key"
+        if File.exist?(source_file)
+          say "Found git-crypt key at #{source_file}", Color::GREEN
+          say "Backing up git-crypt key to #{backup_file}", Color::YELLOW
+          FileUtils.mkdir_p(secrets_path, verbose: verbose?) unless dry_run?
+          FileUtils.cp(source_file, backup_file, verbose: verbose?) unless dry_run?
+        else
+          warning_msg = <<~MSG
+            *************************************************************************
+            *********** WARNING: No git-crypt key found in this repository **********
+            *************************************************************************
+          MSG
+          say warning_msg, Color::RED
+          no_secret_file_msg = <<~MSG
+            Location(s) checked for git-crypt key:
+             |- #{source_file}
 
-      say "Backed up #{credentials_file} to #{backup_file}", Color::GREEN
+            To backup the git-crypt key, you must have initialized git-crypt.
+            Run `git-crypt unlock /path/to/key` to initialize git-crypt. Check out
+            the git-crypt documentation for more information:
+            https://github.com/AGWA/git-crypt.
+
+            To access shared secrets in this repository, you will need to be added
+            to the git-crypt keychain. This will require setting up a GPG key against
+            your GitHub account. Check out this guide for more information:
+            https://bit.ly/gh-new-gpg-key
+
+            Contact your team lead or system administrator for assistance.
+          MSG
+          say no_secret_file_msg
+        end
+      else
+        backup_file = Rails.root.join('config', 'credentials', "#{environment}--#{timestamp}.yml.enc")
+        FileUtils.cp(credentials_file, backup_file, verbose: verbose?) unless dry_run?
+
+        backup_msg = []
+        backup_msg << '(Dry-run)' if dry_run?
+        backup_msg << "Backed up #{credentials_file} to #{backup_file}"
+        say backup_msg.join(' '), Color::GREEN
+      end
     end
 
     desc 'print_key', 'Print the contents of an input key file as a string'
