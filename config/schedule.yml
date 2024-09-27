@@ -15,6 +15,6 @@ fetch_paypal_invoices_job:
 
 upsert_accounts_job:
   cron: '*/15 5-22 * * 1-6' # Every 15 minutes from 05:00 to 22:00 from Monday to Saturday
-  class: 'UpsertAccountsJob'
+  class: 'UpsertInvoiceRecordsJob'
   source: schedule # default: dynamic
   queue: whenever
