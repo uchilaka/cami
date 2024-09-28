@@ -4,7 +4,7 @@ class Invoice
   include DocumentRecord
   include Mongoid::Attributes::Dynamic
 
-  after_initialize :initialize_amount
+  # after_initialize :initialize_amount
   after_create :initialize_record!
 
   # TODO: Consider making :record_id required before saving any invoice document
@@ -37,9 +37,11 @@ class Invoice
             presence: true,
             inclusion: { in: %w[paypal] }
 
-  before_validation :convert_amount,
-                    :convert_due_amount,
-                    :convert_payments, on: %i[create update]
+  before_validation :convert_amount, on: %i[create update], if: -> { amount.present? }
+  before_validation :convert_due_amount, on: %i[create update], if: -> { due_amount.present? }
+  before_validation :convert_payments, on: %i[create update], if: -> { payments.present? }
+
+  before_create :initialize_amount, if: -> { amount.blank? }
 
   PAYPAL_BASE_URL = ENV.fetch('PAYPAL_BASE_URL', Rails.application.credentials.paypal&.base_url).freeze
 
@@ -56,7 +58,7 @@ class Invoice
   end
 
   def initialize_record!
-    return if record_id.present?
+    return if record_id.present? && InvoiceRecord.exists?(id: record_id)
 
     record = InvoiceRecord.find_or_create_by!(document_id: id.to_s)
     update!(record_id: record.id)
@@ -82,10 +84,5 @@ class Invoice
 
   def initialize_amount
     self.amount ||= { currency_code: 'USD', value: 0.0 }
-  end
-
-  def create_record
-    record = InvoiceRecord.create(document_id: id)
-    update(record_id: record.id)
   end
 end

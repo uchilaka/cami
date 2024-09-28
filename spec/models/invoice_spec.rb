@@ -33,6 +33,14 @@ RSpec.describe Invoice, type: :model do
     it 'should save the value as float' do
       expect(subject.due_amount).to eq(currency_code: 'USD', value: 5_486.05)
     end
+
+    context 'with an invalid string value' do
+      subject { Fabricate(:invoice, due_amount: { value: 'invalid value' }) }
+
+      it 'should save the expected value' do
+        expect(subject.due_amount).to eq(currency_code: 'USD', value: 0.0)
+      end
+    end
   end
 
   context '#payments' do

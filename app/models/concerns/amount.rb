@@ -10,18 +10,21 @@ class Amount
 
   def initialize(attributes = {})
     attributes ||= {}
+    super(attributes)
     new_currency_code, new_value = attributes.values_at :currency_code, :value
-    @currency_code = new_currency_code || 'USD'
     @value =
-      if new_value.is_a?(Numeric)
+      if new_value.blank?
+        0.0
+      elsif new_value.is_a?(Numeric)
         new_value
-      elsif new_value.is_a?(String)
+      elsif new_value.is_a?(String) && /^[0-9,\s]+(.[0-9]+)?$/.match?(new_value)
         new_value.gsub(NON_DECIMAL_DELIMITER_REGEX, '').to_f
       else
-        @error = ArgumentError.new('Not a string or number')
+        @error = 'Not a string or number'
         @error_value = new_value
         0.0
       end
+    @currency_code = (new_currency_code || 'USD') if @error.nil?
   end
 
   def to_h
