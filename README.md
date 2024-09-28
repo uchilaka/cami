@@ -10,11 +10,12 @@
     - [Development service ports](#development-service-ports)
   - [Running the app for the first time](#running-the-app-for-the-first-time)
     - [1. Setup the environment](#1-setup-the-environment)
-    - [1. Install dependencies](#1-install-dependencies)
-    - [2. Setup your application secrets](#2-setup-your-application-secrets)
-    - [3. Start up the application's services](#3-start-up-the-applications-services)
-    - [4. Initialize the database](#4-initialize-the-database)
-    - [5. Start up the app](#5-start-up-the-app)
+    - [2. Install dependencies](#2-install-dependencies)
+    - [3. Setup a GPG key for your Github account](#3-setup-a-gpg-key-for-your-github-account)
+    - [4. Setup your application secrets](#4-setup-your-application-secrets)
+    - [5. Start up the application's services](#5-start-up-the-applications-services)
+    - [6. Initialize the database](#6-initialize-the-database)
+    - [7. Start up the app](#7-start-up-the-app)
   - [Database management](#database-management)
     - [Setting up the document store in the test environment](#setting-up-the-document-store-in-the-test-environment)
   - [How to run the test suite](#how-to-run-the-test-suite)
@@ -25,6 +26,12 @@
     - [Using NGROK](#using-ngrok)
     - [Generating a `Monogid` Model](#generating-a-monogid-model)
     - [Print key file](#print-key-file)
+    - [Handling fixture files](#handling-fixture-files)
+      - [Sanitizing an existing fixture file](#sanitizing-an-existing-fixture-file)
+      - [Converting a JSON fixture file to a YAML fixture file](#converting-a-json-fixture-file-to-a-yaml-fixture-file)
+  - [FAQs](#faqs)
+    - [RubyMine](#rubymine)
+      - [How do I disable these "Missing type signature" errors?](#how-do-i-disable-these-missing-type-signature-errors)
   - [Integration Partners](#integration-partners)
     - [PayPal](#paypal)
   - [Guides and References](#guides-and-references)
@@ -113,10 +120,9 @@ bundle install
 yarn install
 ```
 
-### 3. Setup a GPG key for your Github account 
+### 3. Setup a GPG key for your Github account
 
 Follow [this guide](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account). This will be needed by the application when it uses the `git-crypt` command to secure secret fixture files.
-
 
 ### 4. Setup your application secrets
 
@@ -315,11 +321,35 @@ end
 bin/thor help lx-cli:secrets:print_key
 ```
 
-## FAQs 
+### Handling fixture files
+
+A few helpful commands for handling fixture files.
+
+#### Sanitizing an existing fixture file
+
+```shell
+# Show help menu for the sanitize command
+bin/thor help lx-cli:fixtures:sanitize
+
+# Sanitize the fixture file (outputs to the same directory as the fixture)
+bin/thor lx-cli:fixtures:sanitize --file ./path/to/fixture.yml
+```
+
+#### Converting a JSON fixture file to a YAML fixture file
+
+You can review [this guide](https://stackoverflow.com/a/67610900) for more tips
+on using the `yq` command to transform (fixture) files.
+
+```shell
+# Convert the JSON fixture file to a YAML fixture file
+yq -p json -o yaml ./path/to/fixture.json > ./path/to/fixture.yml
+```
+
+## FAQs
 
 ### RubyMine
 
-#### How do I disable these "Missing type signature" errors? 
+#### How do I disable these "Missing type signature" errors?
 
 > Go to `Settngs | Editor | Inspections | Ruby | RBS` and uncheck `Missing type signature`
 
@@ -384,6 +414,7 @@ bin/thor help lx-cli:secrets:print_key
 - [CanCanCan developer guide](https://github.com/CanCanCommunity/cancancan/blob/develop/docs/README.md) - an alternative to `Pundit`
 - [Feature flags for backup providers](https://www.flippercloud.io/docs/guides/backup-providers) e.g. with feature flagging payment providers like Stripe, PayPal & SplitIt or auth providers like Apple, Google & native passwordless authentication
 - [Dynamic roles in a Rails app](https://nicholusmuwonge.medium.com/dynamic-roles-in-a-rails-app-using-rolify-devise-invitable-and-pundit-b72011451239)
+- [Using yq to parse YAML (fixture) files](https://stackoverflow.com/a/67610900)
 
 ## Known issues
 

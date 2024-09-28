@@ -52,15 +52,16 @@ class InvoiceDocumentSerializer < AdhocSerializer
   end
 
   def amount
-    object['amount']&.symbolize_keys
+    serialize(object['amount'], to: 'Amount')
   end
 
   def due_amount
-    object['due_amount']&.symbolize_keys
+    serialize(object['due_amount'], to: 'Amount')
   end
 
   def payments
-    object['payments']&.deep_symbolize_keys
+    paid_amount = object.dig('payments', 'paid_amount')
+    { paid_amount: serialize(paid_amount, to: 'Amount') } if paid_amount
   end
 
   def links

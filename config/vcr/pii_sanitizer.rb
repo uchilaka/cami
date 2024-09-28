@@ -6,6 +6,6 @@ module PIISanitizer
   extend PIIHelper
 
   def self.sanitize(data)
-    JSON.generate(sanitize_json(data))
+    JSON.pretty_generate(sanitize_json(data))
   end
 end

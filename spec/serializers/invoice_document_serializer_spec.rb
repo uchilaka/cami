@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe InvoiceDocumentSerializer, skip_in_ci: true do
   let(:invoice_data) do
-    YAML.load_file('spec/fixtures/pii/paypal/fetch_invoices.yml')
+    YAML.load_file('spec/fixtures/paypal/fetch_invoices_sanitized.yml')
   end
   let(:items) { invoice_data['items'] }
 
@@ -30,7 +30,7 @@ RSpec.describe InvoiceDocumentSerializer, skip_in_ci: true do
     end
 
     it '#invoicer' do
-      expect(subject[:invoicer]).to eq(email_address: 'paypal@larcity.com')
+      expect(subject[:invoicer]).to eq(email_address: 'robt@green-schmidt.example')
     end
 
     it '#amount' do

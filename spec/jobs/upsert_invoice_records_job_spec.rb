@@ -4,10 +4,8 @@ require 'rails_helper'
 
 # Refactoring? Review sidekiq testing documentation:
 # https://github.com/sidekiq/sidekiq/wiki/Testing
-RSpec.describe UpsertInvoiceRecordsJob, type: :job, skip_in_ci: true do
-  let(:invoice_data) do
-    YAML.load_file('spec/fixtures/pii/paypal/fetch_invoices.yml')
-  end
+RSpec.describe UpsertInvoiceRecordsJob, type: :job do
+  let(:invoice_data) { YAML.load_file('spec/fixtures/paypal/fetch_invoices_sanitized.yml') }
   let(:items) { invoice_data['items'] }
 
   before do
