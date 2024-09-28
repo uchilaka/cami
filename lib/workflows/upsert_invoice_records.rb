@@ -20,7 +20,6 @@ module Workflows
         Account.transaction do
           Rails.logger.info("Found accounts for #{invoice.id}", accounts:)
           accounts.each do |account|
-            account.symbolize_keys!
             matching_accounts = lookup_accounts(account)
             if matching_accounts.any?
               Rails.logger.warn('Found matching account(s)', accounts: matching_accounts)
@@ -31,7 +30,7 @@ module Workflows
               next
             end
             email, display_name, given_name, family_name, type =
-              account.values_at :email, :display_name, :given_name, :family_name, :type
+              account.values_at 'email', 'display_name', 'given_name', 'family_name', 'type'
             display_name = email if display_name.blank?
             new_account = Account.create(display_name:, type:)
             if invoice.record.present?
