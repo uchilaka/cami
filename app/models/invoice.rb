@@ -49,7 +49,7 @@ class Invoice
   end
 
   def record
-    InvoiceRecord.find(record_id)
+    InvoiceRecord.find_by(id: record_id)
   end
 
   def recurring?
