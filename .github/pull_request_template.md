@@ -3,7 +3,7 @@
 ## Jira Card
 <!--- Please link the Jira card here -->
 
-[LWS-###](https://larcity.atlassian.net/browse/AMS-###)
+[LWS-###](https://larcity.atlassian.net/browse/LWS-###)
 
 ## Summary
 <!--- Describe your changes, keeping in mind the Jira card should hold most of the context -->
