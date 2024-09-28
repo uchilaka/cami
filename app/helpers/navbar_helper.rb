@@ -20,7 +20,7 @@ module NavbarHelper
   end
 
   def show_admin_menu?
-    user_signed_in? || Rails.env.development?
+    (user_signed_in? && current_user.has_role?(:admin)) || Rails.env.development?
   end
 
   def main_menu
@@ -96,8 +96,8 @@ module NavbarHelper
       #   Another argument could be made that services are needed to bundle products
       #   as an abstraction layer for what PayPal's invoice templates already do.
       { label: 'Services', path: '/services', admin: true },
-      { label: 'Features', path: '/admin/flipper', admin: true, enabled: true },
-      { label: 'Sidekiq', path: '/admin/sidekiq', admin: true, enabled: true },
+      { label: 'Features', path: '/admin/flipper', new_tab: true, admin: true, enabled: true },
+      { label: 'Sidekiq', path: '/admin/sidekiq', new_tab: true, admin: true, enabled: true },
       { label: 'System Logs', url: system_log_url, admin: true, enabled: true },
       # TODO: Update AppUtils to compose the application's URL based on whether
       #   the NGINX tunnel is running or not.

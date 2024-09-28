@@ -3,6 +3,7 @@
 module Metadata
   class Profile
     include DocumentRecord
+    include Mongoid::Attributes::Dynamic
 
     field :user_id, type: String
 
@@ -10,6 +11,9 @@ module Metadata
     field :google, type: Hash
     field :facebook, type: Hash
     field :apple, type: Hash
+
+    # Generic store for identity data
+    field :identity, type: Hash
 
     field :image_url, type: String
     field :last_seen_at, type: Time, default: -> { Time.now }

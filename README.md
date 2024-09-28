@@ -372,6 +372,7 @@ yq -p json -o yaml ./path/to/fixture.json > ./path/to/fixture.yml
   - [Release: Official Atlas Github Action](https://www.mongodb.com/community/forums/t/introducing-the-offical-github-action-and-docker-image-for-atlas-cli/253891)
   - [Mongoid](https://www.mongodb.com/docs/mongoid/current/)
     - [Customer Field Types](https://www.mongodb.com/docs/mongoid/current/reference/fields/#custom-field-types)
+    - [Querying](https://www.mongodb.com/docs/mongoid/master/reference/queries/)
 - [Rails API](https://api.rubyonrails.org/)
 - [Rails Guides](https://guides.rubyonrails.org/)
   - [Autoloading and Reloading Constants](https://guides.rubyonrails.org/autoloading_and_reloading_constants.html)

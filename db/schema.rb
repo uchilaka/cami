@@ -107,8 +107,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_14_130337) do
   end
 
   create_table "products_services", id: false, force: :cascade do |t|
-    t.uuid "service_id", null: false
     t.uuid "product_id", null: false
+    t.uuid "service_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -116,7 +116,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_14_130337) do
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "resource_type"
-    t.bigint "resource_id"
+    t.uuid "resource_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
@@ -140,9 +140,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_14_130337) do
     t.datetime "updated_at", null: false
     t.string "given_name"
     t.string "family_name"
-    t.string "nickname"
     t.string "providers", default: [], array: true
     t.jsonb "uids", default: {}
+    t.string "nickname"
     t.string "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"

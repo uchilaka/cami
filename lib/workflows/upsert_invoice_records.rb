@@ -20,18 +20,43 @@ module Workflows
         Account.transaction do
           Rails.logger.info("Found accounts for #{invoice.id}", accounts:)
           accounts.each do |account|
+            account.symbolize_keys!
             matching_accounts = lookup_accounts(account)
             if matching_accounts.any?
               Rails.logger.warn('Found matching account(s)', accounts: matching_accounts)
+              matching_accounts.each do |matching_account|
+                matching_account.add_role(:contact, invoice.record) if invoice.record.present?
+                matching_account.add_role(:customer, invoice.record) if matching_account.is_a?(Business)
+              end
               next
             end
-            display_name, email, type = account.values_at 'display_name', 'email', 'type'
-            display_name ||= email
+            email, display_name, given_name, family_name, type =
+              account.values_at :email, :display_name, :given_name, :family_name, :type
+            display_name = email if display_name.blank?
             new_account = Account.create(display_name:, type:)
+            if invoice.record.present?
+              new_account.add_role(:contact, invoice.record)
+              new_account.add_role(:customer, invoice.record) if new_account.is_a?(Business)
+            end
+            # Update identity information
+            if new_account.is_a?(Business)
+              new_account.profile.update(email:)
+            else
+              provider = invoice.payment_vendor
+              profile = Metadata::Profile.find_by("identity.#{provider}.email": email)
+              if profile.present?
+                # Create a new orphaned profile that can be claimed by the user
+                # when they sign up
+                profile.update(
+                  "identity.#{provider}.email": email,
+                  "identity.#{provider}.display_name": display_name,
+                  "identity.#{provider}.given_name": given_name,
+                  "identity.#{provider}.family_name": family_name
+                )
+              end
+            end
             new_account.save!
-            new_account.profile.update(email:) if new_account.is_a?(Business)
             Rails.logger.info "Created account #{account['id']} from invoice #{invoice.id}", account: new_account
-            new_account.add_role(:customer, invoice.record) if invoice.record.present?
           end
           invoice.update(updated_accounts_at: Time.zone.now)
         end

@@ -19,18 +19,22 @@ class InvoiceAccountSerializer < AdhocSerializer
     }
   end
 
+  def names
+    object.dig('billing_info', 'name') || {}
+  end
+
   def given_name
-    object.dig('billing_info', 'name', 'given_name')
+    names['given_name']
   end
 
   def family_name
-    object.dig('billing_info', 'name', 'family_name')
+    names['family_name'] || names['surname']
   end
 
   def display_name
     return business_name if business?
 
-    object.dig('billing_info', 'name', 'full_name')
+    names['full_name']
   end
 
   def email

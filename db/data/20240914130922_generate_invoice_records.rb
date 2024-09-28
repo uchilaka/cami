@@ -4,11 +4,11 @@
 class GenerateInvoiceRecords < ActiveRecord::Migration[7.0]
   def up
     invoice_records = []
-    document_updates = []
     Invoice.where(record_id: nil).map do |invoice|
       invoice_records << { document_id: invoice.id.to_s, created_at: invoice.created_at }
-      document_updates << { id: invoice.id, record_id: invoice.id }
     end
+    return if invoice_records.empty?
+
     updated_records = InvoiceRecord.upsert_all(invoice_records, unique_by: :document_id, returning: %i[id document_id])
     bulk_invoice_updates = updated_records.map do |record|
       {

@@ -30,6 +30,10 @@ RSpec.describe Business, type: :model do
     expect(subject).to delegate_method(:email).to(:metadata)
   end
 
+  pending "can be a resource in the context of a user's role"
+
+  pending 'can have a role assigned'
+
   context 'when setting email' do
     let(:email) { Faker::Internet.email }
 
