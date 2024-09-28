@@ -70,7 +70,7 @@ VCR.configure do |c|
 end
 
 RSpec.configure do |config|
-  config.fail_fast = ENV.fetch('CI', false) ? true : false
+  config.fail_fast = AppUtils.yes?(ENV.fetch('RSPEC_FAIL_FAST', false)) ? true : false
 
   config.include Mongoid::Matchers, type: :model
 

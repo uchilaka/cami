@@ -16,6 +16,7 @@ jobs:
       CI: true
       PORT: 3000
       RAILS_ENV: test
+      RSPEC_FAIL_FAST: false
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
       PROJECT_ROOT: .
       APP_DATABASE_HOST: localhost
