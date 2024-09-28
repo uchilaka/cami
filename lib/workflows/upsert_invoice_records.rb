@@ -41,17 +41,17 @@ module Workflows
             if new_account.is_a?(Business)
               new_account.profile.update(email:)
             else
+              # Capture data that can be claimed by the user(s) when they sign up
               provider = invoice.payment_vendor
-              profile = Metadata::Profile.find_by("identity.#{provider}.email": email)
-              if profile.present?
-                # Create a new orphaned profile that can be claimed by the user
-                # when they sign up
-                profile.update(
-                  "identity.#{provider}.email": email,
-                  "identity.#{provider}.display_name": display_name,
-                  "identity.#{provider}.given_name": given_name,
-                  "identity.#{provider}.family_name": family_name
-                )
+              profile = Metadata::Profile.find_by("vendor_data.#{provider}.email": email)
+              if profile.blank?
+                # Create a new orphaned profile that can be claimed by the user when they sign up
+                # "vendor_data.#{provider}.email": email,
+                # "vendor_data.#{provider}.display_name": display_name,
+                # "vendor_data.#{provider}.given_name": given_name,
+                # "vendor_data.#{provider}.family_name": family_name
+                vendor_data = { "#{provider}": { email:, display_name:, given_name:, family_name: } }
+                Metadata::Profile.create(vendor_data:)
               end
             end
             new_account.save!

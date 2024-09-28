@@ -36,6 +36,10 @@ module Workflows
           expect { subject }.to change(Account, :count).by(2)
         end
 
+        it 'creates the expected new (individual) profile(s)' do
+          expect { subject }.to change(Metadata::Profile, :count).by(1)
+        end
+
         pending 'logs the account creation'
 
         pending 'adds the customer role to the invoice'
@@ -43,11 +47,19 @@ module Workflows
         context 'for the individual account' do
           let(:accounts_by_role) { Account.with_role(:contact, invoice.record) }
           let(:account) { accounts_by_role.find_by(type: 'Individual') }
+          let(:profile) do
+            Metadata::Profile.find_by("vendor_data.#{invoice.payment_vendor}.email": individual_account['email'])
+          end
 
           before { subject }
 
           it 'properly sets the account display name' do
             expect(account.display_name).to eq(individual_account['display_name'])
+          end
+
+          it 'properly sets the profile display name' do
+            profile_display_name = profile.vendor_data.dig(invoice.payment_vendor.to_sym, :display_name)
+            expect(profile_display_name).to eq(individual_account['display_name'])
           end
         end
 

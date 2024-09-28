@@ -14,7 +14,10 @@ module Metadata
     it { is_expected.to have_timestamps }
 
     describe 'validations' do
-      it { is_expected.to validate_presence_of(:user_id) }
+      # TODO: Deprecate this validation to allow for orphaned profiles
+      #  created by the system when importing data from external sources
+      #  that can be claimed by a user when they sign up
+      xit { is_expected.to validate_presence_of(:user_id) }
       it { is_expected.to validate_uniqueness_of(:user_id).case_insensitive }
     end
 

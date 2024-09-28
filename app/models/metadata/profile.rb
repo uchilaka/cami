@@ -18,7 +18,11 @@ module Metadata
     field :image_url, type: String
     field :last_seen_at, type: Time, default: -> { Time.now }
 
-    validates :user_id, presence: true, uniqueness: { case_sensitive: false }
+    # TODO: Figure out how to restrict the number of profiles per user
+    #   to a maximum of one, but allow for the creation of orphaned
+    #   profiles that can be claimed by a user (perhaps allow_blank config?
+    #   need to assert with specs)
+    validates :user_id, allow_blank: true, uniqueness: { case_sensitive: false }
 
     def user
       @user ||= User.find_by(id: user_id)
