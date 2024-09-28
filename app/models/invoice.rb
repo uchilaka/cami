@@ -4,7 +4,6 @@ class Invoice
   include DocumentRecord
   include Mongoid::Attributes::Dynamic
 
-  # after_initialize :initialize_amount
   after_create :initialize_record!
 
   # TODO: Consider making :record_id required before saving any invoice document

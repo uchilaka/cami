@@ -45,12 +45,6 @@ Fabricator(:invoice) do
     value = dollars + cents
     invoice.amount ||= { currency_code: invoice.currency_code, value: }
     invoice.due_amount ||= { currency_code: invoice.currency_code, value: }
-    # if invoice.amount.nil? || invoice.amount[:value].nil?
-    #   invoice.amount ||= { currency_code: invoice.currency_code, value: }
-    # end
-    # if invoice.due_amount.nil? || invoice.due_amount[:value].nil?
-    #   invoice.due_amount ||= { currency_code: invoice.currency_code, value: }
-    # end
     # Compose account display names
     invoice.accounts.each do |account|
       next if account[:type] == 'Business'
