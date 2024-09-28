@@ -9,20 +9,25 @@ module Workflows
       accounts = invoice.accounts
       return if accounts.none?
 
-      Rails.logger.info("Found accounts for #{invoice.id}", accounts:)
-      accounts.each do |account|
-        matching_accounts = lookup_accounts(account)
-        if matching_accounts.any?
-          Rails.logger.warn('Found matching account(s)', accounts: matching_accounts)
-          next
+      Invoice.transaction do
+        Mongoid.transaction do
+          Rails.logger.info("Found accounts for #{invoice.id}", accounts:)
+          accounts.each do |account|
+            matching_accounts = lookup_accounts(account)
+            if matching_accounts.any?
+              Rails.logger.warn('Found matching account(s)', accounts: matching_accounts)
+              next
+            end
+            display_name, email, type = account.values_at 'display_name', 'email', 'type'
+            display_name ||= email
+            new_account = Account.create(display_name:, type:)
+            new_account.save!
+            new_account.profile.update(email:) if new_account.is_a?(Business)
+            Rails.logger.info "Created account #{account['id']} from invoice #{invoice.id}", account: new_account
+            new_account.add_role(:customer, invoice.record) if invoice.record.present?
+          end
+          invoice.update(updated_accounts_at: Time.zone.now)
         end
-        display_name, email, type = account.values_at 'display_name', 'email', 'type'
-        display_name ||= email
-        new_account = Account.create(display_name:, type:)
-        new_account.save!
-        new_account.profile.update(email:) if new_account.is_a?(Business)
-        Rails.logger.info "Created account #{account['id']} from invoice #{invoice.id}", account: new_account
-        new_account.add_role(:customer, invoice.record) if invoice.record.present?
       end
     end
 
