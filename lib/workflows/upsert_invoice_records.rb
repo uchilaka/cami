@@ -9,8 +9,13 @@ module Workflows
       accounts = invoice.accounts
       return if accounts.none?
 
-      Invoice.transaction do
-        Mongoid.transaction do
+      # The syntax for transactions in Mongoid changes in version 9.0
+      # https://www.mongodb.com/docs/mongoid/9.0/reference/transactions/
+      # Current version is 8.1
+      # https://www.mongodb.com/docs/mongoid/8.1/reference/transactions/
+      invoice.with_session do |session|
+        session.start_transaction
+        Account.transaction do
           Rails.logger.info("Found accounts for #{invoice.id}", accounts:)
           accounts.each do |account|
             matching_accounts = lookup_accounts(account)
