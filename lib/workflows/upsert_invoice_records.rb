@@ -13,8 +13,10 @@ module Workflows
       # https://www.mongodb.com/docs/mongoid/9.0/reference/transactions/
       # Current version is 8.1
       # https://www.mongodb.com/docs/mongoid/8.1/reference/transactions/
-      invoice.with_session do |session|
-        session.start_transaction
+      invoice.with_session do |_session|
+        # TODO: To implement transactions in Mongoid, we will need to setup replica sets
+        #   for local and test environments
+        session.start_transaction if Flipper.enabled?(:feat__document_transactions)
         Account.transaction do
           Rails.logger.info("Found accounts for #{invoice.id}", accounts:)
           accounts.each do |account|
