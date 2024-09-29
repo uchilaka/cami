@@ -283,6 +283,18 @@ and your command line, run the following code in your console:
 EDITOR=nano bin/rails credentials:edit --environment ${RAILS_ENV:-development}
 ```
 
+### Testing emails 
+
+> To enable email testing, set `SEND_EMAILS_ENABLED=yes` in your `.env.local` file.
+
+To test emails in development, you can use the `Mailhog` service. If you are using the RubyMine configurations you will already have a dockerized `Mailhog` server running in debug mode. Otherwise, to start the service, run the following command in your console:
+
+```shell
+docker compose up -d mailhog
+```
+
+Your test inbox will be available at `http://localhost:8025`.
+
 ### Using NGROK
 
 Follow these steps to setup `ngrok` for your local environment:
