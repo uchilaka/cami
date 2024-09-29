@@ -46,10 +46,6 @@ module Workflows
               profile = Metadata::Profile.find_by("vendor_data.#{provider}.email": email)
               if profile.blank?
                 # Create a new orphaned profile that can be claimed by the user when they sign up
-                # "vendor_data.#{provider}.email": email,
-                # "vendor_data.#{provider}.display_name": display_name,
-                # "vendor_data.#{provider}.given_name": given_name,
-                # "vendor_data.#{provider}.family_name": family_name
                 vendor_data = { "#{provider}": { email:, display_name:, given_name:, family_name: } }
                 Metadata::Profile.create(vendor_data:)
               end
