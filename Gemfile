@@ -129,7 +129,7 @@ group :test do
 
   # TODO: The transaction strategy is not supported by Mongoid.
   #   You can use the deletion strategy to clean the document store.
-  # gem 'database_cleaner-mongoid'
+  gem 'database_cleaner-mongoid'
   # gem 'database_cleaner-redis'
 
   gem 'climate_control'

@@ -131,6 +131,9 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
+    database_cleaner-mongoid (2.0.1)
+      database_cleaner-core (~> 2.0.0)
+      mongoid
     date (3.3.4)
     debug (1.9.1)
       irb (~> 1.10)
@@ -558,6 +561,7 @@ DEPENDENCIES
   dartsass-rails
   data_migrate (~> 9, >= 9.3.0)
   database_cleaner-active_record
+  database_cleaner-mongoid
   debug
   devise
   devise-jwt (~> 0.11)
