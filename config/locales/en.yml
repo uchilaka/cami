@@ -45,6 +45,13 @@ en:
       sign_up: "Sign Up"
       sign_in: "Sign In"
       return_home: "Return Home"
+  labels:
+    invoices:
+      create: "New invoice"
+      search: "Search for invoices"
+    accounts:
+      create: "New account"
+      search: "Search for accounts"
   shared:
     navbar:
       home: "Home"
@@ -55,6 +62,7 @@ en:
       invoices: "Invoices"
       sign_out: "Sign Out"
       registration: "Settings"
+
   models:
     account:
       errors:

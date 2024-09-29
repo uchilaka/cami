@@ -20,10 +20,11 @@ module InvoicesHelper
 
   def invoice_status_filter_options
     [
-      %w[Draft draft],
-      %w[Sent sent],
-      %w[Paid paid],
-      %w[Cancelled cancelled]
+      %w[Draft DRAFT],
+      %w[Sent SENT],
+      %w[Paid PAID],
+      ['Partially paid', 'PARTIALLY_PAID'],
+      %w[Canceled CANCELLED]
     ]
   end
 end
