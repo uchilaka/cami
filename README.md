@@ -10,11 +10,12 @@
     - [Development service ports](#development-service-ports)
   - [Running the app for the first time](#running-the-app-for-the-first-time)
     - [1. Setup the environment](#1-setup-the-environment)
-    - [1. Install dependencies](#1-install-dependencies)
-    - [2. Setup your application secrets](#2-setup-your-application-secrets)
-    - [3. Start up the application's services](#3-start-up-the-applications-services)
-    - [4. Initialize the database](#4-initialize-the-database)
-    - [5. Start up the app](#5-start-up-the-app)
+    - [2. Install dependencies](#2-install-dependencies)
+    - [3. Setup a GPG key for your Github account](#3-setup-a-gpg-key-for-your-github-account)
+    - [4. Setup your application secrets](#4-setup-your-application-secrets)
+    - [5. Start up the application's services](#5-start-up-the-applications-services)
+    - [6. Initialize the database](#6-initialize-the-database)
+    - [7. Start up the app](#7-start-up-the-app)
   - [Database management](#database-management)
     - [Setting up the document store in the test environment](#setting-up-the-document-store-in-the-test-environment)
   - [How to run the test suite](#how-to-run-the-test-suite)
@@ -25,6 +26,12 @@
     - [Using NGROK](#using-ngrok)
     - [Generating a `Monogid` Model](#generating-a-monogid-model)
     - [Print key file](#print-key-file)
+    - [Handling fixture files](#handling-fixture-files)
+      - [Sanitizing an existing fixture file](#sanitizing-an-existing-fixture-file)
+      - [Converting a JSON fixture file to a YAML fixture file](#converting-a-json-fixture-file-to-a-yaml-fixture-file)
+  - [FAQs](#faqs)
+    - [RubyMine](#rubymine)
+      - [How do I disable these "Missing type signature" errors?](#how-do-i-disable-these-missing-type-signature-errors)
   - [Integration Partners](#integration-partners)
     - [PayPal](#paypal)
   - [Guides and References](#guides-and-references)
@@ -98,7 +105,7 @@ Review the `.env.example` file to ensure the environment variables are set. You 
 
 The `.envrc` (see `.envrc.example`) file should be included for compatibility with other features like `docker compose` and simply sources the `.env.local` file.
 
-### 1. Install dependencies
+### 2. Install dependencies
 
 ```shell
 # Install system dependencies
@@ -113,7 +120,11 @@ bundle install
 yarn install
 ```
 
-### 2. Setup your application secrets
+### 3. Setup a GPG key for your Github account
+
+Follow [this guide](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account). This will be needed by the application when it uses the `git-crypt` command to secure secret fixture files.
+
+### 4. Setup your application secrets
 
 Search for `development.yml.enc` to locate the entry in the KeePass store
 with the application's encrypted secrets files.
@@ -128,13 +139,13 @@ bin/thor help lx-cli:secrets:edit
 bin/thor lx-cli:secrets:edit --environment development
 ```
 
-### 3. Start up the application's services
+### 5. Start up the application's services
 
 ```shell
 bin/start-docker
 ```
 
-### 4. Initialize the database
+### 6. Initialize the database
 
 ```shell
 # Get help with the DB setup command
@@ -145,7 +156,7 @@ bin/thor lx-cli:db:setup --postgres
 bin/thor lx-cli:db:setup --mongodb
 ```
 
-### 5. Start up the app
+### 7. Start up the app
 
 > You can also start up the app's non-dockerized services with the included IDE configurations for RubyMine in the `.ide-configs` folder.
 
@@ -272,6 +283,18 @@ and your command line, run the following code in your console:
 EDITOR=nano bin/rails credentials:edit --environment ${RAILS_ENV:-development}
 ```
 
+### Testing emails 
+
+> To enable email testing, set `SEND_EMAILS_ENABLED=yes` in your `.env.local` file.
+
+To test emails in development, you can use the `Mailhog` service. If you are using the RubyMine configurations you will already have a dockerized `Mailhog` server running in debug mode. Otherwise, to start the service, run the following command in your console:
+
+```shell
+docker compose up -d mailhog
+```
+
+Your test inbox will be available at `http://localhost:8025`.
+
 ### Using NGROK
 
 Follow these steps to setup `ngrok` for your local environment:
@@ -310,11 +333,35 @@ end
 bin/thor help lx-cli:secrets:print_key
 ```
 
-## FAQs 
+### Handling fixture files
+
+A few helpful commands for handling fixture files.
+
+#### Sanitizing an existing fixture file
+
+```shell
+# Show help menu for the sanitize command
+bin/thor help lx-cli:fixtures:sanitize
+
+# Sanitize the fixture file (outputs to the same directory as the fixture)
+bin/thor lx-cli:fixtures:sanitize --file ./path/to/fixture.yml
+```
+
+#### Converting a JSON fixture file to a YAML fixture file
+
+You can review [this guide](https://stackoverflow.com/a/67610900) for more tips
+on using the `yq` command to transform (fixture) files.
+
+```shell
+# Convert the JSON fixture file to a YAML fixture file
+yq -p json -o yaml ./path/to/fixture.json > ./path/to/fixture.yml
+```
+
+## FAQs
 
 ### RubyMine
 
-#### How do I disable these "Missing type signature" errors? 
+#### How do I disable these "Missing type signature" errors?
 
 > Go to `Settngs | Editor | Inspections | Ruby | RBS` and uncheck `Missing type signature`
 
@@ -330,10 +377,14 @@ bin/thor help lx-cli:secrets:print_key
 
 ## Guides and References
 
+- [RSpec](https://github.com/rspec/rspec-rails)
+  - [RSwag](https://github.com/rswag/rswag)
+  - [Shoulda Matchers](https://github.com/thoughtbot/shoulda-matchers?tab=readme-ov-file#activemodel-matchers)
 - [MongoDB Tutorial](https://www.w3schools.com/mongodb/)
   - [Release: Official Atlas Github Action](https://www.mongodb.com/community/forums/t/introducing-the-offical-github-action-and-docker-image-for-atlas-cli/253891)
   - [Mongoid](https://www.mongodb.com/docs/mongoid/current/)
     - [Customer Field Types](https://www.mongodb.com/docs/mongoid/current/reference/fields/#custom-field-types)
+    - [Querying](https://www.mongodb.com/docs/mongoid/master/reference/queries/)
 - [Rails API](https://api.rubyonrails.org/)
 - [Rails Guides](https://guides.rubyonrails.org/)
   - [Autoloading and Reloading Constants](https://guides.rubyonrails.org/autoloading_and_reloading_constants.html)
@@ -376,6 +427,7 @@ bin/thor help lx-cli:secrets:print_key
 - [CanCanCan developer guide](https://github.com/CanCanCommunity/cancancan/blob/develop/docs/README.md) - an alternative to `Pundit`
 - [Feature flags for backup providers](https://www.flippercloud.io/docs/guides/backup-providers) e.g. with feature flagging payment providers like Stripe, PayPal & SplitIt or auth providers like Apple, Google & native passwordless authentication
 - [Dynamic roles in a Rails app](https://nicholusmuwonge.medium.com/dynamic-roles-in-a-rails-app-using-rolify-devise-invitable-and-pundit-b72011451239)
+- [Using yq to parse YAML (fixture) files](https://stackoverflow.com/a/67610900)
 
 ## Known issues
 
@@ -412,11 +464,12 @@ info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this comm
 - [ ] Setup secrets using [docker images' compatibility with secret files](https://docs.docker.com/compose/use-secrets/)
 - [ ] [Vite CJS API is deprecated and will be removed in v6](https://vitejs.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated). Update the `vite.config.js` file to use the ESM build instead
 - [ ] [New ESLint configuration system is available](https://eslint.org/docs/latest/use/configure/configuration-files-new). You will need to create a new `eslint.config.js` file to use the new configuration system
+- [ ] Confirm account changes with OTP (email, TOTP), magic links, or passkey
 - [ ] Setup RSwag for baller request specs & API tools
-- [ ] Setup flipper for feature flags
-- [ ] Knapsack Pro for parallelizing tests
+- [ ] Setup [Flipper](https://www.flippercloud.io/docs/features) for feature flags
+- [ ] [Knapsack Pro](https://docs.knapsackpro.com/knapsack_pro-ruby/guide/?rails=yes) for parallelizing tests
 - [ ] Check out [Redis Stack for docker](https://hub.docker.com/r/redis/redis-stack) for advanced indexing & search features with redis data
-- [ ] Playwright E2E test suite
+- [ ] [Playwright](https://playwright.dev/docs/intro) E2E test suite
 - [ ] Implement default authorization policies
 - [ ] **Consolidate vite configuration & dependencies** right now, vite is a dependency of both the front and backend separately. Is there a better way?
 - [ ] Address error from working on rails project in VSCode: `/Users/localadmin/.asdf/installs/ruby/3.2.2/bin/ruby: warning: Ruby was built without YJIT support. You may need to install rustc to build Ruby with YJIT.`

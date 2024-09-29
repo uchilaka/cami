@@ -12,6 +12,8 @@ brew 'heroku'
 brew 'ruby-build'
 brew 'asdf'
 brew 'coreutils'
+brew 'git-crypt'
+brew 'yq'
 
 # install only on specified OS
 brew 'tree' if OS.mac?
@@ -19,8 +21,8 @@ brew 'gnutls' if OS.mac?
 brew 'foreman' if OS.mac?
 
 if OS.mac? && File.exist?('/usr/local/bin/docker')
-    puts 'Found Docker installed 🥳 - skipping docker installation'
+  puts 'Found Docker installed 🥳 - skipping docker installation'
 else
-    cask 'docker'
+  cask 'docker'
 end
 cask 'ngrok'

@@ -106,7 +106,7 @@ RSpec.describe AppUtils, utility: true, skip_in_ci: true do
 
     around do |example|
       with_modified_env(
-        SEND_LIVE_EMAILS_ENABLED: send_live_emails_enabled,
+        SEND_EMAILS_ENABLED: send_live_emails_enabled,
         LETTER_OPENER_ENABLED: letter_opener_enabled,
         MAILHOG_ENABLED: mailhog_enabled
       ) do
@@ -154,7 +154,7 @@ RSpec.describe AppUtils, utility: true, skip_in_ci: true do
         end
       end
 
-      context 'when SEND_LIVE_EMAILS_ENABLED is true' do
+      context 'when SEND_EMAILS_ENABLED is true' do
         let(:send_live_emails_enabled) { 'yes' }
 
         it 'returns true' do
@@ -206,7 +206,13 @@ RSpec.describe AppUtils, utility: true, skip_in_ci: true do
   end
 
   describe '.send_emails?' do
-    context 'when SEND_LIVE_EMAILS_ENABLED is nil' do
+    context 'when SEND_EMAILS_ENABLED is nil' do
+      around do |example|
+        with_modified_env(SEND_EMAILS_ENABLED: nil) do
+          example.run
+        end
+      end
+
       context 'and the application is in production' do
         before do
           allow(Rails.env).to receive(:production?).and_return(true)
@@ -221,16 +227,19 @@ RSpec.describe AppUtils, utility: true, skip_in_ci: true do
         end
       end
 
-      context 'with letter_opener' do
+      context 'and letter_opener (otherwise ENV defaults)' do
         let(:letter_opener_enabled) { nil }
 
         around do |example|
-          with_modified_env(LETTER_OPENER_ENABLED: letter_opener_enabled) do
+          with_modified_env(
+            MAILHOG_ENABLED: 'no',
+            LETTER_OPENER_ENABLED: letter_opener_enabled
+          ) do
             example.run
           end
         end
 
-        context 'when letter_opener is enabled' do
+        context 'is enabled' do
           let(:letter_opener_enabled) { 'yes' }
 
           it 'returns true' do
@@ -238,31 +247,27 @@ RSpec.describe AppUtils, utility: true, skip_in_ci: true do
           end
         end
 
-        context 'when letter_opener is disabled' do
+        context 'is disabled' do
           let(:letter_opener_enabled) { 'no' }
 
           it 'returns false' do
             expect(described_class.send_emails?).to eq(false)
           end
         end
-
-        context 'when letter_opener is nil' do
-          it 'returns true' do
-            expect(described_class.send_emails?).to eq(true)
-          end
-        end
       end
 
-      context 'with mailhog' do
+      context 'and mailhog' do
         let(:mailhog_enabled) { nil }
 
         around do |example|
-          with_modified_env(MAILHOG_ENABLED: mailhog_enabled) do
+          with_modified_env(
+            MAILHOG_ENABLED: mailhog_enabled
+          ) do
             example.run
           end
         end
 
-        context 'when mailhog is disabled' do
+        context 'is disabled' do
           let(:mailhog_enabled) { 'no' }
 
           it 'returns true' do
@@ -270,7 +275,7 @@ RSpec.describe AppUtils, utility: true, skip_in_ci: true do
           end
         end
 
-        context 'when mailhog is enabled' do
+        context 'is enabled' do
           let(:mailhog_enabled) { 'yes' }
 
           it 'returns true' do

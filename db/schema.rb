@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_21_082806) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_14_130337) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -25,6 +25,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_21_082806) do
     t.integer "status"
     t.index ["slug"], name: "index_accounts_on_slug", unique: true
     t.index ["tax_id"], name: "index_accounts_on_tax_id", unique: true, where: "(tax_id IS NOT NULL)"
+  end
+
+  create_table "accounts_roles", id: false, force: :cascade do |t|
+    t.uuid "account_id"
+    t.uuid "role_id"
+    t.index ["account_id", "role_id"], name: "index_accounts_roles_on_account_id_and_role_id"
+    t.index ["account_id"], name: "index_accounts_roles_on_account_id"
+    t.index ["role_id"], name: "index_accounts_roles_on_role_id"
   end
 
   create_table "accounts_users", id: false, force: :cascade do |t|
@@ -81,6 +89,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_21_082806) do
     t.index ["user_id"], name: "index_allowlisted_jwts_on_user_id"
   end
 
+  create_table "invoice_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "document_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["document_id"], name: "index_invoice_records_on_document_id", unique: true
+  end
+
   create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "sku"
     t.string "display_name", null: false
@@ -92,10 +107,20 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_21_082806) do
   end
 
   create_table "products_services", id: false, force: :cascade do |t|
-    t.uuid "service_id", null: false
     t.uuid "product_id", null: false
+    t.uuid "service_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "resource_type"
+    t.uuid "resource_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
+    t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
   create_table "services", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -115,9 +140,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_21_082806) do
     t.datetime "updated_at", null: false
     t.string "given_name"
     t.string "family_name"
-    t.string "nickname"
     t.string "providers", default: [], array: true
     t.jsonb "uids", default: {}
+    t.string "nickname"
     t.string "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
@@ -130,6 +155,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_21_082806) do
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "users_roles", id: false, force: :cascade do |t|
+    t.uuid "user_id"
+    t.uuid "role_id"
+    t.index ["role_id"], name: "index_users_roles_on_role_id"
+    t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
+    t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

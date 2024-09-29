@@ -12,3 +12,9 @@ fetch_paypal_invoices_job:
   class: 'PayPal::FetchInvoicesJob'
   source: schedule # default: dynamic
   queue: yeet
+
+upsert_invoice_records_job:
+  cron: '*/15 5-22 * * 1-6' # Every 15 minutes from 05:00 to 22:00 from Monday to Saturday
+  class: 'UpsertInvoiceRecordsJob'
+  source: schedule # default: dynamic
+  queue: whenever

@@ -45,6 +45,10 @@ module LarCityCLI
       friendly_os_name? == :macos
     end
 
+    def linux?
+      friendly_os_name? == :linux
+    end
+
     def friendly_os_name?
       case RbConfig::CONFIG['host_os']
       when /linux/

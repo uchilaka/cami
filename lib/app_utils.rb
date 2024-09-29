@@ -19,13 +19,9 @@ class AppUtils
 
     def send_emails?
       default_value =
-        if Rails.env.production? || mailhog_enabled? || letter_opener_enabled?
-          true
-        else
-          false
-        end
+        Rails.env.production? || mailhog_enabled? || letter_opener_enabled?
 
-      yes?(ENV.fetch('SEND_LIVE_EMAILS_ENABLED', default_value))
+      yes?(ENV.fetch('SEND_EMAILS_ENABLED', default_value))
     end
 
     def yes?(value)

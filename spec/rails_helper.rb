@@ -70,7 +70,7 @@ VCR.configure do |c|
 end
 
 RSpec.configure do |config|
-  config.fail_fast = ENV.fetch('CI', false) ? true : false
+  config.fail_fast = AppUtils.yes?(ENV.fetch('RSPEC_FAIL_FAST', false)) ? true : false
 
   config.include Mongoid::Matchers, type: :model
 
@@ -116,8 +116,10 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner[:active_record].strategy = :transaction
+    DatabaseCleaner[:active_record].clean_with(:truncation)
+    DatabaseCleaner[:mongoid].db = :default
+    DatabaseCleaner[:mongoid].strategy = :deletion
 
     # Purge the MongoDB test store
     system "RAILS_ENV=test #{Rails.root}/bin/rails db:mongoid:drop"
@@ -131,9 +133,7 @@ RSpec.configure do |config|
   end
 
   config.around(:each) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
+    DatabaseCleaner.cleaning { example.run }
   end
 end
 

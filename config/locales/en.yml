@@ -45,6 +45,13 @@ en:
       sign_up: "Sign Up"
       sign_in: "Sign In"
       return_home: "Return Home"
+  labels:
+    invoices:
+      create: "New invoice"
+      search: "Search for invoices"
+    accounts:
+      create: "New account"
+      search: "Search for accounts"
   shared:
     navbar:
       home: "Home"
@@ -52,9 +59,19 @@ en:
       services: "Services"
       products: "Products"
       accounts: "Accounts"
+      invoices: "Invoices"
       sign_out: "Sign Out"
       registration: "Settings"
+
   models:
     account:
       errors:
         user_limit_exceeded: "cannot have more than one user"
+    invoice:
+      errors:
+        invalid_payment_vendor: "is not a valid payment vendor"
+  validators:
+    errors:
+      invalid_email: "is not a valid email address"
+      invalid_password: "is not a valid password"
+      invalid_username: "is not a valid username"
