@@ -57,7 +57,7 @@ module Workflows
               end
               # Store the email address against the business account
               # (to help with data reconciliation later on)
-              new_account.profile.update(email:)
+              new_account.profile.update(email:) if new_account.is_a?(Business)
             end
             new_account.save!
             Rails.logger.info "Created account #{account['id']} from invoice #{invoice.id}", account: new_account
