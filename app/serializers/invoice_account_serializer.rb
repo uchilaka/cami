@@ -34,7 +34,7 @@ class InvoiceAccountSerializer < AdhocSerializer
   def display_name
     return business_name if business?
 
-    names['full_name']
+    names['full_name'] || email
   end
 
   def email
@@ -42,7 +42,7 @@ class InvoiceAccountSerializer < AdhocSerializer
   end
 
   def business_name
-    object.dig('billing_info', 'business_name')
+    object.dig('billing_info', 'business_name') || email
   end
 
   def type

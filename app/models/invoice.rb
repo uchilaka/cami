@@ -4,6 +4,10 @@ class Invoice
   include DocumentRecord
   include Mongoid::Attributes::Dynamic
 
+  embeds_many :accounts, class_name: 'InvoiceAccount'
+
+  accepts_nested_attributes_for :accounts
+
   after_create :initialize_record!
 
   # TODO: Consider making :record_id required before saving any invoice document
@@ -17,7 +21,7 @@ class Invoice
   field :status, type: String
   # { email_address }
   field :invoicer, type: Hash
-  field :accounts, type: Array
+  # field :accounts, type: Array
   field :viewed_by_recipient, type: Boolean
   field :invoiced_at, type: Time
   field :due_at, type: Time

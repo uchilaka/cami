@@ -20,17 +20,20 @@ module Workflows
         Account.transaction do
           Rails.logger.info("Found accounts for #{invoice.id}", accounts:)
           accounts.each do |account|
-            matching_accounts = lookup_accounts(account)
+            matching_accounts = lookup_accounts(account.serializable_hash)
             if matching_accounts.any?
               Rails.logger.warn('Found matching account(s)', accounts: matching_accounts)
-              matching_accounts.each do |matching_account|
-                matching_account.add_role(:contact, invoice.record) if invoice.record.present?
-                matching_account.add_role(:customer, invoice.record) if matching_account.is_a?(Business)
+              # TODO: Handle single vs. multiple accounts matching invoice data
+              if Flipper.enabled?(:feat__match_accounts_to_invoice_data)
+                matching_accounts.each do |matching_account|
+                  matching_account.add_role(:contact, invoice.record) if invoice.record.present?
+                  matching_account.add_role(:customer, invoice.record) if matching_account.is_a?(Business)
+                end
               end
               next
             end
             email, display_name, given_name, family_name, type =
-              account.values_at 'email', 'display_name', 'given_name', 'family_name', 'type'
+              account.serializable_hash.values_at 'email', 'display_name', 'given_name', 'family_name', 'type'
             display_name = email if display_name.blank?
             new_account = Account.create(display_name:, type:)
             if invoice.record.present?
@@ -61,16 +64,16 @@ module Workflows
     private
 
     def lookup_accounts(params)
-      params = params.symbolize_keys
-      if params[:email].present?
+      working_params = params.symbolize_keys
+      if working_params[:email].present?
         # Check for a business
-        record = Metadata::Business.find_by(email: params[:email])&.business
+        record = Metadata::Business.find_by(email: working_params[:email])&.business
         return [record] if record.present?
 
         # Check for an individual account
-        User.find_by(email: params[:email])&.accounts || []
+        User.find_by(email: working_params[:email])&.accounts || []
       else
-        filter_params = params.slice(:display_name, :type).reverse_merge(type: 'Business')
+        filter_params = working_params.slice(:display_name, :type).reverse_merge(type: 'Business')
         Account.where(filter_params)
       end
     end

@@ -6,24 +6,8 @@ module Workflows
   RSpec.describe UpsertInvoiceRecords do
     describe '.call' do
       context 'when there are no existing accounts' do
-        let(:individual_account) do
-          given_name = Faker::Name.neutral_first_name
-          family_name = Faker::Name.last_name
-          {
-            'email' => Faker::Internet.email,
-            'given_name' => given_name,
-            'family_name' => family_name,
-            'display_name' => "#{given_name} #{family_name}",
-            'type' => 'Individual'
-          }
-        end
-        let(:business_account) do
-          {
-            'email' => Faker::Internet.email,
-            'display_name' => Faker::Company.name,
-            'type' => 'Business'
-          }
-        end
+        let(:individual_account) { Fabricate(:individual_invoice_account) }
+        let(:business_account) { Fabricate(:business_invoice_account) }
         let(:invoice) { Fabricate(:invoice) }
 
         before do
@@ -48,18 +32,18 @@ module Workflows
           let(:accounts_by_role) { Account.with_role(:contact, invoice.record) }
           let(:account) { accounts_by_role.find_by(type: 'Individual') }
           let(:profile) do
-            Metadata::Profile.find_by("vendor_data.#{invoice.payment_vendor}.email": individual_account['email'])
+            Metadata::Profile.find_by("vendor_data.#{invoice.payment_vendor}.email": individual_account.email)
           end
 
           before { subject }
 
           it 'properly sets the account display name' do
-            expect(account.display_name).to eq(individual_account['display_name'])
+            expect(account.display_name).to eq(individual_account.display_name)
           end
 
           it 'properly sets the profile display name' do
             profile_display_name = profile.vendor_data.dig(invoice.payment_vendor.to_sym, :display_name)
-            expect(profile_display_name).to eq(individual_account['display_name'])
+            expect(profile_display_name).to eq(individual_account.display_name)
           end
         end
 
@@ -67,7 +51,7 @@ module Workflows
         #   seem to be working right
         xcontext 'for the business account' do
           let(:accounts_by_role) { Business.with_role(:customer, invoice.record) }
-          let(:account) { accounts_by_role.find_by(display_name: business_account['display_name']) }
+          let(:account) { accounts_by_role.find_by(display_name: business_account.display_name) }
 
           before { subject }
 
