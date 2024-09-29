@@ -62,14 +62,23 @@ en:
       invoices: "Invoices"
       sign_out: "Sign Out"
       registration: "Settings"
-
   models:
     account:
       errors:
         user_limit_exceeded: "cannot have more than one user"
     invoice:
       errors:
+        record_missing: "record is missing"
         invalid_payment_vendor: "is not a valid payment vendor"
+    invoice_account:
+      errors:
+        invalid: "is not a valid invoice account"
+        exists: "already exists"
+  workflows:
+    invoice_account:
+      errors:
+        generic: "An error occurred while creating the invoice account"
+        already_exists: "A matching invoice account already exists"
   validators:
     errors:
       invalid_email: "is not a valid email address"

@@ -87,6 +87,7 @@ group :development, :test do
   gem 'faker'
   gem 'open3'
   gem 'rspec-rails', '~> 6.1'
+  gem 'rspec-wait'
   gem 'rubocop'
   gem 'rubocop-capybara', require: false
   gem 'rubocop-performance'

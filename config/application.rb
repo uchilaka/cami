@@ -46,6 +46,7 @@ module AccountManager
     # config.eager_load_paths << Rails.root.join("extras")
     config.eager_load_paths << "#{root}/lib"
 
+    config.autoload_paths << "#{root}/lib/workflows"
     config.autoload_paths << "#{root}/lib/commands"
     config.autoload_paths << "#{root}/config/vcr"
 

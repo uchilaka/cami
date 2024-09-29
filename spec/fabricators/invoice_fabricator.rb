@@ -8,7 +8,24 @@ Fabricator(:invoice) do
     end
   end
   invoicer { { email_address: 'paypal@larcity.dev' } }
-  accounts { [Fabricate(:individual_invoice_account), Fabricate(:business_invoice_account)] }
+  # accounts { [Fabricate(:individual_invoice_account), Fabricate(:business_invoice_account)] }
+  accounts do
+    [
+      # Individual invoice account
+      {
+        type: 'Individual',
+        given_name: Faker::Name.neutral_first_name,
+        family_name: Faker::Name.last_name,
+        email: Faker::Internet.email
+      },
+      # Business invoice account
+      {
+        type: 'Business',
+        display_name: Faker::Company.name,
+        email: Faker::Internet.email
+      }
+    ]
+  end
   viewed_by_recipient false
   invoiced_at { Time.now }
   due_at { Time.now }
