@@ -2,21 +2,13 @@
 
 class InvoiceAccountSerializer < AdhocSerializer
   def attributes
-    if business?
-      return {
-        display_name: business_name,
-        email:,
-        type:
-      }
-    end
-
     {
       given_name:,
       family_name:,
       display_name:,
       email:,
       type:
-    }
+    }.compact
   end
 
   def names
@@ -31,10 +23,14 @@ class InvoiceAccountSerializer < AdhocSerializer
     names['family_name'] || names['surname']
   end
 
-  def display_name
-    return business_name if business?
-
+  def name_or_default
     names['full_name'] || email
+  end
+
+  def display_name
+    return business_name || name_or_default if business?
+
+    name_or_default
   end
 
   def email
@@ -42,7 +38,7 @@ class InvoiceAccountSerializer < AdhocSerializer
   end
 
   def business_name
-    object.dig('billing_info', 'business_name') || email
+    object.dig('billing_info', 'business_name')
   end
 
   def type

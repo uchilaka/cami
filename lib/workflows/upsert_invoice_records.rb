@@ -35,22 +35,28 @@ module Workflows
             email, display_name, given_name, family_name, type =
               account.serializable_hash.values_at 'email', 'display_name', 'given_name', 'family_name', 'type'
             display_name = email if display_name.blank?
+
+            # Create an account for the business
             new_account = Account.create(display_name:, type:)
             if invoice.record.present?
               new_account.add_role(:contact, invoice.record)
               new_account.add_role(:customer, invoice.record) if new_account.is_a?(Business)
             end
-            # Update identity information
-            if new_account.is_a?(Business)
-              new_account.profile.update(email:)
-            else
-              # Capture data that can be claimed by the user(s) when they sign up
-              provider = invoice.payment_vendor
-              profile = Metadata::Profile.find_by("vendor_data.#{provider}.email": email)
-              if profile.blank?
-                # Create a new orphaned profile that can be claimed by the user when they sign up
-                vendor_data = { "#{provider}": { email:, display_name:, given_name:, family_name: } }
-                Metadata::Profile.create(vendor_data:)
+
+            if email.present?
+              if given_name || family_name
+                # Create a profile for the contact and capture data that
+                # can be claimed by the user(s) when they sign up
+                provider = invoice.payment_vendor
+                profile = Metadata::Profile.find_by("vendor_data.#{provider}.email": email)
+                if profile.blank?
+                  # Create a new orphaned profile that can be claimed by the user when they sign up
+                  vendor_data = { "#{provider}": { email:, display_name:, given_name:, family_name: } }
+                  Metadata::Profile.create(vendor_data:)
+                end
+              elsif new_account.is_a?(Business)
+                # Store the email address against the business account
+                new_account.profile.update(email:)
               end
             end
             new_account.save!

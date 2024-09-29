@@ -3,16 +3,20 @@
 class UpsertInvoiceRecordsJob < ApplicationJob
   queue_as :whenever
 
-  BATCH_LIMIT = 10
+  BATCH_LIMIT = 25
 
   def perform
     Invoice
       .where(updated_accounts_at: nil)
-      .limit(BATCH_LIMIT)
+      .limit(batch_limit)
       .each do |invoice|
       next if invoice.accounts.none?
 
       Workflows::UpsertInvoiceRecords.call(invoice:)
     end
+  end
+
+  def batch_limit
+    ENV.fetch('UPSERT_INVOICE_BATCH_LIMIT', BATCH_LIMIT).to_i
   end
 end
