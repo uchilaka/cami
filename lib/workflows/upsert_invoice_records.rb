@@ -54,10 +54,10 @@ module Workflows
                   vendor_data = { "#{provider}": { email:, display_name:, given_name:, family_name: } }
                   Metadata::Profile.create(vendor_data:)
                 end
-              elsif new_account.is_a?(Business)
-                # Store the email address against the business account
-                new_account.profile.update(email:)
               end
+              # Store the email address against the business account
+              # (to help with data reconciliation later on)
+              new_account.profile.update(email:)
             end
             new_account.save!
             Rails.logger.info "Created account #{account['id']} from invoice #{invoice.id}", account: new_account
@@ -72,11 +72,11 @@ module Workflows
     def lookup_accounts(params)
       working_params = params.symbolize_keys
       if working_params[:email].present?
-        # Check for a business
+        # Check for a business account
         record = Metadata::Business.find_by(email: working_params[:email])&.business
         return [record] if record.present?
 
-        # Check for an individual account
+        # Check for accounts linked to a user via the invoice email address
         User.find_by(email: working_params[:email])&.accounts || []
       else
         filter_params = working_params.slice(:display_name, :type).reverse_merge(type: 'Business')
