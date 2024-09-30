@@ -10,7 +10,7 @@ module Metadata
     validates :account_id, presence: true, uniqueness: { case_sensitive: false }
 
     def business
-      @business ||= Business.find_by(id: account_id)
+      @business ||= ::Business.find_by(id: account_id)
     end
   end
 end

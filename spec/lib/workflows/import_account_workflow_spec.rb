@@ -31,7 +31,7 @@ RSpec.describe ImportAccountWorkflow do
 
   context 'with no matching accounts' do
     let(:account_profile) { Metadata::Business.find_by(email:) }
-    let(:account) { Account.find(account_profile.account_id) }
+    let(:account) { account_profile.business }
 
     subject { described_class.call(invoice_account:) }
 
@@ -46,6 +46,7 @@ RSpec.describe ImportAccountWorkflow do
     it 'adds the customer role to the invoice' do
       expect { subject }.to change(Role, :count).by(2)
       # TODO: Figure out why both of these are failing
+      expect(account.has_role?(:customer, invoice.record)).to be(true)
       # wait_for { account.has_role?(:customer, invoice.record) }.to be(true)
       # wait_for { Account.with_role(:customer, invoice.record) }.to include(account)
     end
