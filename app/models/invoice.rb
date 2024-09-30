@@ -8,6 +8,16 @@ class Invoice
 
   accepts_nested_attributes_for :accounts
 
+  before_validation :convert_amount, on: %i[create], if: -> { amount.present? }
+  before_validation :convert_due_amount, on: %i[create], if: -> { due_amount.present? }
+  before_validation :convert_payments, on: %i[create], if: -> { payments.present? }
+
+  validates :payment_vendor,
+            presence: true,
+            inclusion: { in: %w[paypal] }
+
+  before_create :initialize_amount, if: -> { amount.blank? }
+
   after_create :initialize_record!
 
   # TODO: Consider making :record_id required before saving any invoice document
@@ -34,16 +44,6 @@ class Invoice
   field :payments, type: Hash
   field :links, type: Array
   field :note, type: String
-
-  validates :payment_vendor,
-            presence: true,
-            inclusion: { in: %w[paypal] }
-
-  before_validation :convert_amount, on: %i[create], if: -> { amount.present? }
-  before_validation :convert_due_amount, on: %i[create], if: -> { due_amount.present? }
-  before_validation :convert_payments, on: %i[create], if: -> { payments.present? }
-
-  before_create :initialize_amount, if: -> { amount.blank? }
 
   PAYPAL_BASE_URL = ENV.fetch('PAYPAL_BASE_URL', Rails.application.credentials.paypal&.base_url).freeze
 
