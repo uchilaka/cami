@@ -61,7 +61,9 @@ class InvoiceDocumentSerializer < AdhocSerializer
 
   def payments
     paid_amount = object.dig('payments', 'paid_amount')
-    { paid_amount: serialize(paid_amount, to: 'Amount') } if paid_amount
+    return [] if paid_amount.blank?
+
+    [serialize(paid_amount, to: 'Amount')]
   end
 
   def links

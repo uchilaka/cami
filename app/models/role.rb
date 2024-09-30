@@ -19,6 +19,8 @@
 class Role < ApplicationRecord
   has_and_belongs_to_many :users, join_table: :users_roles
   has_and_belongs_to_many :accounts, join_table: :accounts_roles
+  # has_and_belongs_to_many :individuals, join_table: :accounts_roles, foreign_key: :account_id
+  # has_and_belongs_to_many :businesses, join_table: :accounts_roles, foreign_key: :account_id
 
   belongs_to :resource,
              polymorphic: true,
