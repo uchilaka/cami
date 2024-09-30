@@ -44,10 +44,12 @@ RSpec.describe ImportAccountWorkflow do
     end
 
     it 'adds the customer role to the invoice' do
+      expect { subject }.to change(Role, :count).by(2)
       expect(account.has_role?(:customer, invoice.record)).to be(true)
     end
 
     it 'adds the contact role to the invoice' do
+      expect { subject }.to change(Role, :count).by(2)
       expect(account.has_role?(:contact, invoice.record)).to be(true)
     end
 
