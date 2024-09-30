@@ -21,7 +21,6 @@ class Invoice
   field :status, type: String
   # { email_address }
   field :invoicer, type: Hash
-  # field :accounts, type: Array
   field :viewed_by_recipient, type: Boolean
   field :invoiced_at, type: Time
   field :due_at, type: Time
@@ -40,9 +39,9 @@ class Invoice
             presence: true,
             inclusion: { in: %w[paypal] }
 
-  before_validation :convert_amount, on: %i[create update], if: -> { amount.present? }
-  before_validation :convert_due_amount, on: %i[create update], if: -> { due_amount.present? }
-  before_validation :convert_payments, on: %i[create update], if: -> { payments.present? }
+  before_validation :convert_amount, on: %i[create], if: -> { amount.present? }
+  before_validation :convert_due_amount, on: %i[create], if: -> { due_amount.present? }
+  before_validation :convert_payments, on: %i[create], if: -> { payments.present? }
 
   before_create :initialize_amount, if: -> { amount.blank? }
 

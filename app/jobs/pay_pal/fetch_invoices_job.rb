@@ -29,7 +29,7 @@ module PayPal
       @enqueued_records.each do |record|
         if Invoice.exists?(vendor_record_id: record['id'])
           @skipped_records << record
-          Rails.logger.info("Skipping record with ID #{record['id']} because it already exists", record:)
+          Rails.logger.warn("Skipping invoice record with ID #{record['id']} because it already exists", record:)
           next
         end
 
@@ -79,62 +79,6 @@ module PayPal
 
       # Return next page link
       links.find { |link| link['rel'] == 'next' }
-    end
-
-    # @deprecated
-    # This method is no longer used in the current implementation.
-    # It will be deleted before the 1.0.0 application release.
-    # It is kept here for reference purposes only.
-    # To serialize an invoice record, use the InvoiceSerializer class.
-    def process_record(record)
-      vendor_record_id = record['id']
-      status, detail, invoicer, primary_recipients,
-        amount, due_amount, payments, links, vendor_recurring_group_id = record.values_at(
-          'status', 'detail', 'invoicer', 'primary_recipients',
-          'amount', 'due_amount', 'payments', 'links', 'recurring_Id'
-        )
-      invoice_number, invoiced_at, viewed_by_recipient,
-        currency_code, note = detail.values_at(
-          'invoice_number', 'invoice_date', 'viewed_by_recipient',
-          'currency_code', 'note'
-        )
-      due_at = detail.dig('payment_term', 'due_date')
-      accounts = []
-      # Extract individual accounts
-      (primary_recipients || []).each do |recipient|
-        given_name = recipient.dig('billing_info', 'name', 'given_name')
-        family_name = recipient.dig('billing_info', 'name', 'surname')
-        display_name = recipient.dig('billing_info', 'name', 'full_name')
-        email = recipient.dig('billing_info', 'email_address')
-        accounts << {
-          given_name:, family_name:, display_name:,
-          email:, type: 'Individual'
-        }
-        business_name = recipient.dig('billing_info', 'business_name')
-        next unless business_name.present?
-
-        accounts << { display_name: business_name, type: 'Business' }
-      end
-
-      {
-        vendor_record_id:,
-        vendor_recurring_group_id:,
-        invoice_number:,
-        vendor_id: vendor.id,
-        payment_vendor: 'paypal',
-        status:,
-        invoicer:,
-        accounts:,
-        viewed_by_recipient:,
-        invoiced_at:,
-        due_at:,
-        currency_code:,
-        amount:,
-        due_amount:,
-        payments:,
-        note:,
-        links:
-      }
     end
   end
 end
