@@ -34,7 +34,7 @@ Fabricator(:invoice) do
   # Payment vendor documentation for invoice status:
   # https://developer.paypal.com/docs/api/invoicing/v2/#definition-invoice_status
   status { 'SENT' }
-  payments { {} }
+  payments { [] }
   links []
   note { Faker::Lorem.paragraph }
   vendor_record_id { SecureRandom.alphanumeric(20).upcase.scan(/.{4}/).join('-') }
@@ -52,6 +52,7 @@ Fabricator(:invoice) do
 
       account[:display_name] = "#{account[:given_name]} #{account[:family_name]}"
     end
+    invoice.save!
   end
 end
 
@@ -59,12 +60,10 @@ Fabricator :paid_in_full_invoice, from: :invoice do
   status { 'PAID' }
 
   after_build do |invoice|
-    invoice.payments = {
-      paid_amount: {
-        currency_code: invoice.currency_code,
-        value: invoice.amount[:value]
-      }
-    }
+    invoice.payments = [
+      { currency_code: invoice.currency_code, value: invoice.amount[:value] }
+    ]
+    invoice.save!
   end
 end
 
@@ -73,16 +72,14 @@ Fabricator :partially_paid_invoice, from: :invoice do
 
   after_build do |invoice|
     amount_value = invoice.amount[:value] * 0.75
-    invoice.payments = {
-      paid_amount: {
-        currency_code: invoice.currency_code,
-        value: amount_value
-      }
-    }
+    invoice.payments = [
+      { currency_code: invoice.currency_code, value: amount_value }
+    ]
     invoice.due_amount = {
       currency_code: invoice.currency_code,
       value: invoice.amount[:value] - amount_value
     }
+    invoice.save!
   end
 end
 

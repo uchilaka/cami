@@ -3,19 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe Invoice, type: :model do
-  let(:error_amount) do
-    {
-      value: 0.0,
-      error: 'Not a string or number',
-      error_value: 'invalid value'
-    }
-  end
+  let(:error_amount) { { value: 0.0, currency_code: 'USD' } }
 
   context 'when initialized' do
     let(:invoice) { described_class.new(payment_vendor: 'paypal') }
 
     it 'should have an initialized amount' do
-      expect { invoice.save }.to change { invoice.amount }.from(nil).to(currency_code: 'USD', value: 0.0)
+      expect { invoice.save }.to change { invoice.amount&.value }.from(nil).to(0.0)
       expect(invoice).to be_valid
     end
   end
@@ -32,7 +26,7 @@ RSpec.describe Invoice, type: :model do
     subject { Fabricate(:invoice, amount: { value: '42.90' }) }
 
     it 'should save the value as float' do
-      expect(subject.amount).to eq(currency_code: 'USD', value: 42.9)
+      expect(subject.amount.value).to eq(42.9)
     end
   end
 
@@ -40,7 +34,7 @@ RSpec.describe Invoice, type: :model do
     subject { Fabricate(:invoice, due_amount: { value: '5,486.05' }) }
 
     it 'should save the value as float' do
-      expect(subject.due_amount).to eq(currency_code: 'USD', value: 5_486.05)
+      expect(subject.due_amount.value).to eq(5_486.05)
     end
 
     context 'with an invalid string value' do
@@ -53,17 +47,17 @@ RSpec.describe Invoice, type: :model do
   end
 
   context '#payments' do
-    subject { Fabricate(:invoice, payments: { paid_amount: { value: '1,000.12' } }) }
+    subject { Fabricate(:invoice, payments: [{ value: '1,000.12' }]) }
 
     it 'should save the value as float' do
-      expect(subject.payments).to eq(paid_amount: { currency_code: 'USD', value: 1_000.12 })
+      expect(subject.payments.serializable_hash).to eq([{ currency_code: 'USD', value: 1_000.12 }])
     end
 
     context 'when attribute value is nil' do
       subject { Fabricate(:invoice, payments: nil) }
 
       it 'should be nil' do
-        expect(subject.payments).to be_nil
+        expect(subject.payments).to eq([])
       end
     end
 
@@ -71,7 +65,7 @@ RSpec.describe Invoice, type: :model do
       subject { Fabricate(:invoice, payments: { paid_amount: { value: 'invalid value' } }) }
 
       it 'should save the expected value' do
-        expect(subject.payments).to eq(paid_amount: error_amount)
+        expect(subject.payments).to eq(error_amount)
       end
     end
   end
