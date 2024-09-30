@@ -30,8 +30,6 @@ class ImportAccountWorkflow
           account.add_role(:contact, invoice.record)
           account.profile.update(email:) if account.is_a?(Business)
         end
-        # TODO: Not sure this is needed
-        # new_account.save
       else
         context.errors = account.errors.full_messages
         context.fail!(message: I18n.t('workflows.invoice_account.errors.generic'))

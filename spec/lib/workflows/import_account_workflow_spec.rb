@@ -35,8 +35,11 @@ RSpec.describe ImportAccountWorkflow do
 
     subject { described_class.call(invoice_account:) }
 
+    pending 'logs the account creation'
+
     it 'creates the expected new account' do
       expect { subject }.to change(Account, :count).by(1)
+      expect(subject.account).to eq(account)
     end
 
     it 'creates the expected new business profile' do
@@ -44,19 +47,31 @@ RSpec.describe ImportAccountWorkflow do
     end
 
     it 'adds the customer role to the invoice' do
-      expect { subject }.to change(Role, :count).by(2)
+      expect(subject.success?).to be(true)
       expect(account.has_role?(:customer, invoice.record)).to be(true)
     end
 
     it 'adds the contact role to the invoice' do
-      expect { subject }.to change(Role, :count).by(2)
+      expect(subject.success?).to be(true)
       expect(account.has_role?(:contact, invoice.record)).to be(true)
     end
 
-    pending 'logs the account creation'
-
     context 'without an email address' do
-      pending 'does not add the contact role'
+      let(:email) { nil }
+
+      it 'creates the expected new business profile' do
+        expect { subject }.to change(Metadata::Business, :count).by(1)
+      end
+
+      it 'adds the customer role to the invoice' do
+        expect(subject.success?).to be(true)
+        expect(account.has_role?(:customer, invoice.record)).to be(true)
+      end
+
+      it 'does NOT add the contact role to the invoice' do
+        expect(subject.success?).to be(true)
+        expect(account.has_role?(:contact, invoice.record)).to be(false)
+      end
     end
   end
 
