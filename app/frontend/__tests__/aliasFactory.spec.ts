@@ -1,4 +1,4 @@
-import { viteAliasConfigFromFactory } from '../utils/aliasFactory'
+import { viteAliasConfigFromFactory } from '@/utils/aliasFactory'
 import { describe, it, xit, expect } from '@jest/globals'
 import find from 'lodash.find'
 import path from 'path'
@@ -67,7 +67,6 @@ describe('aliasFactory', () => {
       find: '@/features',
       replacement: path.resolve(__dirname, '../../frontend/features'),
     }
-    console.debug({ aliases })
     expect(find(aliases, matcher)).toBeDefined()
   })
 })
