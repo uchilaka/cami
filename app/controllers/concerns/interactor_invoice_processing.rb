@@ -4,11 +4,13 @@ module InteractorInvoiceProcessing
   extend ActiveSupport::Concern
 
   included do
+    include InteractorErrorHandling
+
     raise "#{name} requires Interactor" unless include?(Interactor)
 
     before do
-      context.errors = []
       context.invoice = context.invoice_account&.invoice
+      context.metadata[:invoice_number] = context.invoice&.invoice_number
     end
 
     def require_invoice_record_presence!
