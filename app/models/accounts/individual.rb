@@ -32,4 +32,8 @@ class Individual < Account
 
     errors.add(:users, I18n.t('models.account.errors.user_limit_exceeded'))
   end
+
+  def profiles
+    @profiles ||= Metadata::Profile.where(account_id: id)
+  end
 end

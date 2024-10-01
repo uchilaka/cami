@@ -31,7 +31,7 @@ class UpsertInvoiceRecordsWorkflow
             next
           end
 
-          profile_result = ImportUserProfileWorkflow.call(invoice_account:)
+          profile_result = ImportUserProfileWorkflow.call(invoice_account:, account: account_result.account)
           unless profile_result.success?
             context.errors += profile_result.errors
             next

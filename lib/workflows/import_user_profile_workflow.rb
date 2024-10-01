@@ -31,13 +31,17 @@ class ImportUserProfileWorkflow
     provider = invoice.payment_vendor
     profile = Metadata::Profile.find_by("vendor_data.#{provider}.email": email)
     if profile.present?
+      # TODO: Link this profile to the invoice
       context.fail!(message: I18n.t('workflows.import_user_profile.errors.already_exists'))
       return
     end
 
     # Create a new orphaned profile that can be claimed by the user when they sign up
     vendor_data = { "#{provider}": { email:, display_name:, given_name:, family_name: } }.symbolize_keys
-    profile = Metadata::Profile.create(vendor_data:)
+    profile = Metadata::Profile.new(vendor_data:)
+    # Link the provided account record
+    profile.account_id = context.account.id if context.account
+    profile.save!
   rescue LarCity::Errors::InvalidInvoiceDocument => e
     context.fail!(message: e.message)
   ensure

@@ -5,6 +5,7 @@ module Metadata
     include DocumentRecord
     include Mongoid::Attributes::Dynamic
 
+    field :account_id, type: String
     field :user_id, type: String
 
     # Identity providers
@@ -28,6 +29,10 @@ module Metadata
 
     def user
       @user ||= User.find_by(id: user_id)
+    end
+
+    def account
+      @account ||= Account.find_by(id: account_id)
     end
   end
 end
