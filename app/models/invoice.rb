@@ -12,6 +12,12 @@ class Invoice
 
   accepts_nested_attributes_for :accounts, :amount, :due_amount, :payments
 
+  validates :payment_vendor,
+            presence: true,
+            inclusion: { in: %w[paypal] }
+
+  before_create :initialize_amount, if: -> { amount.blank? }
+
   after_create :initialize_record!
 
   # TODO: Consider making :record_id required before saving any invoice document
@@ -25,7 +31,6 @@ class Invoice
   field :status, type: String
   # { email_address }
   field :invoicer, type: Hash
-  # field :accounts, type: Array
   field :viewed_by_recipient, type: Boolean
   field :invoiced_at, type: Time
   field :due_at, type: Time

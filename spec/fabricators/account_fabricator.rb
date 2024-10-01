@@ -31,7 +31,6 @@ Fabricator(:account) do
       transients[:users].each do |user|
         account.users << user
       end
-      account.save!
     end
   end
 end

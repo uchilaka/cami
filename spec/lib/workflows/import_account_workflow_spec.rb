@@ -31,12 +31,15 @@ RSpec.describe ImportAccountWorkflow do
 
   context 'with no matching accounts' do
     let(:account_profile) { Metadata::Business.find_by(email:) }
-    let(:account) { Account.find(account_profile.account_id) }
+    let(:account) { account_profile.business }
 
     subject { described_class.call(invoice_account:) }
 
+    pending 'logs the account creation'
+
     it 'creates the expected new account' do
       expect { subject }.to change(Account, :count).by(1)
+      expect(subject.account).to eq(account)
     end
 
     it 'creates the expected new business profile' do
@@ -44,13 +47,32 @@ RSpec.describe ImportAccountWorkflow do
     end
 
     it 'adds the customer role to the invoice' do
-      expect { subject }.to change(Role, :count).by(2)
-      # TODO: Figure out why both of these are failing
-      # wait_for { account.has_role?(:customer, invoice.record) }.to be(true)
-      # wait_for { Account.with_role(:customer, invoice.record) }.to include(account)
+      expect(subject.success?).to be(true)
+      expect(account.has_role?(:customer, invoice.record)).to be(true)
     end
 
-    pending 'logs the account creation'
+    it 'adds the contact role to the invoice' do
+      expect(subject.success?).to be(true)
+      expect(account.has_role?(:contact, invoice.record)).to be(true)
+    end
+
+    context 'without an email address' do
+      let(:email) { nil }
+
+      it 'creates the expected new business profile' do
+        expect { subject }.to change(Metadata::Business, :count).by(1)
+      end
+
+      it 'adds the customer role to the invoice' do
+        expect(subject.success?).to be(true)
+        expect(account.has_role?(:customer, invoice.record)).to be(true)
+      end
+
+      it 'does NOT add the contact role to the invoice' do
+        expect(subject.success?).to be(true)
+        expect(account.has_role?(:contact, invoice.record)).to be(false)
+      end
+    end
   end
 
   pending 'with a matching account'
