@@ -46,6 +46,7 @@ Rails.application.routes.draw do
 
   get 'pages/home'
   get 'pages/dashboard'
+  get 'pages/services'
 
   match 'app/*path', to: 'pages#home', via: :get
 
