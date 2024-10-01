@@ -90,14 +90,14 @@ module LarCityCLI
         end
       end
 
-      if postgres?
-        say 'Resetting the PostgreSQL data store...', Thor::Shell::Color::YELLOW
-        reset_postgres_cmd = 'bundle exec rails db:reset db:seed'
-        if dry_run?
-          say "\n(dry-run) #{reset_postgres_cmd}", Thor::Shell::Color::MAGENTA
-        else
-          system reset_postgres_cmd, out: $stdout, err: :out
-        end
+      return unless postgres?
+
+      say 'Resetting the PostgreSQL data store...', Thor::Shell::Color::YELLOW
+      reset_postgres_cmd = 'bundle exec rails db:reset db:seed'
+      if dry_run?
+        say "\n(dry-run) #{reset_postgres_cmd}", Thor::Shell::Color::MAGENTA
+      else
+        system reset_postgres_cmd, out: $stdout, err: :out
       end
     end
 

@@ -18,18 +18,7 @@
 #
 class Role < ApplicationRecord
   has_and_belongs_to_many :users, join_table: :users_roles
-  # Doc on polymorphic associations: https://guides.rubyonrails.org/association_basics.html#polymorphic-associations
   has_and_belongs_to_many :accounts, join_table: :accounts_roles
-  # TODO: Add specs for these associations
-  has_and_belongs_to_many :contacts,
-                          join_table: :accounts_roles,
-                          class_name: 'Account',
-                          conditions: { accounts: { resource_type: 'Individual' } }
-  # TODO: Add specs for these associations
-  has_and_belongs_to_many :businesses,
-                          join_table: :accounts_roles,
-                          class_name: 'Account',
-                          conditions: { accounts: { resource_type: 'Business' } }
 
   belongs_to :resource,
              polymorphic: true,
