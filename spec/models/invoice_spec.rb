@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe Invoice, type: :model do
-  let(:error_amount) { { value: 0.0, currency_code: 'USD' } }
+  let(:error_amount) { { value: 0.0, currency_code: 'USD', error: 'Not a string or number' } }
 
   context 'when initialized' do
-    let(:invoice) { described_class.new(payment_vendor: 'paypal') }
+    let(:invoice) { described_class.new(payment_vendor: 'paypal', amount: {}, due_amount: {}, payments: nil) }
 
     it 'should have an initialized amount' do
-      expect { invoice.save }.to change { invoice.amount&.value }.from(nil).to(0.0)
+      expect(invoice.amount.value).to eq(0.0)
       expect(invoice).to be_valid
     end
   end
@@ -41,31 +41,33 @@ RSpec.describe Invoice, type: :model do
       subject { Fabricate(:invoice, due_amount: { value: 'invalid value' }) }
 
       it 'should save the expected value' do
-        expect(subject.due_amount).to eq(error_amount)
+        expect(subject.due_amount.to_h).to eq(error_amount.merge(error_value: 'invalid value'))
       end
     end
   end
 
   context '#payments' do
-    subject { Fabricate(:invoice, payments: [{ value: '1,000.12' }]) }
+    let(:invoice) { Fabricate(:invoice, payments: [{ value: '1,000.12' }]) }
+
+    subject { invoice.payments.map(&:serializable_hash) }
 
     it 'should save the value as float' do
-      expect(subject.payments.serializable_hash).to eq([{ currency_code: 'USD', value: 1_000.12 }])
+      expect(subject).to eq([{ currency_code: 'USD', value: 1_000.12 }])
     end
 
     context 'when attribute value is nil' do
-      subject { Fabricate(:invoice, payments: nil) }
+      let(:invoice) { Fabricate(:invoice, payments: nil) }
 
       it 'should be nil' do
-        expect(subject.payments).to eq([])
+        expect(subject).to eq([])
       end
     end
 
     context 'with an invalid value' do
-      subject { Fabricate(:invoice, payments: { paid_amount: { value: 'invalid value' } }) }
+      let(:invoice) { Fabricate(:invoice, payments: [{ value: 'invalid value' }]) }
 
       it 'should save the expected value' do
-        expect(subject.payments).to eq(error_amount)
+        expect(subject).to eq([error_amount.merge(error_value: 'invalid value')])
       end
     end
   end

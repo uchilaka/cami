@@ -16,7 +16,7 @@ class Invoice
             presence: true,
             inclusion: { in: %w[paypal] }
 
-  before_create :initialize_amount, if: -> { amount.blank? }
+  after_initialize :initialize_amounts
 
   after_create :initialize_record!
 
@@ -29,31 +29,18 @@ class Invoice
   # Payment vendor documentation for invoice status:
   # https://developer.paypal.com/docs/api/invoicing/v2/#definition-invoice_status
   field :status, type: String
-  # { email_address }
-  field :invoicer, type: Hash
+  field :invoicer, type: Hash # { email_address }
   field :viewed_by_recipient, type: Boolean
   field :invoiced_at, type: Time
   field :due_at, type: Time
   field :updated_accounts_at, type: Time
   field :currency_code, type: String
-  # # { currency_code, value }
-  # field :amount, type: Hash
-  # # { currency_code, value }
-  # field :due_amount, type: Hash
-  # { payments: { paid_amount: { currency_code, value } } }
-  # field :payments, type: Hash
   field :links, type: Array
   field :note, type: String
 
   validates :payment_vendor,
             presence: true,
             inclusion: { in: %w[paypal] }
-
-  # before_validation :convert_amount, on: %i[create], if: -> { amount.present? }
-  # before_validation :convert_due_amount, on: %i[create], if: -> { due_amount.present? }
-  # before_validation :convert_payments, on: %i[create], if: -> { payments.present? }
-
-  before_create :initialize_amount, if: -> { amount.blank? }
 
   PAYPAL_BASE_URL = ENV.fetch('PAYPAL_BASE_URL', Rails.application.credentials.paypal&.base_url).freeze
 
@@ -78,23 +65,9 @@ class Invoice
 
   private
 
-  # def convert_amount
-  #   self.amount = Amount.new(amount).to_h
-  # end
-  #
-  # def convert_due_amount
-  #   self.due_amount = Amount.new(due_amount).to_h
-  # end
-  #
-  # def convert_payments
-  #   return unless payments.is_a?(Hash)
-  #
-  #   self.payments = {
-  #     paid_amount: Amount.new(payments[:paid_amount]).to_h
-  #   }
-  # end
-
-  def initialize_amount
+  def initialize_amounts
     self.amount ||= InvoiceAmount.new
+    self.due_amount ||= InvoiceAmount.new
+    self.payments ||= []
   end
 end

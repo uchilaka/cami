@@ -34,11 +34,21 @@ Fabricator(:invoice) do
   # Payment vendor documentation for invoice status:
   # https://developer.paypal.com/docs/api/invoicing/v2/#definition-invoice_status
   status { 'SENT' }
-  payments { [] }
   links []
   note { Faker::Lorem.paragraph }
   vendor_record_id { SecureRandom.alphanumeric(20).upcase.scan(/.{4}/).join('-') }
 
+  after_build do |invoice|
+    # Compose account display names
+    invoice.accounts.each do |account|
+      next if account[:type] == 'Business'
+
+      account[:display_name] = "#{account[:given_name]} #{account[:family_name]}"
+    end
+  end
+end
+
+Fabricator :invoice_with_amounts, from: :invoice do
   after_build do |invoice|
     # Generate random invoice amount
     dollars = rand(125..550)
@@ -46,17 +56,10 @@ Fabricator(:invoice) do
     value = dollars + cents
     invoice.amount ||= { currency_code: invoice.currency_code, value: }
     invoice.due_amount ||= { currency_code: invoice.currency_code, value: }
-    # Compose account display names
-    invoice.accounts.each do |account|
-      next if account[:type] == 'Business'
-
-      account[:display_name] = "#{account[:given_name]} #{account[:family_name]}"
-    end
-    invoice.save!
   end
 end
 
-Fabricator :paid_in_full_invoice, from: :invoice do
+Fabricator :paid_in_full_invoice, from: :invoice_with_amounts do
   status { 'PAID' }
 
   after_build do |invoice|
@@ -67,7 +70,7 @@ Fabricator :paid_in_full_invoice, from: :invoice do
   end
 end
 
-Fabricator :partially_paid_invoice, from: :invoice do
+Fabricator :partially_paid_invoice, from: :invoice_with_amounts do
   status { 'PARTIALLY_PAID' }
 
   after_build do |invoice|
@@ -83,10 +86,10 @@ Fabricator :partially_paid_invoice, from: :invoice do
   end
 end
 
-Fabricator :viewed_invoice, from: :invoice do
+Fabricator :viewed_invoice, from: :invoice_with_amounts do
   viewed_by_recipient true
 end
 
-Fabricator :overdue_invoice, from: :invoice do
+Fabricator :overdue_invoice, from: :invoice_with_amounts do
   due_at { 1.week.ago }
 end

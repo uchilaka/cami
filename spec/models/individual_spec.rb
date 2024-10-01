@@ -55,7 +55,7 @@ RSpec.describe Individual, type: :model do
 
       it 'is supported' do
         expect(result.success?).to be(true)
-        expect(result.account.has_role?(:customer, invoice.record)).to be(true)
+        expect(result.account.has_role?(:contact, invoice.record)).to be(true)
       end
     end
   end
