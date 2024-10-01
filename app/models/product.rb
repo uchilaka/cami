@@ -18,6 +18,14 @@
 #  fk_rails_...  (vendor_id => accounts.id)
 #
 class Product < ApplicationRecord
+  # Account/User roles
+  # ==================
+  # :customer
+  # :reviewer
+  # :auditor - is able to try the product for a limited time (e.g. testing, or trial period) without a subscription
+
+  resourcify
+
   include MaintainsMetadata
 
   attribute :type, :string, default: 'Product'
