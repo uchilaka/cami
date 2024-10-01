@@ -28,10 +28,6 @@ RSpec.describe UpsertInvoiceRecordsWorkflow do
         )
       end
 
-      # before do
-      #   invoice.update(accounts: [individual_account, business_account])
-      # end
-
       subject { described_class.call(invoice:) }
 
       it 'creates the expected new accounts' do
@@ -47,6 +43,28 @@ RSpec.describe UpsertInvoiceRecordsWorkflow do
       pending 'adds the customer role to the invoice'
 
       context 'for the individual account' do
+        let(:email) { Faker::Internet.email }
+        let(:invoice) do
+          Fabricate(
+            :invoice,
+            accounts: [
+              # Individual account
+              {
+                type: 'Individual',
+                given_name: Faker::Name.neutral_first_name,
+                family_name: Faker::Name.last_name,
+                email:
+              },
+              # Business account
+              {
+                type: 'Business',
+                display_name: Faker::Company.name,
+                email: Faker::Internet.email
+              }
+            ]
+          )
+        end
+
         let(:accounts_by_role) { Account.with_role(:contact, invoice.record) }
         let(:account) { accounts_by_role.find_by(type: 'Individual') }
         let(:profile) do
@@ -59,15 +77,17 @@ RSpec.describe UpsertInvoiceRecordsWorkflow do
           expect(account.display_name).to eq(individual_account.display_name)
         end
 
+        it 'links the account to the user profile' do
+          expect(profile.account).to eq(account)
+        end
+
         it 'properly sets the profile display name' do
           profile_display_name = profile.vendor_data.dig(invoice.payment_vendor.to_sym, :display_name)
           expect(profile_display_name).to eq(individual_account.display_name)
         end
       end
 
-      # TODO: Something about assignment of roles to Businesses doesn't
-      #   seem to be working right
-      xcontext 'for the business account' do
+      context 'for the business account' do
         let(:accounts_by_role) { Business.with_role(:customer, invoice.record) }
         let(:account) { accounts_by_role.find_by(display_name: business_account.display_name) }
 

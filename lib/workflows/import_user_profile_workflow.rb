@@ -39,8 +39,13 @@ class ImportUserProfileWorkflow
     # Create a new orphaned profile that can be claimed by the user when they sign up
     vendor_data = { "#{provider}": { email:, display_name:, given_name:, family_name: } }.symbolize_keys
     profile = Metadata::Profile.new(vendor_data:)
-    # Link the provided account record
-    profile.account_id = context.account.id if context.account
+
+    # Business accounts can be matched to a user profile by the email address.
+    # Individual accounts MUST be linked by setting the account_id on the user profile.
+    if context.account.present? && context.account.is_a?(Individual)
+      # Link the provided account record
+      profile.account_id = context.account.id
+    end
     profile.save!
   rescue LarCity::Errors::InvalidInvoiceDocument => e
     context.fail!(message: e.message)

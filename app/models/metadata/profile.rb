@@ -5,7 +5,9 @@ module Metadata
     include DocumentRecord
     include Mongoid::Attributes::Dynamic
 
+    # References the individual account record that this profile is linked to
     field :account_id, type: String
+
     field :user_id, type: String
 
     # Identity providers
