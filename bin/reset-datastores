@@ -1,0 +1,2 @@
+#!/usr/bin/env zsh
+bundle exec thor lx-cli:db:reset "$@"
