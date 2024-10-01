@@ -1,45 +1,43 @@
 # frozen_string_literal: true
 
-# From :invoice_account set as a parameter on Context.call with:
-# - :email
-# - :display_name
-# - :given_name
-# - :family_name
-# - :type
 class ImportAccountWorkflow
   include Interactor
+  include InteractorInvoiceProcessing
+
   def call
-    account = nil
+    account, invoice = nil
     invoice_account = context.invoice_account
     invoice = invoice_account.invoice
-    raise LarCity::Errors::InvalidInvoiceDocument, I18n.t('models.invoice.errors.record_missing') \
-      if invoice.record.blank?
+    require_invoice_record_presence!
 
     context.accounts = lookup(invoice_account.serializable_hash)
+    if context.accounts.any?
+      context.fail!(message: I18n.t('workflows.import_account.errors.already_exists'))
+      return
+    end
 
-    if context.accounts.none?
-      email, display_name, _given_name, _family_name, type =
-        invoice_account.serializable_hash.values_at 'email', 'display_name', 'given_name', 'family_name', 'type'
-      display_name = email if display_name.blank?
+    email, display_name, _given_name, _family_name, type =
+      invoice_account.serializable_hash.values_at 'email', 'display_name', 'given_name', 'family_name', 'type'
+    display_name = email if display_name.blank?
 
-      # Create an account for the business
-      account = Account.create(display_name:, type:)
-      if account.persisted?
-        account.add_role(:customer, invoice.record) if account.is_a?(Business)
-        if email.present?
-          account.add_role(:contact, invoice.record)
-          account.profile.update(email:) if account.is_a?(Business)
-        end
-      else
-        context.errors = account.errors.full_messages
-        context.fail!(message: I18n.t('workflows.invoice_account.errors.generic'))
+    # Create an account for the business
+    account = Account.create(display_name:, type:)
+    if account.persisted?
+      account.add_role(:customer, invoice.record) if account.is_a?(Business)
+      if email.present?
+        account.add_role(:contact, invoice.record)
+        # Store the email address against the business account
+        # (to help with data reconciliation later on)
+        account.profile.update(email:) if account.is_a?(Business)
       end
     else
-      context.fail!(message: I18n.t('workflows.invoice_account.errors.already_exists'))
+      context.errors = account.errors.full_messages
+      context.fail!(message: I18n.t('workflows.import_account.errors.generic'))
     end
   rescue LarCity::Errors::InvalidInvoiceDocument => e
     context.fail!(message: e.message)
   ensure
+    context.invoice = invoice
     context.account = account
   end
 

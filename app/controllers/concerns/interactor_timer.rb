@@ -4,6 +4,8 @@ module InteractorTimer
   extend ActiveSupport::Concern
 
   included do
+    raise "#{name} requires Interactor" unless include?(Interactor)
+
     around do |interactor|
       context.start_time = Time.zone.now
       interactor.call

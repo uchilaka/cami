@@ -25,7 +25,7 @@ RSpec.describe ImportAccountWorkflow do
     it 'fails with the expected error message' do
       result = subject
       expect(result.success?).to be(false)
-      expect(result.message).to eq(I18n.t('models.invoice.errors.record_missing'))
+      expect(result.errors).to include('Record reference for invoice is missing')
     end
   end
 
