@@ -6,7 +6,7 @@ console.debug('JavaScript from accounts.ts is loaded.')
  * Custom events
  */
 export function emitLoadAccountEvent(accountId: string, source?: Element) {
-  console.debug(`Will fire load event for account: ${accountId}`)
+  console.debug(`Will fire load event for account: ${accountId}`, { source })
   const event = new CustomEvent<{ accountId: string }>(nsEventName('account:load'), {
     detail: {
       accountId,

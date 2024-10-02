@@ -1,25 +1,37 @@
-import React, { ComponentProps, useEffect, useState } from 'react'
+import React, { ComponentProps, useEffect, useState, useCallback } from 'react'
 import { nsEventName } from '@/utils'
 
 const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ...props }) => {
-  const [accountLoader, setAccountLoader] = useState<AbortController>()
+  const [accountLoader] = useState<AbortController>(() => new AbortController())
   const modalId = id || 'account--summary-modal'
 
-  const listenForAccountLoadEvents = () => {
-    // const initialConfig = { capture: true, passive: true, signal: accountLoader?.signal }
+  /**
+   * React query functions: https://tanstack.com/query/latest/docs/framework/react/guides/query-functions
+   * - variables: https://tanstack.com/query/latest/docs/framework/react/guides/query-functions#query-function-variables   * React query options: https://tanstack.com/query/latest/docs/framework/react/guides/query-options
+   * Using react query with fetch: https://tanstack.com/query/latest/docs/framework/react/guides/query-functions#usage-with-fetch-and-other-clients-that-do-not-throw-by-default
+   */
+  const listenForAccountLoadEvents = useCallback(() => {
     document.addEventListener(
       nsEventName('account:load'),
       (ev) => {
         console.debug('Received account load event', { ev })
       },
-      { signal: accountLoader?.signal },
+      /**
+       * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options
+       */
+      { capture: true, passive: true, signal: accountLoader.signal },
     )
-  }
+  }, [accountLoader])
 
-  // useEffect(() => {
-  //   listenForAccountLoadEvents()
-  //   return () => accountLoader.abort()
-  // })
+  useEffect(() => {
+    listenForAccountLoadEvents()
+    return () => {
+      if (accountLoader) {
+        console.debug('Aborting account loader listener...')
+        accountLoader.abort()
+      }
+    }
+  })
 
   return (
     <div
