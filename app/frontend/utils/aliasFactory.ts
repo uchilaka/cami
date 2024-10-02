@@ -21,6 +21,10 @@ interface ModuleAlias {
 
 type SupportedTsPathPattern = Record<string, string[]>
 
+/**
+ * IMPORTANT: DO NOT EXPORT THIS IN THE index.ts FILE! These are helper functions
+ *   for Vite configuration - not for the application code.
+ */
 export const aliasFactory = () => {
   const pathsToProcess = omit(compilerOptions.paths as SupportedTsPathPattern, ['@/*']) as SupportedTsPathPattern
   return Object.entries(pathsToProcess).map<AliasSet>(([find, [replacement]]) => {
