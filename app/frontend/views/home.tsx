@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Root from '@/components/Root'
 import AboutUs from '@/routes/AboutUs'
 import LangingPage from '@/routes/LandingPage'
+import SetupWizard from '@/routes/SetupWizard'
 
 const router = createBrowserRouter([
   {
@@ -11,6 +12,7 @@ const router = createBrowserRouter([
     element: <Root />,
     children: [
       { path: 'app/about', element: <AboutUs /> },
+      { path: 'app/services/setup', element: <SetupWizard /> },
       { path: '', element: <LangingPage /> },
     ],
   },

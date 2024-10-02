@@ -10,6 +10,9 @@ export default function LandingPage() {
       <div>
         <a href="/app/about">About Us</a>
       </div>
+      <div>
+        <a href="/app/services/setup">Setup Wizard</a>
+      </div>
     </>
   )
 }
