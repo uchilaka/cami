@@ -59,7 +59,12 @@
       "@/pages*": [
         "app/frontend/pages/*"
       ],
-      "@/routes*": [
+      /**
+       * TODO: Pay attention to this tweak in the pattern matching
+       *   (i.e. @/routes/* instead of @/routes* like elsewhere) - observe
+       *   when auto-importing if it works
+       */
+      "@/routes/*": [
         "app/frontend/routes/*"
       ],
       "@views*": [
