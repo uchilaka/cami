@@ -2,8 +2,8 @@ import React from 'react'
 
 /**
  * TODO: Call to action: "New service setup" with a wrench and screwdriver icon.
- * TODO: Figure out how to leverage Tailwind for the styling of this component -
- *   which is different from almost everywhere else having it server-side rendered.
+ * TODO: Figure out how to leverage Tailwind for the styling of React components -
+ *   different from almost everywhere else having it server-side rendered.
  * @constructor
  */
 export default function InvoiceSummaryModal() {
