@@ -1,6 +1,7 @@
 import 'flowbite'
 import 'trix'
 import '@rails/actiontext'
+import '@hotwired/turbo-rails'
 
 import './main.scss'
 
@@ -18,6 +19,13 @@ function mountIfContainerIsLoaded(containerId, Component) {
   }
 }
 
+/**
+ * We'll only enable Turbo drive features discretely, depending on the page.
+ * https://github.com/hotwired/turbo-rails?tab=readme-ov-file#navigate-with-turbo-drive
+ */
+Turbo.session.drive = false
+
+// TODO: Use turbo event instead
 window.addEventListener('DOMContentLoaded', () => {
   console.debug('DOM fully loaded and parsed')
   mountIfContainerIsLoaded('home', Home)
@@ -25,6 +33,7 @@ window.addEventListener('DOMContentLoaded', () => {
   mountIfContainerIsLoaded('account-summary-modal-container', AccountSummaryModal)
 })
 
+// TODO: Use turbo event instead
 window.addEventListener('load', () => {
   console.debug('Page is fully loaded')
 })
