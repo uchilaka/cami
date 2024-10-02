@@ -18,11 +18,14 @@
     - [7. Start up the app](#7-start-up-the-app)
   - [Database management](#database-management)
     - [Setting up the document store in the test environment](#setting-up-the-document-store-in-the-test-environment)
+    - [Resetting the databases](#resetting-the-databases)
+    - [Managing the document store](#managing-the-document-store)
   - [How to run the test suite](#how-to-run-the-test-suite)
   - [Services (job queues, cache servers, search engines, etc.)](#services-job-queues-cache-servers-search-engines-etc)
   - [Deployment instructions](#deployment-instructions)
   - [Development](#development)
     - [Managing application secrets](#managing-application-secrets)
+    - [Testing emails](#testing-emails)
     - [Using NGROK](#using-ngrok)
     - [Generating a `Monogid` Model](#generating-a-monogid-model)
     - [Print key file](#print-key-file)
@@ -168,20 +171,20 @@ bin/dev
 
 ## Database management
 
-Review the list of available rake tasks for managing the `MongoDB` database:
+Review the list of available tasks for managing the `MongoDB` document store:
 
 ```shell
-bundle exec rake -T | grep mongoid
+bundle exec rails -T | grep mongoid
 
 # Sample output
-rake db:mongoid:create_collections             # Create collections for Mongoid models
-rake db:mongoid:create_collections:force       # Drop and create collections for Mongoid models
-rake db:mongoid:create_indexes                 # Create indexes specified in Mongoid models
-rake db:mongoid:drop                           # Drop the database of the default Mongoid client
-rake db:mongoid:purge                          # Drop all non-system collections
-rake db:mongoid:remove_indexes                 # Remove indexes specified in Mongoid models
-rake db:mongoid:remove_undefined_indexes       # Remove indexes that exist in the database but are not specified in Mongoid models
-rake db:mongoid:shard_collections              # Shard collections with shard keys specified in Mongoid models
+rails db:mongoid:create_collections             # Create collections for Mongoid models
+rails db:mongoid:create_collections:force       # Drop and create collections for Mongoid models
+rails db:mongoid:create_indexes                 # Create indexes specified in Mongoid models
+rails db:mongoid:drop                           # Drop the database of the default Mongoid client
+rails db:mongoid:purge                          # Drop all non-system collections
+rails db:mongoid:remove_indexes                 # Remove indexes specified in Mongoid models
+rails db:mongoid:remove_undefined_indexes       # Remove indexes that exist in the database but are not specified in Mongoid models
+rails db:mongoid:shard_collections              # Shard collections with shard keys specified in Mongoid models
 ```
 
 ### Setting up the document store in the test environment
@@ -248,6 +251,23 @@ db.createUser({
 db.grantRolesToUser("db_admin", ["dbOwner"])
 ```
 
+### Resetting the databases
+
+```shell
+# To reset the active record database
+bundle exec rails db:reset db:seed
+# To reset the app store database
+bundle exec rails db:mongoid:purge
+```
+
+### Managing the document store
+
+A few helpful commands for managing the document store.
+
+```shell
+bundle exec rails mongoid --help
+```
+
 ## How to run the test suite
 
 > TODO: Add test suite instructions
@@ -283,7 +303,7 @@ and your command line, run the following code in your console:
 EDITOR=nano bin/rails credentials:edit --environment ${RAILS_ENV:-development}
 ```
 
-### Testing emails 
+### Testing emails
 
 > To enable email testing, set `SEND_EMAILS_ENABLED=yes` in your `.env.local` file.
 

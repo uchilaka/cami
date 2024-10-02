@@ -46,6 +46,7 @@ module AccountManager
     # config.eager_load_paths << Rails.root.join("extras")
     config.eager_load_paths << "#{root}/lib"
 
+    config.autoload_paths << "#{root}/lib/workflows"
     config.autoload_paths << "#{root}/lib/commands"
     config.autoload_paths << "#{root}/config/vcr"
 
@@ -56,6 +57,9 @@ module AccountManager
 
     # Return nil when a document record is not found
     Mongoid.raise_not_found_error = false
+
+    # Documentation on bigdecimal fields: https://www.mongodb.com/docs/mongoid/8.1/reference/fields/#bigdecimal-fields
+    Mongoid.map_big_decimal_to_decimal128 = true
 
     # Don't generate system test files.
     config.generators.system_tests = nil

@@ -63,7 +63,7 @@ RSpec.describe Business, type: :model do
 
     it 'reports an error' do
       expect { subject.valid? }.to \
-        change { subject.errors[:email] }.to include('is not a valid email address')
+        change { subject.errors[:email] }.to include("#{email} is not a valid email address")
     end
   end
 

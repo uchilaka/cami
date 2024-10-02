@@ -70,6 +70,37 @@ module LarCityCLI
       end
     end
 
+    desc 'reset', 'Reset the data stores for the project'
+    option :mongodb,
+           type: :boolean,
+           desc: 'Reset the MongoDB data store',
+           default: true
+    option :postgres,
+           type: :boolean,
+           desc: 'Reset the PostgreSQL data store',
+           default: true
+    def reset
+      if mongodb?
+        say 'Resetting the MongoDB data store...', Thor::Shell::Color::YELLOW
+        reset_mongodb_cmd = 'bundle exec rails db:mongoid:purge'
+        if dry_run?
+          say "\n(dry-run) #{reset_mongodb_cmd}", Thor::Shell::Color::MAGENTA
+        else
+          system reset_mongodb_cmd, out: $stdout, err: :out
+        end
+      end
+
+      return unless postgres?
+
+      say 'Resetting the PostgreSQL data store...', Thor::Shell::Color::YELLOW
+      reset_postgres_cmd = 'bundle exec rails db:reset db:seed'
+      if dry_run?
+        say "\n(dry-run) #{reset_postgres_cmd}", Thor::Shell::Color::MAGENTA
+      else
+        system reset_postgres_cmd, out: $stdout, err: :out
+      end
+    end
+
     private
 
     def database_name

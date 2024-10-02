@@ -3,6 +3,8 @@
 class InvoiceAccount
   include DocumentRecord
 
+  embedded_in :invoice, inverse_of: :accounts
+
   field :display_name, type: String
   field :given_name, type: String
   field :family_name, type: String

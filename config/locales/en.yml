@@ -62,16 +62,31 @@ en:
       invoices: "Invoices"
       sign_out: "Sign Out"
       registration: "Settings"
-
   models:
     account:
       errors:
         user_limit_exceeded: "cannot have more than one user"
     invoice:
       errors:
-        invalid_payment_vendor: "is not a valid payment vendor"
+        record_missing: "%{label} is missing"
+        invalid_payment_vendor: "%{value} is not a valid payment vendor"
+    invoice_account:
+      errors:
+        invalid: "is not a valid invoice account"
+        exists: "already exists"
+  workflows:
+    import_account:
+      errors:
+        generic: "An error occurred while creating the invoice account"
+        already_exists: "A matching invoice account already exists"
+    import_user_profile:
+      errors:
+        generic: "An error occurred while updating the user profile"
+        email_required: "Email address is required to create a user profile"
+        name_required: "A given/first or family/last name is required to create a user profile"
+        already_exists: "A matching user profile already exists"
   validators:
     errors:
-      invalid_email: "is not a valid email address"
+      invalid_email: "%{value} is not a valid email address"
       invalid_password: "is not a valid password"
-      invalid_username: "is not a valid username"
+      invalid_username: "%{value} is not a valid username"

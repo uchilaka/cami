@@ -46,7 +46,7 @@ RSpec.describe InvoiceDocumentSerializer, skip_in_ci: true do
     end
 
     it '#payments' do
-      expect(subject[:payments]).to eq(paid_amount: { currency_code: 'USD', value: '394.00' })
+      expect(subject[:payments]).to eq([{ currency_code: 'USD', value: '394.00' }])
     end
 
     it '#invoiced_at' do

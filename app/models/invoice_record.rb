@@ -19,4 +19,10 @@ class InvoiceRecord < ApplicationRecord
   def document
     Invoice.find(document_id)
   end
+
+  before_destroy :try_unlink_document
+
+  def try_unlink_document
+    document&.update(record_id: nil)
+  end
 end
