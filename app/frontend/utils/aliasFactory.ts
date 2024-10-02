@@ -31,6 +31,11 @@ export const aliasFactory = () => {
     const findWithoutAsterisk = find.replace(/\*$/, '')
     const replacementEndsWithSlash = replacement.endsWith('/')
     const replacementWithoutAsterisk = path.resolve(__dirname, `../../../${replacement.replace(/\*$/, '')}`)
+    /**
+     * TODO: It doesn't seem migrating over to this variant (e.g. @component instead of @/component)
+     *   is working. Investigate why and fix it - or more likely simplify this code a bit by skipping
+     *   the generation of the alternative find.
+     */
     const altFind = findWithoutAsterisk.replace(/^@\//, '@')
     return { aliases: [findWithoutAsterisk, altFind], replacement: `${replacementWithoutAsterisk}${replacementEndsWithSlash ? '/' : ''}` }
   })

@@ -1,3 +1,7 @@
+/**
+ * TODO: Use a more appropriate format for this file that unlocks
+ *   inference of the MongoDB JavaScript context.
+ */
 use doc_store_development;
 
 db.createUser({

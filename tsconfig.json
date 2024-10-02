@@ -32,45 +32,27 @@
       "@/*": [
         "app/frontend/*"
       ],
-      "@components*": [
-        "app/frontend/components/*"
-      ],
-      // @TODO deprecate this
       "@/components*": [
         "app/frontend/components/*"
       ],
-      "@features*": [
-        "app/frontend/features/*"
-      ],
-      // @TODO deprecate this
       "@/features*": [
         "app/frontend/features/*"
       ],
       "@/hooks*": [
         "app/frontend/hooks/*"
       ],
-      "@lib*": [
-        "app/frontend/lib/*"
-      ],
-      // @TODO deprecate this
       "@/lib*": [
         "app/frontend/lib/*"
       ],
       "@/pages*": [
         "app/frontend/pages/*"
       ],
-      /**
-       * TODO: Pay attention to this tweak in the pattern matching
-       *   (i.e. @/routes/* instead of @/routes* like elsewhere) - observe
-       *   when auto-importing if it works
-       */
-      "@/routes/*": [
+      "@/routes*": [
         "app/frontend/routes/*"
       ],
       "@views*": [
         "app/frontend/views/*"
       ],
-      // @TODO deprecate this
       "@/views*": [
         "app/frontend/views/*"
       ]

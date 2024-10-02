@@ -23,11 +23,6 @@ export function emitLoadAccountEvent(accountId: string, source?: Element) {
  */
 document.addEventListener('turbo:load', () => {
   console.debug('Turbo has loaded accounts.ts')
-  // const accountSummaryModal = document.getElementById('account--summary-modal')
-  // if (accountSummaryModal) {
-  //   console.debug('Account summary modal is present')
-  // }
-
   /**
    * Turbo events reference: https://turbo.hotwired.dev/reference/events
    */

@@ -1,5 +1,20 @@
 import React, { ComponentProps, useEffect, useState, useCallback } from 'react'
 import { nsEventName, LoadAccountEventDetail } from '@/utils'
+import withAllTheProviders from '@/components/withAllTheProviders'
+
+// import { useQuery } from '@tanstack/react-query'
+
+// const accountSummaryQuery = (accountId: string) =>
+//   useQuery({
+//     queryKey: ['accountSummary', accountId],
+//     queryFn: async () => {
+//       const response = await fetch('/api/account-summary')
+//       if (!response.ok) {
+//         throw new Error('Network response was not ok')
+//       }
+//       return response.json()
+//     },
+//   })
 
 const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ...props }) => {
   const [accountLoader] = useState<AbortController>(() => new AbortController())
@@ -90,4 +105,4 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
   )
 }
 
-export default AccountSummaryModal
+export default withAllTheProviders(AccountSummaryModal)
