@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import path from 'path'
 import FullReload from 'vite-plugin-full-reload'
 import RubyPlugin from 'vite-plugin-ruby'
@@ -31,14 +31,18 @@ import { viteAliasConfigFromFactory } from './app/frontend/utils/aliasFactory'
 //   [],
 // )
 
-export default defineConfig({
-  // Recommended plugins: https://vite-ruby.netlify.app/guide/plugins.html
-  plugins: [ViteReact(), RubyPlugin(), FullReload(['config/routes.rb', 'app/views/**/*'], { delay: 250 })],
-  define: {
-    __dirname: JSON.stringify(path.resolve('./')),
-  },
-  resolve: {
-    alias: viteAliasConfigFromFactory(),
-  },
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '')
+  return {
+    // Recommended plugins: https://vite-ruby.netlify.app/guide/plugins.html
+    plugins: [ViteReact(), RubyPlugin(), FullReload(['config/routes.rb', 'app/views/**/*'], { delay: 250 })],
+    define: {
+      __dirname: JSON.stringify(path.resolve('./')),
+      'process.env': env,
+    },
+    resolve: {
+      alias: viteAliasConfigFromFactory(),
+    },
+  }
 })
 /* eslint-enable no-undef */

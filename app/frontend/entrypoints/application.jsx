@@ -1,7 +1,7 @@
+import '@hotwired/turbo-rails'
+import '@rails/actiontext'
 import 'flowbite'
 import 'trix'
-import '@rails/actiontext'
-import '@hotwired/turbo-rails'
 
 import './main.scss'
 

@@ -1,7 +1,18 @@
+import { nsEventName } from '@/utils'
+
 console.debug('JavaScript from accounts.ts is loaded.')
 
-export function fireLoadAccountEvent(accountId) {
+/**
+ * Custom events
+ */
+export function emitLoadAccountEvent(accountId: string, source?: Element) {
   console.debug(`Will fire load event for account: ${accountId}`)
+  const event = new CustomEvent<{ accountId: string }>(nsEventName('account:load'), {
+    detail: {
+      accountId,
+    },
+  })
+  ;(source ?? document).dispatchEvent(event)
 }
 
 /**
@@ -28,6 +39,7 @@ document.addEventListener('turbo:load', () => {
     el.addEventListener('click', ({ target }) => {
       const { resourceId: accountId } = target.dataset
       console.debug('View account summary was clicked', { accountId, target })
+      emitLoadAccountEvent(accountId, el)
     })
   })
 })

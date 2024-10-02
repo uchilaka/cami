@@ -1,7 +1,25 @@
-import React, { ComponentProps } from 'react'
+import React, { ComponentProps, useEffect, useState } from 'react'
+import { nsEventName } from '@/utils'
 
 const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ...props }) => {
+  const [accountLoader] = useState<AbortController>(() => new AbortController())
   const modalId = id || 'account--summary-modal'
+
+  const listenForAccountLoadEvents = () => {
+    // const initialConfig = { capture: true, passive: true, signal: accountLoader.signal }
+    document.addEventListener(
+      nsEventName('account:load'),
+      (ev) => {
+        console.debug('Received account load event', { ev })
+      },
+      { signal: accountLoader.signal },
+    )
+  }
+
+  useEffect(() => {
+    listenForAccountLoadEvents()
+    return () => accountLoader.abort()
+  })
 
   return (
     <div
