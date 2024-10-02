@@ -1,4 +1,8 @@
 <!-- TODO: For inspiration, see https://flowbite.com/docs/components/tables/#table-with-users -->
+<% content_for :typescript_includes do %>
+  <%= vite_typescript_tag 'accounts' %>
+<% end %>
+
 <div class="w-full">
   <% if notice.present? %>
     <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
@@ -80,8 +84,9 @@
             <div class="flex justify-end">
               <%= button_tag "View",
                              class: default_item_action_btn_classes,
-                             "data-modal-target": modal_dom_id(account),
-                             "data-modal-toggle": modal_dom_id(account) %>
+                             "data-resource-id": account.id.to_s,
+                             "data-modal-target": modal_dom_id(account, content_type: 'summary'),
+                             "data-modal-toggle": modal_dom_id(account, content_type: 'summary') %>
               <%= link_to "Edit", edit_account_path(account), class: default_item_action_btn_classes %>
             </div>
           </td>
@@ -90,8 +95,12 @@
       </tbody>
     </table>
 
-    <% @accounts.each do |account| %>
-      <%= render partial: 'accounts/modal', locals: { account: account } %>
+    <% if account_summary_modal_enabled? %>
+      <div id="account-summary-modal-container"></div>
+    <% else %>
+      <% @accounts.each do |account| %>
+        <%= render partial: 'accounts/modal', locals: { account: account } %>
+      <% end %>
     <% end %>
   </div>
 </div>

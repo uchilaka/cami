@@ -51,6 +51,6 @@ rules:
         'caughtErrorsIgnorePattern': '^_',
         'destructuredArrayIgnorePattern': '^_',
         'varsIgnorePattern': '^_',
-        'ignoreRestSiblings': false,
+        'ignoreRestSiblings': true,
       },
     ]

@@ -511,6 +511,9 @@ GEM
     thread_safe (0.3.6)
     tilt (2.3.0)
     timeout (0.4.1)
+    turbo-rails (2.0.10)
+      actionpack (>= 6.0.0)
+      railties (>= 6.0.0)
     typhoeus (1.4.1)
       ethon (>= 0.9.0)
     tzinfo (2.0.6)
@@ -615,6 +618,7 @@ DEPENDENCIES
   sprockets-rails
   strong_migrations
   tailwindcss-rails (~> 2.3)
+  turbo-rails (~> 2.0)
   tzinfo-data
   vcr (~> 6.2)
   vite_rails (~> 3.0, >= 3.0.17)
