@@ -1,4 +1,4 @@
-import { nsEventName } from '@/utils'
+import { nsEventName, LoadAccountEventDetail } from '@/utils'
 
 console.debug('JavaScript from accounts.ts is loaded.')
 
@@ -7,7 +7,7 @@ console.debug('JavaScript from accounts.ts is loaded.')
  */
 export function emitLoadAccountEvent(accountId: string, source?: Element) {
   console.debug(`Will fire load event for account: ${accountId}`, { source })
-  const event = new CustomEvent<{ accountId: string }>(nsEventName('account:load'), {
+  const event = new CustomEvent<LoadAccountEventDetail>(nsEventName('account:load'), {
     detail: {
       accountId,
     },

@@ -1,5 +1,5 @@
 import React, { ComponentProps, useEffect, useState, useCallback } from 'react'
-import { nsEventName } from '@/utils'
+import { nsEventName, LoadAccountEventDetail } from '@/utils'
 
 const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ...props }) => {
   const [accountLoader] = useState<AbortController>(() => new AbortController())
@@ -14,7 +14,8 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
     document.addEventListener(
       nsEventName('account:load'),
       (ev) => {
-        console.debug('Received account load event', { ev })
+        const { accountId } = (ev as CustomEvent<LoadAccountEventDetail>).detail
+        console.debug(`Received request to load account: ${accountId}`)
       },
       /**
        * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options
