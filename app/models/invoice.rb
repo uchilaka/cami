@@ -12,10 +12,6 @@ class Invoice
 
   accepts_nested_attributes_for :accounts, :amount, :due_amount, :payments
 
-  validates :payment_vendor,
-            presence: true,
-            inclusion: { in: %w[paypal] }
-
   after_initialize :initialize_amounts
 
   after_create :initialize_record!
