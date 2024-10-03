@@ -79,6 +79,8 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
                   </p>
                 )}
 
+                {/* @TODO: render a list of invoices ordered by invoiced_at: :desc, status: :asc */}
+
                 {/* Modal Actions */}
                 <hr className="my-4" />
                 <div className="flex justify-end items-center space-x-4">
