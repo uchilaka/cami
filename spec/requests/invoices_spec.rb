@@ -65,7 +65,7 @@ RSpec.describe '/invoices', type: :request do
           end
 
           it 'returns the invoice number' do
-            expect(data['invoiceNumber']).to eq(invoice.invoice_number)
+            expect(data['number']).to eq(invoice.invoice_number)
           end
 
           it 'returns the invoiced at' do
