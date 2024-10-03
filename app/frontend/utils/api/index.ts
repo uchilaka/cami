@@ -17,6 +17,8 @@ export const getAccount = async (accountId: string, payload?: Record<string, str
    * here, and still would even if we used gaxios.
    *
    * Stepping over it for now, but I think this is a good candidate for a refactor.
+   *
+   * TIP: we can also use /accounts/:id.json to send the format=json query param
    */
   const result = await fetch(`/accounts/${accountId}?${params.toString()}`)
   const data = await result.json()
