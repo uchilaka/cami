@@ -6,6 +6,7 @@ json.url account_url(account, format: :json)
 if account.is_a?(Business)
   json.extract! account, :tax_id, :email
   json.email account.email if account.profile.present?
+  json.isVendor account.has_role?(:vendor)
 end
 
 if account.is_a?(Individual)

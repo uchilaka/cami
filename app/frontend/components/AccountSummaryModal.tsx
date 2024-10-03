@@ -4,7 +4,7 @@ import { nsEventName, LoadAccountEventDetail } from '@/utils'
 import withAllTheProviders from '@/components/withAllTheProviders'
 import { getAccount } from '@/utils/api'
 import { BusinessAccount, IndividualAccount } from '@/utils/api/types'
-import LoadingAnimation from './LoadingAnimation'
+import LoadingAnimation, { InlineLoadingAnimation } from './LoadingAnimation'
 
 interface AccountContextProps {
   loading?: boolean
@@ -47,7 +47,6 @@ const AccountProvider = ({ children }: { children: React.ReactNode }) => {
     const result = await query.refetch()
     console.debug({ result })
     if (result.isSuccess) setLoading(false)
-    // if (result.isSuccess) setAccount(result.data)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, accountId])
 
@@ -114,8 +113,6 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountLoader])
 
-  console.debug({ account })
-
   return (
     <div
       {...props}
@@ -129,7 +126,9 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
           {/* Modal Header */}
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">This is the AccountSummaryModal component</h3>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+              {loading ? <InlineLoadingAnimation /> : account?.displayName}
+            </h3>
             <button
               type="button"
               className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
