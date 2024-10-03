@@ -107,6 +107,10 @@ class Account < ApplicationRecord
     nil
   end
 
+  def invoices
+    InvoiceRecord.with_role(:customer, self).map(&:document)
+  end
+
   private
 
   def format_tax_id

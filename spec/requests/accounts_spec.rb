@@ -89,6 +89,19 @@ RSpec.describe '/accounts', type: :request do
             it 'returns the tax ID' do
               expect(data['taxId']).to eq(account.tax_id)
             end
+
+            context 'with invoices' do
+              let(:email) { Faker::Internet.email }
+              let(:account) do
+                Fabricate :account_with_invoices,
+                          type: 'Business',
+                          invoices: [Fabricate(:invoice), Fabricate(:invoice)]
+              end
+
+              it 'returns the invoices' do
+                expect(data['invoices']).not_to be_nil
+              end
+            end
           end
         end
       end

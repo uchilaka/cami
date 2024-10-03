@@ -34,3 +34,15 @@ Fabricator(:account) do
     end
   end
 end
+
+Fabricator(:account_with_invoices, from: :account) do
+  transient :invoices
+
+  after_build do |account, transients|
+    if transients[:invoices].is_a?(Array)
+      transients[:invoices].each do |invoice|
+        account.add_role(:customer, invoice.record)
+      end
+    end
+  end
+end
