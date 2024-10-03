@@ -1,5 +1,8 @@
 import React from 'react'
 
+/**
+ * Tailwind CSS Skeleton https://flowbite.com/docs/components/skeleton/
+ */
 export default function LoadingAnimation() {
   return (
     <div role="status" className="max-w-sm animate-pulse">
