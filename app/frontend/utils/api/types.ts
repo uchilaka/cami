@@ -3,9 +3,11 @@ type AccountStatus = 'demo' | 'guest' | 'active' | 'payment_due' | 'overdue' | '
 export interface Account {
   id: string
   displayName: string
-  email?: string
   slug: string
   status: AccountStatus
+  isVendor: boolean
+  email?: string
+  readme?: string
 }
 
 export interface IndividualAccount extends Account {

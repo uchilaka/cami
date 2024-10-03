@@ -2,6 +2,7 @@ import '@hotwired/turbo-rails'
 import '@rails/actiontext'
 import 'flowbite'
 import 'trix'
+import '@/utils/tent'
 
 import './main.scss'
 
@@ -9,7 +10,7 @@ import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import Home from '@views/Home'
 import Dashboard from '@views/Dashboard'
-import AccountSummaryModal from '@components/AccountSummaryModal'
+import AccountSummaryModal from '@/features/AccountSummary/AccountSummaryModal'
 
 function mountIfContainerIsLoaded(containerId, Component) {
   const domContainer = document.querySelector(`#${containerId}`)
@@ -18,12 +19,6 @@ function mountIfContainerIsLoaded(containerId, Component) {
     component.render(createElement(Component))
   }
 }
-
-/**
- * We'll only enable Turbo drive features discretely, depending on the page.
- * https://github.com/hotwired/turbo-rails?tab=readme-ov-file#navigate-with-turbo-drive
- */
-Turbo.session.drive = false
 
 // TODO: Use turbo event instead
 window.addEventListener('DOMContentLoaded', () => {
