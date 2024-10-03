@@ -3,8 +3,10 @@
 module ApplicationHelper
   include StyleHelper
 
-  def modal_dom_id(resource)
-    "#{resource.model_name.singular}-modal_#{resource.id}"
+  def modal_dom_id(resource, content_type: nil)
+    return "#{resource.model_name.singular}--#{content_type}--modal|#{resource.id}|" if content_type.present?
+
+    "#{resource.model_name.singular}-modal|#{resource.id}|"
   end
 
   def record_dom_id(resource, prefix: '')

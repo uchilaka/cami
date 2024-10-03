@@ -95,6 +95,12 @@
               <%= link_to "View", invoice.payment_vendor_url,
                           target: "_blank",
                           class: default_item_action_btn_classes %>
+              <%= link_to(
+                    invoice.payment_vendor_url,
+                    { target: "_blank", class: default_item_action_btn_classes }
+                  ) do %>
+                <i class="fa-brands fa-paypal"></i> Manage
+              <% end %>
             </div>
           </td>
         </tr>

@@ -7,6 +7,18 @@ module AccountsHelper
     Flipper.enabled?(:feat__account_filtering)
   end
 
+  def account_summary_modal_enabled?
+    Flipper.enabled?(:feat__shared_account_summary_modal)
+  end
+
+  def modal_dom_id(resource, content_type: nil)
+    if account_summary_modal_enabled? && content_type == 'summary'
+      return "#{resource.class.table_name.singularize}--#{content_type}-modal"
+    end
+
+    super
+  end
+
   def segment_filter_options
     [
       ['Past due', 'past_due'],

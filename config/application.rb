@@ -66,5 +66,9 @@ module AccountManager
 
     # Setup default business entity
     config.default_entity = VirtualOfficeManager.default_entity
+
+    # Doc for jbuilder: https://github.com/rails/jbuilder
+    Jbuilder.key_format camelize: :lower
+    Jbuilder.deep_format_keys true
   end
 end

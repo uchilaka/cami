@@ -35,10 +35,113 @@ RSpec.describe '/accounts', type: :request do
   end
 
   describe 'GET /show' do
-    it 'renders a successful response' do
-      account = Account.create! valid_attributes
-      get account_url(account)
-      expect(response).to be_successful
+    context 'with a signed in user' do
+      let(:user) { Fabricate :user }
+
+      before do
+        sign_in user
+      end
+
+      context 'accessing an authorized account' do
+        let(:account) { Fabricate :account }
+
+        context 'with the default format' do
+          it 'renders a successful response' do
+            account = Account.create! valid_attributes
+            get account_url(account)
+            expect(response).to be_successful
+          end
+        end
+
+        context 'with format = json' do
+          let(:data) { JSON.parse(response.body) }
+          let(:user) { Fabricate :user }
+          let(:account) { Fabricate :account }
+
+          before do
+            sign_in user
+            get account_url(account, format: :json)
+          end
+
+          it 'renders a successful response' do
+            expect(response).to be_successful
+          end
+
+          it 'returns the display name' do
+            expect(data['displayName']).to eq(account.display_name)
+          end
+
+          it 'returns the account ID' do
+            expect(data['id']).to eq(account.id.to_s)
+          end
+
+          it 'returns the account slug' do
+            expect(data['slug']).to eq(account.slug)
+          end
+
+          it 'returns the account status' do
+            expect(data['status']).to eq(account.status)
+          end
+
+          context 'when the account is a business' do
+            let(:account) { Fabricate :business }
+
+            it 'returns the tax ID' do
+              expect(data['taxId']).to eq(account.tax_id)
+            end
+
+            context 'with invoices' do
+              let(:email) { Faker::Internet.email }
+              let(:account) do
+                Fabricate :account_with_invoices,
+                          type: 'Business',
+                          invoices: [Fabricate(:invoice), Fabricate(:invoice)]
+              end
+
+              it 'returns the invoices' do
+                expect(data['invoices']).not_to be_nil
+              end
+            end
+          end
+        end
+      end
+
+      # TODO: implement access controls for models informed by (Pundit + Rolify) policies
+      context 'accessing an unauthorized account' do
+        let(:account) { Fabricate :account }
+
+        context 'with the default format' do
+          pending 'redirects to the sign in page'
+        end
+
+        context 'with format = json' do
+          pending 'returns a 401 status code'
+        end
+      end
+    end
+
+    context 'without a signed in user' do
+      context 'accessing an account' do
+        let(:account) { Fabricate :account }
+
+        context 'with the default format' do
+          pending 'redirects to the sign in page'
+        end
+
+        context 'with format = json' do
+          before { get account_url(account, format: :json) }
+
+          it 'returns a 401 status code' do
+            get account_url(account, format: :json)
+            expect(response).to have_http_status(:unauthorized)
+          end
+
+          it 'returns an error message' do
+            get account_url(account, format: :json)
+            expect(response.body).to include('You need to sign in or sign up before continuing.')
+          end
+        end
+      end
     end
   end
 

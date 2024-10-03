@@ -89,6 +89,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_14_130337) do
     t.index ["user_id"], name: "index_allowlisted_jwts_on_user_id"
   end
 
+  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
+  end
+
   create_table "invoice_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "document_id", null: false
     t.datetime "created_at", null: false
