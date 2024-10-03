@@ -1,19 +1,6 @@
-import { nsEventName, LoadAccountEventDetail } from '@/utils'
+import { emitLoadAccountEvent } from '@/utils/events'
 
 console.debug('JavaScript from accounts.ts is loaded.')
-
-/**
- * Custom events
- */
-export function emitLoadAccountEvent(accountId: string, source?: Element) {
-  console.debug(`Will fire load event for account: ${accountId}`, { source })
-  const event = new CustomEvent<LoadAccountEventDetail>(nsEventName('account:load'), {
-    detail: {
-      accountId,
-    },
-  })
-  ;(source ?? document).dispatchEvent(event)
-}
 
 /**
  * Turbo handbook: https://turbo.hotwired.dev/handbook/introduction

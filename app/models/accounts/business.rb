@@ -50,9 +50,4 @@ class Business < Account
   end
 
   alias initialize_metadata initialize_profile
-
-  # TODO: Implement AASM for account status
-  def status
-    nil
-  end
 end

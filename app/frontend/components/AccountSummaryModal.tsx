@@ -1,53 +1,120 @@
-import React, { ComponentProps, useEffect, useState, useCallback } from 'react'
+import React, { ComponentProps, useCallback, useEffect, useState, ComponentType } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { nsEventName, LoadAccountEventDetail } from '@/utils'
 import withAllTheProviders from '@/components/withAllTheProviders'
+import { getAccount } from '@/utils/api'
+import { BusinessAccount, IndividualAccount } from '@/utils/api/types'
 
-// import { useQuery } from '@tanstack/react-query'
+interface AccountContextProps {
+  account?: IndividualAccount | BusinessAccount | null
+  reload: () => Promise<void>
+  listenForAccountLoadEvents: () => AbortController
+}
 
-// const accountSummaryQuery = (accountId: string) =>
-//   useQuery({
-//     queryKey: ['accountSummary', accountId],
-//     queryFn: async () => {
-//       const response = await fetch('/api/account-summary')
-//       if (!response.ok) {
-//         throw new Error('Network response was not ok')
-//       }
-//       return response.json()
-//     },
-//   })
+const useAccountSummaryQuery = (accountId?: string) => {
+  const [account, setAccount] = useState<IndividualAccount | BusinessAccount | null>(null)
 
-const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ...props }) => {
-  const [accountLoader] = useState<AbortController>(() => new AbortController())
-  const modalId = id || 'account--summary-modal'
+  const query = useQuery({
+    queryKey: ['accountSummary', accountId],
+    queryFn: async () => {
+      if (!accountId) return null
 
-  /**
-   * React query functions: https://tanstack.com/query/latest/docs/framework/react/guides/query-functions
-   * - variables: https://tanstack.com/query/latest/docs/framework/react/guides/query-functions#query-function-variables   * React query options: https://tanstack.com/query/latest/docs/framework/react/guides/query-options
-   * Using react query with fetch: https://tanstack.com/query/latest/docs/framework/react/guides/query-functions#usage-with-fetch-and-other-clients-that-do-not-throw-by-default
-   */
-  const listenForAccountLoadEvents = useCallback(() => {
+      const data = await getAccount(accountId)
+      // TODO: test to make sure we're not firing this more times than we need to
+      setAccount(data)
+      // TODO: Add error handling for account summary query
+      return data
+    },
+  })
+
+  return { query, account }
+}
+
+const AccountContext = React.createContext<AccountContextProps>(null!)
+
+const useAccountContext = () => React.useContext(AccountContext)
+
+const AccountProvider = ({ children }: { children: React.ReactNode }) => {
+  const [accountId, setAccountId] = useState<string>()
+  const [loading, setLoading] = useState<boolean>()
+  const { account, query } = useAccountSummaryQuery(accountId)
+
+  const reload = useCallback(async () => {
+    const result = await query.refetch()
+    console.debug({ result })
+    if (result.isSuccess) setLoading(false)
+    // if (result.isSuccess) setAccount(result.data)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, accountId])
+
+  const listenForAccountLoadEvents = () => {
+    const accountLoader = new AbortController()
     document.addEventListener(
       nsEventName('account:load'),
       (ev) => {
-        const { accountId } = (ev as CustomEvent<LoadAccountEventDetail>).detail
-        console.debug(`Received request to load account: ${accountId}`)
+        const { detail } = ev as CustomEvent<LoadAccountEventDetail>
+        console.debug(`Received request to load account: ${detail.accountId}`)
+        setAccountId(detail.accountId)
       },
       /**
        * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options
        */
       { capture: true, passive: true, signal: accountLoader.signal },
     )
-  }, [accountLoader])
+    return accountLoader
+  }
 
   useEffect(() => {
-    listenForAccountLoadEvents()
+    if (loading === undefined) setLoading(true)
+    if (accountId) {
+      console.debug(`Loading account: ${accountId}`)
+      reload()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountId])
+
+  console.debug({ account })
+
+  return <AccountContext.Provider value={{ account, reload, listenForAccountLoadEvents }}>{children}</AccountContext.Provider>
+}
+
+const withAccountProvider = <P extends {}>(WrappedComponent: ComponentType<P>) => {
+  const displayName = WrappedComponent.displayName ?? WrappedComponent.name ?? 'Component'
+  const ComponentWithAccountProvider = (props: any) => {
+    /**
+     * React query functions: https://tanstack.com/query/latest/docs/framework/react/guides/query-functions
+     * - variables: https://tanstack.com/query/latest/docs/framework/react/guides/query-functions#query-function-variables   * React query options: https://tanstack.com/query/latest/docs/framework/react/guides/query-options
+     * Using react query with fetch: https://tanstack.com/query/latest/docs/framework/react/guides/query-functions#usage-with-fetch-and-other-clients-that-do-not-throw-by-default
+     */
+    return (
+      <AccountProvider>
+        <WrappedComponent {...props} />
+      </AccountProvider>
+    )
+  }
+  ComponentWithAccountProvider.displayName = `withAccountProvider(${displayName})`
+  return ComponentWithAccountProvider
+}
+
+const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ...props }) => {
+  const [accountLoader, setAccountLoader] = useState<AbortController>()
+
+  const modalId = id || 'account--summary-modal'
+
+  const { account, listenForAccountLoadEvents } = useAccountContext()
+
+  useEffect(() => {
+    if (!accountLoader) setAccountLoader(listenForAccountLoadEvents())
     return () => {
       if (accountLoader) {
         console.debug('Aborting account loader listener...')
         accountLoader.abort()
       }
     }
-  })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountLoader])
+
+  console.debug({ account })
 
   return (
     <div
@@ -105,4 +172,4 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
   )
 }
 
-export default withAllTheProviders(AccountSummaryModal)
+export default withAllTheProviders(withAccountProvider(AccountSummaryModal))

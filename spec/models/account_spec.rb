@@ -48,7 +48,7 @@ RSpec.describe Account, type: :model do
     end
   end
 
-  describe '#state' do
+  describe '#status' do
     it { transition_from(%i[demo guest]).to(:active).on_event(:activate) }
     it { transition_from(%i[active payment_due overdue]).to(:paid).on_event(:enroll) }
     it { transition_from(%i[active payment_due overdue]).to(:suspended).on_event(:suspend) }

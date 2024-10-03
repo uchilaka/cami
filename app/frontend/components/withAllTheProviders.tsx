@@ -1,12 +1,15 @@
 import React, { ComponentType } from 'react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 export const withAllTheProviders = <P extends {}>(WrappedComponent: ComponentType<P>) => {
   const displayName = WrappedComponent.displayName ?? WrappedComponent.name ?? 'Component'
   const ComponentWithAllTheProviders = (props: any) => {
+    const queryClient = new QueryClient()
+
     return (
-      <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
         <WrappedComponent {...props} />
-      </React.StrictMode>
+      </QueryClientProvider>
     )
   }
   ComponentWithAllTheProviders.displayName = `withAllTheProviders(${displayName})`

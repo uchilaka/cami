@@ -78,6 +78,18 @@ RSpec.describe '/accounts', type: :request do
           it 'returns the account slug' do
             expect(data['slug']).to eq(account.slug)
           end
+
+          it 'returns the account status' do
+            expect(data['status']).to eq(account.status)
+          end
+
+          context 'when the account is a business' do
+            let(:account) { Fabricate :business }
+
+            it 'returns the tax ID' do
+              expect(data['taxId']).to eq(account.tax_id)
+            end
+          end
         end
       end
 
