@@ -19,6 +19,29 @@ module AccountsHelper
     super
   end
 
+  def model_actions(resource)
+    {
+      edit: {
+        dom_id: SecureRandom.uuid,
+        http_method: 'GET',
+        label: 'Edit',
+        url: account_url(resource, format: :json)
+      },
+      delete: {
+        dom_id: SecureRandom.uuid,
+        http_method: 'DELETE',
+        label: 'Delete',
+        url: account_url(resource, format: :json)
+      },
+      show: {
+        dom_id: SecureRandom.uuid,
+        http_method: 'GET',
+        label: 'Back to accounts',
+        url: accounts_url
+      }
+    }
+  end
+
   def segment_filter_options
     [
       ['Past due', 'past_due'],

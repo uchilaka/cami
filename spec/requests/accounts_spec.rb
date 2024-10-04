@@ -57,6 +57,25 @@ RSpec.describe '/accounts', type: :request do
           let(:data) { JSON.parse(response.body) }
           let(:user) { Fabricate :user }
           let(:account) { Fabricate :account }
+          let(:expected_actions) do
+            {
+              'edit' => {
+                'httpMethod' => 'GET',
+                'label' => 'Edit',
+                'url' => account_url(account, format: :json)
+              },
+              'delete' => {
+                'httpMethod' => 'DELETE',
+                'label' => 'Delete',
+                'url' => account_url(account, format: :json)
+              },
+              'show' => {
+                'httpMethod' => 'GET',
+                'label' => 'Back to accounts',
+                'url' => accounts_url
+              }
+            }
+          end
 
           before do
             sign_in user
@@ -73,6 +92,28 @@ RSpec.describe '/accounts', type: :request do
 
           it 'returns the account ID' do
             expect(data['id']).to eq(account.id.to_s)
+          end
+
+          it 'returns a hash of actions' do
+            expect(data.dig('actions', 'edit')).to \
+              match(hash_including(expected_actions['edit']))
+
+            expect(data.dig('actions', 'delete')).to \
+              match(hash_including(expected_actions['delete']))
+
+            expect(data.dig('actions', 'show')).to \
+              match(hash_including(expected_actions['show']))
+          end
+
+          it 'returns the actions as a list' do
+            expect(data.dig('actionsList', 0)).to \
+              match(hash_including(expected_actions['edit']))
+
+            expect(data.dig('actionsList', 1)).to \
+              match(hash_including(expected_actions['delete']))
+
+            expect(data.dig('actionsList', 2)).to \
+              match(hash_including(expected_actions['show']))
           end
 
           it 'returns the account slug' do

@@ -22,6 +22,6 @@ export const getAccount = async (accountId: string, payload?: Record<string, str
    */
   const result = await fetch(`/accounts/${accountId}?${params.toString()}`)
   const data = await result.json()
-  if (!isValidAccount(data)) throw new InvalidAccountError('Invalid account data')
+  if (!isValidAccount(data)) throw new InvalidAccountError('Invalid account data', data)
   return data
 }
