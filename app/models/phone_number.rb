@@ -25,6 +25,7 @@ class PhoneNumber
     return if value.blank?
 
     phone = Phonelib.parse(value)
+    self.value_full_e164 = phone.full_e164
     intersect_types = self.class.supported_number_types.intersect? phone.types
     self.number_type = intersect_types.first if intersect_types.any?
   end
