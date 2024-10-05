@@ -3,22 +3,14 @@
 json.extract! account, :id, :display_name, :slug, :type, :readme, :status, :created_at, :updated_at
 json.url account_url(account, format: :json)
 
-json.actions do
-  json.child! do
-    json.label 'Edit'
-    json.http_method 'GET'
-    json.url account_url(account, format: :json)
-  end
-  json.child! do
-    json.label 'Delete'
-    json.http_method 'DELETE'
-    json.url account_url(account, format: :json)
-  end
-  json.child! do
-    json.label 'Back to accounts'
-    json.http_method 'GET'
-    json.url accounts_url
-  end
+json.actions model_actions(account)
+
+json.actions_list model_actions(account).entries do |action_key, action|
+  json.key action_key
+  json.dom_id action[:dom_id]
+  json.http_method action[:http_method]
+  json.label action[:label]
+  json.url action[:url]
 end
 
 if account.is_a?(Business)

@@ -1,8 +1,9 @@
 import React, { ComponentProps, useEffect, useState } from 'react'
 import withAllTheProviders from '@/components/withAllTheProviders'
-import LoadingAnimation, { InlineLoadingAnimation } from '../../components/LoadingAnimation'
-import { useAccountContext, withAccountProvider } from '@/features/AccountSummary/AccountProvider'
+import LoadingAnimation from '../../components/LoadingAnimation'
+import { useAccountContext, withAccountProvider } from '@/features/AccountManager/AccountProvider'
 import AccountTitleLabel from './AccountTitleLabel'
+import { AccountForm } from './AcountForm'
 
 const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ...props }) => {
   const [accountLoader, setAccountLoader] = useState<AbortController>()
@@ -82,18 +83,18 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
                 {/* @TODO: render a list of invoices ordered by invoiced_at: :desc, status: :asc */}
 
                 {/* Modal Actions */}
-                <hr className="my-4" />
-                <div className="flex justify-end items-center space-x-4">
-                  <button className="btn px-5 py-2.5 text-base font-medium text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm text-center me-2 mb-2">
-                    Edit this account
-                  </button>
-                  <button className="btn px-5 py-2.5 hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm text-center me-2 mb-2 dark:hover:text-white text-red-700 border-red-700 hover:bg-red-800 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
-                    Delete this account
-                  </button>
-                  <button className="btn px-5 py-2.5 hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm text-center me-2 mb-2 dark:hover:text-white text-gray-800 border-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:focus:ring-gray-800">
-                    Back to accounts
-                  </button>
-                </div>
+                {/* <hr className="my-4" /> */}
+
+                <AccountForm compact>
+                  <div className="flex justify-end items-center space-x-4">
+                    <button className="btn px-5 py-2.5 hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm text-center me-2 mb-2 dark:hover:text-white text-red-700 border-red-700 hover:bg-red-800 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
+                      Delete this account
+                    </button>
+                    <button className="btn px-5 py-2.5 text-base font-medium text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm text-center me-2 mb-2">
+                      Save
+                    </button>
+                  </div>
+                </AccountForm>
               </>
             )}
           </div>

@@ -1,7 +1,7 @@
 import React, { ComponentType, createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { BusinessAccount, IndividualAccount } from '@/utils/api/types'
 import { LoadAccountEventDetail, nsEventName } from '@/utils'
-import useAccountSummaryQuery from './hooks/useAccountSummaryQuery'
+import useAccountSummaryQuery from './hooks/useAccountQuery'
 
 interface AccountContextProps {
   loading?: boolean
