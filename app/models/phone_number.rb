@@ -4,6 +4,7 @@
 class PhoneNumber
   include DocumentRecord
 
+  field :value, type: String
   field :value_full_e164, type: String
   field :number_purpose, type: String
   field :number_type, type: String
