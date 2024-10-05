@@ -62,7 +62,7 @@ RSpec.describe '/accounts', type: :request do
               'edit' => {
                 'httpMethod' => 'GET',
                 'label' => 'Edit',
-                'url' => account_url(account, format: :json)
+                'url' => account_url(account)
               },
               'delete' => {
                 'httpMethod' => 'DELETE',

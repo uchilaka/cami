@@ -25,7 +25,7 @@ module AccountsHelper
         dom_id: SecureRandom.uuid,
         http_method: 'GET',
         label: 'Edit',
-        url: account_url(resource, format: :json)
+        url: account_url(resource)
       },
       delete: {
         dom_id: SecureRandom.uuid,

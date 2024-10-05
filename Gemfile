@@ -50,10 +50,10 @@ gem 'jbuilder'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
-# Use Tailwind CSS for stylesheets https://tailwindcss.com/docs/guides/ruby-on-rails
+# Use Tailwind CSS for stylesheets [https://tailwindcss.com/docs/guides/ruby-on-rails]
 gem 'tailwindcss-rails', '~> 2.3'
 
-# Integrate Dart Sass with the asset pipeline in Rails https://github.com/rails/dartsass-rails
+# Integrate Dart Sass with the asset pipeline in Rails [https://github.com/rails/dartsass-rails]
 gem 'dartsass-rails'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
@@ -65,6 +65,9 @@ gem 'globalid', '~> 1.2'
 gem 'awesome_print'
 
 gem 'sib-api-v3-sdk'
+
+# Gem validates phone numbers with Google libphonenumber database [https://github.com/daddyz/phonelib]
+gem 'phonelib'
 
 # Roles library with resource scoping
 gem 'rolify', '~> 6.0'
