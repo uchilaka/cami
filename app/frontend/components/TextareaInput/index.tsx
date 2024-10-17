@@ -4,13 +4,14 @@ import clsx from 'clsx'
 import { FormInputProps } from '@/types'
 import FormInputHint from '../FormInputHint'
 
-const TextareaInput: FC<HTMLAttributes<HTMLTextAreaElement> & FormInputProps> = ({
+const TextareaInput: FC<HTMLAttributes<HTMLTextAreaElement> & FormInputProps & { readOnly?: boolean }> = ({
   id,
   label,
   placeholder,
   hint,
   error,
   success,
+  readOnly,
   ...otherProps
 }) => {
   const labelStyle = clsx(
@@ -32,7 +33,7 @@ const TextareaInput: FC<HTMLAttributes<HTMLTextAreaElement> & FormInputProps> = 
   )
   return (
     <div className="relative z-0 w-full mb-5 group">
-      <Field as="textarea" {...otherProps} id={id} rows={4} className={inputStyle} placeholder={placeholder ?? ' '} />
+      <Field as="textarea" {...otherProps} id={id} rows={4} className={inputStyle} placeholder={placeholder ?? ' '} readOnly={readOnly} />
       {label && (
         <label htmlFor={id} className={labelStyle}>
           {label}

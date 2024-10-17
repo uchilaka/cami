@@ -32,6 +32,7 @@ export const FloatingFormInput: FC<InputHTMLAttributes<HTMLInputElement> & FormI
   error,
   success,
   hint,
+  readOnly,
   ...otherProps
 }) => {
   const inputStyle = clsx(

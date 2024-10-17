@@ -16,6 +16,7 @@ type AccountFormData = {
 }
 
 interface AccountFormProps {
+  readOnly?: boolean
   compact?: boolean
   children?: ReactNode
 }
@@ -40,7 +41,7 @@ const validationSchema = Yup.object({
 /**
  * Form with floating labels: https://flowbite.com/docs/components/forms/#floating-labels
  */
-export const AccountForm: FC<AccountFormProps> = ({ compact, children }) => {
+export const AccountForm: FC<AccountFormProps> = ({ compact, children, readOnly }) => {
   const formClassName = clsx('mx-auto', { 'max-w-lg': !compact })
 
   const { loading, account } = useAccountContext()
@@ -72,7 +73,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children }) => {
               onReset={handleReset}
               onChange={handleChange}
               onBlur={handleBlur}
-              readOnly={loading}
+              readOnly={loading || readOnly}
               required
             />
 
@@ -88,7 +89,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children }) => {
                 onReset={handleReset}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                readOnly={loading}
+                readOnly={loading || readOnly}
               />
               <FormInput
                 id="phone"
@@ -100,7 +101,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children }) => {
                 onReset={handleReset}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                readOnly={loading}
+                readOnly={loading || readOnly}
               />
             </div>
 
@@ -114,6 +115,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children }) => {
                 onReset={handleReset}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                readOnly={loading || readOnly}
               />
               <FormInput
                 type="text"
@@ -124,6 +126,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children }) => {
                 onReset={handleReset}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                readOnly={loading || readOnly}
               />
             </div>
 
@@ -136,6 +139,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children }) => {
               onReset={handleReset}
               onChange={handleChange}
               onBlur={handleBlur}
+              readOnly={loading || readOnly}
             />
 
             {children}
