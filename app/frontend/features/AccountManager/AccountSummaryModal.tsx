@@ -12,7 +12,7 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
 
   const modalId = id ?? 'account--summary-modal'
 
-  const { loading, account, listenForAccountLoadEvents } = useAccountContext()
+  const { loading, listenForAccountLoadEvents } = useAccountContext()
 
   useEffect(() => {
     if (!accountLoader) setAccountLoader(listenForAccountLoadEvents())
@@ -69,22 +69,16 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
                 {/* Modal Actions */}
                 {/* <hr className="my-4" /> */}
 
-                <AccountForm compact>
+                <AccountForm compact readOnly={readOnly}>
                   <div className="flex justify-end items-center space-x-2">
                     {!readOnly && (
                       <>
+                        <Button onClick={() => setReadOnly(true)}>Cancel</Button>
                         <Button variant="caution">Delete this account</Button>
                         <Button variant="primary">Save</Button>
                       </>
                     )}
-                    {readOnly && (
-                      <Button
-                        onClick={() => setReadOnly(false)}
-                        className="btn px-5 py-2.5 text-base font-medium text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm text-center me-2 mb-2"
-                      >
-                        Edit
-                      </Button>
-                    )}
+                    {readOnly && <Button onClick={() => setReadOnly(false)}>Edit</Button>}
                   </div>
                 </AccountForm>
               </>

@@ -22,6 +22,7 @@ const TextareaInput: FC<TextareaInputProps> = ({ id, label, placeholder, hint, e
         !error && !success,
       'text-green-900 border-green-300 dark:text-green dark:border-green-600 dark:focus:border-green-500 focus:border-green-600': success,
       'text-red-600 border-red-300 dark:text-red dark:border-red-600 dark:focus:border-red-300 focus:border-red-600': error,
+      'disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none': !!readOnly,
     },
   )
   return (

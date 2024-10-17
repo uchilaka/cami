@@ -20,6 +20,14 @@ export const Default: Story = {
     variant: 'primary',
     onClick: fn(),
   },
+  argTypes: {
+    variant: {
+      options: ['primary', 'secondary', 'caution'],
+      control: {
+        type: 'radio',
+      },
+    },
+  },
 }
 
 export const Sizes: Story = {
@@ -43,17 +51,5 @@ export const Sizes: Story = {
         </SimpleButton>
       </>
     )
-  },
-  // args: {
-  //   variant: 'primary',
-  //   onClick: fn(),
-  // },
-  argTypes: {
-    variant: {
-      options: ['primary', 'secondary', 'caution'],
-      control: {
-        type: 'radio',
-      },
-    },
   },
 }
