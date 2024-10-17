@@ -1,11 +1,8 @@
 import React, { FC, HTMLAttributes, InputHTMLAttributes, ReactNode } from 'react'
 import clsx from 'clsx'
 import { Field } from 'formik'
-
-interface ValidationFeedbackProps {
-  success?: boolean
-  error?: boolean
-}
+import { FormInputProps } from '@/types'
+import FormInputHint from './FormInputHint'
 
 export const InputRow: FC<HTMLAttributes<HTMLDivElement> & { children: ReactNode }> = ({ children, ...otherProps }) => {
   return (
@@ -15,9 +12,9 @@ export const InputRow: FC<HTMLAttributes<HTMLDivElement> & { children: ReactNode
   )
 }
 
-export const InputGrid: FC<HTMLAttributes<HTMLDivElement> & { children: ReactNode }> = ({ children, ...otherProps }) => {
+export const InputGrid: FC<HTMLAttributes<HTMLDivElement> & { children: ReactNode; cols?: Number }> = ({ children, ...otherProps }) => {
   const childrenAsList = React.Children.toArray(children)
-  const cols = childrenAsList.length
+  const cols = otherProps.cols ?? childrenAsList.length
   const containerStyle = clsx(`grid md:grid-cols-${cols} md:gap-6`)
 
   return (
@@ -27,30 +24,7 @@ export const InputGrid: FC<HTMLAttributes<HTMLDivElement> & { children: ReactNod
   )
 }
 
-const FloatingFormInputHint: FC<HTMLAttributes<HTMLParagraphElement> & ValidationFeedbackProps & { children: ReactNode }> = ({
-  children,
-  error,
-  success,
-  ...otherProps
-}) => {
-  const labelStyle = clsx('mt-2 text-sm', {
-    'text-gray-500 dark:text-gray-400': !error && !success,
-    'text-green-600 dark:text-green-400': success,
-    'text-red-600 dark:text-red-400': error,
-  })
-  return (
-    <p {...otherProps} className={labelStyle}>
-      {children}
-    </p>
-  )
-}
-
-interface FloatingFormInputProps extends ValidationFeedbackProps {
-  label: string
-  hint?: ReactNode
-}
-
-export const FloatingFormInput: FC<InputHTMLAttributes<HTMLInputElement> & FloatingFormInputProps> = ({
+export const FloatingFormInput: FC<InputHTMLAttributes<HTMLInputElement> & FormInputProps> = ({
   label,
   type,
   id,
@@ -86,9 +60,9 @@ export const FloatingFormInput: FC<InputHTMLAttributes<HTMLInputElement> & Float
         </label>
       )}
       {hint && (
-        <FloatingFormInputHint error={error} success={success}>
+        <FormInputHint error={error} success={success}>
           {hint}
-        </FloatingFormInputHint>
+        </FormInputHint>
       )}
     </div>
   )

@@ -8,6 +8,7 @@ const config: StorybookConfig = {
     '@storybook/addon-essentials',
     '@chromatic-com/storybook',
     '@storybook/addon-interactions',
+    '@bbbtech/storybook-formik/register',
   ],
   core: {
     builder: '@storybook/builder-vite',
