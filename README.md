@@ -24,6 +24,7 @@
   - [Services (job queues, cache servers, search engines, etc.)](#services-job-queues-cache-servers-search-engines-etc)
   - [Deployment instructions](#deployment-instructions)
   - [Development](#development)
+    - [Communities](#communities)
     - [Managing application secrets](#managing-application-secrets)
     - [Testing emails](#testing-emails)
     - [Using NGROK](#using-ngrok)
@@ -281,6 +282,10 @@ bundle exec rails mongoid --help
 > TODO: Add deployment instructions
 
 ## Development
+
+### Communities
+
+- Storybook Discord: <https://discord.gg/storybook/>
 
 ### Managing application secrets
 
