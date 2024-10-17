@@ -1,6 +1,7 @@
-import { Meta, StoryObj } from '@storybook/react'
-import withFormik from '@bbbtech/storybook-formik'
+import React from 'react'
+import { Decorator, Meta, StoryObj, StrictArgs } from '@storybook/react'
 import TextareaInput from '.'
+import { Formik, FormikConfig } from 'formik'
 
 const meta = {
   title: 'Components/TextareaInput',
@@ -11,8 +12,17 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
+const withFormikDecorator: Decorator<StrictArgs> = (Story, { args, parameters }) => {
+  const { initialValues, onSubmit } = parameters.formik as FormikConfig<any>
+  return (
+    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+      <Story {...args} />
+    </Formik>
+  )
+}
+
 export const Default: Story = {
-  decorators: [withFormik],
+  decorators: [withFormikDecorator],
   args: {
     label: 'Description',
     id: 'description',
@@ -31,7 +41,7 @@ export const Default: Story = {
 }
 
 export const WithError: Story = {
-  decorators: [withFormik],
+  decorators: [withFormikDecorator],
   args: {
     label: 'Description',
     id: 'description',
