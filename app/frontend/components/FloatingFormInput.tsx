@@ -15,7 +15,7 @@ export const InputRow: FC<HTMLAttributes<HTMLDivElement> & { children: ReactNode
 export const InputGrid: FC<HTMLAttributes<HTMLDivElement> & { children: ReactNode; cols?: Number }> = ({ children, ...otherProps }) => {
   const childrenAsList = React.Children.toArray(children)
   const cols = otherProps.cols ?? childrenAsList.length
-  const containerStyle = clsx(`grid md:grid-cols-${cols} md:gap-6`)
+  const containerStyle = clsx('grid md:gap-6', `md:grid-cols-${cols}`)
 
   return (
     <div {...otherProps} className={containerStyle}>

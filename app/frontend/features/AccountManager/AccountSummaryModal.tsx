@@ -62,24 +62,6 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
               <LoadingAnimation />
             ) : (
               <>
-                <p className="my-5">
-                  <strong className="block font-medium mb-1">{account?.type} name:</strong>
-                  <span className="text-2xl text-gray-900 dark:text-white">{account?.displayName}</span>
-                </p>
-
-                <p className="my-5">
-                  <strong className="block font-medium mb-1">Email:</strong>
-                  <span className="text-2xl text-gray-900 dark:text-white">{account?.email}</span>
-                </p>
-
-                {account?.readme && (
-                  <p className="my-5">
-                    <strong className="block font-medium mb-1">Readme:</strong>
-                    {/* @TODO Figure out how to handle trix-content via react frontend */}
-                    <span className="trix-content text-2xl">{account?.readme}</span>
-                  </p>
-                )}
-
                 {/* @TODO: render a list of invoices ordered by invoiced_at: :desc, status: :asc */}
 
                 {/* Modal Actions */}

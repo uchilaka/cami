@@ -5,12 +5,14 @@ import * as Yup from 'yup'
 import FormInput, { InputGrid } from '@/components/FloatingFormInput'
 import { useAccountContext } from './AccountProvider'
 import { isBusinessAccount } from '@/utils/api/types'
+import TextareaInput from '@/components/TextareaInput'
 
 type AccountFormData = {
   displayName: string
   email: string
   type: 'Individual' | 'Business'
   phone?: string
+  readme?: string
 }
 
 interface AccountFormProps {
@@ -46,6 +48,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children }) => {
   const initialValues: AccountFormData = {
     displayName: account?.displayName ?? '',
     email: account?.email ?? '',
+    readme: account?.readme,
     phone: (isBusinessAccount(account) ? account?.phone : '') ?? '',
     type: account?.type ?? 'Business',
   }
@@ -63,6 +66,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children }) => {
               label={'Company (Ex. Google)'}
               autoComplete="off"
               name="displayName"
+              placeholder=" "
               error={!!errors.displayName}
               hint={errors.displayName}
               onReset={handleReset}
@@ -72,12 +76,13 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children }) => {
               required
             />
 
-            <InputGrid>
+            <div className="grid md:gap-6 md:grid-cols-2">
               <FormInput
                 id="email"
                 type="email"
                 label="Email address"
                 name="email"
+                placeholder=" "
                 error={!!errors.email}
                 hint={errors.email}
                 onReset={handleReset}
@@ -90,26 +95,49 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children }) => {
                 type="phone"
                 label="Phone number"
                 name="phone"
+                placeholder=" "
                 hint={errors.phone}
                 onReset={handleReset}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 readOnly={loading}
               />
-            </InputGrid>
+            </div>
 
-            <InputGrid>
+            <div className="grid md:gap-6 md:grid-cols-2">
               <FormInput
                 type="text"
                 id="givenName"
                 name="givenName"
                 label="First name"
+                placeholder=" "
                 onReset={handleReset}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              <FormInput type="text" id="familyName" name="familyName" label="Last name" placeholder=" " />
-            </InputGrid>
+              <FormInput
+                type="text"
+                id="familyName"
+                name="familyName"
+                label="Last name"
+                placeholder=" "
+                onReset={handleReset}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+            </div>
+
+            {/* @TODO Figure out how to handle trix-content via react frontend */}
+            <TextareaInput
+              id="readme"
+              name="readme"
+              label="Description"
+              placeholder=" "
+              onReset={handleReset}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+
             {children}
           </Form>
         )
