@@ -18,16 +18,17 @@ export interface IndividualAccount extends Account {
 export interface BusinessAccount extends Account {
   type: 'Business'
   taxId: string
+  phone: string
 }
 
-export const isValidAccount = (account: IndividualAccount | BusinessAccount | null): account is IndividualAccount | BusinessAccount => {
+export const isValidAccount = (account?: IndividualAccount | BusinessAccount | null): account is IndividualAccount | BusinessAccount => {
   return !!account && !!account.displayName && !!account.slug && !!account.type
 }
 
-export const isIndividualAccount = (account: IndividualAccount | BusinessAccount | null): account is IndividualAccount => {
+export const isIndividualAccount = (account?: IndividualAccount | BusinessAccount | null): account is IndividualAccount => {
   return isValidAccount(account) && account.type === 'Individual'
 }
 
-export const isBusinessAccount = (account: IndividualAccount | BusinessAccount | null): account is BusinessAccount => {
+export const isBusinessAccount = (account?: IndividualAccount | BusinessAccount | null): account is BusinessAccount => {
   return isValidAccount(account) && account.type === 'Business'
 }

@@ -7,6 +7,8 @@ module Metadata
     field :account_id, type: String
     field :email, type: String
 
+    embeds_one :phone, class_name: 'PhoneNumber'
+
     validates :account_id, presence: true, uniqueness: { case_sensitive: false }
 
     def business

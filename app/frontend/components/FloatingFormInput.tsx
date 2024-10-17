@@ -79,7 +79,7 @@ export const FloatingFormInput: FC<InputHTMLAttributes<{}> & FloatingFormInputPr
   )
   return (
     <div className="relative z-0 w-full mb-5 group">
-      <Field {...otherProps} id={id} type={type ?? 'text'} className={inputStyle} />
+      <Field {...otherProps} id={id} type={type ?? 'text'} className={inputStyle} placeholder={otherProps.placeholder ?? ' '} />
       {label && (
         <label htmlFor={id} className={labelStyle}>
           {label}

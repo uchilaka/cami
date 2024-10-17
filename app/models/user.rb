@@ -81,6 +81,8 @@ class User < ApplicationRecord
 
   has_and_belongs_to_many :accounts, join_table: 'accounts_users'
 
+  delegate :phone, to: :profile, allow_nil: true
+
   def profile
     @profile ||= Metadata::Profile.find_or_initialize_by(user_id: id)
   end

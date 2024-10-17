@@ -20,14 +20,16 @@ module Metadata
     field :image_url, type: String
     field :last_seen_at, type: Time, default: -> { Time.now }
 
-    index({ user_id: 1 }, { name: 'user_profile__user_id_index' })
-    index({ 'vendor_data.paypal.email': 1 }, { name: 'user_profile__paypal_email_index' })
+    embeds_one :phone, class_name: 'PhoneNumber'
 
     # TODO: Figure out how to restrict the number of profiles per user
     #   to a maximum of one, but allow for the creation of orphaned
     #   profiles that can be claimed by a user (perhaps allow_blank config?
     #   need to assert with specs)
     validates :user_id, allow_blank: true, uniqueness: { case_sensitive: false }
+
+    index({ user_id: 1 }, { name: 'user_profile__user_id_index' })
+    index({ 'vendor_data.paypal.email': 1 }, { name: 'user_profile__paypal_email_index' })
 
     def user
       @user ||= User.find_by(id: user_id)
