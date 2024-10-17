@@ -76,5 +76,6 @@
     "*.rb": [
       "./bin/lint-ruby"
     ]
-  }
+  },
+  "packageManager": "yarn@4.5.0"
 }
