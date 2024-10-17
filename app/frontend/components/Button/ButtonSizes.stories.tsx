@@ -5,7 +5,7 @@ import SimpleButton, { ButtonProps } from '.'
 
 const ButtonSizes: FC<ButtonProps> = ({ variant, ...otherProps }) => {
   return (
-    <>
+    <div className="space-x-2">
       <SimpleButton {...otherProps} id="x-small" variant={variant} size="xs">
         Extra Small
       </SimpleButton>
@@ -21,7 +21,7 @@ const ButtonSizes: FC<ButtonProps> = ({ variant, ...otherProps }) => {
       <SimpleButton {...otherProps} id="x-large" variant={variant} size="xl">
         Extra Large
       </SimpleButton>
-    </>
+    </div>
   )
 }
 

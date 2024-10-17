@@ -33,7 +33,7 @@ export const Default: Story = {
 export const Sizes: Story = {
   render: (args) => {
     return (
-      <>
+      <div className="space-x-2">
         <SimpleButton {...args} {...ButtonSizes.args} id="x-small" size="xs">
           Extra Small
         </SimpleButton>
@@ -49,7 +49,7 @@ export const Sizes: Story = {
         <SimpleButton {...args} {...ButtonSizes.args} id="x-large" size="xl">
           Extra Large
         </SimpleButton>
-      </>
+      </div>
     )
   },
 }
