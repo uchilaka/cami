@@ -1,7 +1,7 @@
 import type { Preview } from '@storybook/react'
 
-import 'tailwindcss'
-import 'flowbite'
+import 'tailwindcss/tailwind.css'
+import 'flowbite/dist/flowbite.css'
 
 const preview: Preview = {
   parameters: {
