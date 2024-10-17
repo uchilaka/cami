@@ -40,6 +40,26 @@ export const Default: Story = {
   },
 }
 
+export const ReadOnly = {
+  decorators: [withFormikDecorator],
+  args: {
+    label: 'Description',
+    id: 'description',
+    name: 'description',
+    readOnly: true,
+  },
+  parameters: {
+    formik: {
+      initialValues: {
+        description: 'This is a read-only field',
+      },
+      onSubmit: (values: any) => {
+        console.log(values)
+      },
+    },
+  },
+}
+
 export const WithError: Story = {
   decorators: [withFormikDecorator],
   args: {
