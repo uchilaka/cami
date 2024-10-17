@@ -475,6 +475,7 @@ info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this comm
 ## Future Work
 
 - [ ] Complete [integration of Storybook with Tailwind CSS](https://storybook.js.org/recipes/tailwindcss#3-add-a-theme-switcher-tool)
+- [ ] Implement `withFormikDecorator` to support writing stories that include Formik forms (and remove dependency on `@bbbtech/storybook-formik` library - see [this Storybook 8 incompatibility issue](https://github.com/storybookjs/storybook/issues/26031))
 - [ ] [Vite HMR](https://vite.dev/guide/features#hot-module-replacement) doesn't seem to be working
 - [ ] A JS Auth flow to emit and retain the JWT token for frontend access control features and initialize the rails session for everything else
 - [ ] Review Yahoo + Google [updated email sender requirements](https://help.brevo.com/hc/en-us/articles/14925263522578-Prepare-for-Gmail-and-Yahoo-s-new-requirements-for-email-senders) and make any needed changes to the Brevo configs
