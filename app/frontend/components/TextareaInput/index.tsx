@@ -7,12 +7,18 @@ import FormInputHint from '../FormInputHint'
 export type TextareaInputProps = HTMLAttributes<HTMLTextAreaElement> & FormInputProps & { readOnly?: boolean }
 
 const TextareaInput: FC<TextareaInputProps> = ({ id, label, placeholder, hint, error, success, readOnly, ...otherProps }) => {
+  const containerStyle = clsx('relative z-0 w-full mb-5 group', {
+    'bg-slate-50 text-slate-500 border-slate-200 shadow-none': !!readOnly,
+  })
   const labelStyle = clsx(
-    'peer-focus:font-medium absolute text-lg duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6',
+    'absolute text-lg transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0',
     {
+      'duration-300 peer-focus:font-medium peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:scale-75 peer-focus:-translate-y-6':
+        !readOnly,
       'text-gray-500 dark:text-gray-400 peer-focus:text-blue-600 peer-focus:dark:text-blue-500': !error && !success,
       'text-green-500 dark:text-green-400 peer-focus:text-green-600 peer-focus:dark:text-green-500': success,
       'text-red-500 dark:text-red-400 peer-focus:text-red-600 peer-focus:dark:text-red-500': error,
+      'disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none': !!readOnly,
     },
   )
   const inputStyle = clsx(
@@ -26,7 +32,7 @@ const TextareaInput: FC<TextareaInputProps> = ({ id, label, placeholder, hint, e
     },
   )
   return (
-    <div className="relative z-0 w-full mb-5 group">
+    <div className={containerStyle}>
       <Field as="textarea" {...otherProps} id={id} rows={4} className={inputStyle} placeholder={placeholder ?? ' '} readOnly={readOnly} />
       {label && (
         <label htmlFor={id} className={labelStyle}>
