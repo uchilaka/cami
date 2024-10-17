@@ -5,7 +5,7 @@ interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   hint?: ReactNode
 }
 
-const TextArea: React.FC<TextAreaProps> = ({ label, id, placeholder, ...otherProps }) => {
+const MarkdownEditor: React.FC<TextAreaProps> = ({ label, id, placeholder, ...otherProps }) => {
   return (
     <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
       <div className="flex items-center justify-between px-3 py-2 border-b dark:border-gray-600">
@@ -153,4 +153,4 @@ const TextArea: React.FC<TextAreaProps> = ({ label, id, placeholder, ...otherPro
   )
 }
 
-export default TextArea
+export default MarkdownEditor
