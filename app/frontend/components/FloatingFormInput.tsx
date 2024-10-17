@@ -50,7 +50,7 @@ interface FloatingFormInputProps extends ValidationFeedbackProps {
   hint?: ReactNode
 }
 
-export const FloatingFormInput: FC<InputHTMLAttributes<{}> & FloatingFormInputProps> = ({
+export const FloatingFormInput: FC<InputHTMLAttributes<HTMLInputElement> & FloatingFormInputProps> = ({
   label,
   type,
   id,
