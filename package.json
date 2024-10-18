@@ -2,7 +2,7 @@
   "name": "@larcity/account_manager",
   "license": "UNLICENSED",
   "engines": {
-    "yarn": ">= 1.22.21"
+    "yarn": ">= 4.5.0"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.18",
@@ -76,5 +76,6 @@
     "*.rb": [
       "./bin/lint-ruby"
     ]
-  }
+  },
+  "packageManager": "yarn@4.5.0"
 }

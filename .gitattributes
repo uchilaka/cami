@@ -11,3 +11,7 @@ vendor/* linguist-vendored
 
 # Encrypt sensitive files using git-crypt
 spec/fixtures/pii/** filter=git-crypt diff=git-crypt
+
+# Identify the Yarn releases and plugin bundles as binary
+/.yarn/releases/** binary
+/.yarn/plugins/** binary
