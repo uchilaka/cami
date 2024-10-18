@@ -22,5 +22,6 @@ echo "Running rubocop..."
 exec git diff --cached --name-only --relative --diff-filter=ACMR | xargs \
   bundle exec rubocop --force-exclusion \
                       --autocorrect-all --fail-level A \
+                      --ignore-unrecognized-cops \
                       --format simple \
                       --parallel --cache true
