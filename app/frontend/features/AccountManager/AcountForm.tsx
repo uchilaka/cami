@@ -4,7 +4,7 @@ import React, { FC, ReactNode } from 'react'
 import * as Yup from 'yup'
 import FormInput from '@/components/FloatingFormInput'
 import { useAccountContext } from './AccountProvider'
-import { isBusinessAccount } from '@/utils/api/types'
+import { isBusinessAccount, isIndividualAccount } from '@/utils/api/types'
 import TextareaInput from '@/components/TextareaInput'
 
 type AccountFormData = {
@@ -105,30 +105,32 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children, readOnly 
               />
             </div>
 
-            <div className="grid md:gap-6 md:grid-cols-2">
-              <FormInput
-                type="text"
-                id="givenName"
-                name="givenName"
-                label="First name"
-                placeholder=" "
-                onReset={handleReset}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                readOnly={loading || readOnly}
-              />
-              <FormInput
-                type="text"
-                id="familyName"
-                name="familyName"
-                label="Last name"
-                placeholder=" "
-                onReset={handleReset}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                readOnly={loading || readOnly}
-              />
-            </div>
+            {isIndividualAccount(account) && (
+              <div className="grid md:gap-6 md:grid-cols-2">
+                <FormInput
+                  type="text"
+                  id="givenName"
+                  name="givenName"
+                  label="First name"
+                  placeholder=" "
+                  onReset={handleReset}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  readOnly={loading || readOnly}
+                />
+                <FormInput
+                  type="text"
+                  id="familyName"
+                  name="familyName"
+                  label="Last name"
+                  placeholder=" "
+                  onReset={handleReset}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  readOnly={loading || readOnly}
+                />
+              </div>
+            )}
 
             {/* @TODO Figure out how to handle trix-content via react frontend */}
             <TextareaInput
