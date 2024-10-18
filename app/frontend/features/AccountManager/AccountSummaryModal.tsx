@@ -4,13 +4,15 @@ import LoadingAnimation from '../../components/LoadingAnimation'
 import { useAccountContext, withAccountProvider } from '@/features/AccountManager/AccountProvider'
 import AccountTitleLabel from './AccountTitleLabel'
 import { AccountForm } from './AcountForm'
+import Button from '@/components/Button'
 
 const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ...props }) => {
   const [accountLoader, setAccountLoader] = useState<AbortController>()
+  const [readOnly, setReadOnly] = useState(true)
 
   const modalId = id ?? 'account--summary-modal'
 
-  const { loading, account, listenForAccountLoadEvents } = useAccountContext()
+  const { loading, listenForAccountLoadEvents } = useAccountContext()
 
   useEffect(() => {
     if (!accountLoader) setAccountLoader(listenForAccountLoadEvents())
@@ -62,37 +64,21 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
               <LoadingAnimation />
             ) : (
               <>
-                <p className="my-5">
-                  <strong className="block font-medium mb-1">{account?.type} name:</strong>
-                  <span className="text-2xl text-gray-900 dark:text-white">{account?.displayName}</span>
-                </p>
-
-                <p className="my-5">
-                  <strong className="block font-medium mb-1">Email:</strong>
-                  <span className="text-2xl text-gray-900 dark:text-white">{account?.email}</span>
-                </p>
-
-                {account?.readme && (
-                  <p className="my-5">
-                    <strong className="block font-medium mb-1">Readme:</strong>
-                    {/* @TODO Figure out how to handle trix-content via react frontend */}
-                    <span className="trix-content text-2xl">{account?.readme}</span>
-                  </p>
-                )}
-
                 {/* @TODO: render a list of invoices ordered by invoiced_at: :desc, status: :asc */}
 
                 {/* Modal Actions */}
                 {/* <hr className="my-4" /> */}
 
-                <AccountForm compact>
-                  <div className="flex justify-end items-center space-x-4">
-                    <button className="btn px-5 py-2.5 hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm text-center me-2 mb-2 dark:hover:text-white text-red-700 border-red-700 hover:bg-red-800 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
-                      Delete this account
-                    </button>
-                    <button className="btn px-5 py-2.5 text-base font-medium text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm text-center me-2 mb-2">
-                      Save
-                    </button>
+                <AccountForm compact readOnly={readOnly}>
+                  <div className="flex justify-end items-center space-x-2">
+                    {!readOnly && (
+                      <>
+                        <Button onClick={() => setReadOnly(true)}>Cancel</Button>
+                        <Button variant="caution">Delete this account</Button>
+                        <Button variant="primary">Save</Button>
+                      </>
+                    )}
+                    {readOnly && <Button onClick={() => setReadOnly(false)}>Edit</Button>}
                   </div>
                 </AccountForm>
               </>
