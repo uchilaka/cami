@@ -1481,7 +1481,7 @@ __metadata:
     "@types/lodash.omit": "npm:^4.5.9"
     "@types/lodash.uniqby": "npm:^4.7.9"
     "@types/node": "npm:^20.12.7"
-    "@types/react": "npm:^18.2.79"
+    "@types/react": "npm:^18.3.11"
     "@types/react-dom": "npm:^18.2.25"
     "@typescript-eslint/eslint-plugin": "npm:^7.7.0"
     "@typescript-eslint/parser": "npm:^7.7.0"
@@ -2834,7 +2834,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^18.2.79":
+"@types/react@npm:*":
   version: 18.3.10
   resolution: "@types/react@npm:18.3.10"
   dependencies:
@@ -2844,7 +2844,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^16.8.0 || ^17.0.0 || ^18.0.0":
+"@types/react@npm:^16.8.0 || ^17.0.0 || ^18.0.0, @types/react@npm:^18.3.11":
   version: 18.3.11
   resolution: "@types/react@npm:18.3.11"
   dependencies:
