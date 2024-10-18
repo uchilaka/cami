@@ -84,18 +84,18 @@ class User < ApplicationRecord
   delegate :phone, to: :profile, allow_nil: true
 
   def profile
-    @profile ||= Metadata::Profile.find_or_initialize_by(user_id: id)
+    @profile ||= Metadata::Profile.find_by(user_id: id)
   end
 
   alias metadata profile
 
   def initialize_profile
-    if profile.present?
-      profile.user_id ||= id
-      profile.save if profile.changed? && profile.user&.persisted?
-    else
-      Metadata::Profile.create(user_id: id)
-    end
+    @profile ||= Metadata::Profile.find_or_initialize_by(user_id: id)
+    return @profile if @profile.persisted?
+
+    @profile.user_id ||= id
+    @profile.save if @profile.changed? && @profile.user&.persisted?
+    @profile
   end
 
   alias initialize_metadata initialize_profile
@@ -104,7 +104,7 @@ class User < ApplicationRecord
     add_role(:user) if roles.blank?
   end
 
-  after_create_commit :assign_default_role
+  after_create_commit :initialize_profile, :assign_default_role
 
   def matching_auth_provider
     return nil if profile.blank?
