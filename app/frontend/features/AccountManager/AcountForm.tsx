@@ -11,6 +11,8 @@ type AccountFormData = {
   displayName: string
   email: string
   type: 'Individual' | 'Business'
+  givenName?: string
+  familyName?: string
   phone?: string
   readme?: string
 }
@@ -53,6 +55,8 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children, readOnly 
     phone: (isBusinessAccount(account) ? account?.phone : '') ?? '',
     type: account?.type ?? 'Business',
   }
+
+  console.debug({ account, loading })
 
   return (
     <Formik validateOnBlur initialValues={initialValues} validationSchema={validationSchema} onSubmit={() => {}}>
