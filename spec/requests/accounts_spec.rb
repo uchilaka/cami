@@ -103,6 +103,23 @@ RSpec.describe '/accounts', type: :request do
               end
             end
           end
+
+          context 'when the account is an individual' do
+            let(:account) { Fabricate :individual }
+
+            it 'returns the email' do
+              expect(data['email']).to eq(account.email)
+            end
+
+            context 'with profiles' do
+              let(:account) { Fabricate :individual_with_profiles }
+
+              it 'returns the profiles' do
+                expect(data['profiles']).to be_an(Array)
+                expect(data['profiles'].count).to eq(account.profiles.count)
+              end
+            end
+          end
         end
       end
 
