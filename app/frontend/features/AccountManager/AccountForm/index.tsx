@@ -4,7 +4,7 @@ import React, { FC, useState } from 'react'
 import * as Yup from 'yup'
 import FormInput from '@/components/FloatingFormInput'
 import { useAccountContext } from '../AccountProvider'
-import { isBusinessAccount, isIndividualAccount } from '@/utils/api/types'
+import { isActionableAccount, isBusinessAccount, isIndividualAccount } from '@/utils/api/types'
 import TextareaInput from '@/components/TextareaInput'
 import Button from '@/components/Button'
 
@@ -64,13 +64,26 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
       validateOnBlur
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values, { setFieldValue, setFieldTouched, setFieldError, setSubmitting, validateForm, ...otherHelpers }) => {
+      onSubmit={async (values, { setSubmitting, validateForm }) => {
         setSubmitting(true)
-        console.debug({ values })
+        const validationErrors = await validateForm(values)
+        if (Object.keys(validationErrors).length > 0) {
+          // Errors were reported
+          console.debug({ values, errors: validationErrors })
+        } else {
+          console.debug({ values })
+          if (isActionableAccount(account)) {
+            // Submit the form
+            const { edit } = account.actions
+          } else {
+            // Set an error
+          }
+        }
+        setSubmitting(false)
       }}
     >
       {(formikProps) => {
-        const { handleChange, handleReset, handleBlur, handleSubmit, isValidating, isSubmitting, values, errors } = formikProps
+        const { handleChange, handleReset, handleBlur, handleSubmit, isValid, isValidating, isSubmitting, values, errors } = formikProps
         console.debug({ values, errors })
         return (
           <Form className={formClassName} onSubmit={handleSubmit}>
@@ -164,7 +177,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
                   <Button disabled variant="caution">
                     Delete this account
                   </Button>
-                  <Button variant="primary" type="submit" disabled={loading || isValidating || isSubmitting}>
+                  <Button variant="primary" type="submit" disabled={loading || !isValid || isValidating || isSubmitting}>
                     Save
                   </Button>
                 </>
