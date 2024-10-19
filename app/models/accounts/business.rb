@@ -26,7 +26,7 @@ class Business < Account
   #   through invoice integration(s).
   validates :email, email: true, allow_nil: true
 
-  delegate :email, :phone, to: :metadata, allow_nil: true
+  delegate :email, :phone, to: :profile, allow_nil: true
 
   has_many :products, foreign_key: :vendor_id, dependent: :nullify
 
@@ -35,18 +35,21 @@ class Business < Account
   end
 
   def profile
-    @metadata ||= Metadata::Business.find_or_create_by(account_id: id)
+    @metadata ||=
+      if new_record?
+        initialize_profile
+      else
+        Metadata::Business.find_or_create_by(account_id: id)
+      end
   end
 
   alias metadata profile
 
   def initialize_profile
-    if profile.present?
-      profile.account_id ||= id
-      profile.save if profile.changed? && persisted?
-    else
-      Metadata::Business.create(account_id: id)
-    end
+    @metadata ||= Metadata::Business.find_or_initialize_by(account_id: id)
+    @metadata.account_id ||= id
+    @metadata.save if @metadata.changed? && persisted?
+    @metadata
   end
 
   alias initialize_metadata initialize_profile

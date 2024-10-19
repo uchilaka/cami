@@ -23,11 +23,12 @@ class AccountsController < ApplicationController
 
   # POST /accounts or /accounts.json
   def create
-    @account = Account.new(create_account_params)
+    profile_params = create_account_params.slice(:phone)
+    @account = Account.new(create_account_params.except(*profile_params.keys))
 
     respond_to do |format|
       if @account.save
-        format.html { redirect_to @account, notice: 'Account was successfully created.' }
+        format.html { redirect_to account_url(@account), notice: 'Account was successfully created.' }
         format.json { render :show, status: :created, location: @account }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -69,7 +70,7 @@ class AccountsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def create_account_params
-    params.require(:account).permit(:display_name, :readme, :status, :tax_id, :email, :type)
+    params.require(:account).permit(:slug, :display_name, :readme, :status, :tax_id, :email, :phone, :type)
   end
 
   def account_params
@@ -77,7 +78,7 @@ class AccountsController < ApplicationController
     params_filter =
       case parameter_key
       when :business
-        common_param_keys + %i[tax_id email]
+        common_param_keys + %i[tax_id email phone]
       when :individual
         common_param_keys
       else

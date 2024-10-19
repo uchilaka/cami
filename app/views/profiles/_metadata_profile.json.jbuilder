@@ -19,4 +19,4 @@ elsif metadata_profile.is_a?(Metadata::Profile)
 end
 
 json.id metadata_profile.id.to_s
-json.url account_profile_url(account, metadata_profile, format: :json)
+json.url account_profile_url(account, metadata_profile.id.to_s, format: :json)

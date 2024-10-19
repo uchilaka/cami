@@ -239,19 +239,63 @@ RSpec.describe '/accounts', type: :request do
             display_name: Faker::Company.name,
             type: 'Business',
             tax_id: Faker::Company.ein,
-            email: Faker::Internet.email
+            email: Faker::Internet.email,
+            slug: Faker::Internet.slug,
+            phone: Faker::PhoneNumber.cell_phone,
+            status: 'active'
           }
         end
 
+        subject { Account.find_by_slug valid_attributes[:slug] }
+
         it 'creates a new Account' do
           expect do
-            post accounts_url, params: { account: valid_business_account_params }
+            post accounts_url, params: { account: valid_attributes }
           end.to change(Account, :count).by(1)
         end
 
+        xit 'sets all the attributes' do
+          post accounts_url, params: { account: valid_attributes }
+          valid_attributes.each do |key, value|
+            expect(subject[key]).to eq(value)
+          end
+        end
+
         it 'redirects to the created account' do
-          post accounts_url, params: { account: valid_business_account_params }
-          expect(response).to redirect_to(account_url(Account.last))
+          post accounts_url, params: { account: valid_attributes }
+          expect(response).to redirect_to(account_url(subject))
+        end
+
+        context 'attributes' do
+          before { post accounts_url, params: { account: valid_attributes } }
+
+          context '#email' do
+            it { expect(subject.email).to eq(valid_attributes[:email]) }
+          end
+
+          context '#phone' do
+            it { expect(subject.phone).to eq(valid_attributes[:phone]) }
+          end
+
+          context '#status' do
+            it { expect(subject.status).to eq(valid_attributes[:status]) }
+          end
+
+          context '#tax_id' do
+            it { expect(subject.tax_id).to eq(valid_attributes[:tax_id]) }
+          end
+
+          context '#type' do
+            it { expect(subject.type).to eq(valid_attributes[:type]) }
+          end
+
+          context '#slug' do
+            it { expect(subject.slug).to eq(valid_attributes[:slug]) }
+          end
+
+          context '#display_name' do
+            it { expect(subject.display_name).to eq(valid_attributes[:display_name]) }
+          end
         end
       end
     end

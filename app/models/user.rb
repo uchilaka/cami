@@ -76,6 +76,10 @@ class User < ApplicationRecord
   alias_attribute :first_name, :given_name
   alias_attribute :last_name, :family_name
 
+  validates :email, presence: true, uniqueness: true, email: true
+
+  after_create_commit :assign_default_role
+
   # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
   has_person_name
 
@@ -84,17 +88,20 @@ class User < ApplicationRecord
   delegate :phone, to: :profile, allow_nil: true
 
   def profile
-    @profile ||= Metadata::Profile.find_by(user_id: id)
+    @profile ||=
+      if new_record?
+        initialize_profile
+      else
+        Metadata::Profile.find_or_create_by(user_id: id)
+      end
   end
 
   alias metadata profile
 
   def initialize_profile
     @profile ||= Metadata::Profile.find_or_initialize_by(user_id: id)
-    return @profile if @profile.persisted?
-
     @profile.user_id ||= id
-    @profile.save if @profile.changed? && @profile.user&.persisted?
+    @profile.save if @profile.changed? && persisted?
     @profile
   end
 
@@ -103,8 +110,6 @@ class User < ApplicationRecord
   def assign_default_role
     add_role(:user) if roles.blank?
   end
-
-  after_create_commit :initialize_profile, :assign_default_role
 
   def matching_auth_provider
     return nil if profile.blank?
