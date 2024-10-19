@@ -241,7 +241,12 @@ RSpec.describe '/accounts', type: :request do
             tax_id: Faker::Company.ein,
             email: Faker::Internet.email,
             slug: Faker::Internet.slug,
-            phone: Faker::PhoneNumber.cell_phone_in_e164,
+            # IMPORTANT: Update frontend input component(s) to use formatting libraries
+            #   that ensure fully formatted numbers are returned to the service
+            phone: [
+              Faker::PhoneNumber.cell_phone_with_country_code,
+              Faker::PhoneNumber.phone_number_with_country_code
+            ].sample,
             status: 'active'
           }
         end
@@ -277,7 +282,7 @@ RSpec.describe '/accounts', type: :request do
             let(:account) { Account.find_by_slug valid_attributes[:slug] }
             let(:parsed_number) { Phonelib.parse(valid_attributes[:phone]) }
 
-            subject { account.profile.phone&.value_full_e164 }
+            subject { account.profile.phone&.full_e164 }
 
             it { expect(subject).to eq(parsed_number.full_e164) }
           end
