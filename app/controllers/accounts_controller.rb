@@ -23,7 +23,7 @@ class AccountsController < ApplicationController
 
   # POST /accounts or /accounts.json
   def create
-    @account = Account.new(account_params)
+    @account = Account.new(create_account_params)
 
     respond_to do |format|
       if @account.save
@@ -68,12 +68,27 @@ class AccountsController < ApplicationController
   end
 
   # Only allow a list of trusted parameters through.
+  def create_account_params
+    params.require(:account).permit(:display_name, :readme, :status, :tax_id, :email, :type)
+  end
+
   def account_params
-    params.require(parameter_key).permit(:display_name, :readme, :email)
+    common_param_keys = %i[display_name readme status]
+    params_filter =
+      case parameter_key
+      when :business
+        common_param_keys + %i[tax_id email]
+      when :individual
+        common_param_keys
+      else
+        common_param_keys + %i[tax_id]
+      end
+    params.require(parameter_key).permit(*params_filter)
   end
 
   def parameter_key
     return :business if @account.is_a?(Business)
+    return :individual if @account.is_a?(Individual)
 
     :account
   end

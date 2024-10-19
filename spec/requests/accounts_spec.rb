@@ -225,6 +225,37 @@ RSpec.describe '/accounts', type: :request do
   end
 
   describe 'POST /create' do
+    context 'with an authorized user' do
+      # TODO: Implement access controls for models informed by (Pundit + Rolify) policies
+      let(:user) { Fabricate :user }
+
+      before do
+        sign_in user
+      end
+
+      context 'and valid business account parameters' do
+        let(:valid_attributes) do
+          {
+            display_name: Faker::Company.name,
+            type: 'Business',
+            tax_id: Faker::Company.ein,
+            email: Faker::Internet.email
+          }
+        end
+
+        it 'creates a new Account' do
+          expect do
+            post accounts_url, params: { account: valid_business_account_params }
+          end.to change(Account, :count).by(1)
+        end
+
+        it 'redirects to the created account' do
+          post accounts_url, params: { account: valid_business_account_params }
+          expect(response).to redirect_to(account_url(Account.last))
+        end
+      end
+    end
+
     context 'with valid parameters' do
       it 'creates a new Account' do
         expect do

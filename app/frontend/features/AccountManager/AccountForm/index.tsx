@@ -7,6 +7,7 @@ import { useAccountContext } from '../AccountProvider'
 import { isActionableAccount, isBusinessAccount, isIndividualAccount } from '@/utils/api/types'
 import TextareaInput from '@/components/TextareaInput'
 import Button from '@/components/Button'
+import { useMutation } from '@tanstack/react-query'
 
 type AccountFormData = {
   displayName: string
@@ -47,6 +48,17 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
   const [isReadOnly, setIsReadOnly] = useState(readOnly ?? true)
   const { loading, account } = useAccountContext()
 
+  const updateAccount = useMutation({
+    mutationFn: async (values: AccountFormData) => {
+      if (isActionableAccount(account)) {
+        // Submit the form
+        const { edit } = account.actions
+      } else {
+        // TODO: Raise AccountNotActionableError
+      }
+    },
+  })
+
   const formClassName = clsx('mx-auto', { 'max-w-lg': !compact })
 
   const initialValues: AccountFormData = {
@@ -84,7 +96,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
     >
       {(formikProps) => {
         const { handleChange, handleReset, handleBlur, handleSubmit, isValid, isValidating, isSubmitting, values, errors } = formikProps
-        console.debug({ values, errors })
+
         return (
           <Form className={formClassName} onSubmit={handleSubmit}>
             <FormInput
