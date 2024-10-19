@@ -284,6 +284,7 @@ RSpec.describe '/accounts', type: :request do
 
             subject { account.profile.phone&.full_e164 }
 
+            # TODO: Check either side of this assertion
             it { expect(subject).to eq(parsed_number.full_e164) }
           end
 
