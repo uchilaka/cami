@@ -11,14 +11,18 @@ module Metadata
 
     validates :account_id, presence: true, uniqueness: { case_sensitive: false }
     validates :email, allow_nil: true, email: true
-    validate :should_have_email_or_phone_number
+    validate :should_have_email_or_phone_number, on: :update
 
     def business
       @business ||= ::Business.find_by(id: account_id)
     end
 
     def should_have_email_or_phone_number
-      errors.add(:base, 'Business must have either an email or a phone number') if email.blank? && phone.blank?
+      return unless email.blank? && phone.blank?
+
+      errors.add(:base, I18n.t('models.metadata.business.errors.should_have_email_or_phone_number'))
+      errors.add(:phone, I18n.t('models.metadata.business.errors.should_have_email_or_phone_number'))
+      errors.add(:email, I18n.t('models.metadata.business.errors.should_have_email_or_phone_number'))
     end
   end
 end

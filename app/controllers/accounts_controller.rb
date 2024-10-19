@@ -3,6 +3,8 @@
 class AccountsController < ApplicationController
   before_action :set_account, only: %i[show edit update destroy]
 
+  attr_reader :account
+
   # GET /accounts
   def index
     # TODO: Limit the accounts returned to those the customer
@@ -40,19 +42,19 @@ class AccountsController < ApplicationController
   # PATCH/PUT /accounts/1 or /accounts/1.json
   def update
     respond_to do |format|
-      if @account.update(account_params)
-        format.html { redirect_to @account, notice: 'Account was successfully updated.' }
-        format.json { render :show, status: :ok, location: @account }
+      if account.update(account_params)
+        format.html { redirect_to account, notice: 'Account was successfully updated.' }
+        format.json { render :show, status: :ok, location: account }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @account.errors, status: :unprocessable_entity }
+        format.json { render json: account.errors, status: :unprocessable_entity }
       end
     end
   end
 
   # DELETE /accounts/1 or /accounts/1.json
   def destroy
-    @account.destroy
+    account.destroy
     respond_to do |format|
       format.html { redirect_to accounts_url, notice: 'Account was successfully destroyed.' }
       format.json { head :no_content }
@@ -88,8 +90,8 @@ class AccountsController < ApplicationController
   end
 
   def parameter_key
-    return :business if @account.is_a?(Business)
-    return :individual if @account.is_a?(Individual)
+    return :business if account.is_a?(Business)
+    return :individual if account.is_a?(Individual)
 
     :account
   end

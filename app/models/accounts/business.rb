@@ -26,7 +26,7 @@ class Business < Account
   #   through invoice integration(s).
   validates :email, email: true, allow_nil: true
 
-  delegate :email, :phone, to: :profile, allow_nil: true
+  delegate :email, :phone, to: :metadata, allow_nil: true
 
   has_many :products, foreign_key: :vendor_id, dependent: :nullify
 
