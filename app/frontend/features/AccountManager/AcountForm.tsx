@@ -1,11 +1,12 @@
 import clsx from 'clsx'
 import { Form, Formik } from 'formik'
-import React, { FC, ReactNode } from 'react'
+import React, { FC, ReactNode, useState } from 'react'
 import * as Yup from 'yup'
 import FormInput from '@/components/FloatingFormInput'
 import { useAccountContext } from './AccountProvider'
 import { isBusinessAccount, isIndividualAccount } from '@/utils/api/types'
 import TextareaInput from '@/components/TextareaInput'
+import Button from '@/components/Button'
 
 type AccountFormData = {
   displayName: string
@@ -20,7 +21,6 @@ type AccountFormData = {
 interface AccountFormProps {
   readOnly?: boolean
   compact?: boolean
-  children?: ReactNode
 }
 
 const validationSchema = Yup.object({
@@ -43,10 +43,11 @@ const validationSchema = Yup.object({
 /**
  * Form with floating labels: https://flowbite.com/docs/components/forms/#floating-labels
  */
-export const AccountForm: FC<AccountFormProps> = ({ compact, children, readOnly }) => {
-  const formClassName = clsx('mx-auto', { 'max-w-lg': !compact })
-
+export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
+  const [isReadOnly, setIsReadOnly] = useState(readOnly ?? true)
   const { loading, account } = useAccountContext()
+
+  const formClassName = clsx('mx-auto', { 'max-w-lg': !compact })
 
   const initialValues: AccountFormData = {
     displayName: account?.displayName ?? '',
@@ -77,7 +78,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children, readOnly 
               onReset={handleReset}
               onChange={handleChange}
               onBlur={handleBlur}
-              readOnly={loading || readOnly}
+              readOnly={loading || isReadOnly}
               required
             />
 
@@ -93,7 +94,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children, readOnly 
                 onReset={handleReset}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                readOnly={loading || readOnly}
+                readOnly={loading || isReadOnly}
               />
               <FormInput
                 id="phone"
@@ -105,7 +106,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children, readOnly 
                 onReset={handleReset}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                readOnly={loading || readOnly}
+                readOnly={loading || isReadOnly}
               />
             </div>
 
@@ -120,7 +121,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children, readOnly 
                   onReset={handleReset}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  readOnly={loading || readOnly}
+                  readOnly={loading || isReadOnly}
                 />
                 <FormInput
                   type="text"
@@ -131,7 +132,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children, readOnly 
                   onReset={handleReset}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  readOnly={loading || readOnly}
+                  readOnly={loading || isReadOnly}
                 />
               </div>
             )}
@@ -145,10 +146,19 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, children, readOnly 
               onReset={handleReset}
               onChange={handleChange}
               onBlur={handleBlur}
-              readOnly={loading || readOnly}
+              readOnly={loading || isReadOnly}
             />
 
-            {children}
+            <div className="flex justify-end items-center space-x-2">
+              {!isReadOnly && (
+                <>
+                  <Button onClick={() => setIsReadOnly(true)}>Cancel</Button>
+                  <Button variant="caution">Delete this account</Button>
+                  <Button variant="primary">Save</Button>
+                </>
+              )}
+              {isReadOnly && <Button onClick={() => setIsReadOnly(false)}>Edit</Button>}
+            </div>
           </Form>
         )
       }}

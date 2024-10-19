@@ -4,12 +4,9 @@ import LoadingAnimation from '../../components/LoadingAnimation'
 import { useAccountContext, withAccountProvider } from '@/features/AccountManager/AccountProvider'
 import AccountTitleLabel from './AccountTitleLabel'
 import { AccountForm } from './AcountForm'
-import Button from '@/components/Button'
 
 const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ...props }) => {
   const [accountLoader, setAccountLoader] = useState<AbortController>()
-  const [readOnly, setReadOnly] = useState(true)
-
   const modalId = id ?? 'account--summary-modal'
 
   const { loading, listenForAccountLoadEvents } = useAccountContext()
@@ -69,18 +66,7 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
                 {/* Modal Actions */}
                 {/* <hr className="my-4" /> */}
 
-                <AccountForm compact readOnly={readOnly}>
-                  <div className="flex justify-end items-center space-x-2">
-                    {!readOnly && (
-                      <>
-                        <Button onClick={() => setReadOnly(true)}>Cancel</Button>
-                        <Button variant="caution">Delete this account</Button>
-                        <Button variant="primary">Save</Button>
-                      </>
-                    )}
-                    {readOnly && <Button onClick={() => setReadOnly(false)}>Edit</Button>}
-                  </div>
-                </AccountForm>
+                <AccountForm compact readOnly />
               </>
             )}
           </div>
