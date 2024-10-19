@@ -18,7 +18,8 @@ class CreateAccountWorkflow
     if account.errors.any?
       context.fail!(message: account.errors.full_messages)
     else
-      account.profile.update(**profile_params) if account.profile.present? && profile_params.present?
+      account.profile.update(profile_params) if account.profile.present? && profile_params.present?
+      account.profile.save if account.profile.changed?
       context.fail!(message: account.profile.errors.full_messages) if account.profile.errors.any?
     end
     context.account = account

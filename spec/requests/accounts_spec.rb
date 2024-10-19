@@ -241,7 +241,7 @@ RSpec.describe '/accounts', type: :request do
             tax_id: Faker::Company.ein,
             email: Faker::Internet.email,
             slug: Faker::Internet.slug,
-            phone: Faker::PhoneNumber.cell_phone,
+            phone: Faker::PhoneNumber.cell_phone_in_e164,
             status: 'active'
           }
         end
@@ -274,7 +274,12 @@ RSpec.describe '/accounts', type: :request do
           end
 
           context '#phone' do
-            it { expect(subject.phone).to eq(valid_attributes[:phone]) }
+            let(:account) { Account.find_by_slug valid_attributes[:slug] }
+            let(:parsed_number) { Phonelib.parse(valid_attributes[:phone]) }
+
+            subject { account.profile.phone&.value_full_e164 }
+
+            it { expect(subject).to eq(parsed_number.full_e164) }
           end
 
           context '#status' do
