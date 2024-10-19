@@ -16,13 +16,16 @@ end
 if account.is_a?(Business)
   json.extract! account, :tax_id, :email
   json.email account.email if account.profile.present?
-  json.profiles [account.profile].compact
+  # json.profiles [account.profile].compact
+  json.profiles do
+    json.partial! 'profiles/metadata_profile', metadata_profile: account.profile, account:
+  end
   json.isVendor account.has_role?(:vendor)
-end
-
-if account.is_a?(Individual)
+elsif account.is_a?(Individual)
   json.email account.email if account.user.present?
-  json.profiles account.profiles
+  json.profiles account.profiles, partial: 'profiles/metadata_profile', as: :metadata_profile, account:
+else
+  json.profiles []
 end
 
 json.invoices account.invoices, partial: 'invoices/invoice', as: :invoice
