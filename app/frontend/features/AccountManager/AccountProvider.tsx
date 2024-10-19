@@ -4,10 +4,10 @@ import { LoadAccountEventDetail, nsEventName } from '@/utils'
 import useAccountSummaryQuery from './hooks/useAccountQuery'
 
 interface AccountContextProps {
+  listenForAccountLoadEvents: () => AbortController
+  reload: () => Promise<void>
   loading?: boolean
   account?: IndividualAccount | BusinessAccount | null
-  reload: () => Promise<void>
-  listenForAccountLoadEvents: () => AbortController
 }
 
 const AccountContext = createContext<AccountContextProps>(null!)

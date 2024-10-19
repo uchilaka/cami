@@ -3,7 +3,7 @@ import withAllTheProviders from '@/components/withAllTheProviders'
 import LoadingAnimation from '../../components/LoadingAnimation'
 import { useAccountContext, withAccountProvider } from '@/features/AccountManager/AccountProvider'
 import AccountTitleLabel from './AccountTitleLabel'
-import { AccountForm } from './AcountForm'
+import { AccountForm } from './AccountForm'
 
 const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ...props }) => {
   const [accountLoader, setAccountLoader] = useState<AbortController>()

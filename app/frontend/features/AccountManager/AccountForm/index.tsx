@@ -3,7 +3,7 @@ import { Form, Formik } from 'formik'
 import React, { FC, useState } from 'react'
 import * as Yup from 'yup'
 import FormInput from '@/components/FloatingFormInput'
-import { useAccountContext } from './AccountProvider'
+import { useAccountContext } from '../AccountProvider'
 import { isBusinessAccount, isIndividualAccount } from '@/utils/api/types'
 import TextareaInput from '@/components/TextareaInput'
 import Button from '@/components/Button'
@@ -64,12 +64,13 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
       validateOnBlur
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values, { setFieldValue, setFieldTouched, setFieldError, setSubmitting, ...otherHelpers }) => {
+      onSubmit={(values, { setFieldValue, setFieldTouched, setFieldError, setSubmitting, validateForm, ...otherHelpers }) => {
+        setSubmitting(true)
         console.debug({ values })
       }}
     >
       {(formikProps) => {
-        const { handleChange, handleReset, handleBlur, handleSubmit, values, errors } = formikProps
+        const { handleChange, handleReset, handleBlur, handleSubmit, isValidating, isSubmitting, values, errors } = formikProps
         console.debug({ values, errors })
         return (
           <Form className={formClassName} onSubmit={handleSubmit}>
@@ -160,8 +161,12 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
               {!isReadOnly && (
                 <>
                   <Button onClick={() => setIsReadOnly(true)}>Cancel</Button>
-                  <Button variant="caution">Delete this account</Button>
-                  <Button variant="primary">Save</Button>
+                  <Button disabled variant="caution">
+                    Delete this account
+                  </Button>
+                  <Button variant="primary" type="submit" disabled={loading || isValidating || isSubmitting}>
+                    Save
+                  </Button>
                 </>
               )}
               {isReadOnly && <Button onClick={() => setIsReadOnly(false)}>Edit</Button>}

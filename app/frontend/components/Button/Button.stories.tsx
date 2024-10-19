@@ -19,6 +19,8 @@ export const Default: Story = {
     children: 'Click me',
     variant: 'primary',
     onClick: fn(),
+    disabled: false,
+    loading: false,
   },
   argTypes: {
     variant: {
