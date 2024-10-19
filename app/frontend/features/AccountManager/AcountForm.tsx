@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { Form, Formik } from 'formik'
-import React, { FC, ReactNode, useState } from 'react'
+import React, { FC, useState } from 'react'
 import * as Yup from 'yup'
 import FormInput from '@/components/FloatingFormInput'
 import { useAccountContext } from './AccountProvider'
@@ -60,7 +60,14 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
   console.debug({ account, loading })
 
   return (
-    <Formik validateOnBlur initialValues={initialValues} validationSchema={validationSchema} onSubmit={() => {}}>
+    <Formik
+      validateOnBlur
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={(values, { setFieldValue, setFieldTouched, setFieldError, setSubmitting, ...otherHelpers }) => {
+        console.debug({ values })
+      }}
+    >
       {(formikProps) => {
         const { handleChange, handleReset, handleBlur, handleSubmit, values, errors } = formikProps
         console.debug({ values, errors })
