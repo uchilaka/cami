@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 json.ignore_nil!
+json.id invoice.id.to_s
+json.vendor_record_id invoice.vendor_record_id
+json.vendor_url nil
 json.number invoice.invoice_number
 json.extract! invoice, :amount, :status, :created_at, :updated_at
 json.invoiced_at invoice.invoiced_at&.change(usec: 0)&.iso8601

@@ -4,6 +4,7 @@ json.extract! metadata_profile, :phone, :created_at, :updated_at
 
 if metadata_profile.is_a?(Metadata::Business)
   json.email metadata_profile.email
+
 elsif metadata_profile.is_a?(Metadata::Profile)
   json.extract! metadata_profile, :image_url, :last_seen_at
 
