@@ -31,10 +31,10 @@ class Business < Account
   has_many :products, foreign_key: :vendor_id, dependent: :nullify
 
   def email=(value)
-    profile.email = value
+    metadata.email = value
   end
 
-  def profile
+  def metadata
     @metadata ||=
       if new_record?
         initialize_profile
@@ -43,14 +43,14 @@ class Business < Account
       end
   end
 
-  alias metadata profile
+  alias profile metadata
 
-  def initialize_profile
+  def initialize_metadata
     @metadata ||= Metadata::Business.find_or_initialize_by(account_id: id)
     @metadata.account_id ||= id
     @metadata.save if @metadata.changed? && persisted?
     @metadata
   end
 
-  alias initialize_metadata initialize_profile
+  alias initialize_profile initialize_metadata
 end

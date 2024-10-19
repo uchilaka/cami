@@ -25,11 +25,11 @@ class AccountsController < ApplicationController
 
   # POST /accounts or /accounts.json
   def create
-    profile_params = create_account_params.slice(:phone)
-    @account = Account.new(create_account_params.except(*profile_params.keys))
+    result = CreateAccountWorkflow.call(params: create_account_params)
+    @account = result.account
 
     respond_to do |format|
-      if @account.save
+      if result.success?
         format.html { redirect_to account_url(@account), notice: 'Account was successfully created.' }
         format.json { render :show, status: :created, location: @account }
       else
