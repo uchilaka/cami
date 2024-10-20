@@ -14,15 +14,17 @@ brew 'asdf'
 brew 'coreutils'
 brew 'git-crypt'
 brew 'yq'
+brew 'vips'
 
 # install only on specified OS
 brew 'tree' if OS.mac?
 brew 'gnutls' if OS.mac?
 brew 'foreman' if OS.mac?
 
-if OS.mac? && File.exist?('/usr/local/bin/docker')
+# FYI: Brew cask only works on macOS
+if File.exist?('/usr/local/bin/docker')
   puts 'Found Docker installed 🥳 - skipping docker installation'
 else
-  cask 'docker'
+  cask 'docker' if OS.mac?
 end
-cask 'ngrok'
+cask 'ngrok' if OS.mac?
