@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-class CreateAccountWorkflow
+class UpdateAccountWorkflow
   include Interactor
   include LarCity::ProfileParameters
 
   # TODO: Include asserting the authorized account
   #   via Current.user
-  # (params:)
+  # (account:, params:)
   def call
-    account = Account.new(compose_create_params(context.params))
+    account = context.account
     profile_params =
       if account.is_a?(Business)
         context.params.slice(*business_profile_params)
