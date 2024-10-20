@@ -8,6 +8,7 @@ import { isActionableAccount, isBusinessAccount, isIndividualAccount } from '@/u
 import TextareaInput from '@/components/TextareaInput'
 import Button from '@/components/Button'
 import { useMutation } from '@tanstack/react-query'
+import useCsrfToken from '@/utils/hooks/useCsrfToken'
 
 type AccountFormData = {
   displayName: string
@@ -47,17 +48,7 @@ const validationSchema = Yup.object({
 export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
   const [isReadOnly, setIsReadOnly] = useState(readOnly ?? true)
   const { loading, account } = useAccountContext()
-
-  const updateAccount = useMutation({
-    mutationFn: async (values: AccountFormData) => {
-      if (isActionableAccount(account)) {
-        // Submit the form
-        const { edit } = account.actions
-      } else {
-        // TODO: Raise AccountNotActionableError
-      }
-    },
-  })
+  const { csrfToken } = useCsrfToken()
 
   const formClassName = clsx('mx-auto', { 'max-w-lg': !compact })
 
@@ -68,6 +59,27 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
     phone: (isBusinessAccount(account) ? account?.phone : '') ?? '',
     type: account?.type ?? 'Business',
   }
+
+  const updateAccount = useMutation({
+    mutationFn: async (values: AccountFormData) => {
+      if (isActionableAccount(account)) {
+        // Submit the form
+        const { edit } = account.actions
+        const payload = { [account.type.toLowerCase()]: values }
+        return fetch(edit.url, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            'X-CSRF-Token': csrfToken,
+          },
+          body: JSON.stringify(payload),
+        })
+      } else {
+        // TODO: Raise AccountNotActionableError
+      }
+    },
+  })
 
   console.debug({ account, loading })
 
@@ -86,7 +98,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
           console.debug({ values })
           if (isActionableAccount(account)) {
             // Submit the form
-            const { edit } = account.actions
+            updateAccount.mutate(values)
           } else {
             // Set an error
           }
@@ -143,6 +155,10 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
               />
             </div>
 
+            {/**
+             * TODO: Detect if there is a user account and offer
+             * to create one to save givenName and familyName
+             */}
             {isIndividualAccount(account) && (
               <div className="grid md:gap-6 md:grid-cols-2">
                 <FormInput
