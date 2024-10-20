@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class AccountsController < ApplicationController
+  include LarCity::ProfileParameters
+
   before_action :set_account, only: %i[show edit update destroy]
 
   attr_reader :account
@@ -73,21 +75,23 @@ class AccountsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def create_account_params
-    params.require(:account).permit(:slug, :display_name, :readme, :status, :tax_id, :email, :phone, :type)
+    params
+      .require(:account)
+      .permit(:slug, :display_name, :readme, :status, :tax_id, :type, *common_profile_param_keys)
   end
 
   def account_params
-    common_param_keys = %i[display_name readme status]
+    common_param_keys = %i[display_name readme status] + common_profile_param_keys
     params_filter =
       case parameter_key
       when :business
-        common_param_keys + %i[tax_id email phone]
-      when :individual
-        common_param_keys
-      else
         common_param_keys + %i[tax_id]
+      when :individual
+        common_param_keys + %i[given_name family_name]
+      else
+        common_param_keys
       end
-    params.require(parameter_key).permit(*params_filter)
+    params.require(parameter_key).permit(*params_filter.compact)
   end
 
   def parameter_key

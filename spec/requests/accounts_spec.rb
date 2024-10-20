@@ -251,12 +251,12 @@ RSpec.describe '/accounts', type: :request do
           }
         end
 
-        subject { Account.find_by_slug valid_attributes[:slug] }
+        subject { Business.find_by_slug valid_attributes[:slug] }
 
         it 'creates a new Account' do
           expect do
             post accounts_url, params: { account: valid_attributes }
-          end.to change(Account, :count).by(1)
+          end.to change(Business, :count).by(1)
         end
 
         it 'redirects to the created account' do
@@ -274,8 +274,6 @@ RSpec.describe '/accounts', type: :request do
           context '#phone' do
             let(:parsed_number) { Phonelib.parse(valid_attributes[:phone]) }
 
-            subject { Business.find_by_slug valid_attributes[:slug] }
-
             it { expect(subject.profile.phone.full_international).to eq(parsed_number.full_international) }
           end
 
@@ -285,6 +283,73 @@ RSpec.describe '/accounts', type: :request do
 
           context '#tax_id' do
             it { expect(subject.tax_id).to eq(valid_attributes[:tax_id]) }
+          end
+
+          context '#type' do
+            it { expect(subject.type).to eq(valid_attributes[:type]) }
+          end
+
+          context '#slug' do
+            it { expect(subject.slug).to eq(valid_attributes[:slug]) }
+          end
+
+          context '#display_name' do
+            it { expect(subject.display_name).to eq(valid_attributes[:display_name]) }
+          end
+        end
+      end
+
+      context 'and valid individual account parameters' do
+        let(:valid_attributes) do
+          {
+            display_name: Faker::Name.name,
+            type: 'Individual',
+            given_name: Faker::Name.neutral_first_name,
+            family_name: Faker::Name.last_name,
+            email: Faker::Internet.email,
+            slug: Faker::Internet.slug,
+            status: 'guest'
+          }
+        end
+
+        subject { Individual.find_by_slug valid_attributes[:slug] }
+
+        it 'creates a new Account' do
+          expect do
+            post accounts_url, params: { account: valid_attributes }
+          end.to change(Individual, :count).by(1)
+        end
+
+        it 'redirects to the created account' do
+          post accounts_url, params: { account: valid_attributes }
+          expect(response).to redirect_to(account_url(subject))
+        end
+
+        context 'attributes' do
+          let(:profile) { subject.profile }
+
+          before { post accounts_url, params: { account: valid_attributes } }
+
+          context '#given_name' do
+            it { expect(profile.given_name).to eq(valid_attributes[:given_name]) }
+          end
+
+          context '#family_name' do
+            it { expect(profile.family_name).to eq(valid_attributes[:family_name]) }
+          end
+
+          context '#email' do
+            it { expect(subject.email).to eq(valid_attributes[:email]) }
+          end
+
+          context '#phone' do
+            let(:parsed_number) { Phonelib.parse(valid_attributes[:phone]) }
+
+            it { expect(subject.profile.phone.full_international).to eq(parsed_number.full_international) }
+          end
+
+          context '#status' do
+            it { expect(subject.status).to eq(valid_attributes[:status]) }
           end
 
           context '#type' do

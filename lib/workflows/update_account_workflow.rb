@@ -11,9 +11,9 @@ class UpdateAccountWorkflow
     account = context.account
     profile_params =
       if account.is_a?(Business)
-        context.params.slice(*business_profile_params)
+        context.params.slice(*business_profile_param_keys)
       else
-        context.params.slice(*individual_profile_params)
+        context.params.slice(*individual_profile_param_keys)
       end.to_h.symbolize_keys
     account.update(compose_update_params)
     context.fail!(message: account.errors.full_messages) if account.errors.any?

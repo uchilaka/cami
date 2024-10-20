@@ -9,7 +9,7 @@ module LarCity
         unless supported_input?(request_params)
 
       request_params
-        .except(*(common_profile_params + individual_profile_params)).to_h.symbolize_keys
+        .except(*(common_profile_param_keys + individual_profile_param_keys)).to_h.symbolize_keys
     end
 
     def supported_input?(params)
@@ -19,15 +19,15 @@ module LarCity
       false
     end
 
-    def business_profile_params
-      common_profile_params
+    def business_profile_param_keys
+      common_profile_param_keys
     end
 
-    def individual_profile_params
-      common_profile_params + %i[image_url family_name given_name]
+    def individual_profile_param_keys
+      common_profile_param_keys + %i[image_url family_name given_name]
     end
 
-    def common_profile_params
+    def common_profile_param_keys
       %i[phone email]
     end
   end
