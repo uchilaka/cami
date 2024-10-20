@@ -62,6 +62,9 @@ node_modules
 /*.code-workspace
 .tool-versions
 
+# Ignore proxy server config file (will be processed by initializer)
+/config/ngrok.yml
+
 # General
 .DS_Store
 .AppleDouble

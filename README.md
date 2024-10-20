@@ -169,6 +169,21 @@ This is the same command you'll need any time you want to start up the applicati
 bin/dev
 ```
 
+## Troubleshooting
+
+### image processing library not loading on WSL2 Linux
+
+> Could not open library 'vips.so.42': vips.so.42: cannot open shared object file: No such file or directory. (LoadError)
+
+Try running the following commands:
+
+```shell
+# Make sure all appilcation dependencies are setup, which includes the "vips" image processing library
+brew bundle
+# Install ruby extension for the vips image processing library (will likely need "sudo" access)
+apt install ruby-vips
+```
+
 ## Database management
 
 Review the list of available tasks for managing the `MongoDB` document store:
