@@ -259,13 +259,6 @@ RSpec.describe '/accounts', type: :request do
           end.to change(Account, :count).by(1)
         end
 
-        xit 'sets all the attributes' do
-          post accounts_url, params: { account: valid_attributes }
-          valid_attributes.each do |key, value|
-            expect(subject[key]).to eq(value)
-          end
-        end
-
         it 'redirects to the created account' do
           post accounts_url, params: { account: valid_attributes }
           expect(response).to redirect_to(account_url(subject))
@@ -279,13 +272,9 @@ RSpec.describe '/accounts', type: :request do
           end
 
           context '#phone' do
-            let(:account) { Account.find_by_slug valid_attributes[:slug] }
             let(:parsed_number) { Phonelib.parse(valid_attributes[:phone]) }
 
-            subject { account.profile.phone&.full_e164 }
-
-            # TODO: Check either side of this assertion
-            it { expect(subject).to eq(parsed_number.full_e164) }
+            it { expect(subject.profile.phone.full_international).to eq(parsed_number.full_international) }
           end
 
           context '#status' do

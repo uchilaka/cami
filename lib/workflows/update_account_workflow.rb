@@ -15,27 +15,36 @@ class UpdateAccountWorkflow
       else
         context.params.slice(*individual_profile_params)
       end.to_h.symbolize_keys
-    profile_params.to_h.symbolize_keys!
-    account.save
-    if account.errors.any?
-      context.fail!(message: account.errors.full_messages)
-    else
-      if account.profile.present? && profile_params.present?
-        input_number = profile_params.delete(:phone)
-        if input_number.present?
-          parsed_number = PhoneNumber.new(value: input_number)
-          if parsed_number.valid?
-            account.profile.phone = parsed_number
-          else
-            account.profile.errors.add(:phone, parsed_number.errors.full_messages.join(', '))
-          end
+    account.update(compose_update_params)
+    context.fail!(message: account.errors.full_messages) if account.errors.any?
+    if context.success? && account.profile.present? && profile_params.present?
+      input_number = profile_params.delete(:phone)
+      if input_number.present?
+        parsed_number = PhoneNumber.new(value: input_number)
+        if parsed_number.valid?
+          account.profile.phone = parsed_number
+        else
+          account.profile.errors.add(:phone, parsed_number.errors.full_messages.join(', '))
         end
-        account.profile.update(profile_params)
       end
-      account.profile.save if account.profile.changed?
+      # Save (all) changes to the (account) profile
+      account.profile.update(profile_params)
       context.fail!(message: account.profile.errors.full_messages) if account.profile.errors.any?
     end
-    context.account = account
+    context.account.reload!
     context.profile = account.profile
+  end
+
+  private
+
+  def compose_update_params
+    compose_create_params(context.params)
+      .except(*create_only_params)
+      .to_h
+      .symbolize_keys
+  end
+
+  def create_only_params
+    %i[type]
   end
 end

@@ -5,10 +5,18 @@ module LarCity
     extend ActiveSupport::Concern
 
     def compose_create_params(request_params)
-      raise ArgumentError, 'request_params must be a Hash' unless request_params.is_a?(Hash)
+      raise ArgumentError, 'request_params must be a Hash' \
+        unless supported_input?(request_params)
 
       request_params
         .except(*(common_profile_params + individual_profile_params)).to_h.symbolize_keys
+    end
+
+    def supported_input?(params)
+      return true if params.is_a?(ActionController::Parameters)
+      return true if params.is_a?(Hash)
+
+      false
     end
 
     def business_profile_params
