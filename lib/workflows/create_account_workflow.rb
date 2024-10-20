@@ -22,7 +22,8 @@ class CreateAccountWorkflow
       if input_number.present?
         parsed_number = PhoneNumber.new(value: input_number)
         if parsed_number.valid?
-          account.profile.phone = parsed_number
+          profile_params[:phone] = parsed_number
+          # account.profile.phone = parsed_number
         else
           account.profile.errors.add(:phone, parsed_number.errors.full_messages.join(', '))
         end

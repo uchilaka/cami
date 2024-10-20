@@ -274,6 +274,8 @@ RSpec.describe '/accounts', type: :request do
           context '#phone' do
             let(:parsed_number) { Phonelib.parse(valid_attributes[:phone]) }
 
+            subject { Business.find_by_slug valid_attributes[:slug] }
+
             it { expect(subject.profile.phone.full_international).to eq(parsed_number.full_international) }
           end
 

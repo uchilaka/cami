@@ -5,8 +5,6 @@ class PhoneNumber
   include DocumentRecord
 
   field :value, type: String
-  # @deprecated migrate to using :full_e164 instead
-  field :value_full_e164, type: String
   field :full_e164, type: String
   field :full_international, type: String
   field :number_purpose, type: String
@@ -35,7 +33,6 @@ class PhoneNumber
 
     phone = Phonelib.parse(value)
     self.country ||= phone.country
-    self.value_full_e164 = phone.full_e164
     self.full_e164 = phone.full_e164
     # TODO: Assert in spec that value == phone.full_international
     self.full_international = phone.full_international
