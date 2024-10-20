@@ -26,12 +26,14 @@
 #  unlock_token           :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  primary_profile_id     :string
 #
 # Indexes
 #
-#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
-#  index_users_on_email                 (email) UNIQUE
-#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#  index_users_on_confirmation_token         (confirmation_token) UNIQUE
+#  index_users_on_email                      (email) UNIQUE
+#  index_users_on_id_and_primary_profile_id  (id,primary_profile_id) UNIQUE
+#  index_users_on_reset_password_token       (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
   rolify
@@ -102,6 +104,8 @@ class User < ApplicationRecord
     @profile ||= Metadata::Profile.find_or_initialize_by(user_id: id)
     @profile.user_id ||= id
     @profile.save if @profile.changed? && persisted?
+    self.primary_profile_id ||= @profile.id
+    save if changed?
     @profile
   end
 

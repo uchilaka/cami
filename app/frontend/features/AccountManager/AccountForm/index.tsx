@@ -156,7 +156,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
             </div>
 
             {/**
-             * TODO: Detect if there is a user account and offer
+             * TODO: Detect if there is a (metadata) profile and offer
              * to create one to save givenName and familyName
              */}
             {isIndividualAccount(account) && (
