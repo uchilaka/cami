@@ -19,15 +19,7 @@ class UpdateAccountWorkflow
     context.fail!(message: account.errors.full_messages) if account.errors.any?
     if context.success? && account.profile.present? && profile_params.present?
       input_number = profile_params.delete(:phone)
-      if input_number.present?
-        parsed_number = PhoneNumber.new(value: input_number)
-        if parsed_number.valid?
-          profile_params[:phone] = parsed_number
-        else
-          account.profile.errors.add(:phone, parsed_number.errors.full_messages.join(', '))
-        end
-      end
-      # Save (all) changes to the (account) profile
+      profile_params[:phone] = PhoneNumber.new(value: input_number) if input_number.present?
       account.profile.update(profile_params)
       context.fail!(message: account.profile.errors.full_messages) if account.profile.errors.any?
     end
