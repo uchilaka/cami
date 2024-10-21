@@ -236,11 +236,11 @@ RSpec.describe '/accounts', type: :request do
       context 'and valid business account parameters' do
         let(:valid_attributes) do
           {
-            display_name: Faker::Company.name,
             type: 'Business',
+            slug: Faker::Internet.slug,
+            display_name: Faker::Company.name,
             tax_id: Faker::Company.ein,
             email: Faker::Internet.email,
-            slug: Faker::Internet.slug,
             # IMPORTANT: Update frontend input component(s) to use formatting libraries
             #   that ensure fully formatted numbers are returned to the service
             phone: [
@@ -302,12 +302,16 @@ RSpec.describe '/accounts', type: :request do
       context 'and valid individual account parameters' do
         let(:valid_attributes) do
           {
-            display_name: Faker::Name.name,
             type: 'Individual',
+            slug: Faker::Internet.slug,
+            display_name: Faker::Name.name,
             given_name: Faker::Name.neutral_first_name,
             family_name: Faker::Name.last_name,
             email: Faker::Internet.email,
-            slug: Faker::Internet.slug,
+            phone: [
+              Faker::PhoneNumber.cell_phone_with_country_code,
+              Faker::PhoneNumber.phone_number_with_country_code
+            ].sample,
             status: 'guest'
           }
         end

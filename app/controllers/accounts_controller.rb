@@ -77,7 +77,11 @@ class AccountsController < ApplicationController
   def create_account_params
     params
       .require(:account)
-      .permit(:slug, :display_name, :readme, :status, :tax_id, :type, *common_profile_param_keys)
+      .permit(:slug, :display_name, :readme, :status, :tax_id, :type, *create_profile_param_keys)
+  end
+
+  def create_profile_param_keys
+    (individual_profile_param_keys + business_profile_param_keys).uniq
   end
 
   def account_params
