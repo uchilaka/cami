@@ -44,7 +44,11 @@ class AccountsController < ApplicationController
   # PATCH/PUT /accounts/1 or /accounts/1.json
   def update
     respond_to do |format|
-      result = UpdateAccountWorkflow.call(account:, params: account_params)
+      result =
+        UpdateAccountWorkflow.call(
+          account:, account_params: update_params[:account],
+          profile_params: update_params[:profile]
+        )
       if result.success?
         format.html { redirect_to account_url(result.account), notice: 'Account was successfully updated.' }
         format.json { render :show, status: :ok, location: account_url(result.account) }
@@ -73,35 +77,40 @@ class AccountsController < ApplicationController
     redirect_to accounts_path
   end
 
-  # Only allow a list of trusted parameters through.
+  # TODO: Refactor the :create action to expect :account_params
+  #   and :profile_params discretely from the frontend
   def create_account_params
     params
       .require(:account)
       .permit(:slug, :display_name, :readme, :status, :tax_id, :type, *create_profile_param_keys)
   end
 
+  def create_profile_params
+    params.permit(profile: create_profile_param_keys)[:profile]
+  end
+
   def create_profile_param_keys
     (individual_profile_param_keys + business_profile_param_keys).uniq
   end
 
-  def account_params
-    common_param_keys = %i[display_name readme status] + common_profile_param_keys
-    params_filter =
-      case parameter_key
-      when :business
-        common_param_keys + %i[tax_id]
-      when :individual
-        common_param_keys + %i[given_name family_name]
-      else
-        common_param_keys
-      end
-    params.require(parameter_key).permit(*params_filter.compact)
+  def update_params
+    params.permit(
+      account: update_account_param_keys,
+      # TODO: Improve this logic to allow for updating the email address on
+      #   a profile if a User does not exist for it - otherwise, profile emails
+      #   should ONLY be changed as a side-effect of a confirmed email update
+      #   to the associated account's email.
+      profile: create_profile_param_keys - %i[email]
+    )
   end
 
-  def parameter_key
-    return :business if account.is_a?(Business)
-    return :individual if account.is_a?(Individual)
-
-    :account
+  def update_account_param_keys
+    common_param_keys = %i[display_name readme status]
+    case account
+    when Business
+      common_param_keys + %i[tax_id]
+    else
+      common_param_keys
+    end
   end
 end

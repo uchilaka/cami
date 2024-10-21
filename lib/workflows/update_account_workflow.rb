@@ -6,37 +6,34 @@ class UpdateAccountWorkflow
 
   # TODO: Include asserting the authorized account
   #   via Current.user
-  # (account:, params:)
+  # (account:, account_params:, profile_params:)
   def call
     account = context.account
-    profile_params =
-      if account.is_a?(Business)
-        context.params.slice(*business_profile_param_keys)
-      else
-        context.params.slice(*individual_profile_param_keys)
-      end.to_h.symbolize_keys
-    account.update(compose_update_params)
-    context.fail!(message: account.errors.full_messages) if account.errors.any?
-    if context.success? && account.profile.present? && profile_params.present?
-      input_number = profile_params.delete(:phone)
-      profile_params[:phone] = PhoneNumber.new(value: input_number) if input_number.present?
-      account.profile.update(profile_params)
-      context.fail!(message: account.profile.errors.full_messages) if account.profile.errors.any?
+    account_params =
+      (context.account_params.to_h.symbolize_keys if context.account_params.present?)
+    if account_params.present?
+      account_params = context.account_params.to_h.symbolize_keys
+      account.update(account_params)
+      context.fail!(message: account.errors.full_messages) if account.errors.any?
+      context.account = account
     end
-    context.account.reload!
+
     context.profile = account.profile
-  end
+    profile_params =
+      if context.profile_params.present?
+        if account.is_a?(Business)
+          context.profile_params.slice(*business_profile_param_keys)
+        else
+          context.profile_params.slice(*individual_profile_param_keys)
+        end.to_h.symbolize_keys
+      end
 
-  private
+    return unless context.success? && profile_params.present? && account.profile.present?
 
-  def compose_update_params
-    compose_create_params(context.params)
-      .except(*create_only_params)
-      .to_h
-      .symbolize_keys
-  end
-
-  def create_only_params
-    %i[type]
+    input_number = profile_params.delete(:phone)
+    profile_params[:phone] = PhoneNumber.new(value: input_number) if input_number.present?
+    account.profile.update(profile_params)
+    context.fail!(message: account.profile.errors.full_messages) if account.profile.errors.any?
+    context.profile = account.profile
   end
 end
