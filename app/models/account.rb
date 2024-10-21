@@ -33,6 +33,7 @@ class Account < ApplicationRecord
   attribute :slug, :string, default: -> { SecureRandom.alphanumeric(4).downcase }
 
   validates :display_name, presence: true
+  validates :type, presence: true, inclusion: { in: %w[Account Business Individual] }
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
   validates :tax_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
 
@@ -49,6 +50,7 @@ class Account < ApplicationRecord
 
   enum :status, {
     demo: 1,
+    draft: 2,
     guest: 5,
     active: 10,
     paid: 20,
@@ -59,8 +61,9 @@ class Account < ApplicationRecord
   }, scopes: true
 
   aasm column: :status, enum: true, logger: Rails.logger do
+    state :draft, initial: true
     state :demo
-    state :guest, initial: true
+    state :guest
     state :active
     state :paid
     state :payment_due

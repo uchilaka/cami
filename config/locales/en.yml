@@ -74,6 +74,11 @@ en:
       errors:
         invalid: "is not a valid invoice account"
         exists: "already exists"
+    metadata:
+      business:
+        errors:
+          invalid: "is not a valid business"
+          should_have_email_or_phone_number: "should have an email address or phone number"
   workflows:
     import_account:
       errors:

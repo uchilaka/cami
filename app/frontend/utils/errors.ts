@@ -1,4 +1,12 @@
-export class InvalidAccountError extends Error {}
+export class InvalidAccountError extends Error {
+  errorData: any
+
+  constructor(message: string, errorData?: unknown) {
+    super(message)
+    this.name = 'InvalidAccountError'
+    this.errorData = errorData
+  }
+}
 export class AccountNotFoundError extends Error {}
 export class AccountSuspendedError extends Error {}
 export class AccountDeactivatedError extends Error {}

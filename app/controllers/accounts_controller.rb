@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 class AccountsController < ApplicationController
+  include LarCity::ProfileParameters
+
   before_action :set_account, only: %i[show edit update destroy]
+
+  attr_reader :account
 
   # GET /accounts
   def index
@@ -23,11 +27,12 @@ class AccountsController < ApplicationController
 
   # POST /accounts or /accounts.json
   def create
-    @account = Account.new(account_params)
+    result = CreateAccountWorkflow.call(params: create_account_params)
+    @account = result.account
 
     respond_to do |format|
-      if @account.save
-        format.html { redirect_to @account, notice: 'Account was successfully created.' }
+      if result.success?
+        format.html { redirect_to account_url(@account), notice: 'Account was successfully created.' }
         format.json { render :show, status: :created, location: @account }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -39,19 +44,24 @@ class AccountsController < ApplicationController
   # PATCH/PUT /accounts/1 or /accounts/1.json
   def update
     respond_to do |format|
-      if @account.update(account_params)
-        format.html { redirect_to @account, notice: 'Account was successfully updated.' }
-        format.json { render :show, status: :ok, location: @account }
+      result =
+        UpdateAccountWorkflow.call(
+          account:, account_params: update_params[:account],
+          profile_params: update_params[:profile]
+        )
+      if result.success?
+        format.html { redirect_to account_url(result.account), notice: 'Account was successfully updated.' }
+        format.json { render :show, status: :ok, location: account_url(result.account) }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @account.errors, status: :unprocessable_entity }
+        format.json { render json: result.account.errors, status: :unprocessable_entity }
       end
     end
   end
 
   # DELETE /accounts/1 or /accounts/1.json
   def destroy
-    @account.destroy
+    account.destroy
     respond_to do |format|
       format.html { redirect_to accounts_url, notice: 'Account was successfully destroyed.' }
       format.json { head :no_content }
@@ -67,14 +77,40 @@ class AccountsController < ApplicationController
     redirect_to accounts_path
   end
 
-  # Only allow a list of trusted parameters through.
-  def account_params
-    params.require(parameter_key).permit(:display_name, :readme, :email)
+  # TODO: Refactor the :create action to expect :account_params
+  #   and :profile_params discretely from the frontend
+  def create_account_params
+    params
+      .require(:account)
+      .permit(:slug, :display_name, :readme, :status, :tax_id, :type, *create_profile_param_keys)
   end
 
-  def parameter_key
-    return :business if @account.is_a?(Business)
+  def create_profile_params
+    params.permit(profile: create_profile_param_keys)[:profile]
+  end
 
-    :account
+  def create_profile_param_keys
+    (individual_profile_param_keys + business_profile_param_keys).uniq
+  end
+
+  def update_params
+    params.permit(
+      account: update_account_param_keys,
+      # TODO: Improve this logic to allow for updating the email address on
+      #   a profile if a User does not exist for it - otherwise, profile emails
+      #   should ONLY be changed as a side-effect of a confirmed email update
+      #   to the associated account's email.
+      profile: create_profile_param_keys - %i[email]
+    )
+  end
+
+  def update_account_param_keys
+    common_param_keys = %i[display_name readme status]
+    case account
+    when Business
+      common_param_keys + %i[tax_id]
+    else
+      common_param_keys
+    end
   end
 end
