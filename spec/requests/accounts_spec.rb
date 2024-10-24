@@ -390,7 +390,7 @@ RSpec.describe '/accounts', type: :request do
     context 'with an authorized user' do
       # TODO: Implement access controls for models informed by (Pundit + Rolify) policies
       let(:user) { Fabricate :user }
-      let(:account) { Fabricate :account }
+      let(:account) { Fabricate :account, users: [user] }
 
       before do
         sign_in user
@@ -398,7 +398,7 @@ RSpec.describe '/accounts', type: :request do
 
       context 'and valid business account parameters' do
         let(:email) { Faker::Internet.email }
-        let(:account) { Fabricate :business }
+        let(:account) { Fabricate :business, users: [user] }
         let(:account_attributes) do
           {
             display_name: Faker::Company.name,
