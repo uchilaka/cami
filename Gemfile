@@ -64,7 +64,8 @@ gem 'globalid', '~> 1.2'
 
 gem 'awesome_print'
 
-gem 'sib-api-v3-sdk'
+# Gem validates phone numbers with Google libphonenumber database [https://github.com/daddyz/phonelib]
+gem 'phonelib'
 
 # Roles library with resource scoping
 gem 'rolify', '~> 6.0'
@@ -77,6 +78,11 @@ gem 'rails_semantic_logger'
 
 # Better Stack Rails integration
 gem 'logtail-rails'
+
+# Find slowly loading gems for your Bundler-based projects
+gem 'bumbler'
+
+gem 'sib-api-v3-sdk', groups: %i[development production]
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
