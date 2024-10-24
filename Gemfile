@@ -82,7 +82,8 @@ gem 'logtail-rails'
 # Find slowly loading gems for your Bundler-based projects
 gem 'bumbler'
 
-gem 'sib-api-v3-sdk', groups: %i[development production]
+# Rationale: setup "staging" environments to be identical to production, distinguished by their domain name.
+gem 'sib-api-v3-sdk', groups: %i[production]
 
 group :development, :test do
   gem 'active_model_serializers'
