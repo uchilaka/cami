@@ -86,6 +86,8 @@ gem 'sib-api-v3-sdk', groups: %i[development production]
 
 group :development, :test do
   gem 'active_model_serializers'
+  gem 'capybara'
+  gem 'capybara_accessibility_audit'
   gem 'fabrication'
   gem 'faker'
   gem 'open3'
@@ -121,8 +123,6 @@ group :development do
 end
 
 group :test do
-  gem 'capybara'
-  gem 'capybara_accessibility_audit'
   gem 'rubocop-capybara', require: false
   gem 'rubocop-performance'
   gem 'rubocop-rails'
