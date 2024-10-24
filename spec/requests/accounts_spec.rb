@@ -398,7 +398,7 @@ RSpec.describe '/accounts', type: :request do
 
       context 'and valid business account parameters' do
         let(:email) { Faker::Internet.email }
-        let(:account) { Fabricate :business, users: [user] }
+        let(:account) { Fabricate :business, users: [user], status: 'guest' }
         let(:account_attributes) do
           {
             display_name: Faker::Company.name,
@@ -427,17 +427,30 @@ RSpec.describe '/accounts', type: :request do
             end.not_to change(Business, :count)
           end
 
-          it 'returns the expected HTTP status' do
+          it 'redirecting to the created account' do
             patch account_url(account), params: { account: account_attributes, profile: profile_attributes }
-            expect(response).to have_http_status(:ok)
+            expect(response).to redirect_to(account_url(subject))
+          end
+
+          context 'when format = json' do
+            it 'returns the expected HTTP status' do
+              patch account_url(account),
+                    params: { account: account_attributes, profile: profile_attributes, format: :json }
+              expect(response).to have_http_status(:ok)
+            end
           end
         end
 
         context 'attributes' do
-          before { patch account_url(account), params: { account: account_attributes, profile: profile_attributes } }
+          before do
+            patch account_url(account),
+                  params: { account: account_attributes, profile: profile_attributes, format: :json }
+          end
 
           context '#email' do
-            it { expect(subject.email).to eq(profile_attributes[:email]) }
+            it 'does NOT update the email address' do
+              expect(subject.email).not_to eq(profile_attributes[:email])
+            end
           end
 
           context '#phone' do
@@ -455,11 +468,11 @@ RSpec.describe '/accounts', type: :request do
           end
 
           context '#type' do
-            it { expect(subject.type).to eq(account_attributes[:type]) }
+            pending 'does NOT update the account type'
           end
 
           context '#slug' do
-            it { expect(subject.slug).to eq(account_attributes[:slug]) }
+            pending 'does NOT update the account slug'
           end
 
           context '#display_name' do

@@ -46,8 +46,9 @@ class AccountsController < ApplicationController
     respond_to do |format|
       result =
         UpdateAccountWorkflow.call(
-          account:, account_params: update_params[:account],
-          profile_params: update_params[:profile]
+          account_params: update_params[:account],
+          profile_params: update_params[:profile],
+          account:
         )
       if result.success?
         format.html { redirect_to account_url(result.account), notice: 'Account was successfully updated.' }
@@ -96,11 +97,7 @@ class AccountsController < ApplicationController
   def update_params
     params.permit(
       account: update_account_param_keys,
-      # TODO: Improve this logic to allow for updating the email address on
-      #   a profile if a User does not exist for it - otherwise, profile emails
-      #   should ONLY be changed as a side-effect of a confirmed email update
-      #   to the associated account's email.
-      profile: create_profile_param_keys - %i[email]
+      profile: create_profile_param_keys
     )
   end
 

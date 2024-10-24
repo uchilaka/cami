@@ -18,6 +18,8 @@ class UpdateAccountWorkflow
       context.account = account
     end
 
+    return unless context.success?
+
     context.profile = account.profile
     profile_params =
       if context.profile_params.present?
@@ -27,6 +29,11 @@ class UpdateAccountWorkflow
           context.profile_params.slice(*individual_profile_param_keys)
         end.to_h.symbolize_keys
       end
+    # TODO: Improve this logic to allow for updating the email address on
+    #   a profile if a User does not exist for it - otherwise, profile emails
+    #   should ONLY be changed as a side-effect of a confirmed email update
+    #   to the associated account's email.
+    _updated_email = profile_params.delete(:email)
 
     return unless context.success? && profile_params.present? && account.profile.present?
 
