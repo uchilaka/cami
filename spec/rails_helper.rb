@@ -140,6 +140,8 @@ RSpec.configure do |config|
 
   config.around(:each) do |example|
     DatabaseCleaner.cleaning { example.run }
+    # Clean up all test double state
+    RSpec::Mocks.teardown
   end
 end
 

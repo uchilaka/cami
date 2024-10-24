@@ -17,11 +17,11 @@ document.addEventListener('turbo:load', () => {
     console.debug('A Turbo link was clicked', { ev })
   })
 
-  document.querySelectorAll('.action--view-account-summary').forEach((el) => {
+  document.querySelectorAll('.action--view-account-summary').forEach((el: Element | HTMLElement) => {
     el.addEventListener('click', ({ target }) => {
-      const { resourceId: accountId } = target.dataset
+      const { resourceId: accountId } = (target as HTMLElement).dataset
       console.debug('View account summary was clicked', { accountId, target })
-      emitLoadAccountEvent(accountId, el)
+      if (accountId) emitLoadAccountEvent(accountId, el)
     })
   })
 })

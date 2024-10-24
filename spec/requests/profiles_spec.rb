@@ -35,9 +35,18 @@ RSpec.describe '/metadata/profiles', type: :request do
   end
 
   describe 'GET /show' do
+    let(:user) { Fabricate :user }
+    let(:account) { Fabricate :individual, users: [user] }
+    let(:profile) { Fabricate :user_profile, account: }
+
+    before do
+      sign_in user
+      # Turn off auto-creation of profiles with user account records
+      allow_any_instance_of(User).to receive(:initialize_profile) { nil }
+    end
+
     it 'renders a successful response' do
-      profile = Metadata::Profile.create! valid_attributes
-      get _metadata_profile_url(profile)
+      get account_profile_url(account, profile, format: :json)
       expect(response).to be_successful
     end
   end

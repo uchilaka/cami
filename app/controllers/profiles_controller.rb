@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ProfilesController < ApplicationController
+  before_action :set_account
   before_action :set_metadata_profile, only: %i[show edit update destroy]
 
   # GET /profiles
@@ -58,15 +59,21 @@ class ProfilesController < ApplicationController
 
   private
 
+  # Only allow a list of trusted parameters through.
+  def metadata_profile_params
+    params.fetch(:metadata_profile, {})
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_metadata_profile
     @metadata_profile = Metadata::Profile.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to _metadata_profiles_path
+    redirect_to accounts_path
   end
 
-  # Only allow a list of trusted parameters through.
-  def metadata_profile_params
-    params.fetch(:metadata_profile, {})
+  def set_account
+    @account = Account.find(params[:account_id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to accounts_path
   end
 end
