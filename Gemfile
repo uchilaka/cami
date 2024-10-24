@@ -85,24 +85,20 @@ gem 'bumbler'
 gem 'sib-api-v3-sdk', groups: %i[development production]
 
 group :development, :test do
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem 'debug', platforms: %i[mri mingw x64_mingw]
-  # Security vulnerability scanner for Ruby on Rails. https://github.com/presidentbeef/brakeman
   gem 'active_model_serializers'
-  gem 'brakeman'
-  gem 'capybara'
-  gem 'capybara_accessibility_audit'
   gem 'fabrication'
   gem 'faker'
   gem 'open3'
   gem 'rspec-rails', '~> 6.1'
-  gem 'rspec-wait'
+  # gem 'rspec-wait'
   gem 'rubocop'
-  gem 'rubocop-capybara', require: false
-  gem 'rubocop-performance'
-  gem 'rubocop-rails'
-  gem 'rubocop-rspec'
   gem 'strong_migrations'
+
+  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem 'debug', platforms: %i[mri mingw x64_mingw]
+
+  # Security vulnerability scanner for Ruby on Rails. https://github.com/presidentbeef/brakeman
+  gem 'brakeman'
 end
 
 group :development do
@@ -125,6 +121,13 @@ group :development do
 end
 
 group :test do
+  gem 'capybara'
+  gem 'capybara_accessibility_audit'
+  gem 'rubocop-capybara', require: false
+  gem 'rubocop-performance'
+  gem 'rubocop-rails'
+  gem 'rubocop-rspec'
+
   # Record your test suite's HTTP interactions and replay them during future test runs for fast,
   #   deterministic, accurate tests
   gem 'vcr', '~> 6.2'

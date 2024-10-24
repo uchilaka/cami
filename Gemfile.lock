@@ -395,10 +395,6 @@ GEM
       nokogiri
     rexml (3.2.6)
     rolify (6.0.1)
-    rspec (3.13.0)
-      rspec-core (~> 3.13.0)
-      rspec-expectations (~> 3.13.0)
-      rspec-mocks (~> 3.13.0)
     rspec-core (3.13.0)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.0)
@@ -416,8 +412,6 @@ GEM
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
     rspec-support (3.13.1)
-    rspec-wait (1.0.1)
-      rspec (>= 3.4)
     rubocop (1.57.2)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -608,7 +602,6 @@ DEPENDENCIES
   rails_semantic_logger
   rolify (~> 6.0)
   rspec-rails (~> 6.1)
-  rspec-wait
   rubocop
   rubocop-capybara
   rubocop-performance
