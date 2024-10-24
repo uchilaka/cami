@@ -399,6 +399,7 @@ RSpec.describe '/accounts', type: :request do
       context 'and valid business account parameters' do
         let(:email) { Faker::Internet.email }
         let(:account) { Fabricate :business, users: [user], status: 'guest' }
+        let(:profile) { account.profile }
         let(:account_attributes) do
           {
             display_name: Faker::Company.name,
@@ -456,7 +457,7 @@ RSpec.describe '/accounts', type: :request do
           context '#phone' do
             let(:parsed_number) { Phonelib.parse(profile_attributes[:phone]) }
 
-            it { expect(subject.profile.phone.full_international).to eq(parsed_number.full_international) }
+            it { expect(profile.reload.phone.full_international).to eq(parsed_number.full_international) }
           end
 
           context '#status' do
