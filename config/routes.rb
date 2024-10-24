@@ -36,7 +36,9 @@ Rails.application.routes.draw do
   resources :invoices, except: %i[destroy]
   resources :services, except: %i[destroy]
   resources :products, except: %i[destroy]
-  resources :accounts, except: %i[destroy]
+  resources :accounts, except: %i[destroy] do
+    resources :profiles
+  end
   get 'businesses', to: 'accounts#index', as: :businesses
   get 'businesses/new', to: 'accounts#new', as: :new_business
   get 'businesses/:id', to: 'accounts#show', as: :business

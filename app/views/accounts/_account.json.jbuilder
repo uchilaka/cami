@@ -24,9 +24,13 @@ end
 if account.is_a?(Business)
   json.extract! account, :tax_id, :email
   json.email account.email if account.profile.present?
+  json.profiles [account.profile].compact
   json.isVendor account.has_role?(:vendor)
 end
 
-json.email account.email if account.is_a?(Individual) && account.user.present?
+if account.is_a?(Individual)
+  json.email account.email if account.user.present?
+  json.profiles account.profiles
+end
 
 json.invoices account.invoices, partial: 'invoices/invoice', as: :invoice
