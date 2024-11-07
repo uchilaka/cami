@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class ProfilesController < ApplicationController
+  before_action :set_account
   before_action :set_metadata_profile, only: %i[show edit update destroy]
 
   # GET /profiles
   def index
-    @metadata_profiles = Metadata::Profile.where(account_id: params[:account_id])
+    @profiles = Metadata::Profile.where(account_id: params[:account_id])
   end
 
   # GET /profiles/1 or /profiles/1.json
@@ -51,18 +52,22 @@ class ProfilesController < ApplicationController
   def destroy
     @metadata_profile.destroy
     respond_to do |format|
-      format.html { redirect_to _metadata_profiles_url, notice: 'Profile was successfully destroyed.' }
+      format.html { redirect_to account_profiles_path(@account), notice: 'Profile was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
 
+  def set_account
+    @account = Account.find(params[:account_id])
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_metadata_profile
     @metadata_profile = Metadata::Profile.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to _metadata_profiles_path
+    redirect_to account_profiles_path(@account), notice: 'Profile not found'
   end
 
   # Only allow a list of trusted parameters through.

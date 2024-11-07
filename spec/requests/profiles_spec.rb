@@ -30,30 +30,36 @@ RSpec.describe '/metadata/profiles', type: :request do
   let(:account) { Fabricate :individual, users: [user] }
 
   describe 'GET /index' do
-    let(:account) { Fabricate :individual_with_profiles }
+    let(:account) { Fabricate :individual_with_profiles, users: [user] }
 
     before { sign_in user }
 
     it 'renders a successful response' do
-      get account_profiles_url(account), params: { format: :json }
+      get account_profiles_url(account)
       expect(response).to have_http_status(:ok)
     end
   end
 
   describe 'GET /show' do
     let(:profile) { Fabricate :user_profile }
-    let(:account) { Fabricate :individual, profiles: [profile] }
+    let(:account) { Fabricate :individual, profiles: [profile], users: [user] }
+
+    before { sign_in user }
 
     it 'renders a successful response' do
-      get account_profile_url(account, profile.id.to_s), params: { format: :json }
-      expect(response).to be_successful
+      get account_profile_url(account, profile.id.to_s)
+      expect(response).to have_http_status(:ok)
     end
   end
 
   describe 'GET /new' do
+    let(:account) { Fabricate :individual, users: [user] }
+
+    before { sign_in user }
+
     it 'renders a successful response' do
       get new_account_profile_url(account)
-      expect(response).to be_successful
+      expect(response).to have_http_status(:ok)
     end
   end
 
@@ -69,7 +75,7 @@ RSpec.describe '/metadata/profiles', type: :request do
     context 'with valid parameters' do
       it 'creates a new Metadata::Profile' do
         expect do
-          post _metadata_profiles_url, params: { metadata_profile: valid_attributes }
+          post account_profiles_url(account), params: { metadata_profile: valid_attributes }
         end.to change(Metadata::Profile, :count).by(1)
       end
 
