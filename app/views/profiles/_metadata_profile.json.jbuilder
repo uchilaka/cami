@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 json.extract! metadata_profile, :created_at, :updated_at
-json.phone metadata_profile.phone&.full_international
+json.phone metadata_profile.phone&.full_e164
 
 if metadata_profile.is_a?(Metadata::Business)
   json.email metadata_profile.email

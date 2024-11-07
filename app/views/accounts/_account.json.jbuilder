@@ -15,7 +15,10 @@ end
 
 if account.is_a?(Business)
   json.extract! account, :tax_id, :email
-  json.email account.email if account.profile.present?
+  if account.profile.present?
+    json.email account.email
+    json.phone account.phone&.full_e164
+  end
   json.profiles do
     json.child! do
       json.partial! 'profiles/metadata_profile', metadata_profile: account.profile, account:

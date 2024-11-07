@@ -3,6 +3,7 @@ import { Form, Formik } from 'formik'
 import React, { FC, useState } from 'react'
 import * as Yup from 'yup'
 import FormInput from '@/components/FloatingFormInput'
+import PhoneInput from '@/components/PhoneNumberInput/PhoneLibNumberInput'
 import { useAccountContext } from '../AccountProvider'
 import { isActionableAccount, isBusinessAccount, isIndividualAccount } from '@/utils/api/types'
 import TextareaInput from '@/components/TextareaInput'
@@ -148,7 +149,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
                 onBlur={handleBlur}
                 readOnly={loading || isReadOnly}
               />
-              <FormInput
+              <PhoneInput
                 id="phone"
                 type="phone"
                 label="Phone number"
