@@ -13,13 +13,13 @@ import useCsrfToken from '@/utils/hooks/useCsrfToken'
 type ProfileFormData = {
   givenName: string
   familyName: string
+  phone?: string
 }
 
 type AccountFormData = Partial<ProfileFormData> & {
   displayName: string
   email: string
   type: 'Individual' | 'Business'
-  phone?: string
   readme?: string
 }
 
@@ -68,10 +68,10 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
       if (isActionableAccount(account)) {
         // Submit the form
         const { edit } = account.actions
-        const { givenName, familyName, ...rest } = values
+        const { givenName, familyName, phone, ...rest } = values
         const payload = {
           [account.type.toLowerCase()]: rest,
-          profile: { givenName, familyName },
+          profile: { givenName, familyName, phone },
         }
         return fetch(edit.url, {
           method: 'PATCH',
