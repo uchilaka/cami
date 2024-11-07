@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RestrictedIpsConstraint < LarCity::ApplicationRouteConstraint
+class RestrictedIpsConstraint < ApplicationRouteConstraint
   def matches?(request)
     Rails.logger.info log_prefix(__method__), request: {
       remote_ip: request.remote_ip,

@@ -2,7 +2,7 @@
 
 require_relative 'admin_scope_constraint'
 
-class FlipperApiConstraint < LarCity::ApplicationRouteConstraint
+class FlipperApiConstraint < ApplicationRouteConstraint
   def matches?(request)
     Rails.logger.info log_prefix(__method__), request: {
       remote_ip: request.remote_ip,
