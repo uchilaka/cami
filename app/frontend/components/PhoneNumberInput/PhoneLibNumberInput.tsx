@@ -1,5 +1,5 @@
 import React, { FC, forwardRef, InputHTMLAttributes, useEffect } from 'react'
-import PhoneLibInput from 'react-phone-number-input'
+import PhoneLibInput, { isValidPhoneNumber, formatPhoneNumberIntl } from 'react-phone-number-input'
 import { useFormikContext } from 'formik'
 import clsx from 'clsx'
 import { FormInputProps } from '@/types'
@@ -19,7 +19,12 @@ const StyledInput = forwardRef<HTMLInputElement, PhoneNumberInputProps>(function
   console.debug({ id, name, value })
 
   useEffect(() => {
-    setFieldValue(name, value, true)
+    const valueString = `${value}`
+    if (isValidPhoneNumber(valueString)) {
+      const intlValue = formatPhoneNumberIntl(valueString)
+      const e164Value = intlValue.replace(/\s/g, '')
+      setFieldValue(name, e164Value, true)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 
