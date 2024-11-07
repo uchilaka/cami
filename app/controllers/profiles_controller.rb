@@ -6,7 +6,7 @@ class ProfilesController < ApplicationController
 
   # GET /profiles
   def index
-    @metadata_profiles = Metadata::Profile.all
+    @profiles = Metadata::Profile.where(account_id: params[:account_id])
   end
 
   # GET /profiles/1 or /profiles/1.json
@@ -50,10 +50,14 @@ class ProfilesController < ApplicationController
 
   # DELETE /profiles/1 or /profiles/1.json
   def destroy
-    @metadata_profile.destroy
-    respond_to do |format|
-      format.html { redirect_to _metadata_profiles_url, notice: 'Profile was successfully destroyed.' }
-      format.json { head :no_content }
+    if @metadata_profile.destroy
+      respond_to do |format|
+        format.html { redirect_to account_profiles_path(@account), notice: 'Profile was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+    else
+      format.html { render :edit, status: :unprocessable_entity }
+      format.json { render json: @metadata_profile.errors, status: :unprocessable_entity }
     end
   end
 
@@ -68,7 +72,7 @@ class ProfilesController < ApplicationController
   def set_metadata_profile
     @metadata_profile = Metadata::Profile.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to accounts_path
+    redirect_to account_profiles_path(@account), notice: 'Profile not found'
   end
 
   def set_account

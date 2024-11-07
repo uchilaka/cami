@@ -1,7 +1,7 @@
 <div id="<%= dom_id metadata_profile %>" class="bg-white p-6 shadow-sm rounded overflow-hidden">
 <% if action_name != "show" %>
-    <%= link_to "Show this profile", metadata_profile, class: "btn btn-primary" %>
-    <%= link_to 'Edit this profile', edit_metadata_profile_path(metadata_profile), class: "btn btn-secondary" %>
+    <%= link_to "Show this profile", account_profile_path(@account, metadata_profile), class: "btn btn-primary" %>
+    <%= link_to 'Edit this profile', edit_account_profile_path(@account, metadata_profile), class: "btn btn-secondary" %>
     <hr class="mt-6">
   <% end %>
 </div>
