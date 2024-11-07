@@ -3,7 +3,7 @@ import clsx from 'clsx'
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   loading?: boolean
-  variant?: 'primary' | 'secondary' | 'caution'
+  variant?: 'primary' | 'secondary' | 'caution' | 'transparent'
   size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
 }
 
@@ -46,6 +46,7 @@ const Button: FC<ButtonProps> = ({
       variant === 'secondary',
     'hover:text-white border focus:outline-none dark:hover:text-white text-red-700 border-red-700 hover:bg-red-800 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900':
       variant === 'caution',
+    'bg-transparent': 'transparent',
     'text-xs px-3 py-2': size === 'xs',
     'text-sm px-3 py-2': size === 'sm',
     'text-sm px-5 py-2.5': size === 'base',
