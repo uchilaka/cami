@@ -1,5 +1,6 @@
 import React, { ComponentType } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import FeatureFlagsProvider from '@/features/FeatureFlagsProvider'
 
 export const withAllTheProviders = <P extends {}>(WrappedComponent: ComponentType<P>) => {
   const displayName = WrappedComponent.displayName ?? WrappedComponent.name ?? 'Component'
@@ -8,7 +9,9 @@ export const withAllTheProviders = <P extends {}>(WrappedComponent: ComponentTyp
 
     return (
       <QueryClientProvider client={queryClient}>
-        <WrappedComponent {...props} />
+        <FeatureFlagsProvider>
+          <WrappedComponent {...props} />
+        </FeatureFlagsProvider>
       </QueryClientProvider>
     )
   }

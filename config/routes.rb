@@ -52,6 +52,10 @@ Rails.application.routes.draw do
 
   root to: 'pages#home'
 
+  namespace :api do
+    resources :features, only: %i[index], defaults: { format: :json }
+  end
+
   draw :flipper
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

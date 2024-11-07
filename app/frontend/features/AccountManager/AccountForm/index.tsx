@@ -10,6 +10,7 @@ import TextareaInput from '@/components/TextareaInput'
 import Button from '@/components/Button'
 import { useMutation } from '@tanstack/react-query'
 import useCsrfToken from '@/utils/hooks/useCsrfToken'
+import { useFeatureFlagsContext } from '@/features/FeatureFlagsProvider'
 
 type ProfileFormData = {
   givenName: string
@@ -52,6 +53,8 @@ const validationSchema = Yup.object({
 export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
   const [isReadOnly, setIsReadOnly] = useState(readOnly ?? true)
   const { loading, account } = useAccountContext()
+  const { loading: loadingFeatureFlags, isEnabled } = useFeatureFlagsContext()
+  const disablePhoneNumbers = !isEnabled('editable_phone_numbers')
   const { csrfToken } = useCsrfToken()
 
   const formClassName = clsx('mx-auto', { 'max-w-lg': !compact })
@@ -159,7 +162,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
                 onReset={handleReset}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                readOnly={loading || isReadOnly}
+                readOnly={loading || loadingFeatureFlags || disablePhoneNumbers || isReadOnly}
               />
             </div>
 

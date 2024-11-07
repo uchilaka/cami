@@ -25,3 +25,10 @@ export const getAccount = async (accountId: string, payload?: Record<string, str
   if (!isValidAccount(data)) throw new InvalidAccountError('Invalid account data', data)
   return data
 }
+
+export const getFeatureFlags = async () => {
+  const params = new URLSearchParams({ format: 'json' })
+  const result = await fetch(`/api/features?${params.toString()}`)
+  const data: { features: Record<string, boolean>; flags: string[] } = await result.json()
+  return data.features
+}
