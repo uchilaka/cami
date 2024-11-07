@@ -31,7 +31,7 @@ const StyledInput = forwardRef<HTMLInputElement, PhoneNumberInputProps>(function
       {...otherProps}
       className="border-0 w-full bg-transparent"
       placeholder={otherProps.placeholder ?? ' '}
-      value={value}
+      defaultValue={value}
       onChange={onChange}
       onBlur={handleBlur}
       onReset={handleReset}
