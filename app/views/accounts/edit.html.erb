@@ -3,7 +3,7 @@
   <%= render "form", account: @account %>
   <hr class="my-8">
   <div class="inline btn-group">
-    <%= link_to "Show this account", @account, class: secondary_btn_classes('px-5 py-2.5') %>
+    <%= link_to "Show this account", account_path(@account), class: secondary_btn_classes('px-5 py-2.5') %>
     <%= link_to "Back to accounts", accounts_path, class: secondary_btn_classes('px-5 py-2.5') %>
   </div>
 </div>
