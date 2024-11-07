@@ -506,6 +506,8 @@ RSpec.describe '/accounts', type: :request do
         subject { account.reload }
 
         context 'has side effect(s) of' do
+          let!(:profile) { Fabricate :user_profile, account: }
+
           it 'NOT creating a new Account' do
             expect do
               patch account_url(account), params: { account: account_attributes, profile: profile_attributes }
@@ -520,6 +522,8 @@ RSpec.describe '/accounts', type: :request do
         end
 
         context 'attributes' do
+          let!(:profile) { Fabricate :user_profile, account: }
+
           before do
             patch account_url(account),
                   params: { account: account_attributes, profile: profile_attributes, format: :json }
