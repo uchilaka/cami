@@ -50,10 +50,14 @@ class ProfilesController < ApplicationController
 
   # DELETE /profiles/1 or /profiles/1.json
   def destroy
-    @metadata_profile.destroy
-    respond_to do |format|
-      format.html { redirect_to account_profiles_path(@account), notice: 'Profile was successfully destroyed.' }
-      format.json { head :no_content }
+    if @metadata_profile.destroy
+      respond_to do |format|
+        format.html { redirect_to account_profiles_path(@account), notice: 'Profile was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+    else
+      format.html { render :edit, status: :unprocessable_entity }
+      format.json { render json: @metadata_profile.errors, status: :unprocessable_entity }
     end
   end
 
