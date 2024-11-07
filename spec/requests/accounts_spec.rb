@@ -43,11 +43,11 @@ RSpec.describe '/accounts', type: :request do
       end
 
       context 'accessing an authorized account' do
-        let(:account) { Fabricate :account }
+        let(:account) { Fabricate :account, users: [user] }
 
         context 'with the default format' do
           it 'renders a successful response' do
-            account = Account.create! valid_attributes
+            # account = Account.create! valid_attributes
             get account_url(account)
             expect(response).to be_successful
           end
@@ -55,8 +55,6 @@ RSpec.describe '/accounts', type: :request do
 
         context 'with format = json' do
           let(:data) { JSON.parse(response.body) }
-          let(:user) { Fabricate :user }
-          let(:account) { Fabricate :account }
           let(:expected_actions) do
             {
               'edit' => {
@@ -125,7 +123,7 @@ RSpec.describe '/accounts', type: :request do
           end
 
           context 'when the account is a business' do
-            let(:account) { Fabricate :business }
+            let(:account) { Fabricate :business, users: [user] }
 
             it 'returns the tax ID' do
               expect(data['taxId']).to eq(account.tax_id)
@@ -136,6 +134,7 @@ RSpec.describe '/accounts', type: :request do
               let(:account) do
                 Fabricate :account_with_invoices,
                           type: 'Business',
+                          users: [user],
                           invoices: [Fabricate(:invoice), Fabricate(:invoice)]
               end
 
@@ -146,14 +145,14 @@ RSpec.describe '/accounts', type: :request do
           end
 
           context 'when the account is an individual' do
-            let(:account) { Fabricate :individual }
+            let(:account) { Fabricate :individual, users: [user] }
 
             it 'returns the email' do
               expect(data['email']).to eq(account.email)
             end
 
             context 'with profiles' do
-              let(:account) { Fabricate :individual_with_profiles }
+              let(:account) { Fabricate :individual_with_profiles, users: [user] }
 
               it 'returns the profiles' do
                 expect(data['profiles']).to be_an(Array)
@@ -164,7 +163,6 @@ RSpec.describe '/accounts', type: :request do
         end
       end
 
-      # TODO: implement access controls for models informed by (Pundit + Rolify) policies
       context 'accessing an unauthorized account' do
         let(:account) { Fabricate :account }
 
@@ -226,7 +224,6 @@ RSpec.describe '/accounts', type: :request do
 
   describe 'POST /create' do
     context 'with an authorized user' do
-      # TODO: Implement access controls for models informed by (Pundit + Rolify) policies
       let(:user) { Fabricate :user }
 
       before do
@@ -482,7 +479,7 @@ RSpec.describe '/accounts', type: :request do
       end
 
       context 'and valid individual account parameters' do
-        let(:account) { Fabricate :individual }
+        let(:account) { Fabricate :individual, users: [user] }
         let(:profile) { Fabricate :user_profile, account: }
         let(:account_attributes) do
           {
@@ -502,6 +499,8 @@ RSpec.describe '/accounts', type: :request do
             ].sample
           }
         end
+
+        before { sign_in user }
 
         subject { account.reload }
 

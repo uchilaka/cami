@@ -81,4 +81,22 @@ RSpec.describe User, type: :model do
       expect(subject.profile).to be_persisted
     end
   end
+
+  describe '#admin?' do
+    subject { Fabricate(:user, email:) }
+
+    context 'when the user has the admin role' do
+      before { subject.add_role(:admin) }
+
+      it 'returns true' do
+        expect(subject.admin?).to be(true)
+      end
+    end
+
+    context 'when the user does not have the admin role' do
+      it 'returns false' do
+        expect(subject.admin?).to be(false)
+      end
+    end
+  end
 end

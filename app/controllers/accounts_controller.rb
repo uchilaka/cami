@@ -11,7 +11,7 @@ class AccountsController < ApplicationController
   def index
     # TODO: Limit the accounts returned to those the customer
     #   has access through via a policy (Pundit)
-    @accounts = Account.all
+    @accounts = policy_scope(Account)
   end
 
   # GET /accounts/1 or /accounts/1.json
@@ -73,9 +73,12 @@ class AccountsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_account
-    @account = Account.find(params[:id])
+    @account = policy_scope(Account).find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to accounts_path
+    respond_to do |format|
+      format.html { redirect_to accounts_path, notice: 'Account not found' }
+      format.json { render json: { error: 'Account not found' }, status: :not_found }
+    end
   end
 
   # TODO: Refactor the :create action to expect :account_params

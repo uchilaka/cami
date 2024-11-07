@@ -122,6 +122,10 @@ class User < ApplicationRecord
     profile[Current.auth_provider.provider]
   end
 
+  def admin?
+    has_role?(:admin)
+  end
+
   # def jwt_payload
   #   super.merge(foo: 'bar')
   # end

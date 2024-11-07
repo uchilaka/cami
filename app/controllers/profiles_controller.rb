@@ -72,12 +72,18 @@ class ProfilesController < ApplicationController
   def set_metadata_profile
     @metadata_profile = Metadata::Profile.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to account_profiles_path(@account), notice: 'Profile not found'
+    respond_to do |format|
+      format.html { redirect_to account_profiles_path(@account), notice: 'Profile not found' }
+      format.json { render json: { error: 'Profile not found' }, status: :not_found }
+    end
   end
 
   def set_account
     @account = Account.find(params[:account_id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to accounts_path
+    respond_to do |format|
+      format.html { redirect_to accounts_path, notice: 'Account not found' }
+      format.json { render json: { error: 'Account not found' }, status: :not_found }
+    end
   end
 end
