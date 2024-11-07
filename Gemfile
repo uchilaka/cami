@@ -92,7 +92,7 @@ group :development, :test do
   gem 'fabrication'
   gem 'faker'
   gem 'open3'
-  gem 'rspec-rails', '~> 6.1'
+  gem 'rspec-rails'
   # gem 'rspec-wait'
   gem 'rubocop'
   gem 'strong_migrations'
