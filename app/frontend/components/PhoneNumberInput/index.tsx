@@ -361,17 +361,15 @@ const PhoneNumberInput: FC<PhoneNumberInputProps> = ({ id, type = 'tel', label, 
           </li>
         </ul>
       </div>
-      <div className="relative w-full">
-        <Field
-          {...otherProps}
-          id={id}
-          type={type}
-          className={inputElementClassNames}
-          placeholder={otherProps.placeholder ?? ' '}
-          pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-          readOnly={readOnly}
-        />
-      </div>
+      <Field
+        {...otherProps}
+        id={id}
+        type={type}
+        className={inputElementClassNames}
+        placeholder={otherProps.placeholder ?? ' '}
+        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+        readOnly={readOnly}
+      />
       {label && (
         <label htmlFor={id} className={labelClassNames}>
           {label}
