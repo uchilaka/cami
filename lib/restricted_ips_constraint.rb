@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'application_route_constraint'
+
 class RestrictedIpsConstraint < ApplicationRouteConstraint
   def matches?(request)
     Rails.logger.info log_prefix(__method__), request: {
