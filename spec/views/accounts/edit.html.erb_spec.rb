@@ -3,12 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'accounts/edit', type: :view do
-  let(:account) do
-    Account.create!(
-      display_name: 'MyString',
-      readme: 'MyText'
-    )
-  end
+  let(:account) { Fabricate :account }
 
   before(:each) do
     assign(:account, account)
