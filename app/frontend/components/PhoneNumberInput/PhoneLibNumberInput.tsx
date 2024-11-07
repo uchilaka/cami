@@ -1,7 +1,7 @@
 import React, { FC, InputHTMLAttributes } from 'react'
 import { FormInputProps } from '@/types'
 import PhoneInput from 'react-phone-number-input'
-import { Field } from 'formik'
+import { Field, useFormikContext } from 'formik'
 import useInputClassNames from '@/utils/hooks/useInputClassNames'
 import FormInputHint from '../FormInputHint'
 
@@ -15,18 +15,17 @@ const PhoneLibNumberInput: FC<PhoneNumberInputProps> = ({ id, type = 'tel', labe
     error: !!error,
     success: !!success,
   })
+  const { handleChange, values = {} } = useFormikContext<Record<string, string>>()
 
   return (
     <div className={containerClassNames}>
-      <Field
-        as={PhoneInput}
+      <PhoneInput
         {...otherProps}
         id={id}
-        type={type}
         className={inputElementClassNames}
-        placeholder={otherProps.placeholder ?? ' '}
-        readOnly={readOnly}
         defaultCountry="US"
+        value={values[otherProps.name]}
+        onChange={handleChange}
       />
       {label && (
         <label htmlFor={id} className={labelClassNames}>

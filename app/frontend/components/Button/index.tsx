@@ -30,9 +30,16 @@ const ButtonLoader = () => (
   </>
 )
 
-const Button: FC<ButtonProps> = ({ id, children, variant = 'secondary', size = 'base', ...otherProps }) => {
+const Button: FC<ButtonProps> = ({
+  id,
+  children,
+  variant = 'secondary',
+  size = 'base',
+  className = 'text-center mb-2 rounded-lg',
+  ...otherProps
+}) => {
   // TODO: experimenting with "me-2 mb-2" in base style
-  const buttonStyle = clsx('btn rounded-lg font-medium text-center mb-2 focus:ring-4', {
+  const buttonStyle = clsx('btn font-medium focus:ring-4 items-center', className, {
     'text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:outline-none focus:ring-green-200 dark:focus:ring-green-800':
       variant === 'primary',
     'text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-gray-100 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700':

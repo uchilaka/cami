@@ -1,12 +1,12 @@
 import React from 'react'
 import { Decorator, Meta, StoryObj, StrictArgs } from '@storybook/react'
 import { Formik, FormikConfig } from 'formik'
-import PhoneNumberInput from '.'
+import PhoneLibNumberInput from './PhoneLibNumberInput'
 
 const meta = {
-  title: 'Components/PhoneNumberInput',
-  component: PhoneNumberInput,
-} satisfies Meta<typeof PhoneNumberInput>
+  title: 'Components/PhoneLibNumberInput',
+  component: PhoneLibNumberInput,
+} satisfies Meta<typeof PhoneLibNumberInput>
 
 export default meta
 
