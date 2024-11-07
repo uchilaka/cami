@@ -24,7 +24,11 @@ if account.is_a?(Business)
   json.isVendor account.has_role?(:vendor)
 elsif account.is_a?(Individual)
   json.email account.email if account.user.present?
-  json.profiles account.profiles, partial: 'profiles/metadata_profile', as: :metadata_profile, account:
+  if account.profiles.any?
+    json.profiles account.profiles, partial: 'profiles/metadata_profile', as: :metadata_profile, account:
+  else
+    json.profiles []
+  end
 else
   json.profiles []
 end
