@@ -10,12 +10,15 @@ import Button from '@/components/Button'
 import { useMutation } from '@tanstack/react-query'
 import useCsrfToken from '@/utils/hooks/useCsrfToken'
 
-type AccountFormData = {
+type ProfileFormData = {
+  givenName: string
+  familyName: string
+}
+
+type AccountFormData = Partial<ProfileFormData> & {
   displayName: string
   email: string
   type: 'Individual' | 'Business'
-  givenName?: string
-  familyName?: string
   phone?: string
   readme?: string
 }
@@ -65,7 +68,11 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
       if (isActionableAccount(account)) {
         // Submit the form
         const { edit } = account.actions
-        const payload = { [account.type.toLowerCase()]: values }
+        const { givenName, familyName, ...rest } = values
+        const payload = {
+          [account.type.toLowerCase()]: rest,
+          profile: { givenName, familyName },
+        }
         return fetch(edit.url, {
           method: 'PATCH',
           headers: {
