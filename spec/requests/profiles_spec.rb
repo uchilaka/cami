@@ -143,12 +143,12 @@ RSpec.describe '/metadata/profiles', type: :request do
   end
 
   describe 'DELETE /destroy' do
-    let(:profile) { Fabricate :user_profile }
-    let(:account) { Fabricate :individual, profiles: [profile], users: [user] }
+    let!(:profile) { Fabricate :user_profile }
+    let!(:account) { Fabricate :individual, profiles: [profile], users: [user] }
 
     before { sign_in user }
 
-    xit 'destroys the requested metadata_profile' do
+    it 'destroys the requested metadata_profile' do
       expect do
         delete account_profile_url(account, profile)
       end.to change(Metadata::Profile, :count).by(-1)
