@@ -1,12 +1,15 @@
-import React, { FC, HTMLAttributes } from 'react'
-import { Field } from 'formik'
+import React, { FC, InputHTMLAttributes } from 'react'
 import { FormInputProps } from '@/types'
-import FormInputHint from '../FormInputHint'
+import PhoneInput from 'react-phone-number-input'
+import { Field } from 'formik'
 import useInputClassNames from '@/utils/hooks/useInputClassNames'
+import FormInputHint from '../FormInputHint'
 
-export type TextareaInputProps = HTMLAttributes<HTMLTextAreaElement> & FormInputProps & { readOnly?: boolean }
+import 'react-phone-number-input/style.css'
 
-const TextareaInput: FC<TextareaInputProps> = ({ id, label, placeholder, hint, error, success, readOnly, ...otherProps }) => {
+type PhoneNumberInputProps = InputHTMLAttributes<HTMLInputElement> & FormInputProps
+
+const PhoneLibNumberInput: FC<PhoneNumberInputProps> = ({ id, type = 'tel', label, success, error, hint, readOnly, ...otherProps }) => {
   const { containerClassNames, labelClassNames, inputElementClassNames } = useInputClassNames({
     readOnly: !!readOnly,
     error: !!error,
@@ -16,13 +19,14 @@ const TextareaInput: FC<TextareaInputProps> = ({ id, label, placeholder, hint, e
   return (
     <div className={containerClassNames}>
       <Field
-        as="textarea"
+        as={PhoneInput}
         {...otherProps}
         id={id}
-        rows={4}
+        type={type}
         className={inputElementClassNames}
-        placeholder={placeholder ?? ' '}
+        placeholder={otherProps.placeholder ?? ' '}
         readOnly={readOnly}
+        defaultCountry="US"
       />
       {label && (
         <label htmlFor={id} className={labelClassNames}>
@@ -38,4 +42,4 @@ const TextareaInput: FC<TextareaInputProps> = ({ id, label, placeholder, hint, e
   )
 }
 
-export default TextareaInput
+export default PhoneLibNumberInput
