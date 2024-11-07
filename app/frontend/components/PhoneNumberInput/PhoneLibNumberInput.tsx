@@ -16,6 +16,10 @@ const StyledInput = forwardRef<HTMLInputElement, PhoneNumberInputProps>(function
 ) {
   const { handleBlur, handleReset, setFieldValue } = useFormikContext<Record<string, string>>()
 
+  const classNames = clsx('border-0 w-full bg-transparent', {
+    'cursor-not-allowed': otherProps.readOnly || otherProps.disabled,
+  })
+
   console.debug({ id, name, value })
 
   useEffect(() => {
@@ -34,7 +38,7 @@ const StyledInput = forwardRef<HTMLInputElement, PhoneNumberInputProps>(function
       ref={ref}
       name={name}
       {...otherProps}
-      className="border-0 w-full bg-transparent"
+      className={classNames}
       placeholder={otherProps.placeholder ?? ' '}
       defaultValue={value}
       onChange={onChange}
@@ -50,7 +54,7 @@ const PhoneLibNumberInput: FC<PhoneNumberInputProps> = ({ id, type = 'tel', labe
     error: !!error,
     success: !!success,
   })
-  const inputClassName = clsx(inputElementClassNames, 'pb-0')
+  const inputClassName = clsx(inputElementClassNames, 'pb-0', { 'cursor-not-allowed': readOnly || otherProps.disabled })
   const { handleChange, errors, values = {} } = useFormikContext<Record<string, string>>()
   const message = errors[otherProps.name] ?? hint
 
