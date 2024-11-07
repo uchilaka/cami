@@ -420,6 +420,8 @@ RSpec.describe '/accounts', type: :request do
         subject { account.reload }
 
         context 'has side effect(s) of' do
+          let!(:account) { Fabricate :business, users: [user], status: 'guest' }
+
           it 'NOT creating a new Account' do
             expect do
               patch account_url(account), params: { account: account_attributes, profile: profile_attributes }

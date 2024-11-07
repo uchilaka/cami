@@ -43,13 +43,13 @@ class AccountsController < ApplicationController
 
   # PATCH/PUT /accounts/1 or /accounts/1.json
   def update
+    result =
+      UpdateAccountWorkflow.call(
+        account_params: update_params[:account],
+        profile_params: update_params[:profile],
+        account:
+      )
     respond_to do |format|
-      result =
-        UpdateAccountWorkflow.call(
-          account_params: update_params[:account],
-          profile_params: update_params[:profile],
-          account:
-        )
       if result.success?
         format.html { redirect_to account_url(result.account), notice: 'Account was successfully updated.' }
         format.json { render :show, status: :ok, location: account_url(result.account) }
