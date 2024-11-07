@@ -5,7 +5,7 @@ class ProfilesController < ApplicationController
 
   # GET /profiles
   def index
-    @metadata_profiles = Metadata::Profile.all
+    @metadata_profiles = Metadata::Profile.where(account_id: params[:account_id])
   end
 
   # GET /profiles/1 or /profiles/1.json

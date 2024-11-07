@@ -26,33 +26,41 @@ RSpec.describe '/metadata/profiles', type: :request do
     skip('Add a hash of attributes invalid for your model')
   end
 
+  let(:user) { Fabricate :user }
+  let(:account) { Fabricate :individual, users: [user] }
+
   describe 'GET /index' do
+    let(:account) { Fabricate :individual_with_profiles }
+
+    before { sign_in user }
+
     it 'renders a successful response' do
-      Metadata::Profile.create! valid_attributes
-      get _metadata_profiles_url
-      expect(response).to be_successful
+      get account_profiles_url(account), params: { format: :json }
+      expect(response).to have_http_status(:ok)
     end
   end
 
   describe 'GET /show' do
+    let(:profile) { Fabricate :user_profile }
+    let(:account) { Fabricate :individual, profiles: [profile] }
+
     it 'renders a successful response' do
-      profile = Metadata::Profile.create! valid_attributes
-      get _metadata_profile_url(profile)
+      get account_profile_url(account, profile.id.to_s), params: { format: :json }
       expect(response).to be_successful
     end
   end
 
   describe 'GET /new' do
     it 'renders a successful response' do
-      get new__metadata_profile_url
+      get new_account_profile_url(account)
       expect(response).to be_successful
     end
   end
 
   describe 'GET /edit' do
     it 'renders a successful response' do
-      profile = Metadata::Profile.create! valid_attributes
-      get edit__metadata_profile_url(profile)
+      # profile = Metadata::Profile.create! valid_attributes
+      get edit_account_profile_url(account, account.profile)
       expect(response).to be_successful
     end
   end
