@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'admin_scope_constraint'
+require_relative 'application_route_constraint'
 
 class FlipperApiConstraint < ApplicationRouteConstraint
   def matches?(request)
