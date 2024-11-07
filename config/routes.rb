@@ -28,8 +28,6 @@ Rails.application.routes.draw do
     constraints AdminScopeConstraint.new do
       # Setting up sidekiq web: https://github.com/sidekiq/sidekiq/wiki/Monitoring#web-ui
       mount Sidekiq::Web => '/sidekiq'
-      mount Flipper::Api.app(Flipper) => '/flipper/api'
-      mount Flipper::UI.app(Flipper) => '/flipper'
     end
   end
 
@@ -53,6 +51,8 @@ Rails.application.routes.draw do
   match 'app/*path', to: 'pages#home', via: :get
 
   root to: 'pages#home'
+
+  draw :flipper
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
