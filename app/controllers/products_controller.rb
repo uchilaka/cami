@@ -10,7 +10,7 @@ class ProductsController < ApplicationController
 
   # GET /products
   def index
-    @products = Product.all
+    @products = policy_scope(Product)
   end
 
   # GET /products/1 or /products/1.json
@@ -64,12 +64,12 @@ class ProductsController < ApplicationController
   private
 
   def set_vendors
-    @vendors = Business.all
+    @vendors = Business.with_role(:vendor)
   end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_product
-    @product = Product.find(params[:id])
+    @product = policy_scope(Product).find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to products_path
   end
