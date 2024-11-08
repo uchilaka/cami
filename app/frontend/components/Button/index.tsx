@@ -41,7 +41,7 @@ const Button: FC<ButtonProps> = ({
 }) => {
   const { buttonClassNames } = useButtonClassNames({ variant, size, disabled: otherProps.disabled, loading: otherProps.loading })
   // TODO: experimenting with "me-2 mb-2" in base style
-  const buttonStyle = clsx(buttonClassNames, className)
+  const buttonStyle = clsx(className, buttonClassNames)
 
   return (
     <button type="button" {...otherProps} id={id} className={buttonStyle}>

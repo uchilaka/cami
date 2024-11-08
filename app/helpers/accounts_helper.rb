@@ -39,11 +39,17 @@ module AccountsHelper
         label: 'Back to accounts',
         url: accounts_url
       },
-      transactions: {
+      transactions_index: {
         dom_id: SecureRandom.uuid,
         http_method: 'GET',
         label: 'Transactions',
         url: account_invoices_url(resource)
+      },
+      profiles_index: {
+        dom_id: SecureRandom.uuid,
+        http_method: 'GET',
+        label: 'Profiles',
+        url: account_profiles_url(resource)
       }
     }
   end
