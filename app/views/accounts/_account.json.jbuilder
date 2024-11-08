@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-json.key_format! camelize: :lower
+# json.key_format! camelize: :lower
 json.extract! account, :id, :display_name, :slug, :type, :readme, :status, :created_at, :updated_at
 json.url account_url(account, format: :json)
 
