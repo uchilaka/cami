@@ -226,7 +226,11 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
               {isReadOnly && (
                 <>
                   <Button disabled>Transactions</Button>
-                  <Button onClick={() => setIsReadOnly(false)}>Edit</Button>
+                  {isBusinessAccount(account) && <Button disabled>Profile</Button>}
+                  {isIndividualAccount(account) && <Button disabled>Profiles</Button>}
+                  <Button variant="primary" onClick={() => setIsReadOnly(false)}>
+                    Edit
+                  </Button>
                 </>
               )}
             </div>
