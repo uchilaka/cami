@@ -2,13 +2,15 @@ import React, { ButtonHTMLAttributes, FC } from 'react'
 import clsx from 'clsx'
 import useButtonClassNames from '@/utils/hooks/useButtonClassNames'
 
-export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type ButtonBaseProps = {
   loading?: boolean
   variant?: 'primary' | 'secondary' | 'caution' | 'transparent'
   size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
 }
 
-const ButtonLoader = () => (
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & ButtonBaseProps
+
+export const ButtonLoader = () => (
   <>
     <svg
       aria-hidden="true"
@@ -34,18 +36,19 @@ const ButtonLoader = () => (
 const Button: FC<ButtonProps> = ({
   id,
   children,
+  loading,
   variant = 'secondary',
   size = 'base',
   className = 'text-center mb-2 rounded-lg',
   ...otherProps
 }) => {
-  const { buttonClassNames } = useButtonClassNames({ variant, size, disabled: otherProps.disabled, loading: otherProps.loading })
+  const { buttonClassNames } = useButtonClassNames({ variant, size, loading, disabled: otherProps.disabled })
   // TODO: experimenting with "me-2 mb-2" in base style
   const buttonStyle = clsx(className, buttonClassNames)
 
   return (
     <button type="button" {...otherProps} id={id} className={buttonStyle}>
-      {otherProps.loading ? <ButtonLoader /> : children}
+      {loading ? <ButtonLoader /> : children}
     </button>
   )
 }
