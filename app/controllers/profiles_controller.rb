@@ -4,9 +4,18 @@ class ProfilesController < ApplicationController
   before_action :set_account
   before_action :set_metadata_profile, only: %i[show edit update destroy]
 
+  attr_accessor :account
+
   # GET /profiles
   def index
-    @profiles = Metadata::Profile.where(account_id: params[:account_id])
+    @profiles =
+      if account.is_a?(Business)
+        Metadata::Business.where(account_id: params[:account_id])
+      elsif account.is_a?(Individual)
+        account.profiles
+      else
+        []
+      end
   end
 
   # GET /profiles/1 or /profiles/1.json
@@ -70,7 +79,12 @@ class ProfilesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_metadata_profile
-    @metadata_profile = Metadata::Profile.find(params[:id])
+    @metadata_profile =
+      if account.is_a?(Business)
+        Metadata::Business.find(params[:id])
+      elsif account.is_a?(Individual)
+        Metadata::Profile.find(params[:id])
+      end
   rescue ActiveRecord::RecordNotFound
     respond_to do |format|
       format.html { redirect_to account_profiles_path(@account), notice: 'Profile not found' }

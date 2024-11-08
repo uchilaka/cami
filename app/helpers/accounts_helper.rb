@@ -4,11 +4,11 @@ module AccountsHelper
   include UserProfileHelper
 
   def account_filtering_enabled?
-    Flipper.enabled?(:feat__account_filtering)
+    Flipper.enabled?(:feat__account_filtering, current_user)
   end
 
   def account_summary_modal_enabled?
-    Flipper.enabled?(:feat__shared_account_summary_modal)
+    Flipper.enabled?(:feat__shared_account_summary_modal, current_user)
   end
 
   def modal_dom_id(resource, content_type: nil)
@@ -38,6 +38,12 @@ module AccountsHelper
         http_method: 'GET',
         label: 'Back to accounts',
         url: accounts_url
+      },
+      transactions: {
+        dom_id: SecureRandom.uuid,
+        http_method: 'GET',
+        label: 'Transactions',
+        url: account_invoices_url(resource)
       }
     }
   end
