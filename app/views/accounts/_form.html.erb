@@ -16,7 +16,10 @@
     <%= form.rich_text_area :readme, rows: 4, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
   </div>
 
-  <div class="inline">
+  <hr class="my-4">
+
+  <div class="flex justify-end items-center">
+    <%= yield :account_form_actions %>
     <%= form.submit class: primary_btn_classes %>
   </div>
 <% end %>

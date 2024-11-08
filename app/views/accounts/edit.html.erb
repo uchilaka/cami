@@ -1,9 +1,9 @@
+<% content_for :account_form_actions do %>
+  <%= link_to "Show this account", account_path(@account), class: secondary_btn_classes('px-5 py-2.5') %>
+  <%= link_to "Back to accounts", accounts_path, class: secondary_btn_classes('px-5 py-2.5') %>
+<% end %>
+
 <div class="mx-auto sm:w-9/12 md:w-6/12 w-full">
   <h1 class="font-bold text-4xl">Editing account</h1>
   <%= render "form", account: @account %>
-  <hr class="my-8">
-  <div class="inline btn-group">
-    <%= link_to "Show this account", account_path(@account), class: secondary_btn_classes('px-5 py-2.5') %>
-    <%= link_to "Back to accounts", accounts_path, class: secondary_btn_classes('px-5 py-2.5') %>
-  </div>
 </div>
