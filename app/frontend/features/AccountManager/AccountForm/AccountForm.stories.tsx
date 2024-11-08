@@ -3,15 +3,21 @@ import { Decorator, Meta, StoryObj } from '@storybook/react'
 import AccountForm from '.'
 import AccountProvider from '../AccountProvider'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import LogTransportProvider from '@/components/LogTransportProvider'
+import FeatureFlagsProvider from '@/components/FeatureFlagsProvider'
 
 const queryClient = new QueryClient()
 
 const accountProviderDecorator: Decorator = (Story, { args }) => (
-  <QueryClientProvider client={queryClient}>
-    <AccountProvider>
-      <Story {...args} />
-    </AccountProvider>
-  </QueryClientProvider>
+  <LogTransportProvider>
+    <FeatureFlagsProvider>
+      <QueryClientProvider client={queryClient}>
+        <AccountProvider>
+          <Story {...args} />
+        </AccountProvider>
+      </QueryClientProvider>
+    </FeatureFlagsProvider>
+  </LogTransportProvider>
 )
 
 const meta: Meta<typeof AccountForm> = {

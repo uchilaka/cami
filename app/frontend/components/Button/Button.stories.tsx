@@ -55,3 +55,9 @@ export const Sizes: Story = {
     )
   },
 }
+
+export const DisabledWhileLoading: Story = {
+  args: {
+    loading: true,
+  },
+}
