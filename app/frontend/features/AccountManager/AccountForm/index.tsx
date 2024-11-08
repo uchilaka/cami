@@ -10,7 +10,7 @@ import TextareaInput from '@/components/TextareaInput'
 import Button from '@/components/Button'
 import { useMutation } from '@tanstack/react-query'
 import useCsrfToken from '@/utils/hooks/useCsrfToken'
-import { useFeatureFlagsContext } from '@/features/FeatureFlagsProvider'
+import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
 
 type ProfileFormData = {
   givenName: string

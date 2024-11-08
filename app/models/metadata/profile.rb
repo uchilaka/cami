@@ -18,6 +18,7 @@ module Metadata
     field :google, type: Hash
     field :facebook, type: Hash
     field :apple, type: Hash
+    field :whatsapp, type: Hash
 
     field :vendor_data, type: Hash
 

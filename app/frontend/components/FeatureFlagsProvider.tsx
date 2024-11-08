@@ -1,7 +1,14 @@
 import React, { createContext, FC, ReactNode, useCallback } from 'react'
 import useFeatureFlags, { FeatureFlagsProps } from '@/utils/hooks/useFeatureFlags'
 
-type FEATURE_FLAGS = 'editable_phone_numbers' | 'filterable_billing_type_badge' | 'account_filtering' | 'sortable_invoice_index'
+type FEATURE_FLAGS =
+  | 'editable_phone_numbers'
+  | 'filterable_billing_type_badge'
+  | 'account_filtering'
+  | 'invoice_filtering'
+  | 'invoice_bulk_actions'
+  | 'invoice_search'
+  | 'sortable_invoice_index'
 
 type FeatureFlagContextProps = Pick<FeatureFlagsProps, 'error' | 'loading' | 'refetch'> & {
   isEnabled: (flag: FEATURE_FLAGS) => boolean

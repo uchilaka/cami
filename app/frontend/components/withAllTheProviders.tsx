@@ -1,6 +1,6 @@
 import React, { ComponentType } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import FeatureFlagsProvider from '@/features/FeatureFlagsProvider'
+import FeatureFlagsProvider from '@/components/FeatureFlagsProvider'
 
 export const withAllTheProviders = <P extends {}>(WrappedComponent: ComponentType<P>) => {
   const displayName = WrappedComponent.displayName ?? WrappedComponent.name ?? 'Component'
