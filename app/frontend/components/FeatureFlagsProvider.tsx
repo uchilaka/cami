@@ -1,5 +1,6 @@
 import React, { createContext, FC, ReactNode, useCallback } from 'react'
 import useFeatureFlags, { FeatureFlagsProps } from '@/utils/hooks/useFeatureFlags'
+import { MissingRequiredContextError } from '@/utils/errors'
 
 type FEATURE_FLAGS =
   | 'editable_phone_numbers'
@@ -15,8 +16,6 @@ type FeatureFlagContextProps = Pick<FeatureFlagsProps, 'error' | 'loading' | 're
 }
 
 const FeatureFlagsContext = createContext<FeatureFlagContextProps>(null!)
-
-class MissingRequiredContextError extends Error {}
 
 export const useFeatureFlagsContext = () => {
   const context = React.useContext(FeatureFlagsContext)

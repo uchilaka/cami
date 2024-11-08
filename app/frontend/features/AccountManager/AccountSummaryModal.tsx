@@ -6,9 +6,11 @@ import AccountTitleLabel from './AccountTitleLabel'
 import { AccountForm } from './AccountForm'
 import CloseIcon from '@/components/Icons/CloseIcon'
 import AccountSlug from './AccountSlug'
+import { useLogTransport } from '@/components/LogTransportProvider'
 
 const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ...props }) => {
   const [accountLoader, setAccountLoader] = useState<AbortController>()
+  const { logger } = useLogTransport()
   const modalId = id ?? 'account--summary-modal'
 
   const { loading, account, listenForAccountLoadEvents } = useAccountContext()
@@ -17,7 +19,7 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
     if (!accountLoader) setAccountLoader(listenForAccountLoadEvents())
     return () => {
       if (accountLoader) {
-        console.debug('Aborting account loader listener...')
+        logger.debug('Aborting account loader listener...')
         accountLoader.abort()
       }
     }
@@ -28,6 +30,7 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
     <div
       {...props}
       id={modalId}
+      data-testid="account-summary-modal"
       tabIndex={-1}
       aria-hidden="true"
       className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
@@ -40,7 +43,7 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
               <AccountTitleLabel />
             </h3>
-            <div className="flex flex-shrink-0 items-center">
+            <div data-testid="account-badges-and-controls" className="flex flex-shrink-0 items-center">
               {account?.slug && <AccountSlug>{account.slug}</AccountSlug>}
               <button
                 type="button"

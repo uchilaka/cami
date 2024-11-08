@@ -1,6 +1,7 @@
 import React, { ComponentType } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import FeatureFlagsProvider from '@/components/FeatureFlagsProvider'
+import LogTransportProvider from '@/components/LogTransportProvider'
 
 export const withAllTheProviders = <P extends {}>(WrappedComponent: ComponentType<P>) => {
   const displayName = WrappedComponent.displayName ?? WrappedComponent.name ?? 'Component'
@@ -8,11 +9,13 @@ export const withAllTheProviders = <P extends {}>(WrappedComponent: ComponentTyp
     const queryClient = new QueryClient()
 
     return (
-      <QueryClientProvider client={queryClient}>
-        <FeatureFlagsProvider>
-          <WrappedComponent {...props} />
-        </FeatureFlagsProvider>
-      </QueryClientProvider>
+      <LogTransportProvider>
+        <QueryClientProvider client={queryClient}>
+          <FeatureFlagsProvider>
+            <WrappedComponent {...props} />
+          </FeatureFlagsProvider>
+        </QueryClientProvider>
+      </LogTransportProvider>
     )
   }
   ComponentWithAllTheProviders.displayName = `withAllTheProviders(${displayName})`

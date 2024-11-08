@@ -12,3 +12,4 @@ export class AccountSuspendedError extends Error {}
 export class AccountDeactivatedError extends Error {}
 export class AccountPaymentDueError extends Error {}
 export class AccountOverdueError extends Error {}
+export class MissingRequiredContextError extends Error {}

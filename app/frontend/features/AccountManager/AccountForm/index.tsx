@@ -11,6 +11,7 @@ import Button from '@/components/Button'
 import { useMutation } from '@tanstack/react-query'
 import useCsrfToken from '@/utils/hooks/useCsrfToken'
 import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
+import { useLogTransport } from '@/components/LogTransportProvider'
 
 type ProfileFormData = {
   givenName: string
@@ -51,6 +52,7 @@ const validationSchema = Yup.object({
  * Form with floating labels: https://flowbite.com/docs/components/forms/#floating-labels
  */
 export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
+  const { logger } = useLogTransport()
   const [isReadOnly, setIsReadOnly] = useState(readOnly ?? true)
   const { loading, account } = useAccountContext()
   const { loading: loadingFeatureFlags, isEnabled } = useFeatureFlagsContext()
@@ -92,7 +94,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
     },
   })
 
-  console.debug({ account, loading })
+  logger.debug({ account, loading })
 
   return (
     <Formik
@@ -104,9 +106,9 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
         const validationErrors = await validateForm(values)
         if (Object.keys(validationErrors).length > 0) {
           // Errors were reported
-          console.debug({ values, errors: validationErrors })
+          logger.debug({ values, errors: validationErrors })
         } else {
-          console.debug({ values })
+          logger.debug({ values })
           if (isActionableAccount(account)) {
             // Submit the form
             updateAccount.mutate(values)
