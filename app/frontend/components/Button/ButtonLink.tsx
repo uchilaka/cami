@@ -1,9 +1,9 @@
-import React, { FC, LinkHTMLAttributes } from 'react'
+import React, { AnchorHTMLAttributes, FC } from 'react'
 import { ButtonBaseProps, ButtonLoader } from '.'
 import useButtonClassNames from '@/utils/hooks/useButtonClassNames'
 import clsx from 'clsx'
 
-type ButtonLinkProps = LinkHTMLAttributes<HTMLAnchorElement> & ButtonBaseProps
+type ButtonLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & ButtonBaseProps
 
 const ButtonLink: FC<ButtonLinkProps> = ({
   id,

@@ -20,7 +20,7 @@ module AccountsHelper
   end
 
   def model_actions(resource)
-    {
+    actions = {
       edit: {
         dom_id: SecureRandom.uuid,
         http_method: 'GET',
@@ -52,6 +52,15 @@ module AccountsHelper
         url: account_profiles_url(resource)
       }
     }
+    if resource.is_a?(Business) && resource.profile.present?
+      actions[:show_profile] = {
+        dom_id: SecureRandom.uuid,
+        http_method: 'GET',
+        label: 'Profile',
+        url: account_profile_url(resource, resource.profile)
+      }
+    end
+    actions
   end
 
   def segment_filter_options

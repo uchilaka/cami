@@ -5,13 +5,14 @@ import * as Yup from 'yup'
 import FormInput from '@/components/FloatingFormInput'
 import PhoneInput from '@/components/PhoneNumberInput/PhoneLibNumberInput'
 import { useAccountContext } from '../AccountProvider'
-import { isActionableAccount, isBusinessAccount, isIndividualAccount } from '@/utils/api/types'
+import { arrayHasItems, isActionableAccount, isBusinessAccount, isIndividualAccount } from '@/utils/api/types'
 import TextareaInput from '@/components/TextareaInput'
 import Button from '@/components/Button'
 import { useMutation } from '@tanstack/react-query'
 import useCsrfToken from '@/utils/hooks/useCsrfToken'
 import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
 import { useLogTransport } from '@/components/LogTransportProvider'
+import ButtonLink from '@/components/Button/ButtonLink'
 
 type ProfileFormData = {
   givenName: string
@@ -225,9 +226,13 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
               )}
               {isReadOnly && (
                 <>
-                  <Button disabled>Transactions</Button>
-                  {isBusinessAccount(account) && <Button disabled>Profile</Button>}
-                  {isIndividualAccount(account) && <Button disabled>Profiles</Button>}
+                  {arrayHasItems(account?.invoices) ? (
+                    <ButtonLink href={account?.actions.transactionsIndex.url}>Transactions</ButtonLink>
+                  ) : (
+                    <Button disabled>Transactions</Button>
+                  )}
+                  {isBusinessAccount(account) && <ButtonLink href={account.actions.showProfile.url}>Profile</ButtonLink>}
+                  {isIndividualAccount(account) && <ButtonLink href={account.actions.profilesIndex.url}>Profiles</ButtonLink>}
                   <Button variant="primary" onClick={() => setIsReadOnly(false)}>
                     Edit
                   </Button>

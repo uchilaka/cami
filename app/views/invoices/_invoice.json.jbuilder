@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 json.ignore_nil!
+json.key_format! camelize: :lower
+json.deep_format_keys!
 json.id invoice.id.to_s
 json.vendor_record_id invoice.vendor_record_id
 json.vendor_url nil

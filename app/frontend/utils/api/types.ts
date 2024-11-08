@@ -7,8 +7,22 @@ interface AccountAction {
   url: string
 }
 
-type ActionKey = 'delete' | 'edit' | 'show'
+type ActionKey = 'delete' | 'edit' | 'show' | 'showProfile' | 'profilesIndex' | 'transactionsIndex'
 
+interface InvoiceAmount {
+  value: number
+  currencyCode: string
+}
+
+interface Invoice {
+  id: string
+  createdAt: Date
+  dueAt: Date
+  updatedAt: Date
+  number: string
+  status: 'PAID' | 'OVERDUE' | 'SENT'
+  amount: InvoiceAmount
+}
 export interface Account {
   id: string
   displayName: string
@@ -16,6 +30,7 @@ export interface Account {
   status: AccountStatus
   isVendor: boolean
   actions: Record<ActionKey, AccountAction>
+  invoices: Invoice[]
   email?: string
   readme?: string
 }
@@ -47,4 +62,8 @@ export const isIndividualAccount = (account?: IndividualAccount | BusinessAccoun
 
 export const isBusinessAccount = (account?: IndividualAccount | BusinessAccount | null): account is BusinessAccount => {
   return isValidAccount(account) && account.type === 'Business'
+}
+
+export const arrayHasItems = <T>(array: T[] | null | undefined): array is T[] => {
+  return Array.isArray(array) && array.length > 0
 }
