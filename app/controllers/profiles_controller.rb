@@ -96,7 +96,7 @@ class ProfilesController < ApplicationController
     @account = Account.find(params[:account_id])
   rescue ActiveRecord::RecordNotFound
     respond_to do |format|
-      format.html { redirect_to accounts_path, notice: 'Account not found' }
+      format.html { redirect_to profiles_path, notice: 'Account not found' }
       format.json { render json: { error: 'Account not found' }, status: :not_found }
     end
   end
