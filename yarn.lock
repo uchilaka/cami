@@ -1594,7 +1594,7 @@ __metadata:
     snakecase-keys: "npm:^8.0.1"
     storybook: "npm:^8.3.5"
     tailwindcss: "npm:^3.4.1"
-    trix: "npm:^2.1.0"
+    trix: "npm:^2.1.8"
     ts-jest: "npm:^29.1.2"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.4.5"
@@ -10617,10 +10617,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"trix@npm:^2.1.0":
-  version: 2.1.5
-  resolution: "trix@npm:2.1.5"
-  checksum: 10c0/49153f8d7e678adfe12fdbf8426a6dd4f6532e1950ff96953f89ada6f04ec06c9d5b31c0ac8986d067c54ddca6d47dd975d4802404232cc6812d3eb030578b86
+"trix@npm:^2.1.8":
+  version: 2.1.8
+  resolution: "trix@npm:2.1.8"
+  checksum: 10c0/c276750c3083a7ed3b408ffcacbb133430c263be8b0afe501a605c16aa6491b3a2cdc634a447dd7d8529492ddbcb09747aea725dbaa1c5ca3855d5b5f0003a9b
   languageName: node
   linkType: hard
 
