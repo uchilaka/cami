@@ -239,8 +239,11 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
                   ) : (
                     <Button disabled>Transactions</Button>
                   )}
-                  {isBusinessAccount(account) && <ButtonLink href={account.actions.showProfile.url}>Profile</ButtonLink>}
-                  {isIndividualAccount(account) && <ButtonLink href={account.actions.profilesIndex.url}>Profiles</ButtonLink>}
+                  {account?.actions.showProfile ? (
+                    <ButtonLink href={account.actions.showProfile.url}>Profile</ButtonLink>
+                  ) : (
+                    <>{isIndividualAccount(account) && <ButtonLink href={account.actions.profilesIndex.url}>Profiles</ButtonLink>}</>
+                  )}
                   <Button variant="primary" onClick={() => setIsReadOnly(false)}>
                     Edit
                   </Button>

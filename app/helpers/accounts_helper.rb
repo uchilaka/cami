@@ -52,7 +52,7 @@ module AccountsHelper
         url: account_profiles_url(resource)
       }
     }
-    if resource.is_a?(Business) && resource.profile.present?
+    if resource.profile.present?
       actions[:show_profile] = {
         dom_id: SecureRandom.uuid,
         http_method: 'GET',
