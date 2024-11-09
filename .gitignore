@@ -107,3 +107,7 @@ Temporary Items
 # Storybook
 *storybook.log
 /storybook-static
+
+# Chromatic
+chromatic-diagnostics.json
+chromatic.log
