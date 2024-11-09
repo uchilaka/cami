@@ -109,9 +109,9 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({
   logger.debug('AccountInnerForm:', { account, isReadOnly: readOnly, initialType, saved })
 
   useEffect(() => {
-    if (account && readOnly) setValues(composeFormValues(account))
+    if (account) setValues(composeFormValues(account))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, readOnly])
+  }, [account])
 
   useEffect(() => {
     if (loadedAccount && readOnly) setAccount(loadedAccount)
@@ -306,9 +306,14 @@ const AccountForm: FC<Omit<AccountFormProps, 'setReadOnly'>> = ({ compact, initi
     onSuccess: async (result) => {
       const account = await result?.json()
       logger.debug('Account updated:', { account })
-      setCurrentAccount(account)
       setHasBeenSaved(true)
+      /**
+       * IMPORTANT: Enabling read-only mode signals to the form that
+       * the account data has been updated and passes the condition(s) for
+       * the form to be reloaded.
+       */
       setIsReadOnly(true)
+      setCurrentAccount(account)
     },
   })
 
@@ -333,13 +338,6 @@ const AccountForm: FC<Omit<AccountFormProps, 'setReadOnly'>> = ({ compact, initi
     if (accountId && readOnly) setAccountId(accountId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountId, readOnly])
-
-  // useEffect(() => {
-  //   if (account) {
-  //     logger.debug('Account Form initial values updated (withFormik):', { account })
-  //     setInitialValues(composeFormValues(account))
-  //   }
-  // }, [logger, account])
 
   return (
     <AccountFormWithFormik
