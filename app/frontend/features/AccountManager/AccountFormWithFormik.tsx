@@ -8,7 +8,7 @@ import TextareaInput from '@/components/TextareaInput'
 import Button from '@/components/Button'
 import { useMutation } from '@tanstack/react-query'
 import ButtonLink from '@/components/Button/ButtonLink'
-import { Form, Field, FormikProps, withFormik, FormikBag, FormikComputedProps, useFormikContext } from 'formik'
+import { Form, withFormik, FormikComputedProps, useFormikContext } from 'formik'
 import * as Yup from 'yup'
 import { UseMutationResult } from '@tanstack/react-query'
 import { Logger, useLogTransport } from '@/components/LogTransportProvider'
@@ -70,12 +70,11 @@ export const validationSchema = Yup.object({
     }),
 })
 
-const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, saved, initialType, readOnly, logger, account, setReadOnly }) => {
+const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, saved, initialType, readOnly, setReadOnly, logger, account }) => {
   const { handleChange, handleReset, handleBlur, handleSubmit, isValid, isValidating, isSubmitting, errors } =
     useFormikContext<AccountFormData>()
   const { loading: loadingFeatureFlags, isEnabled } = useFeatureFlagsContext()
   const disablePhoneNumbers = !isEnabled('editable_phone_numbers')
-  // const [readOnly, setReadOnly] = useState(readOnly ?? true)
   const formClassName = clsx('mx-auto', { 'max-w-lg': !compact })
 
   logger.debug('AccountInnerForm:', { account, isReadOnly: readOnly, initialType, saved })
