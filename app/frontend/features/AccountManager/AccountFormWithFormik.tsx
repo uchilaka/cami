@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, useState } from 'react'
 import { Console } from 'node:console'
 import snakecaseKeys from 'snakecase-keys'
 import FormInput from '@/components/FloatingFormInput'
@@ -38,11 +38,13 @@ export type AccountFormData = Partial<ProfileFormData> & {
 }
 
 export interface AccountFormProps {
+  setReadOnly: Dispatch<SetStateAction<boolean>>
   compact?: boolean
   loading?: boolean
   initialType?: AccountFormData['type']
   initialValues?: AccountFormData
   readOnly?: boolean
+  saved?: boolean
 }
 
 type AccountInnerFormProps = AccountFormProps & {
@@ -68,15 +70,15 @@ export const validationSchema = Yup.object({
     }),
 })
 
-const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, initialType, readOnly, logger, account }) => {
+const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, saved, initialType, readOnly, logger, account, setReadOnly }) => {
   const { handleChange, handleReset, handleBlur, handleSubmit, isValid, isValidating, isSubmitting, errors } =
     useFormikContext<AccountFormData>()
   const { loading: loadingFeatureFlags, isEnabled } = useFeatureFlagsContext()
   const disablePhoneNumbers = !isEnabled('editable_phone_numbers')
-  const [isReadOnly, setIsReadOnly] = useState(readOnly ?? true)
+  // const [readOnly, setReadOnly] = useState(readOnly ?? true)
   const formClassName = clsx('mx-auto', { 'max-w-lg': !compact })
 
-  logger.debug('AccountInnerForm:', { account, isReadOnly, initialType })
+  logger.debug('AccountInnerForm:', { account, isReadOnly: readOnly, initialType, saved })
 
   return (
     <Form className={formClassName} onSubmit={handleSubmit}>
@@ -92,7 +94,7 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, initial
         onReset={handleReset}
         onChange={handleChange}
         onBlur={handleBlur}
-        readOnly={loading || isReadOnly}
+        readOnly={loading || readOnly}
         required
       />
 
@@ -108,7 +110,7 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, initial
           onReset={handleReset}
           onChange={handleChange}
           onBlur={handleBlur}
-          readOnly={loading || isReadOnly}
+          readOnly={loading || readOnly}
         />
         <PhoneInput
           id="phone"
@@ -121,7 +123,7 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, initial
           onReset={handleReset}
           onChange={handleChange}
           onBlur={handleBlur}
-          readOnly={loading || loadingFeatureFlags || disablePhoneNumbers || isReadOnly}
+          readOnly={loading || loadingFeatureFlags || disablePhoneNumbers || readOnly}
         />
       </div>
 
@@ -140,7 +142,7 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, initial
             onReset={handleReset}
             onChange={handleChange}
             onBlur={handleBlur}
-            readOnly={loading || isReadOnly}
+            readOnly={loading || readOnly}
           />
           <FormInput
             type="text"
@@ -151,7 +153,7 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, initial
             onReset={handleReset}
             onChange={handleChange}
             onBlur={handleBlur}
-            readOnly={loading || isReadOnly}
+            readOnly={loading || readOnly}
           />
         </div>
       )}
@@ -165,13 +167,13 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, initial
         onReset={handleReset}
         onChange={handleChange}
         onBlur={handleBlur}
-        readOnly={loading || isReadOnly}
+        readOnly={loading || readOnly}
       />
 
       <div className="flex justify-end items-center space-x-2">
-        {!isReadOnly && (
+        {!readOnly && (
           <>
-            <Button onClick={() => setIsReadOnly(true)}>Cancel</Button>
+            <Button onClick={() => setReadOnly(true)}>Cancel</Button>
             <Button disabled variant="caution">
               Delete this account
             </Button>
@@ -180,7 +182,7 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, initial
             </Button>
           </>
         )}
-        {isReadOnly && (
+        {readOnly && (
           <>
             {arrayHasItems(account?.invoices) ? (
               <ButtonLink href={account?.actions.transactionsIndex.url}>Transactions</ButtonLink>
@@ -192,7 +194,7 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, initial
             ) : (
               <>{isIndividualAccount(account) && <ButtonLink href={account.actions.profilesIndex.url}>Profiles</ButtonLink>}</>
             )}
-            <Button variant="primary" onClick={() => setIsReadOnly(false)}>
+            <Button variant="primary" onClick={() => setReadOnly(false)}>
               Edit
             </Button>
           </>
@@ -236,8 +238,9 @@ export const AccountFormWithFormik = withFormik<AccountInnerFormProps, AccountFo
   },
 })(AccountInnerForm)
 
-const AccountForm: FC<AccountFormProps> = ({ compact, initialType, ...props }) => {
+const AccountForm: FC<AccountFormProps> = ({ compact, initialType, readOnly, ...props }) => {
   const [saved, setSaved] = useState<boolean>()
+  const [isReadOnly, setIsReadOnly] = useState(readOnly ?? true)
   const { logger } = useLogTransport()
   const { loading, account } = useAccountContext()
   const { csrfToken } = useCsrfToken()
@@ -280,7 +283,10 @@ const AccountForm: FC<AccountFormProps> = ({ compact, initialType, ...props }) =
         // TODO: Raise AccountNotActionableError
       }
     },
-    onSuccess: (_result) => setSaved(true),
+    onSuccess: (_result) => {
+      setSaved(true)
+      setIsReadOnly(true)
+    },
   })
 
   logger.debug('Account Form (withFormik):', { initialValues, account, loading })
@@ -289,11 +295,14 @@ const AccountForm: FC<AccountFormProps> = ({ compact, initialType, ...props }) =
     compact,
     loading,
     ...props,
+    saved,
     dirty: false,
     initialType,
     initialErrors: {},
     initialTouched: {},
     isValid: false,
+    readOnly: isReadOnly,
+    setReadOnly: setIsReadOnly,
   }
 
   return (

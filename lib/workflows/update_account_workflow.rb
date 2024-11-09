@@ -42,7 +42,7 @@ class UpdateAccountWorkflow
     #   a profile if a User does not exist for it - otherwise, profile emails
     #   should ONLY be changed as a side-effect of a confirmed email update
     #   to the associated account's email.
-    _updated_email = profile_params.delete(:email)
+    _updated_email = profile_params.delete(:email) unless Current.user&.admin?
     input_number = profile_params.delete(:phone)
     profile_params[:phone] = PhoneNumber.new(value: input_number) if input_number.present?
     context.profile.update(profile_params)
