@@ -18,10 +18,9 @@ class InvoicesController < ApplicationController
       else
         policy_scope(InvoiceRecord)
       end
-    @invoices =
-      Invoice
-      .where(:id.in => invoice_records.pluck(:document_id))
-      .order(due_at: :asc)
+    @invoices = Invoice
+                  .where(:id.in => invoice_records.pluck(:document_id))
+                  .order(due_at: :asc)
   end
 
   # GET /invoices/1 or /invoices/1.json

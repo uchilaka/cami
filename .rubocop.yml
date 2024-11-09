@@ -39,6 +39,9 @@ Layout/LineContinuationSpacing: # new in 1.31
   Enabled: true
 Layout/LineEndStringConcatenationIndentation: # new in 1.18
   Enabled: true
+Layout/MultilineMethodCallIndentation:
+  Enabled: true
+  EnforcedStyle: indented_relative_to_receiver
 Layout/SpaceBeforeBrackets: # new in 1.7
   Enabled: true
 Lint/AmbiguousAssignment: # new in 1.7
