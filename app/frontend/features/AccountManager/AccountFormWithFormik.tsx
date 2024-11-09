@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import { Console } from 'node:console'
 import snakecaseKeys from 'snakecase-keys'
 import FormInput from '@/components/FloatingFormInput'
@@ -39,6 +39,7 @@ export type AccountFormData = Partial<ProfileFormData> & {
 
 export interface AccountFormProps {
   setReadOnly: Dispatch<SetStateAction<boolean>>
+  accountId?: string
   compact?: boolean
   loading?: boolean
   initialType?: AccountFormData['type']
@@ -237,11 +238,11 @@ export const AccountFormWithFormik = withFormik<AccountInnerFormProps, AccountFo
   },
 })(AccountInnerForm)
 
-const AccountForm: FC<Omit<AccountFormProps, 'setReadOnly'>> = ({ compact, initialType, readOnly, saved, ...props }) => {
+const AccountForm: FC<Omit<AccountFormProps, 'setReadOnly'>> = ({ compact, initialType, readOnly, saved, accountId, ...props }) => {
   const [hasBeenSaved, setHasBeenSaved] = useState<boolean | undefined>(saved)
   const [isReadOnly, setIsReadOnly] = useState(readOnly ?? true)
   const { logger } = useLogTransport()
-  const { loading, account } = useAccountContext()
+  const { loading, account, setAccountId } = useAccountContext()
   const { csrfToken } = useCsrfToken()
 
   const initialValues: AccountFormData = {
@@ -303,6 +304,10 @@ const AccountForm: FC<Omit<AccountFormProps, 'setReadOnly'>> = ({ compact, initi
     readOnly: isReadOnly,
     setReadOnly: setIsReadOnly,
   }
+
+  useEffect(() => {
+    if (accountId) setAccountId(accountId)
+  })
 
   return (
     <AccountFormWithFormik {...mappedProps} logger={logger} initialValues={initialValues} account={account} updateAccount={updateAccount} />

@@ -1,10 +1,11 @@
-import React, { ComponentType, createContext, useCallback, useContext, useEffect, useState } from 'react'
+import React, { ComponentType, createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from 'react'
 import { BusinessAccount, IndividualAccount } from '@/utils/api/types'
 import { LoadAccountEventDetail, nsEventName } from '@/utils'
 import useAccountSummaryQuery from './hooks/useAccountQuery'
 
 interface AccountContextProps {
   listenForAccountLoadEvents: () => AbortController
+  setAccountId: Dispatch<SetStateAction<string | undefined>>
   reload: () => Promise<void>
   loading?: boolean
   account?: IndividualAccount | BusinessAccount | null
@@ -52,7 +53,11 @@ export const AccountProvider = ({ children }: { children: React.ReactNode }) => 
 
   console.debug({ account })
 
-  return <AccountContext.Provider value={{ loading, account, reload, listenForAccountLoadEvents }}>{children}</AccountContext.Provider>
+  return (
+    <AccountContext.Provider value={{ loading, account, reload, listenForAccountLoadEvents, setAccountId }}>
+      {children}
+    </AccountContext.Provider>
+  )
 }
 
 export const withAccountProvider = <P extends {}>(WrappedComponent: ComponentType<P>) => {

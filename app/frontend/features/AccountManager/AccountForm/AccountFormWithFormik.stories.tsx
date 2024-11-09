@@ -9,14 +9,6 @@ import { emitLoadAccountEvent } from '@/utils/events'
 
 const queryClient = new QueryClient()
 
-const AccountMockForm: FC<AccountFormProps> = (props) => {
-  useEffect(() => {
-    setTimeout(() => emitLoadAccountEvent('1234'), 3000)
-  }, [])
-
-  return <AccountForm {...props} />
-}
-
 const accountProviderDecorator: Decorator = (Story, { args }) => (
   <LogTransportProvider>
     <FeatureFlagsProvider>
@@ -35,10 +27,10 @@ const accountDataDecorator: Decorator = (Story, { args }) => {
   return <Story {...args} />
 }
 
-const meta: Meta<typeof AccountMockForm> = {
+const meta: Meta<typeof AccountForm> = {
   decorators: [accountDataDecorator, accountProviderDecorator],
   title: 'AccountManager/AccountFormWithFormik',
-  component: AccountMockForm,
+  component: AccountForm,
 }
 
 export default meta
@@ -54,5 +46,5 @@ export const BusinessForm: Story = {
 }
 
 export const IndividualForm: Story = {
-  args: { initialType: 'Individual' },
+  args: { initialType: 'Individual', accountId: '1234' },
 }
