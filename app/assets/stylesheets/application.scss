@@ -26,3 +26,13 @@
 .fancy-separator {
   height: 0.15rem;
 }
+
+.PhoneInput {
+  input[type="tel"] {
+    border-width: 0;
+  }
+}
+
+.PhoneInputInput {
+  border-width: 0;
+}

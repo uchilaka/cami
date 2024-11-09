@@ -4,11 +4,11 @@ module AccountsHelper
   include UserProfileHelper
 
   def account_filtering_enabled?
-    Flipper.enabled?(:feat__account_filtering)
+    Flipper.enabled?(:feat__account_filtering, current_user)
   end
 
   def account_summary_modal_enabled?
-    Flipper.enabled?(:feat__shared_account_summary_modal)
+    Flipper.enabled?(:feat__shared_account_summary_modal, current_user)
   end
 
   def modal_dom_id(resource, content_type: nil)
@@ -17,6 +17,50 @@ module AccountsHelper
     end
 
     super
+  end
+
+  def model_actions(resource)
+    actions = {
+      edit: {
+        dom_id: SecureRandom.uuid,
+        http_method: 'GET',
+        label: 'Edit',
+        url: account_url(resource)
+      },
+      delete: {
+        dom_id: SecureRandom.uuid,
+        http_method: 'DELETE',
+        label: 'Delete',
+        url: account_url(resource, format: :json)
+      },
+      show: {
+        dom_id: SecureRandom.uuid,
+        http_method: 'GET',
+        label: 'Back to accounts',
+        url: accounts_url
+      },
+      transactions_index: {
+        dom_id: SecureRandom.uuid,
+        http_method: 'GET',
+        label: 'Transactions',
+        url: account_invoices_url(resource)
+      },
+      profiles_index: {
+        dom_id: SecureRandom.uuid,
+        http_method: 'GET',
+        label: 'Profiles',
+        url: account_profiles_url(resource)
+      }
+    }
+    if resource.is_a?(Business) && resource.profile.present?
+      actions[:show_profile] = {
+        dom_id: SecureRandom.uuid,
+        http_method: 'GET',
+        label: 'Profile',
+        url: account_profile_url(resource, resource.profile)
+      }
+    end
+    actions
   end
 
   def segment_filter_options

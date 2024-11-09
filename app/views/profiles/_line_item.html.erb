@@ -1,0 +1,5 @@
+<% if metadata_profile.is_a?(Metadata::Business) %>
+  <%= render partial: 'profiles/business_line_item', locals: { metadata_profile:, account: } %>
+<% elsif metadata_profile.is_a?(Metadata::Profile) %>
+  <%= render partial: 'profiles/individual_line_item', locals: { metadata_profile:, account: } %>
+<% end %>

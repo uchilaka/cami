@@ -34,10 +34,14 @@ RSpec.describe '/metadata/profiles', type: :request do
 
     before { sign_in user }
 
-    it 'renders a successful response' do
-      get account_profiles_url(account)
-      expect(response).to have_http_status(:ok)
+    context 'with default format (html)' do
+      it 'renders a successful response' do
+        get account_profiles_url(account)
+        expect(response).to have_http_status(:ok)
+      end
     end
+
+    pending 'with json format'
   end
 
   describe 'GET /show' do
@@ -46,10 +50,14 @@ RSpec.describe '/metadata/profiles', type: :request do
 
     before { sign_in user }
 
-    it 'renders a successful response' do
-      get account_profile_url(account, profile.id.to_s)
-      expect(response).to have_http_status(:ok)
+    context 'with default format (html)' do
+      it 'renders a successful response' do
+        get account_profile_url(account, profile.id.to_s)
+        expect(response).to have_http_status(:ok)
+      end
     end
+
+    pending 'with json format'
   end
 
   describe 'GET /new' do
@@ -79,29 +87,37 @@ RSpec.describe '/metadata/profiles', type: :request do
     context 'with valid parameters' do
       before { sign_in user }
 
-      it 'creates a new Metadata::Profile' do
-        expect do
+      context 'with default format (html)' do
+        it 'creates a new Metadata::Profile' do
+          expect do
+            post account_profiles_url(account), params: { metadata_profile: valid_attributes }
+          end.to change(Metadata::Profile, :count).by(1)
+        end
+
+        it 'redirects to the created metadata_profile' do
           post account_profiles_url(account), params: { metadata_profile: valid_attributes }
-        end.to change(Metadata::Profile, :count).by(1)
+          expect(response).to redirect_to(account_profile_url(account, Metadata::Profile.last))
+        end
       end
 
-      it 'redirects to the created metadata_profile' do
-        post account_profiles_url(account), params: { metadata_profile: valid_attributes }
-        expect(response).to redirect_to(account_profile_url(account, Metadata::Profile.last))
-      end
+      pending 'with json format'
     end
 
     context 'with invalid parameters' do
-      it 'does not create a new Metadata::Profile' do
-        expect do
+      context 'with default format (html)' do
+        it 'does not create a new Metadata::Profile' do
+          expect do
+            post account_profiles_url(account), params: { metadata_profile: invalid_attributes }
+          end.to change(Metadata::Profile, :count).by(0)
+        end
+
+        it "renders a response with 422 status (i.e. to display the 'new' template)" do
           post account_profiles_url(account), params: { metadata_profile: invalid_attributes }
-        end.to change(Metadata::Profile, :count).by(0)
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
       end
 
-      it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post account_profiles_url(account), params: { metadata_profile: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
+      pending 'with json format'
     end
   end
 
@@ -116,17 +132,21 @@ RSpec.describe '/metadata/profiles', type: :request do
 
       before { sign_in user }
 
-      it 'updates the requested metadata_profile' do
-        patch account_profile_url(account, profile), params: { metadata_profile: new_attributes }
-        profile.reload
-        skip('Add assertions for updated state')
+      context 'with default format (html)' do
+        it 'updates the requested metadata_profile' do
+          patch account_profile_url(account, profile), params: { metadata_profile: new_attributes }
+          profile.reload
+          skip('Add assertions for updated state')
+        end
+
+        it 'redirects to the metadata_profile' do
+          patch account_profile_url(account, profile), params: { metadata_profile: new_attributes }
+          profile.reload
+          expect(response).to redirect_to(account_profile_url(account, profile))
+        end
       end
 
-      it 'redirects to the metadata_profile' do
-        patch account_profile_url(account, profile), params: { metadata_profile: new_attributes }
-        profile.reload
-        expect(response).to redirect_to(account_profile_url(account, profile))
-      end
+      pending 'with json format'
     end
 
     context 'with invalid parameters' do
@@ -135,10 +155,14 @@ RSpec.describe '/metadata/profiles', type: :request do
 
       before { sign_in user }
 
-      it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        patch account_profile_url(account, profile), params: { metadata_profile: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+      context 'with default format (html)' do
+        it "renders a response with 422 status (i.e. to display the 'edit' template)" do
+          patch account_profile_url(account, profile), params: { metadata_profile: invalid_attributes }
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
       end
+
+      pending 'with json format'
     end
   end
 
@@ -148,15 +172,19 @@ RSpec.describe '/metadata/profiles', type: :request do
 
     before { sign_in user }
 
-    it 'destroys the requested metadata_profile' do
-      expect do
+    context 'with default format (html)' do
+      it 'destroys the requested metadata_profile' do
+        expect do
+          delete account_profile_url(account, profile)
+        end.to change(Metadata::Profile, :count).by(-1)
+      end
+
+      it 'redirects to the metadata_profiles list' do
         delete account_profile_url(account, profile)
-      end.to change(Metadata::Profile, :count).by(-1)
+        expect(response).to redirect_to(account_profiles_url(account))
+      end
     end
 
-    it 'redirects to the metadata_profiles list' do
-      delete account_profile_url(account, profile)
-      expect(response).to redirect_to(account_profiles_url(account))
-    end
+    pending 'with json format'
   end
 end

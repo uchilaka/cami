@@ -19,12 +19,21 @@
 #  index_accounts_on_tax_id  (tax_id) UNIQUE WHERE (tax_id IS NOT NULL)
 #
 class Individual < Account
-  delegate :email, to: :user, allow_nil: true
+  delegate :email, to: :user_or_profile, allow_nil: true
 
   validate :allows_one_user
 
   def user
     users.first
+  end
+
+  def user_or_profile
+    user || profile
+  end
+
+  def profile
+    # TODO: Refactor accessor to return value from "primary" profile
+    profiles.order(created_at: :desc).first
   end
 
   def allows_one_user

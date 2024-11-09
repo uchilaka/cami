@@ -4,9 +4,18 @@ class ProfilesController < ApplicationController
   before_action :set_account
   before_action :set_metadata_profile, only: %i[show edit update destroy]
 
+  attr_accessor :account
+
   # GET /profiles
   def index
-    @profiles = Metadata::Profile.where(account_id: params[:account_id])
+    @profiles =
+      if account.is_a?(Business)
+        Metadata::Business.where(account_id: params[:account_id])
+      elsif account.is_a?(Individual)
+        account.profiles
+      else
+        []
+      end
   end
 
   # GET /profiles/1 or /profiles/1.json
@@ -63,19 +72,32 @@ class ProfilesController < ApplicationController
 
   private
 
-  def set_account
-    @account = Account.find(params[:account_id])
+  # Only allow a list of trusted parameters through.
+  def metadata_profile_params
+    params.fetch(:metadata_profile, {})
   end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_metadata_profile
-    @metadata_profile = Metadata::Profile.find(params[:id])
+    @metadata_profile =
+      if account.is_a?(Business)
+        Metadata::Business.find(params[:id])
+      elsif account.is_a?(Individual)
+        Metadata::Profile.find(params[:id])
+      end
   rescue ActiveRecord::RecordNotFound
-    redirect_to account_profiles_path(@account), notice: 'Profile not found'
+    respond_to do |format|
+      format.html { redirect_to account_profiles_path(@account), notice: 'Profile not found' }
+      format.json { render json: { error: 'Profile not found' }, status: :not_found }
+    end
   end
 
-  # Only allow a list of trusted parameters through.
-  def metadata_profile_params
-    params.fetch(:metadata_profile, {})
+  def set_account
+    @account = Account.find(params[:account_id])
+  rescue ActiveRecord::RecordNotFound
+    respond_to do |format|
+      format.html { redirect_to profiles_path, notice: 'Account not found' }
+      format.json { render json: { error: 'Account not found' }, status: :not_found }
+    end
   end
 end

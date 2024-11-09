@@ -26,12 +26,14 @@
 #  unlock_token           :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  primary_profile_id     :string
 #
 # Indexes
 #
-#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
-#  index_users_on_email                 (email) UNIQUE
-#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#  index_users_on_confirmation_token         (confirmation_token) UNIQUE
+#  index_users_on_email                      (email) UNIQUE
+#  index_users_on_id_and_primary_profile_id  (id,primary_profile_id) UNIQUE
+#  index_users_on_reset_password_token       (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
   rolify
@@ -76,24 +78,35 @@ class User < ApplicationRecord
   alias_attribute :first_name, :given_name
   alias_attribute :last_name, :family_name
 
+  validates :email, presence: true, uniqueness: true, email: true
+
+  after_create_commit :assign_default_role
+
   # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
   has_person_name
 
   has_and_belongs_to_many :accounts, join_table: 'accounts_users'
 
+  delegate :phone, to: :profile, allow_nil: true
+
   def profile
-    @profile ||= Metadata::Profile.find_or_initialize_by(user_id: id)
+    @profile ||=
+      if new_record?
+        initialize_profile
+      else
+        Metadata::Profile.find_or_create_by(user_id: id)
+      end
   end
 
   alias metadata profile
 
   def initialize_profile
-    if profile.present?
-      profile.user_id ||= id
-      profile.save if profile.changed? && profile.user&.persisted?
-    else
-      Metadata::Profile.create(user_id: id)
-    end
+    @profile ||= Metadata::Profile.find_or_initialize_by(user_id: id)
+    @profile.user_id ||= id
+    @profile.save if @profile.changed? && persisted?
+    self.primary_profile_id ||= @profile.id
+    save if changed?
+    @profile
   end
 
   alias initialize_metadata initialize_profile
@@ -102,13 +115,15 @@ class User < ApplicationRecord
     add_role(:user) if roles.blank?
   end
 
-  after_create_commit :assign_default_role
-
   def matching_auth_provider
     return nil if profile.blank?
     return nil if Current.auth_provider.blank?
 
     profile[Current.auth_provider.provider]
+  end
+
+  def admin?
+    has_role?(:admin)
   end
 
   # def jwt_payload

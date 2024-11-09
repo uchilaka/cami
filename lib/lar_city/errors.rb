@@ -10,6 +10,7 @@ module LarCity
     class UnprocessableEntity < StandardError; end
     class InternalServerError < StandardError; end
     class Unsupported < StandardError; end
+    class MissingRequiredModule < StandardError; end
 
     class IntegrationRequestFailed < StandardError
       attr_reader :status, :vendor

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class RestrictedIpsConstraint
+require_relative 'application_route_constraint'
+
+class RestrictedIpsConstraint < ApplicationRouteConstraint
   def matches?(request)
     Rails.logger.info log_prefix(__method__), request: {
       remote_ip: request.remote_ip,
@@ -12,14 +14,10 @@ class RestrictedIpsConstraint
     return allow_list_of_ips.include?(request.remote_ip) if request.forwarded_for.nil?
 
     # Checks to see if any of the remote ips captured for the request are in the admin_remote_ips array
-    (allow_list_of_ips & request.forwarded_for).any?
+    allow_list_of_ips.intersect?(request.forwarded_for)
   end
 
   private
-
-  def log_prefix(method_name)
-    "#{self.class.name}##{method_name}"
-  end
 
   def allow_list_of_ips
     @allow_list_of_ips ||= ENV.fetch('ADMIN_REMOTE_IP_ADDRESSES', '').split(',')

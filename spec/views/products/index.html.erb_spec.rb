@@ -8,6 +8,7 @@ RSpec.describe 'products/index', type: :view do
   let(:description) { Faker::Marketing.buzzwords }
 
   before(:each) do
+    allow(view).to receive(:current_user).and_return(nil)
     Flipper.enable :feat__product_cards
     assign(
       :products, [
