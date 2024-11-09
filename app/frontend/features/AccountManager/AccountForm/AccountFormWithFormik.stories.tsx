@@ -46,5 +46,5 @@ export const BusinessForm: Story = {
 }
 
 export const IndividualForm: Story = {
-  args: { initialType: 'Individual', accountId: '1234' },
+  args: { initialType: 'Individual', accountId: '1234', readOnly: true },
 }

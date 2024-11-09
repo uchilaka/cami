@@ -92,6 +92,7 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, saved, 
   const { handleChange, handleReset, handleBlur, handleSubmit, isValid, isValidating, isSubmitting, errors, setValues } =
     useFormikContext<AccountFormData>()
   const { loading: loadingFeatureFlags, isEnabled } = useFeatureFlagsContext()
+  const { loading: loadingAccount, account: loadedAccount } = useAccountContext()
   const disablePhoneNumbers = !isEnabled('editable_phone_numbers')
   const formClassName = clsx('mx-auto', { 'max-w-lg': !compact })
 
@@ -101,6 +102,11 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, saved, 
     if (account && readOnly) setValues(composeFormValues(account))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account, readOnly])
+
+  useEffect(() => {
+    if (loadedAccount && readOnly) setValues(composeFormValues(loadedAccount))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadingAccount, loadedAccount, readOnly])
 
   return (
     <Form className={formClassName} onSubmit={handleSubmit}>
@@ -322,6 +328,7 @@ const AccountForm: FC<Omit<AccountFormProps, 'setReadOnly'>> = ({ compact, initi
   }
 
   useEffect(() => {
+    // Capture the account ID property and set it in the context
     if (accountId && readOnly) setAccountId(accountId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountId, readOnly])
