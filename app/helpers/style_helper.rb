@@ -4,15 +4,15 @@ module StyleHelper
   # When appending to the primary and secondary button classes, you MUST override the default
   #   padding classes (px-# py-#) to ensure consistent padding within the buttons.
   def primary_btn_classes(append_classes = 'px-5 py-3')
-    "btn #{append_classes} text-base font-medium text-white bg-gradient-to-br from-green-400 to-blue-600 "\
-      'hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 '\
+    "btn #{append_classes} text-base font-medium text-white bg-gradient-to-br from-green-400 to-blue-600 " \
+      'hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 ' \
       'font-medium rounded-lg text-sm text-center me-2 mb-2'
   end
 
   # When appending to the primary and secondary button classes, you MUST override the default
   #   padding classes (px-# py-#) to ensure consistent padding within the buttons.
   def secondary_btn_classes(append_classes = 'px-5 py-3', style: :default)
-    append_classes = append_classes.split(' ').append(
+    append_classes = append_classes.split.append(
       'hover:text-white border focus:ring-4 focus:outline-none',
       'font-medium rounded-lg text-sm text-center me-2 mb-2',
       'dark:hover:text-white'
@@ -56,5 +56,9 @@ module StyleHelper
 
   def danger_item_action_btn_classes
     @danger_action_btn_classes ||= item_action_btn_classes(style: :danger)
+  end
+
+  def compose_class_names(*args)
+    args.map { |arg| arg.is_a?(Hash) ? arg.map { |k, v| k if v }.compact : arg }.flatten.compact.join(' ')
   end
 end
