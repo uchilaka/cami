@@ -60,7 +60,12 @@ class AccountsController < ApplicationController
         format.json { render :show, status: :ok, location: account_url(result.account) }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: result.account.errors, status: :unprocessable_entity }
+        format.json do
+          render json: {
+            account: result.account&.errors,
+            profile: result.profile&.errors
+          }, status: :unprocessable_entity
+        end
       end
     end
   end

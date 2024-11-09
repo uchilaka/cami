@@ -110,6 +110,10 @@ class Account < ApplicationRecord
     nil
   end
 
+  def profile
+    nil
+  end
+
   def invoices
     InvoiceRecord.with_role(:customer, self).map(&:document)
   end

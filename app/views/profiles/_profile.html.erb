@@ -8,7 +8,7 @@
   <% end %>
 <% end %>
 
-<div id="<%= dom_id metadata_profile %>" class="bg-white p-6 shadow-sm rounded overflow-hidden">
+<div id="<%= dom_id metadata_profile %>" class="px-0 py-4 overflow-hidden">
   <% if metadata_profile.is_a?(Metadata::Business) %>
     <%= render partial: 'profiles/business', locals: { metadata_profile: } %>
   <% elsif metadata_profile.is_a?(Metadata::Profile) %>

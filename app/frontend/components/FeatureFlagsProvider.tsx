@@ -1,6 +1,7 @@
 import React, { createContext, FC, ReactNode, useCallback } from 'react'
 import useFeatureFlags, { FeatureFlagsProps } from '@/utils/hooks/useFeatureFlags'
 import { MissingRequiredContextError } from '@/utils/errors'
+import LoadingAnimation from './LoadingAnimation'
 
 type FEATURE_FLAGS =
   | 'editable_phone_numbers'
@@ -34,6 +35,10 @@ export const FeatureFlagsProvider: FC<{ children?: ReactNode }> = ({ children })
     },
     [flags],
   )
+
+  if (loading === undefined || loading) {
+    return <LoadingAnimation />
+  }
 
   return <FeatureFlagsContext.Provider value={{ loading, error, isEnabled, refetch }}>{children}</FeatureFlagsContext.Provider>
 }

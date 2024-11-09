@@ -8,7 +8,7 @@ import FormInputHint from '../FormInputHint'
 
 import 'react-phone-number-input/style.css'
 
-type PhoneNumberInputProps = InputHTMLAttributes<HTMLInputElement> & FormInputProps
+type PhoneNumberInputProps = InputHTMLAttributes<HTMLInputElement> & FormInputProps & { international?: boolean }
 
 const StyledInput = forwardRef<HTMLInputElement, PhoneNumberInputProps>(function StyledPhoneInput(
   { id, name, value, onChange, ...otherProps },
@@ -63,7 +63,6 @@ const PhoneLibNumberInput: FC<PhoneNumberInputProps> = ({ id, label, success, er
       <PhoneLibInput
         {...otherProps}
         id={id}
-        international
         inputComponent={StyledInput}
         className={inputClassName}
         defaultCountry="US"

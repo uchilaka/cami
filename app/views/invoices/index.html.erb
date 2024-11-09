@@ -6,7 +6,12 @@
 
   <div class="flex justify-between items-center mb-6">
     <h1 class="font-bold text-4xl">Invoices</h1>
-    <%= link_to 'New invoice', new_invoice_path, class: primary_btn_classes %>
+    <div class="flex flex-shrink-0 items-start">
+      <% if @account.present? %>
+      <%= link_to 'Back to account', account_path(@account), class: 'px-5 py-3 font-medium text-blue-600 dark:text-blue-500 hover:underline' %>
+      <% end %>
+      <%= link_to 'New deal', new_invoice_path, class: primary_btn_classes('px-5 py-3') %>
+    </div>
   </div>
 
   <div id="invoices" class="relative overflow-x-auto shadow-md sm:rounded-lg">
