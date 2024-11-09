@@ -51,7 +51,7 @@ export const AccountProvider = ({ children }: { children: React.ReactNode }) => 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountId])
 
-  console.debug({ account })
+  console.debug('AccountProvider:', { account })
 
   return (
     <AccountContext.Provider value={{ loading, account, reload, listenForAccountLoadEvents, setAccountId }}>

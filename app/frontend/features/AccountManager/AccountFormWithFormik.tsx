@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, useCallback, useEffect, useState } from 'react'
 import { Console } from 'node:console'
 import snakecaseKeys from 'snakecase-keys'
 import FormInput from '@/components/FloatingFormInput'
@@ -8,7 +8,7 @@ import TextareaInput from '@/components/TextareaInput'
 import Button from '@/components/Button'
 import { useMutation } from '@tanstack/react-query'
 import ButtonLink from '@/components/Button/ButtonLink'
-import { Form, withFormik, FormikComputedProps, useFormikContext } from 'formik'
+import { Form, withFormik, FormikComputedProps, useFormikContext, setIn } from 'formik'
 import * as Yup from 'yup'
 import { UseMutationResult } from '@tanstack/react-query'
 import { Logger, useLogTransport } from '@/components/LogTransportProvider'
@@ -71,14 +71,36 @@ export const validationSchema = Yup.object({
     }),
 })
 
+const composeFormValues = (account?: IndividualAccount | BusinessAccount | null, initialType?: AccountFormData['type']) => {
+  return {
+    displayName: account?.displayName ?? '',
+    email: account?.email ?? '',
+    readme: account?.readme ?? '',
+    phone: (isBusinessAccount(account) ? account?.phone : '') ?? '',
+    type: account?.type ?? initialType ?? 'Business',
+    ...(isIndividualAccount(account)
+      ? {
+          givenName: account?.profile?.givenName ?? '',
+          familyName: account?.profile?.familyName ?? '',
+          phone: account?.profile?.phone ?? '',
+        }
+      : {}),
+  }
+}
+
 const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, saved, initialType, readOnly, setReadOnly, logger, account }) => {
-  const { handleChange, handleReset, handleBlur, handleSubmit, isValid, isValidating, isSubmitting, errors } =
+  const { handleChange, handleReset, handleBlur, handleSubmit, isValid, isValidating, isSubmitting, errors, setValues } =
     useFormikContext<AccountFormData>()
   const { loading: loadingFeatureFlags, isEnabled } = useFeatureFlagsContext()
   const disablePhoneNumbers = !isEnabled('editable_phone_numbers')
   const formClassName = clsx('mx-auto', { 'max-w-lg': !compact })
 
   logger.debug('AccountInnerForm:', { account, isReadOnly: readOnly, initialType, saved })
+
+  useEffect(() => {
+    if (account && readOnly) setValues(composeFormValues(account))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, readOnly])
 
   return (
     <Form className={formClassName} onSubmit={handleSubmit}>
@@ -207,16 +229,12 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, saved, 
 export const AccountFormWithFormik = withFormik<AccountInnerFormProps, AccountFormData>({
   validationSchema,
   validateOnBlur: true,
-  mapPropsToValues: ({
-    initialType,
-    initialValues = {
-      displayName: '',
-      email: '',
-      readme: '',
-    },
-  }) => ({
+  mapPropsToValues: ({ initialValues }) => ({
+    givenName: '',
+    familyName: '',
+    phone: '',
+    readme: '',
     ...initialValues,
-    type: initialType ?? 'Business',
   }),
   handleSubmit: async (values, { setSubmitting, validateForm, props }) => {
     const { logger, account, updateAccount } = props
@@ -239,26 +257,21 @@ export const AccountFormWithFormik = withFormik<AccountInnerFormProps, AccountFo
 })(AccountInnerForm)
 
 const AccountForm: FC<Omit<AccountFormProps, 'setReadOnly'>> = ({ compact, initialType, readOnly, saved, accountId, ...props }) => {
+  const [initialValues, setInitialValues] = useState<AccountFormData>({
+    displayName: '',
+    givenName: '',
+    familyName: '',
+    phone: '',
+    email: '',
+    readme: '',
+    type: initialType ?? 'Business',
+  })
   const [hasBeenSaved, setHasBeenSaved] = useState<boolean | undefined>(saved)
   const [isReadOnly, setIsReadOnly] = useState(readOnly ?? true)
   const { logger } = useLogTransport()
   const { loading, account, setAccountId } = useAccountContext()
+  const [currentAccount, setCurrentAccount] = useState(account)
   const { csrfToken } = useCsrfToken()
-
-  const initialValues: AccountFormData = {
-    displayName: account?.displayName ?? '',
-    email: account?.email ?? '',
-    readme: account?.readme,
-    phone: (isBusinessAccount(account) ? account?.phone : '') ?? '',
-    type: account?.type ?? initialType ?? 'Business',
-    ...(isIndividualAccount(account)
-      ? {
-          givenName: account?.profile?.givenName ?? '',
-          familyName: account?.profile?.familyName ?? '',
-          phone: account?.profile?.phone ?? '',
-        }
-      : {}),
-  }
 
   const updateAccount = useMutation({
     mutationFn: async (values: AccountFormData) => {
@@ -283,7 +296,10 @@ const AccountForm: FC<Omit<AccountFormProps, 'setReadOnly'>> = ({ compact, initi
         // TODO: Raise AccountNotActionableError
       }
     },
-    onSuccess: (_result) => {
+    onSuccess: async (result) => {
+      const account = await result?.json()
+      logger.debug('Account updated:', { account })
+      setCurrentAccount(account)
       setHasBeenSaved(true)
       setIsReadOnly(true)
     },
@@ -306,11 +322,25 @@ const AccountForm: FC<Omit<AccountFormProps, 'setReadOnly'>> = ({ compact, initi
   }
 
   useEffect(() => {
-    if (accountId) setAccountId(accountId)
-  })
+    if (accountId && readOnly) setAccountId(accountId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountId, readOnly])
+
+  // useEffect(() => {
+  //   if (account) {
+  //     logger.debug('Account Form initial values updated (withFormik):', { account })
+  //     setInitialValues(composeFormValues(account))
+  //   }
+  // }, [logger, account])
 
   return (
-    <AccountFormWithFormik {...mappedProps} logger={logger} initialValues={initialValues} account={account} updateAccount={updateAccount} />
+    <AccountFormWithFormik
+      {...mappedProps}
+      logger={logger}
+      initialValues={initialValues}
+      account={currentAccount}
+      updateAccount={updateAccount}
+    />
   )
 }
 
