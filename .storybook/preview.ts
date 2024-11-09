@@ -1,7 +1,9 @@
 import type { Preview } from '@storybook/react'
 import { initialize, mswLoader } from 'msw-storybook-addon'
 import { http, HttpResponse, delay } from 'msw'
-import mockFeaturesResponse from '../spec/fixtures/feature_flags.json'
+import mockFeaturesResponse from '../spec/fixtures/msw/feature_flags.json'
+import mockIndividualAccountResponse from '../spec/fixtures/msw/accounts/individual.json'
+import mockBusinessAccountResponse from '../spec/fixtures/msw/accounts/business.json'
 
 /*
  * Initializes MSW
@@ -27,6 +29,14 @@ const preview: Preview = {
         http.get('/api/features?format=json', async () => {
           await delay(150)
           return HttpResponse.json(mockFeaturesResponse)
+        }),
+        http.get('/accounts/1234?format=json', async () => {
+          await delay(150)
+          return HttpResponse.json(mockIndividualAccountResponse)
+        }),
+        http.get('/accounts/4321?format=json', async () => {
+          await delay(150)
+          return HttpResponse.json(mockBusinessAccountResponse)
         }),
       ],
     },
