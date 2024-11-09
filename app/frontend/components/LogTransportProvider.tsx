@@ -5,7 +5,7 @@ import { MissingRequiredContextError } from '@/utils/errors'
 type LogMessageFn = (message: string, ...payload: any) => Promise<void>
 type LogMetadataFn = (...payload: any) => Promise<void>
 
-interface Logger {
+export interface Logger {
   log: LogMessageFn | LogMetadataFn
   error: LogMessageFn | LogMetadataFn
   warn: LogMessageFn | LogMetadataFn
