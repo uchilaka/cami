@@ -89,7 +89,7 @@ const composeFormValues = (account?: IndividualAccount | BusinessAccount | null,
 }
 
 const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, saved, initialType, readOnly, setReadOnly, logger, account }) => {
-  const { handleChange, handleReset, handleBlur, handleSubmit, isValid, isValidating, isSubmitting, errors, setValues } =
+  const { handleChange, handleReset, handleBlur, handleSubmit, isValid, isValidating, isSubmitting, errors, values, setValues } =
     useFormikContext<AccountFormData>()
   const { loading: loadingFeatureFlags, isEnabled } = useFeatureFlagsContext()
   const { loading: loadingAccount, account: loadedAccount } = useAccountContext()
@@ -113,7 +113,7 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, saved, 
       <FormInput
         id="displayName"
         type="text"
-        label={isBusinessAccount(account) ? 'Company (Ex. Google)' : 'Display name'}
+        label={values.type === 'Business' ? 'Company (Ex. Google)' : 'Display name'}
         autoComplete="off"
         name="displayName"
         placeholder=" "
@@ -159,7 +159,7 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, saved, 
        * TODO: Detect if there is a (metadata) profile and offer
        * to create one to save givenName and familyName
        */}
-      {isIndividualAccount(account) && (
+      {values.type === 'Individual' && (
         <div className="grid md:gap-6 md:grid-cols-2">
           <FormInput
             type="text"
