@@ -1,11 +1,13 @@
 <!-- TODO: For inspiration, see https://flowbite.com/docs/components/tables/#table-with-users -->
 
-<% content_for :typescript_includes do %>
-  <%= vite_typescript_tag 'accounts' %>
+<% content_for :modal_containers do %>
+  <% if account_summary_modal_enabled? %>
+    <div id="account-summary-modal-container"></div>
+  <% end %>
 <% end %>
 
-<% if account_summary_modal_enabled? %>
-  <div id="account-summary-modal-container"></div>
+<% content_for :typescript_includes do %>
+  <%= vite_typescript_tag 'accounts' %>
 <% end %>
 
 <div class="w-full">

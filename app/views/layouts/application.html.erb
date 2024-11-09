@@ -27,6 +27,7 @@
   </head>
 
   <body class="h-full">
+    <%= yield :modal_containers %>
     <% if Flipper.enabled? :feat__navbar_v2 %>
       <%= render "shared/navbar/v2/index" %>
     <% end %>
