@@ -76,7 +76,7 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, initial
   const [isReadOnly, setIsReadOnly] = useState(readOnly ?? true)
   const formClassName = clsx('mx-auto', { 'max-w-lg': !compact })
 
-  logger.debug('AccountInnerForm:', { isReadOnly, initialType })
+  logger.debug('AccountInnerForm:', { account, isReadOnly, initialType })
 
   return (
     <Form className={formClassName} onSubmit={handleSubmit}>
@@ -283,7 +283,7 @@ const AccountForm: FC<AccountFormProps> = ({ compact, initialType, ...props }) =
     onSuccess: (_result) => setSaved(true),
   })
 
-  logger.debug({ initialValues, account, loading })
+  logger.debug('Account Form (withFormik):', { initialValues, account, loading })
 
   const mappedProps = {
     compact,
@@ -293,13 +293,12 @@ const AccountForm: FC<AccountFormProps> = ({ compact, initialType, ...props }) =
     initialType,
     initialErrors: {},
     initialTouched: {},
-    // isSubmitting: false,
     isValid: false,
-    // isValidating: false,
-    // submitCount: 0,
   }
 
-  return <AccountFormWithFormik {...mappedProps} logger={logger} initialValues={initialValues} updateAccount={updateAccount} />
+  return (
+    <AccountFormWithFormik {...mappedProps} logger={logger} initialValues={initialValues} account={account} updateAccount={updateAccount} />
+  )
 }
 
 export default AccountForm
