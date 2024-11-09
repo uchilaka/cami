@@ -490,7 +490,7 @@ info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this comm
 - [x] Implement FontAwesome library for [SVG icons](https://fontawesome.com/icons/google?f=brands&s=solid)
 - [ ] Secure accounts with MFA
 - [ ] Setup secrets using [docker images' compatibility with secret files](https://docs.docker.com/compose/use-secrets/)
-- [ ] [Vite CJS API is deprecated and will be removed in v6](https://vitejs.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated). Update the `vite.config.js` file to use the ESM build instead
+- [ ] [Vite CJS API is deprecated and will be removed in v6](https://vitejs.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated). Update the `vite.config.js` file to use the ESM build instead. Also, review [this guide](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c) on switching to using "pure ESM" packages
 - [ ] [New ESLint configuration system is available](https://eslint.org/docs/latest/use/configure/configuration-files-new). You will need to create a new `eslint.config.js` file to use the new configuration system
 - [ ] Confirm account changes with OTP (email, TOTP), magic links, or passkey
 - [ ] Setup RSwag for baller request specs & API tools

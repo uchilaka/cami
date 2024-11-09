@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { Form, Formik } from 'formik'
 import React, { FC, useState } from 'react'
+import snakecaseKeys from 'snakecase-keys'
 import * as Yup from 'yup'
 import FormInput from '@/components/FloatingFormInput'
 import PhoneInput from '@/components/PhoneNumberInput/PhoneLibNumberInput'
@@ -87,7 +88,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
             Accept: 'application/json',
             'X-CSRF-Token': csrfToken,
           },
-          body: JSON.stringify(payload),
+          body: JSON.stringify(snakecaseKeys(payload)),
         })
       } else {
         // TODO: Raise AccountNotActionableError
