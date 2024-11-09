@@ -157,6 +157,10 @@ RSpec.describe '/accounts', type: :request do
                 expect(data['invoices']).not_to be_nil
               end
             end
+
+            pending 'with a profile'
+
+            pending 'without a profile'
           end
 
           context 'when the account is an individual' do
@@ -166,7 +170,7 @@ RSpec.describe '/accounts', type: :request do
               expect(data['email']).to eq(account.email)
             end
 
-            context 'with profiles' do
+            context 'with several profiles' do
               let(:account) { Fabricate :individual_with_profiles, users: [user] }
 
               it 'returns the profiles' do
@@ -174,6 +178,8 @@ RSpec.describe '/accounts', type: :request do
                 expect(data['profiles'].count).to eq(account.profiles.count)
               end
             end
+
+            pending 'with 1 profile'
           end
         end
       end
