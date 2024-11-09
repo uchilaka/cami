@@ -121,7 +121,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
       }}
     >
       {(formikProps) => {
-        const { handleChange, handleReset, handleBlur, handleSubmit, isValid, isValidating, isSubmitting, values, errors } = formikProps
+        const { handleChange, handleReset, handleBlur, handleSubmit, isValid, isValidating, isSubmitting, errors } = formikProps
 
         return (
           <Form className={formClassName} onSubmit={handleSubmit}>

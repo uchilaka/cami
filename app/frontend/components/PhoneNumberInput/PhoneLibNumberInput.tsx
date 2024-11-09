@@ -48,7 +48,7 @@ const StyledInput = forwardRef<HTMLInputElement, PhoneNumberInputProps>(function
   )
 })
 
-const PhoneLibNumberInput: FC<PhoneNumberInputProps> = ({ id, type = 'tel', label, success, error, hint, readOnly, ...otherProps }) => {
+const PhoneLibNumberInput: FC<PhoneNumberInputProps> = ({ id, label, success, error, hint, readOnly, ...otherProps }) => {
   const { containerClassNames, labelClassNames, inputElementClassNames } = useInputClassNames({
     readOnly: !!readOnly,
     error: !!error,

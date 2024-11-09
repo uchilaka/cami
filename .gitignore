@@ -104,4 +104,6 @@ Temporary Items
 !.yarn/sdks
 !.yarn/versions
 
+# Storybook
 *storybook.log
+/storybook-static

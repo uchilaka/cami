@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+
+SETUP_MSG=$(cat <<-SETUP_GUIDE
+To publish your Storybook to Chromatic, you need to set the \$CHROMATIC_PROJECT_TOKEN environment variable.
+You can find your project token in your Chromatic project settings, or in the setup guide for your project,
+available here: https://www.chromatic.com/setup?appId=672f4b60dab53d48175d55dd
+SETUP_GUIDE
+)
+
+echo "${SETUP_MSG}"
+
+if [ -z "${CHROMATIC_PROJECT_TOKEN}" ]; then
+  echo "${SETUP_MSG}"
+  exit 1
+fi
+
+SCRIPT_PATH="$(dirname ${0:A})/../"
+SCRIPT_PATH="${SCRIPT_PATH:A}"
+
+echo "\nPublishing Storybook to Chromatic from ${SCRIPT_PATH}"
+
+yarn dlx chromatic --project-token=${CHROMATIC_PROJECT_TOKEN} --auto-accept-changes
