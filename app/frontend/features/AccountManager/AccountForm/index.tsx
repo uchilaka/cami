@@ -2,7 +2,6 @@ import clsx from 'clsx'
 import { Form, Formik } from 'formik'
 import React, { FC, useState } from 'react'
 import snakecaseKeys from 'snakecase-keys'
-import * as Yup from 'yup'
 import FormInput from '@/components/FloatingFormInput'
 import PhoneInput from '@/components/PhoneNumberInput/PhoneLibNumberInput'
 import { useAccountContext } from '../AccountProvider'
@@ -14,41 +13,12 @@ import useCsrfToken from '@/utils/hooks/useCsrfToken'
 import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
 import { useLogTransport } from '@/components/LogTransportProvider'
 import ButtonLink from '@/components/Button/ButtonLink'
-
-type ProfileFormData = {
-  givenName: string
-  familyName: string
-  phone?: string
-}
-
-type AccountFormData = Partial<ProfileFormData> & {
-  displayName: string
-  email: string
-  type: 'Individual' | 'Business'
-  readme?: string
-}
+import { AccountFormData, validationSchema } from '../AccountFormWithFormik'
 
 interface AccountFormProps {
   readOnly?: boolean
   compact?: boolean
 }
-
-const validationSchema = Yup.object({
-  displayName: Yup.string().required('A display name is required'),
-  email: Yup.string()
-    .email('must be a valid email address')
-    .test({
-      name: 'is-valid-email',
-      skipAbsent: false,
-      test(value, ctx) {
-        const source: AccountFormData = ctx.parent
-        if (source.type === 'Business' && !value) {
-          return ctx.createError({ message: 'Email address is required for a business' })
-        }
-        return true
-      },
-    }),
-})
 
 /**
  * Form with floating labels: https://flowbite.com/docs/components/forms/#floating-labels
