@@ -4,6 +4,7 @@
   "engines": {
     "yarn": ">= 4.5.0"
   },
+  "readme": "README.md",
   "dependencies": {
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
@@ -89,8 +90,8 @@
     "test": "jest",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "publish-storybook": "chromatic --zip --output-dir storybook-static"
+    "build-storybook": "storybook build $@",
+    "publish-storybook": "chromatic --debug --zip --output-dir storybook-static"
   },
   "lint-staged": {
     "*.rb": [

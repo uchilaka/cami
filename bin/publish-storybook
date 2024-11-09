@@ -22,5 +22,5 @@ echo "\nPublishing Storybook to Chromatic from ${SCRIPT_PATH}"
 if [ -z "$CI" ]; then
   yarn publish-storybook
 else
-  yarn dlx chromatic --project-token "${CHROMATIC_PROJECT_TOKEN}" --zip --output-dir "storybook-static"
+  yarn dlx chromatic --project-token "${CHROMATIC_PROJECT_TOKEN}" --zip
 fi
