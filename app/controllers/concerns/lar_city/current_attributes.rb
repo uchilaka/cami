@@ -5,21 +5,23 @@ module LarCity
     extend ActiveSupport::Concern
 
     included do
-      prepend_before_action do
-        unless excluded_controllers.include?(request.params[:controller])
-          Current.user = current_user
-          Current.request_id = request.uuid
-          Current.user_agent = request.user_agent
-          Current.ip_address = request.ip
-        end
-      end
+      before_action :maybe_set_current_attributes
+    end
 
-      private
+    private
 
-      def excluded_controllers
-        # E.g. controller for magic links: devise/magic_links
-        []
-      end
+    def maybe_set_current_attributes
+      return if excluded_controllers.include?(request.params[:controller])
+
+      Current.user = current_user
+      Current.request_id = request.uuid
+      Current.user_agent = request.user_agent
+      Current.ip_address = request.ip
+    end
+
+    def excluded_controllers
+      # E.g. controller for magic links: devise/magic_links
+      []
     end
   end
 end

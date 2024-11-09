@@ -52,6 +52,7 @@ class AccountsController < ApplicationController
       UpdateAccountWorkflow.call(
         account_params: update_params[:account],
         profile_params: update_params[:profile],
+        current_user:,
         account:
       )
     respond_to do |format|
