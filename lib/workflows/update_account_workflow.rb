@@ -45,8 +45,7 @@ class UpdateAccountWorkflow
     _updated_email = profile_params.delete(:email)
     input_number = profile_params.delete(:phone)
     profile_params[:phone] = PhoneNumber.new(value: input_number) if input_number.present?
-    context.profile.set(profile_params)
-    context.profile.save
+    context.profile.update(profile_params)
     context.fail!(message: context.profile.errors.full_messages) if context.profile.errors.any?
   end
 end
