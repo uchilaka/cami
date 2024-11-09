@@ -26,6 +26,8 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountLoader])
 
+  logger.debug({ modalId, account })
+
   return (
     <div
       {...props}

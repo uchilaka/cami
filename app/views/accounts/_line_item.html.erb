@@ -31,7 +31,7 @@
   <td class="px-6 py-4 text-end">
     <div class="flex justify-end">
       <%= button_tag "View",
-                     class: "action--view-account-summary #{default_item_action_btn_classes}",
+                     class: compose_class_names('action--view-account-summary', default_item_action_btn_classes),
                      "data-resource-id": account.id.to_s,
                      "data-modal-target": modal_dom_id(account, content_type: 'summary'),
                      "data-modal-toggle": modal_dom_id(account, content_type: 'summary') %>
