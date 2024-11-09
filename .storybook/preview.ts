@@ -24,7 +24,7 @@ const preview: Preview = {
     },
     msw: {
       handlers: [
-        http.get('http://localhost:6006/api/features?format=json', async () => {
+        http.get('/api/features?format=json', async () => {
           await delay(150)
           return HttpResponse.json(mockFeaturesResponse)
         }),
