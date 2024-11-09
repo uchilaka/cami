@@ -21,7 +21,12 @@ class UpdateAccountWorkflow
     return unless context.success?
 
     context.profile = account.profile
-    context.profile ||= Metadata::Business.new(account_id: account.id)
+    context.profile ||=
+      if account.is_a?(Business)
+        Metadata::Business.new(account_id: account.id)
+      elsif account.is_a?(Individual)
+        Metadata::Profile.new(account_id: account.id)
+      end
     profile_params =
       if context.profile_params.present?
         if account.is_a?(Business)
