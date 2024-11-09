@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class InvoicePolicy < ApplicationPolicy
+class InvoiceRecordPolicy < ApplicationPolicy
   def index?
     user.admin? || accessible_to_user?
   end
@@ -28,7 +28,7 @@ class InvoicePolicy < ApplicationPolicy
   def current_account_is?(role)
     return false unless Current.account.present?
 
-    Current.account.has_role?(role)
+    Current.account.has_role?(role, record)
   end
 
   class Scope < Scope

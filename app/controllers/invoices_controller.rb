@@ -11,7 +11,17 @@ class InvoicesController < ApplicationController
 
   # GET /invoices
   def index
-    @invoices = Invoice.all.order(due_at: :asc)
+    invoice_records =
+      if account.present?
+        InvoiceRecord
+          .with_roles(%i[customer contact], account)
+      else
+        policy_scope(InvoiceRecord)
+      end
+    @invoices =
+      Invoice
+      .where(:id.in => invoice_records.pluck(:document_id))
+      .order(due_at: :asc)
   end
 
   # GET /invoices/1 or /invoices/1.json
