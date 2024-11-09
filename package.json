@@ -75,6 +75,8 @@
     "lodash.find": "^4.6.0",
     "lodash.omit": "^4.5.0",
     "lodash.uniqby": "^4.7.0",
+    "msw": "^2.6.2",
+    "msw-storybook-addon": "^2.0.4",
     "path": "^0.12.7",
     "prettier": "^3.2.5",
     "prettier-eslint": "^16.3.0",
@@ -103,6 +105,11 @@
   "eslintConfig": {
     "extends": [
       "plugin:storybook/recommended"
+    ]
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
     ]
   }
 }

@@ -1,4 +1,4 @@
-import React, { FC, forwardRef, InputHTMLAttributes, useEffect } from 'react'
+import React, { ChangeEvent, FC, forwardRef, InputHTMLAttributes, useEffect } from 'react'
 import PhoneLibInput, { isValidPhoneNumber, formatPhoneNumberIntl } from 'react-phone-number-input'
 import { useFormikContext } from 'formik'
 import clsx from 'clsx'
@@ -7,6 +7,7 @@ import useInputClassNames from '@/utils/hooks/useInputClassNames'
 import FormInputHint from '../FormInputHint'
 
 import 'react-phone-number-input/style.css'
+import { useLogTransport } from '../LogTransportProvider'
 
 type PhoneNumberInputProps = InputHTMLAttributes<HTMLInputElement> & FormInputProps & { international?: boolean }
 
@@ -14,23 +15,28 @@ const StyledInput = forwardRef<HTMLInputElement, PhoneNumberInputProps>(function
   { id, name, value, onChange, ...otherProps },
   ref,
 ) {
+  const { logger } = useLogTransport()
   const { handleBlur, handleReset, setFieldValue } = useFormikContext<Record<string, string>>()
 
   const classNames = clsx('border-0 w-full bg-transparent', {
     'cursor-not-allowed': otherProps.readOnly || otherProps.disabled,
   })
 
-  console.debug({ id, name, value })
-
-  useEffect(() => {
-    const valueString = `${value}`
-    if (isValidPhoneNumber(valueString)) {
-      const intlValue = formatPhoneNumberIntl(valueString)
+  const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    const newValue = ev.target.value
+    logger.debug({ ev, newValue })
+    if (onChange) onChange(ev)
+    if (isValidPhoneNumber(newValue)) {
+      logger.info(`Valid phone number input: "${newValue}"`)
+      const intlValue = formatPhoneNumberIntl(newValue)
       const e164Value = intlValue.replace(/\s/g, '')
-      setFieldValue(name, e164Value, true)
+      setFieldValue(name, e164Value, isValidPhoneNumber(newValue))
+    } else {
+      logger.warn(`Invalid phone number input: ${newValue}`)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
+  }
+
+  logger.debug({ id, name, value })
 
   return (
     <input
@@ -41,7 +47,7 @@ const StyledInput = forwardRef<HTMLInputElement, PhoneNumberInputProps>(function
       className={classNames}
       placeholder={otherProps.placeholder ?? ' '}
       defaultValue={value}
-      onChange={onChange}
+      onChange={handleChange}
       onBlur={handleBlur}
       onReset={handleReset}
     />
