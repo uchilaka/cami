@@ -128,7 +128,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
             <FormInput
               id="displayName"
               type="text"
-              label={'Company (Ex. Google)'}
+              label={isBusinessAccount(account) ? 'Company (Ex. Google)' : 'Display name'}
               autoComplete="off"
               name="displayName"
               placeholder=" "
