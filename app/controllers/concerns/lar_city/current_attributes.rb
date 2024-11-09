@@ -5,7 +5,7 @@ module LarCity
     extend ActiveSupport::Concern
 
     included do
-      before_action do
+      prepend_before_action do
         unless excluded_controllers.include?(request.params[:controller])
           Current.user = current_user
           Current.request_id = request.uuid
