@@ -25,9 +25,10 @@ if account.is_a?(Business)
       json.partial! 'profiles/metadata_profile', metadata_profile: account.profile, account:
     end
   end
-  json.isVendor account.has_role?(:vendor)
+  json.is_vendor account.has_role?(:vendor)
 elsif account.is_a?(Individual)
-  json.email account.email if account.user.present?
+  json.extract! account, :given_name, :family_name, :email
+  # json.email account.email if account.user.present?
   if account.profiles.any?
     json.profiles account.profiles, partial: 'profiles/metadata_profile', as: :metadata_profile, account:
   else
@@ -38,7 +39,7 @@ else
 end
 
 if account.is_a?(Individual) && account.profiles.size == 1
-  json.extract! account.profiles.first, :given_name, :family_name, :image_url
+  # json.extract! account.profiles.first, :given_name, :family_name, :image_url
   json.profile do
     json.partial! 'profiles/metadata_profile', metadata_profile: account.profiles.first, account:
   end

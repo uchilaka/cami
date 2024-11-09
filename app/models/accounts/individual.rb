@@ -19,7 +19,7 @@
 #  index_accounts_on_tax_id  (tax_id) UNIQUE WHERE (tax_id IS NOT NULL)
 #
 class Individual < Account
-  delegate :email, to: :user_or_profile, allow_nil: true
+  delegate :email, :given_name, :family_name, to: :user_or_profile, allow_nil: true
 
   validate :allows_one_user
 

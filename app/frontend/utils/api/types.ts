@@ -23,6 +23,14 @@ interface Invoice {
   status: 'PAID' | 'OVERDUE' | 'SENT'
   amount: InvoiceAmount
 }
+
+interface UserProfile {
+  id: string
+  givenName?: string
+  familyName?: string
+  phone?: string
+}
+
 export interface Account {
   id: string
   displayName: string
@@ -38,6 +46,7 @@ export interface Account {
 export interface IndividualAccount extends Account {
   type: 'Individual'
   email: string
+  profile?: UserProfile
 }
 
 export interface BusinessAccount extends Account {

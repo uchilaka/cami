@@ -69,6 +69,13 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
     readme: account?.readme,
     phone: (isBusinessAccount(account) ? account?.phone : '') ?? '',
     type: account?.type ?? 'Business',
+    ...(isIndividualAccount(account)
+      ? {
+          givenName: account?.profile?.givenName ?? '',
+          familyName: account?.profile?.familyName ?? '',
+          phone: account?.profile?.phone ?? '',
+        }
+      : {}),
   }
 
   const updateAccount = useMutation({
