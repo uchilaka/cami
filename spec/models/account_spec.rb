@@ -49,10 +49,34 @@ RSpec.describe Account, type: :model do
   end
 
   describe '#status' do
-    it { transition_from(%i[demo guest]).to(:active).on_event(:activate) }
+    it { transition_from(%i[demo draft guest]).to(:active).on_event(:activate) }
     it { transition_from(%i[active payment_due overdue]).to(:paid).on_event(:enroll) }
     it { transition_from(%i[active payment_due overdue]).to(:suspended).on_event(:suspend) }
     it { transition_from(%i[suspended overdue deactivated]).to(:active).on_event(:reactivate) }
     it { transition_from(%i[payment_due overdue suspended]).to(:deactivated).on_event(:deactivate) }
+
+    it 'is draft by default' do
+      expect(subject.status).to eq 'draft'
+    end
+
+    context 'is invalid' do
+      subject { Fabricate.build :account, status: 'not_valid' }
+
+      it { expect { subject }.to raise_error(ArgumentError, "'not_valid' is not a valid status") }
+    end
+
+    context 'is nil' do
+      let(:account) { Fabricate.build :account, status: nil }
+
+      it { expect(account.status).to eq 'draft' }
+    end
+
+    context 'is valid' do
+      let(:account) { Fabricate.build :account, status: 'demo' }
+
+      it { expect(account).to be_valid }
+
+      it { expect(account.status).to eq 'demo' }
+    end
   end
 end

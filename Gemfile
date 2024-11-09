@@ -6,7 +6,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.2.2'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.0.8', '>= 7.0.8.1'
+# gem 'rails', github: 'rails/rails', branch: 'v7.0.8.6'
+gem 'rails', '~> 7.0.8', '>= 7.0.8.6'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
@@ -50,10 +51,10 @@ gem 'jbuilder'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
-# Use Tailwind CSS for stylesheets https://tailwindcss.com/docs/guides/ruby-on-rails
+# Use Tailwind CSS for stylesheets [https://tailwindcss.com/docs/guides/ruby-on-rails]
 gem 'tailwindcss-rails', '~> 2.3'
 
-# Integrate Dart Sass with the asset pipeline in Rails https://github.com/rails/dartsass-rails
+# Integrate Dart Sass with the asset pipeline in Rails [https://github.com/rails/dartsass-rails]
 gem 'dartsass-rails'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
@@ -64,7 +65,8 @@ gem 'globalid', '~> 1.2'
 
 gem 'awesome_print'
 
-gem 'sib-api-v3-sdk'
+# Gem validates phone numbers with Google libphonenumber database [https://github.com/daddyz/phonelib]
+gem 'phonelib'
 
 # Roles library with resource scoping
 gem 'rolify', '~> 6.0'
@@ -78,25 +80,29 @@ gem 'rails_semantic_logger'
 # Better Stack Rails integration
 gem 'logtail-rails'
 
+# Find slowly loading gems for your Bundler-based projects
+gem 'bumbler'
+
+# Rationale: setup "staging" environments to be identical to production, distinguished by their domain name.
+gem 'sib-api-v3-sdk', groups: %i[production]
+
 group :development, :test do
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem 'debug', platforms: %i[mri mingw x64_mingw]
-  # Security vulnerability scanner for Ruby on Rails. https://github.com/presidentbeef/brakeman
   gem 'active_model_serializers'
-  gem 'brakeman'
   gem 'capybara'
   gem 'capybara_accessibility_audit'
   gem 'fabrication'
   gem 'faker'
   gem 'open3'
   gem 'rspec-rails', '~> 6.1'
-  gem 'rspec-wait'
+  # gem 'rspec-wait'
   gem 'rubocop'
-  gem 'rubocop-capybara', require: false
-  gem 'rubocop-performance'
-  gem 'rubocop-rails'
-  gem 'rubocop-rspec'
   gem 'strong_migrations'
+
+  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem 'debug', platforms: %i[mri mingw x64_mingw]
+
+  # Security vulnerability scanner for Ruby on Rails. https://github.com/presidentbeef/brakeman
+  gem 'brakeman'
 end
 
 group :development do
@@ -119,6 +125,11 @@ group :development do
 end
 
 group :test do
+  gem 'rubocop-capybara', require: false
+  gem 'rubocop-performance'
+  gem 'rubocop-rails'
+  gem 'rubocop-rspec'
+
   # Record your test suite's HTTP interactions and replay them during future test runs for fast,
   #   deterministic, accurate tests
   gem 'vcr', '~> 6.2'

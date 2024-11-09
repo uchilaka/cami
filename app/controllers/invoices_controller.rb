@@ -1,9 +1,26 @@
+# frozen_string_literal: true
+
 class InvoicesController < ApplicationController
+  include MaybeAccountSpecific
+
+  load_account :all,
+               optional: true,
+               bounce_to: :invoices_path
+
   before_action :set_invoice, only: %i[show edit update destroy]
 
   # GET /invoices
   def index
-    @invoices = Invoice.all.order(due_at: :asc)
+    invoice_records =
+      if account.present?
+        InvoiceRecord
+          .with_roles(%i[customer contact], account)
+      else
+        policy_scope(InvoiceRecord)
+      end
+    @invoices = Invoice
+                  .where(:id.in => invoice_records.pluck(:document_id))
+                  .order(due_at: :asc)
   end
 
   # GET /invoices/1 or /invoices/1.json
@@ -23,7 +40,7 @@ class InvoicesController < ApplicationController
 
     respond_to do |format|
       if @invoice.save
-        format.html { redirect_to @invoice, notice: "Invoice was successfully created." }
+        format.html { redirect_to @invoice, notice: 'Invoice was successfully created.' }
         format.json { render :show, status: :created, location: @invoice }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -36,7 +53,7 @@ class InvoicesController < ApplicationController
   def update
     respond_to do |format|
       if @invoice.update(invoice_params)
-        format.html { redirect_to @invoice, notice: "Invoice was successfully updated." }
+        format.html { redirect_to @invoice, notice: 'Invoice was successfully updated.' }
         format.json { render :show, status: :ok, location: @invoice }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -49,7 +66,7 @@ class InvoicesController < ApplicationController
   def destroy
     @invoice.destroy
     respond_to do |format|
-      format.html { redirect_to invoices_url, notice: "Invoice was successfully destroyed." }
+      format.html { redirect_to invoices_url, notice: 'Invoice was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

@@ -9,6 +9,7 @@ module Errors
   class UnprocessableEntity < StandardError; end
   class InternalServerError < StandardError; end
   class Unsupported < StandardError; end
+  class DataModelViolation < StandardError; end
 
   class IntegrationRequestFailed < StandardError
     attr_reader :status, :vendor

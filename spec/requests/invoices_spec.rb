@@ -77,7 +77,7 @@ RSpec.describe '/invoices', type: :request do
           end
 
           it 'returns the amount' do
-            expect(data['amount']).to eq({ 'currency_code' => 'USD', 'value' => 0.0 })
+            expect(data['amount']).to eq({ 'currencyCode' => 'USD', 'value' => 0.0 })
           end
         end
       end

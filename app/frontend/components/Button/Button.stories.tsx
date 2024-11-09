@@ -2,6 +2,7 @@ import React from 'react'
 import { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
 import SimpleButton from '.'
+import SimpleButtonLink from './ButtonLink'
 
 import { Default as ButtonSizes } from './ButtonSizes.stories'
 
@@ -19,6 +20,8 @@ export const Default: Story = {
     children: 'Click me',
     variant: 'primary',
     onClick: fn(),
+    disabled: false,
+    loading: false,
   },
   argTypes: {
     variant: {
@@ -51,5 +54,21 @@ export const Sizes: Story = {
         </SimpleButton>
       </div>
     )
+  },
+}
+
+export const DisabledWhileLoading: Story = {
+  args: {
+    loading: true,
+  },
+}
+
+export const ButtonLink: Story = {
+  render: () => {
+    return <SimpleButtonLink href="https://www.google.com">Google</SimpleButtonLink>
+  },
+  args: {
+    loading: false,
+    variant: 'primary',
   },
 }

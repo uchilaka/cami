@@ -1,0 +1,17 @@
+{
+  "autorun": true,
+  "autokill": true,
+  "terminals": [
+    {
+      "name": "Run storybook",
+      "description": "Runs and serves the storybook locally",
+      "open": true,
+      "execute": true,
+      "recycle": true,
+      "commands": [
+        "yarn install",
+        "yarn storybook"
+      ]
+    }
+  ]
+}

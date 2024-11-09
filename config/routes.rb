@@ -28,15 +28,16 @@ Rails.application.routes.draw do
     constraints AdminScopeConstraint.new do
       # Setting up sidekiq web: https://github.com/sidekiq/sidekiq/wiki/Monitoring#web-ui
       mount Sidekiq::Web => '/sidekiq'
-      mount Flipper::Api.app(Flipper) => '/flipper/api'
-      mount Flipper::UI.app(Flipper) => '/flipper'
     end
   end
 
   resources :invoices, except: %i[destroy]
   resources :services, except: %i[destroy]
   resources :products, except: %i[destroy]
-  resources :accounts, except: %i[destroy]
+  resources :accounts, except: %i[destroy] do
+    resources :invoices
+    resources :profiles
+  end
   get 'businesses', to: 'accounts#index', as: :businesses
   get 'businesses/new', to: 'accounts#new', as: :new_business
   get 'businesses/:id', to: 'accounts#show', as: :business
@@ -51,6 +52,12 @@ Rails.application.routes.draw do
   match 'app/*path', to: 'pages#home', via: :get
 
   root to: 'pages#home'
+
+  namespace :api do
+    resources :features, only: %i[index], defaults: { format: :json }
+  end
+
+  draw :flipper
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

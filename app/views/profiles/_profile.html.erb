@@ -1,0 +1,17 @@
+<% content_for :profile_form_actions do %>
+  <% unless %w[index show].include?(action_name) %>
+    <%= link_to "View", account_profile_path(@account, metadata_profile), class: primary_btn_classes('px-5 py-2.5') %>
+  <% end %>
+
+  <% unless action_name == 'edit' %>
+    <%= link_to 'Edit', edit_account_profile_path(@account, metadata_profile), class: primary_btn_classes('px-5 py-2.5') %>
+  <% end %>
+<% end %>
+
+<div id="<%= dom_id metadata_profile %>" class="px-0 py-4 overflow-hidden">
+  <% if metadata_profile.is_a?(Metadata::Business) %>
+    <%= render partial: 'profiles/business', locals: { metadata_profile: } %>
+  <% elsif metadata_profile.is_a?(Metadata::Profile) %>
+    <%= render partial: 'profiles/individual', locals: { metadata_profile: } %>
+  <% end %>
+</div>

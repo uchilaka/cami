@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-  include SetCurrentRequestDetails
+  include LarCity::CurrentAttributes
   include Pundit::Authorization
 
   before_action :configure_permitted_parameters, if: :devise_controller?
@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def public_resource?
-    %w[/up].include?(request.path)
+    %w[/up /api/features].include?(request.path)
   end
 
   def initialize_web_console

@@ -16,6 +16,7 @@
     - [5. Start up the application's services](#5-start-up-the-applications-services)
     - [6. Initialize the database](#6-initialize-the-database)
     - [7. Start up the app](#7-start-up-the-app)
+  - [Running Storybook](#running-storybook)
   - [Database management](#database-management)
     - [Setting up the document store in the test environment](#setting-up-the-document-store-in-the-test-environment)
     - [Resetting the databases](#resetting-the-databases)
@@ -167,6 +168,16 @@ This is the same command you'll need any time you want to start up the applicati
 
 ```shell
 bin/dev
+```
+
+## Running Storybook
+
+> The `FeatureFlagsProvider` requires the application service running locally on port `6006` (currently broken, hence all features are disabled by default). This should be refactored to mock the response from `/api/features` and other endpoints needed to review components. See [this guide on mocking requests](https://storybook.js.org/docs/writing-stories/mocking-data-and-modules/mocking-network-requests) for more.
+
+To review component stories, run:
+
+```shell
+yarn storybook
 ```
 
 ## Troubleshooting

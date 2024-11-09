@@ -43,11 +43,10 @@ RSpec.describe '/accounts', type: :request do
       end
 
       context 'accessing an authorized account' do
-        let(:account) { Fabricate :account }
+        let(:account) { Fabricate :account, users: [user] }
 
         context 'with the default format' do
           it 'renders a successful response' do
-            account = Account.create! valid_attributes
             get account_url(account)
             expect(response).to be_successful
           end
@@ -55,8 +54,35 @@ RSpec.describe '/accounts', type: :request do
 
         context 'with format = json' do
           let(:data) { JSON.parse(response.body) }
-          let(:user) { Fabricate :user }
-          let(:account) { Fabricate :account }
+          let(:expected_actions) do
+            {
+              'edit' => {
+                'httpMethod' => 'GET',
+                'label' => 'Edit',
+                'url' => account_url(account)
+              },
+              'delete' => {
+                'httpMethod' => 'DELETE',
+                'label' => 'Delete',
+                'url' => account_url(account, format: :json)
+              },
+              'show' => {
+                'httpMethod' => 'GET',
+                'label' => 'Back to accounts',
+                'url' => accounts_url
+              },
+              'transactionsIndex' => {
+                'httpMethod' => 'GET',
+                'label' => 'Transactions',
+                'url' => account_invoices_url(account)
+              },
+              'profilesIndex' => {
+                'httpMethod' => 'GET',
+                'label' => 'Profiles',
+                'url' => account_profiles_url(account)
+              }
+            }
+          end
 
           before do
             sign_in user
@@ -75,6 +101,34 @@ RSpec.describe '/accounts', type: :request do
             expect(data['id']).to eq(account.id.to_s)
           end
 
+          it 'returns a hash of actions' do
+            expect(data.dig('actions', 'edit')).to \
+              match(hash_including(expected_actions['edit']))
+
+            expect(data.dig('actions', 'delete')).to \
+              match(hash_including(expected_actions['delete']))
+
+            expect(data.dig('actions', 'show')).to \
+              match(hash_including(expected_actions['show']))
+
+            expect(data.dig('actions', 'transactionsIndex')).to \
+              match(hash_including(expected_actions['transactionsIndex']))
+
+            expect(data.dig('actions', 'profilesIndex')).to \
+              match(hash_including(expected_actions['profilesIndex']))
+          end
+
+          it 'returns the actions as a list' do
+            expect(data.dig('actionsList', 0)).to \
+              match(hash_including(expected_actions['edit']))
+
+            expect(data.dig('actionsList', 1)).to \
+              match(hash_including(expected_actions['delete']))
+
+            expect(data.dig('actionsList', 2)).to \
+              match(hash_including(expected_actions['show']))
+          end
+
           it 'returns the account slug' do
             expect(data['slug']).to eq(account.slug)
           end
@@ -84,7 +138,7 @@ RSpec.describe '/accounts', type: :request do
           end
 
           context 'when the account is a business' do
-            let(:account) { Fabricate :business }
+            let(:account) { Fabricate :business, users: [user] }
 
             it 'returns the tax ID' do
               expect(data['taxId']).to eq(account.tax_id)
@@ -95,6 +149,7 @@ RSpec.describe '/accounts', type: :request do
               let(:account) do
                 Fabricate :account_with_invoices,
                           type: 'Business',
+                          users: [user],
                           invoices: [Fabricate(:invoice), Fabricate(:invoice)]
               end
 
@@ -102,11 +157,33 @@ RSpec.describe '/accounts', type: :request do
                 expect(data['invoices']).not_to be_nil
               end
             end
+
+            pending 'with a profile'
+
+            pending 'without a profile'
+          end
+
+          context 'when the account is an individual' do
+            let(:account) { Fabricate :individual, users: [user] }
+
+            it 'returns the email' do
+              expect(data['email']).to eq(account.email)
+            end
+
+            context 'with several profiles' do
+              let(:account) { Fabricate :individual_with_profiles, users: [user] }
+
+              it 'returns the profiles' do
+                expect(data['profiles']).to be_an(Array)
+                expect(data['profiles'].count).to eq(account.profiles.count)
+              end
+            end
+
+            pending 'with 1 profile'
           end
         end
       end
 
-      # TODO: implement access controls for models informed by (Pundit + Rolify) policies
       context 'accessing an unauthorized account' do
         let(:account) { Fabricate :account }
 
@@ -167,34 +244,367 @@ RSpec.describe '/accounts', type: :request do
   end
 
   describe 'POST /create' do
-    context 'with valid parameters' do
-      it 'creates a new Account' do
-        expect do
-          post accounts_url, params: { account: valid_attributes }
-        end.to change(Account, :count).by(1)
+    context 'with an authorized user' do
+      let(:user) { Fabricate :user }
+
+      before do
+        sign_in user
       end
 
-      it 'redirects to the created account' do
-        post accounts_url, params: { account: valid_attributes }
-        expect(response).to redirect_to(account_url(Account.last))
-      end
-    end
+      context 'and valid business account parameters' do
+        let(:valid_attributes) do
+          {
+            type: 'Business',
+            slug: Faker::Internet.slug,
+            display_name: Faker::Company.name,
+            tax_id: Faker::Company.ein,
+            email: Faker::Internet.email,
+            # IMPORTANT: Update frontend input component(s) to use formatting libraries
+            #   that ensure fully formatted numbers are returned to the service
+            phone: [
+              Faker::PhoneNumber.cell_phone_with_country_code,
+              Faker::PhoneNumber.phone_number_with_country_code
+            ].sample,
+            status: 'active'
+          }
+        end
 
-    context 'with invalid parameters' do
-      it 'does not create a new Account' do
-        expect do
-          post accounts_url, params: { account: invalid_attributes }
-        end.to change(Account, :count).by(0)
+        subject { Business.find_by_slug valid_attributes[:slug] }
+
+        context 'has side effect(s) of' do
+          it 'creating a new Account' do
+            expect do
+              post accounts_url, params: { account: valid_attributes }
+            end.to change(Business, :count).by(1)
+          end
+
+          it 'redirecting to the created account' do
+            post accounts_url, params: { account: valid_attributes }
+            expect(response).to redirect_to(account_url(subject))
+          end
+        end
+
+        context 'attributes' do
+          before { post accounts_url, params: { account: valid_attributes } }
+
+          context '#email' do
+            it { expect(subject.email).to eq(valid_attributes[:email]) }
+          end
+
+          context '#phone' do
+            let(:parsed_number) { Phonelib.parse(valid_attributes[:phone]) }
+
+            it { expect(subject.profile.phone.full_international).to eq(parsed_number.full_international) }
+          end
+
+          context '#status' do
+            it { expect(subject.status).to eq(valid_attributes[:status]) }
+          end
+
+          context '#tax_id' do
+            it { expect(subject.tax_id).to eq(valid_attributes[:tax_id]) }
+          end
+
+          context '#type' do
+            it { expect(subject.type).to eq(valid_attributes[:type]) }
+          end
+
+          context '#slug' do
+            it { expect(subject.slug).to eq(valid_attributes[:slug]) }
+          end
+
+          context '#display_name' do
+            it { expect(subject.display_name).to eq(valid_attributes[:display_name]) }
+          end
+        end
       end
 
-      it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post accounts_url, params: { account: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+      context 'and valid individual account parameters' do
+        let(:valid_attributes) do
+          {
+            type: 'Individual',
+            slug: Faker::Internet.slug,
+            display_name: Faker::Name.name,
+            given_name: Faker::Name.neutral_first_name,
+            family_name: Faker::Name.last_name,
+            email: Faker::Internet.email,
+            phone: [
+              Faker::PhoneNumber.cell_phone_with_country_code,
+              Faker::PhoneNumber.phone_number_with_country_code
+            ].sample,
+            status: 'guest'
+          }
+        end
+
+        subject { Individual.find_by(slug: valid_attributes[:slug]) }
+
+        context 'has side effect(s) of' do
+          it 'creating a new Account' do
+            expect do
+              post accounts_url, params: { account: valid_attributes }
+            end.to change(Individual, :count).by(1)
+          end
+
+          it 'redirecting to the created account' do
+            post accounts_url, params: { account: valid_attributes }
+            expect(response).to redirect_to(account_url(subject))
+          end
+        end
+
+        context 'attributes' do
+          let(:profile) { subject.profile }
+
+          before { post accounts_url, params: { account: valid_attributes } }
+
+          context '#given_name' do
+            it { expect(profile.given_name).to eq(valid_attributes[:given_name]) }
+          end
+
+          context '#family_name' do
+            it { expect(profile.family_name).to eq(valid_attributes[:family_name]) }
+          end
+
+          context '#email' do
+            it { expect(subject.email).to eq(valid_attributes[:email]) }
+          end
+
+          context '#phone' do
+            let(:parsed_number) { Phonelib.parse(valid_attributes[:phone]) }
+
+            it { expect(subject.profile.phone.full_international).to eq(parsed_number.full_international) }
+          end
+
+          context '#status' do
+            it { expect(subject.status).to eq(valid_attributes[:status]) }
+          end
+
+          context '#type' do
+            it { expect(subject.type).to eq(valid_attributes[:type]) }
+          end
+
+          context '#slug' do
+            it { expect(subject.slug).to eq(valid_attributes[:slug]) }
+          end
+
+          context '#display_name' do
+            it { expect(subject.display_name).to eq(valid_attributes[:display_name]) }
+          end
+        end
+      end
+
+      context 'and no account parameters' do
+        pending 'returns the expected error message(s)'
+        pending 'returns the expected status'
+      end
+
+      context 'and no profile parameters' do
+        pending 'creates the account'
+        pending 'does NOT create the account profile'
       end
     end
   end
 
   describe 'PATCH /update' do
+    context 'with an authorized user' do
+      # TODO: Implement access controls for models informed by (Pundit + Rolify) policies
+      let(:user) { Fabricate :user }
+      let(:account) { Fabricate :account, users: [user] }
+
+      before do
+        sign_in user
+      end
+
+      context 'and valid business account parameters' do
+        let(:account) { Fabricate :business, users: [user], status: 'guest' }
+        let(:profile) { account.profile }
+        let(:account_attributes) do
+          {
+            display_name: Faker::Company.name,
+            tax_id: Faker::Company.ein,
+            status: 'active'
+          }
+        end
+        let(:profile_attributes) do
+          {
+            # IMPORTANT: Update frontend input component(s) to use formatting libraries
+            #   that ensure fully formatted numbers are returned to the service
+            phone: [
+              Faker::PhoneNumber.cell_phone_with_country_code,
+              Faker::PhoneNumber.phone_number_with_country_code
+            ].sample
+          }
+        end
+
+        subject { account.reload }
+
+        context 'has side effect(s) of' do
+          let!(:account) { Fabricate :business, users: [user], status: 'guest' }
+
+          it 'NOT creating a new Account' do
+            expect do
+              patch account_url(account), params: { account: account_attributes, profile: profile_attributes }
+            end.not_to change(Business, :count)
+          end
+
+          it 'redirecting to the created account' do
+            patch account_url(account), params: { account: account_attributes, profile: profile_attributes }
+            expect(response).to redirect_to(account_url(subject))
+          end
+
+          context 'when format = json' do
+            it 'returns the expected HTTP status' do
+              patch account_url(account),
+                    params: { account: account_attributes, profile: profile_attributes, format: :json }
+              expect(response).to have_http_status(:ok)
+            end
+          end
+        end
+
+        context 'attributes' do
+          before do
+            patch account_url(account),
+                  params: { account: account_attributes, profile: profile_attributes, format: :json }
+            profile.reload
+          end
+
+          context '#email' do
+            pending 'does NOT update the email address'
+          end
+
+          context '#phone' do
+            let(:parsed_number) { Phonelib.parse(profile_attributes[:phone]) }
+
+            it { expect(profile.reload.phone.full_international).to eq(parsed_number.full_international) }
+          end
+
+          context '#status' do
+            it { expect(subject.status).to eq(account_attributes[:status]) }
+          end
+
+          context '#tax_id' do
+            it { expect(subject.tax_id).to eq(account_attributes[:tax_id]) }
+          end
+
+          context '#type' do
+            pending 'does NOT update the account type'
+          end
+
+          context '#slug' do
+            pending 'does NOT update the account slug'
+          end
+
+          context '#display_name' do
+            it { expect(subject.display_name).to eq(account_attributes[:display_name]) }
+          end
+        end
+      end
+
+      context 'and valid individual account parameters' do
+        let(:account) { Fabricate :individual, users: [user] }
+        let(:profile) { Fabricate :user_profile, account: }
+        let(:account_attributes) do
+          {
+            display_name: Faker::Company.name,
+            status: 'guest'
+          }
+        end
+        let(:profile_attributes) do
+          {
+            given_name: Faker::Name.neutral_first_name,
+            family_name: Faker::Name.last_name,
+            # IMPORTANT: Update frontend input component(s) to use formatting libraries
+            #   that ensure fully formatted numbers are returned to the service
+            phone: [
+              Faker::PhoneNumber.cell_phone_with_country_code,
+              Faker::PhoneNumber.phone_number_with_country_code
+            ].sample
+          }
+        end
+
+        before { sign_in user }
+
+        subject { account.reload }
+
+        context 'has side effect(s) of' do
+          let!(:profile) { Fabricate :user_profile, account: }
+
+          it 'NOT creating a new Account' do
+            expect do
+              patch account_url(account), params: { account: account_attributes, profile: profile_attributes }
+            end.not_to change(Individual, :count)
+          end
+
+          it 'returns the expected HTTP status' do
+            patch account_url(account),
+                  params: { account: account_attributes, profile: profile_attributes, format: :json }
+            expect(response).to have_http_status(:ok)
+          end
+        end
+
+        context 'attributes' do
+          let!(:profile) { Fabricate :user_profile, account: }
+
+          before do
+            patch account_url(account),
+                  params: { account: account_attributes, profile: profile_attributes, format: :json }
+            profile.reload
+          end
+
+          context '#given_name' do
+            it { expect(profile.reload.given_name).to eq(profile_attributes[:given_name]) }
+          end
+
+          context '#family_name' do
+            it { expect(profile.reload.family_name).to eq(profile_attributes[:family_name]) }
+          end
+
+          context '#email' do
+            pending 'does NOT update the email address'
+          end
+
+          context '#phone' do
+            let(:parsed_number) { Phonelib.parse(profile_attributes[:phone]) }
+
+            it { expect(profile.reload.phone.full_international).to eq(parsed_number.full_international) }
+          end
+
+          context '#status' do
+            it { expect(subject.status).to eq(account_attributes[:status]) }
+          end
+
+          context '#type' do
+            pending 'does NOT update the account type'
+          end
+
+          context '#slug' do
+            pending 'does NOT update the account slug'
+          end
+
+          context '#display_name' do
+            it { expect(subject.display_name).to eq(account_attributes[:display_name]) }
+          end
+        end
+      end
+
+      context 'and no account parameters' do
+        pending 'returns the expected error message(s)'
+        pending 'returns the expected status'
+      end
+
+      context 'and no profile parameters' do
+        pending 'updates the account'
+        pending 'does NOT update the account profile'
+      end
+
+      context 'and slug in the payload' do
+        pending 'does NOT update the account slug'
+      end
+
+      context 'and type in the payload' do
+        pending 'does NOT update the account type'
+      end
+    end
+
     context 'with valid parameters' do
       let(:new_attributes) do
         skip('Add a hash of attributes valid for your model')

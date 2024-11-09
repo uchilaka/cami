@@ -10,7 +10,7 @@ require_relative '../config/environment'
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'rspec/rails'
-require 'rspec/wait'
+# require 'rspec/wait'
 require 'aasm/rspec'
 require 'database_cleaner/active_record'
 require 'sidekiq/testing'
@@ -73,10 +73,10 @@ end
 RSpec.configure do |config|
   config.fail_fast = AppUtils.yes?(ENV.fetch('RSPEC_FAIL_FAST', false)) ? true : false
 
-  # Configure rspec-wait: https://github.com/laserlemon/rspec-wait?tab=readme-ov-file#configuration
-  config.wait_timeout = 10 # seconds
-  config.wait_delay = 1 # seconds
-  config.clone_wait_matcher = true
+  # # Configure rspec-wait: https://github.com/laserlemon/rspec-wait?tab=readme-ov-file#configuration
+  # config.wait_timeout = 10 # seconds
+  # config.wait_delay = 1 # seconds
+  # config.clone_wait_matcher = true
 
   config.include Mongoid::Matchers, type: :model
 
@@ -140,6 +140,8 @@ RSpec.configure do |config|
 
   config.around(:each) do |example|
     DatabaseCleaner.cleaning { example.run }
+    # Clean up all test double state
+    RSpec::Mocks.teardown
   end
 end
 

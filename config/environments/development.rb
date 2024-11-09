@@ -16,8 +16,7 @@ Rails.application.configure do
 
   config.cache_classes = false
 
-  # Do not eager load code on boot.
-  config.eager_load = true
+  config.eager_load = false
 
   # Show full error reports. See https://guides.rubyonrails.org/configuring.html#config-consider-all-requests-local
   config.consider_all_requests_local = true

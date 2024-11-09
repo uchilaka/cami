@@ -10,7 +10,7 @@ import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import Home from '@views/Home'
 import Dashboard from '@views/Dashboard'
-import AccountSummaryModal from '@/features/AccountSummary/AccountSummaryModal'
+import AccountSummaryModal from '@/features/AccountManager/AccountSummaryModal'
 
 function mountIfContainerIsLoaded(containerId, Component) {
   const domContainer = document.querySelector(`#${containerId}`)
