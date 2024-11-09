@@ -172,7 +172,7 @@ bin/dev
 
 ## Running Storybook
 
-> The `FeatureFlagsProvider` requires the application service running locally on port `16006`. This should be refactored to mock the response from `/api/features` and other endpoints needed to review components. See [this guide on mocking requests](https://storybook.js.org/docs/writing-stories/mocking-data-and-modules/mocking-network-requests) for more.
+> The `FeatureFlagsProvider` requires the application service running locally on port `6006` (currently broken, hence all features are disabled by default). This should be refactored to mock the response from `/api/features` and other endpoints needed to review components. See [this guide on mocking requests](https://storybook.js.org/docs/writing-stories/mocking-data-and-modules/mocking-network-requests) for more.
 
 To review component stories, run:
 
