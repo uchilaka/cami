@@ -238,7 +238,7 @@ export const AccountFormWithFormik = withFormik<AccountInnerFormProps, AccountFo
   },
 })(AccountInnerForm)
 
-const AccountForm: FC<AccountFormProps> = ({ compact, initialType, readOnly, ...props }) => {
+const AccountForm: FC<Omit<AccountFormProps, 'setReadOnly'>> = ({ compact, initialType, readOnly, ...props }) => {
   const [saved, setSaved] = useState<boolean>()
   const [isReadOnly, setIsReadOnly] = useState(readOnly ?? true)
   const { logger } = useLogTransport()
