@@ -1,4 +1,10 @@
 {
   "$schema": "https://www.chromatic.com/config-file.schema.json",
-  "projectId": "672f4b60dab53d48175d55dd"
+  "projectId": "Project:672f4b60dab53d48175d55dd",
+  "outputDir": "storybook-static",
+  "autoAcceptChanges": "main",
+  "externals": [
+    "public/**"
+  ],
+  "onlyChanged": true
 }
