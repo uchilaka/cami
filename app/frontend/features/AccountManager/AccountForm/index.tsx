@@ -56,6 +56,7 @@ const validationSchema = Yup.object({
 export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
   const { logger } = useLogTransport()
   const [isReadOnly, setIsReadOnly] = useState(readOnly ?? true)
+  const [saved, setSaved] = useState<boolean>()
   const { loading, account } = useAccountContext()
   const { loading: loadingFeatureFlags, isEnabled } = useFeatureFlagsContext()
   const disablePhoneNumbers = !isEnabled('editable_phone_numbers')
@@ -101,6 +102,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
         // TODO: Raise AccountNotActionableError
       }
     },
+    onSuccess: (_result) => setSaved(true),
   })
 
   logger.debug({ account, loading })
@@ -129,7 +131,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
       }}
     >
       {(formikProps) => {
-        const { handleChange, handleReset, handleBlur, handleSubmit, isValid, isValidating, isSubmitting, values, errors } = formikProps
+        const { handleChange, handleReset, handleBlur, handleSubmit, isValid, isValidating, isSubmitting, errors } = formikProps
 
         return (
           <Form className={formClassName} onSubmit={handleSubmit}>
