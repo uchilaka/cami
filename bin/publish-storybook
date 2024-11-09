@@ -19,4 +19,4 @@ SCRIPT_PATH="${SCRIPT_PATH:A}"
 
 echo "\nPublishing Storybook to Chromatic from ${SCRIPT_PATH}"
 
-yarn dlx chromatic --project-token=${CHROMATIC_PROJECT_TOKEN} --auto-accept-changes
+yarn dlx chromatic --project-token=${CHROMATIC_PROJECT_TOKEN}
