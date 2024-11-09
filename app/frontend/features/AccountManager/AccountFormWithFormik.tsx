@@ -88,7 +88,17 @@ const composeFormValues = (account?: IndividualAccount | BusinessAccount | null,
   }
 }
 
-const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, saved, initialType, readOnly, setReadOnly, logger, account }) => {
+const AccountInnerForm: FC<AccountInnerFormProps> = ({
+  compact,
+  loading,
+  saved,
+  initialType,
+  readOnly,
+  setReadOnly,
+  logger,
+  account: initialAccount,
+}) => {
+  const [account, setAccount] = useState(() => initialAccount)
   const { handleChange, handleReset, handleBlur, handleSubmit, isValid, isValidating, isSubmitting, errors, values, setValues } =
     useFormikContext<AccountFormData>()
   const { loading: loadingFeatureFlags, isEnabled } = useFeatureFlagsContext()
@@ -104,7 +114,7 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({ compact, loading, saved, 
   }, [account, readOnly])
 
   useEffect(() => {
-    if (loadedAccount && readOnly) setValues(composeFormValues(loadedAccount))
+    if (loadedAccount && readOnly) setAccount(loadedAccount)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadingAccount, loadedAccount, readOnly])
 
@@ -263,15 +273,6 @@ export const AccountFormWithFormik = withFormik<AccountInnerFormProps, AccountFo
 })(AccountInnerForm)
 
 const AccountForm: FC<Omit<AccountFormProps, 'setReadOnly'>> = ({ compact, initialType, readOnly, saved, accountId, ...props }) => {
-  const [initialValues, setInitialValues] = useState<AccountFormData>({
-    displayName: '',
-    givenName: '',
-    familyName: '',
-    phone: '',
-    email: '',
-    readme: '',
-    type: initialType ?? 'Business',
-  })
   const [hasBeenSaved, setHasBeenSaved] = useState<boolean | undefined>(saved)
   const [isReadOnly, setIsReadOnly] = useState(readOnly ?? true)
   const { logger } = useLogTransport()
@@ -311,7 +312,7 @@ const AccountForm: FC<Omit<AccountFormProps, 'setReadOnly'>> = ({ compact, initi
     },
   })
 
-  logger.debug('Account Form (withFormik):', { initialValues, account, loading })
+  logger.debug('Account Form (withFormik):', { account, loading })
 
   const mappedProps = {
     compact,
@@ -344,7 +345,15 @@ const AccountForm: FC<Omit<AccountFormProps, 'setReadOnly'>> = ({ compact, initi
     <AccountFormWithFormik
       {...mappedProps}
       logger={logger}
-      initialValues={initialValues}
+      initialValues={{
+        displayName: '',
+        givenName: '',
+        familyName: '',
+        phone: '',
+        email: '',
+        readme: '',
+        type: initialType ?? 'Business',
+      }}
       account={currentAccount}
       updateAccount={updateAccount}
     />

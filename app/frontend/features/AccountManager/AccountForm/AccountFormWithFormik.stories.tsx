@@ -41,10 +41,20 @@ export const Default: Story = {
   args: { readOnly: true, compact: false },
 }
 
+/**
+ * This story demonstrates how to load a Business account. The account
+ * data is only updated when the `accountId` prop changes while the form
+ * is in read-only mode.
+ */
 export const BusinessForm: Story = {
-  args: { initialType: 'Business' },
+  args: { initialType: 'Business', accountId: '4321', readOnly: true },
 }
 
+/**
+ * This story demonstrates how to load an Individual account. The account
+ * data is only updated when the `accountId` prop changes while the form
+ * is in read-only mode.
+ */
 export const IndividualForm: Story = {
   args: { initialType: 'Individual', accountId: '1234', readOnly: true },
 }
