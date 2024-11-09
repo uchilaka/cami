@@ -21,6 +21,7 @@ class UpdateAccountWorkflow
     return unless context.success?
 
     context.profile = account.profile
+    context.profile ||= Metadata::Business.new(account_id: account.id)
     profile_params =
       if context.profile_params.present?
         if account.is_a?(Business)
@@ -30,7 +31,7 @@ class UpdateAccountWorkflow
         end.to_h.symbolize_keys
       end
 
-    return unless context.success? && profile_params.present? && account.profile.present?
+    return unless context.success? && profile_params.present? && context.profile.present?
 
     # TODO: Improve this logic to allow for updating the email address on
     #   a profile if a User does not exist for it - otherwise, profile emails
@@ -39,8 +40,7 @@ class UpdateAccountWorkflow
     _updated_email = profile_params.delete(:email)
     input_number = profile_params.delete(:phone)
     profile_params[:phone] = PhoneNumber.new(value: input_number) if input_number.present?
-    account.profile.update(profile_params)
-    context.fail!(message: account.profile.errors.full_messages) if account.profile.errors.any?
-    context.profile = account.profile
+    context.profile.update(profile_params)
+    context.fail!(message: context.profile.errors.full_messages) if context.profile.errors.any?
   end
 end
