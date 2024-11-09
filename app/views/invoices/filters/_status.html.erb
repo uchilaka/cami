@@ -1,7 +1,7 @@
 <div class="list-filter">
   <%= button_tag(id: 'statusDropdownRadioButton',
                  'data-dropdown-toggle': 'statusDropdownRadio',
-                 class: 'inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700',
+                 class: compose_class_names('inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700', { 'cursor-not-allowed': !invoice_filtering_enabled? }),
                  disabled: !invoice_filtering_enabled?) do %>
     <i class="mr-2.5 fa-sharp fa-solid fa-filter"></i>
     Status
