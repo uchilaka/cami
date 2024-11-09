@@ -1497,6 +1497,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^4.6.0"
     eslint-plugin-storybook: "npm:^0.9.0"
     flowbite: "npm:^2.3.0"
+    flowbite-typography: "npm:^1.0.4"
     formik: "npm:^2.4.6"
     gaxios: "npm:^6.7.1"
     husky: "npm:^9.1.6"
@@ -5766,6 +5767,19 @@ __metadata:
     "@rollup/plugin-node-resolve": "npm:^15.2.3"
     flowbite: "npm:^2.0.0"
   checksum: 10c0/a3d24f5f89c6c64bce436bbe269baf624cc8e4f58de32e234b3652d08c58960191b0114cc8c8762e986cd828b75021b22184663a44ed8da98820b0cff0e53aa1
+  languageName: node
+  linkType: hard
+
+"flowbite-typography@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "flowbite-typography@npm:1.0.4"
+  dependencies:
+    lodash.castarray: "npm:^4.4.0"
+    lodash.isplainobject: "npm:^4.0.6"
+    lodash.merge: "npm:^4.6.2"
+  peerDependencies:
+    tailwindcss: "*"
+  checksum: 10c0/96351c4fd97671fe9267559e0fca7fe750fe9f6a4eeb07a153563a97b5a21bc355ccc514546cb736f04b99beeec118af0c7ec68f1bddd577438912452cb81395
   languageName: node
   linkType: hard
 
