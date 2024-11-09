@@ -12,7 +12,7 @@
     "feat__invoice_filtering": false,
     "feat__account_filtering": true,
     "feat__shared_account_summary_modal": true,
-    "feat__editable_phone_numbers": true
+    "feat__editable_phone_numbers": false
   },
   "flags": [
     "feat__google_omniauth",
