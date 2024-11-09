@@ -29,6 +29,7 @@ export const Default: Story = {
     name: 'phone',
     readOnly: false,
     disabled: false,
+    international: false,
   },
   parameters: {
     formik: {

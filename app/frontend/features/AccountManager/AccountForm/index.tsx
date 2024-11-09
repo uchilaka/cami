@@ -169,6 +169,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
                 label="Phone number"
                 name="phone"
                 placeholder=" "
+                international
                 hint={errors.phone}
                 onReset={handleReset}
                 onChange={handleChange}
