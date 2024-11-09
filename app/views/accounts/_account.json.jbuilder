@@ -37,5 +37,12 @@ else
   json.profiles []
 end
 
+if account.is_a?(Individual) && account.profiles.size == 1
+  json.extract! account.profiles.first, :given_name, :family_name, :image_url
+  json.profile do
+    json.partial! 'profiles/metadata_profile', metadata_profile: account.profiles.first, account:
+  end
+end
+
 json.invoices account.invoices, partial: 'invoices/invoice', as: :invoice
 json.deep_format_keys!
