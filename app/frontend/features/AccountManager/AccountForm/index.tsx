@@ -51,7 +51,10 @@ const validationSchema = Yup.object({
 })
 
 /**
- * Form with floating labels: https://flowbite.com/docs/components/forms/#floating-labels
+ * Form with floating labels: https://flowbite.com/docs/components/forms/#floating-labels.
+ *
+ * The form story will have editing phone numbers disabled by default. To enable it, review
+ * the `editable_phone_numbers` feature flag at `<project-root>/spec/fixtures/feature_flags.json`.
  */
 export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
   const { logger } = useLogTransport()
