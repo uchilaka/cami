@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { Form, Formik } from 'formik'
 import React, { FC, useState } from 'react'
+import snakecaseKeys from 'snakecase-keys'
 import * as Yup from 'yup'
 import FormInput from '@/components/FloatingFormInput'
 import PhoneInput from '@/components/PhoneNumberInput/PhoneLibNumberInput'
@@ -55,6 +56,7 @@ const validationSchema = Yup.object({
 export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
   const { logger } = useLogTransport()
   const [isReadOnly, setIsReadOnly] = useState(readOnly ?? true)
+  const [saved, setSaved] = useState<boolean>()
   const { loading, account } = useAccountContext()
   const { loading: loadingFeatureFlags, isEnabled } = useFeatureFlagsContext()
   const disablePhoneNumbers = !isEnabled('editable_phone_numbers')
@@ -68,6 +70,13 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
     readme: account?.readme,
     phone: (isBusinessAccount(account) ? account?.phone : '') ?? '',
     type: account?.type ?? 'Business',
+    ...(isIndividualAccount(account)
+      ? {
+          givenName: account?.profile?.givenName ?? '',
+          familyName: account?.profile?.familyName ?? '',
+          phone: account?.profile?.phone ?? '',
+        }
+      : {}),
   }
 
   const updateAccount = useMutation({
@@ -87,12 +96,13 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
             Accept: 'application/json',
             'X-CSRF-Token': csrfToken,
           },
-          body: JSON.stringify(payload),
+          body: JSON.stringify(snakecaseKeys(payload)),
         })
       } else {
         // TODO: Raise AccountNotActionableError
       }
     },
+    onSuccess: (_result) => setSaved(true),
   })
 
   logger.debug({ account, loading })
@@ -121,7 +131,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
       }}
     >
       {(formikProps) => {
-        const { handleChange, handleReset, handleBlur, handleSubmit, isValid, isValidating, isSubmitting, values, errors } = formikProps
+        const { handleChange, handleReset, handleBlur, handleSubmit, isValid, isValidating, isSubmitting, errors } = formikProps
 
         return (
           <Form className={formClassName} onSubmit={handleSubmit}>
@@ -161,6 +171,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
                 label="Phone number"
                 name="phone"
                 placeholder=" "
+                international
                 hint={errors.phone}
                 onReset={handleReset}
                 onChange={handleChange}
@@ -231,8 +242,11 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
                   ) : (
                     <Button disabled>Transactions</Button>
                   )}
-                  {isBusinessAccount(account) && <ButtonLink href={account.actions.showProfile.url}>Profile</ButtonLink>}
-                  {isIndividualAccount(account) && <ButtonLink href={account.actions.profilesIndex.url}>Profiles</ButtonLink>}
+                  {account?.actions.showProfile ? (
+                    <ButtonLink href={account.actions.showProfile.url}>Profile</ButtonLink>
+                  ) : (
+                    <>{isIndividualAccount(account) && <ButtonLink href={account.actions.profilesIndex.url}>Profiles</ButtonLink>}</>
+                  )}
                   <Button variant="primary" onClick={() => setIsReadOnly(false)}>
                     Edit
                   </Button>

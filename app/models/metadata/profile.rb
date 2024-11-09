@@ -15,12 +15,12 @@ module Metadata
     field :given_name, type: String
 
     # Identity providers
-    field :google, type: Hash
-    field :facebook, type: Hash
-    field :apple, type: Hash
-    field :whatsapp, type: Hash
+    field :google, type: Hash, default: {}
+    field :facebook, type: Hash, default: {}
+    field :apple, type: Hash, default: {}
+    field :whatsapp, type: Hash, default: {}
 
-    field :vendor_data, type: Hash
+    field :vendor_data, type: Hash, default: {}
 
     field :image_url, type: String
     field :last_seen_at, type: Time, default: -> { Time.now }

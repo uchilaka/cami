@@ -1,3 +1,4 @@
+import { Modal } from 'flowbite'
 import { emitLoadAccountEvent } from '@/utils/events'
 
 console.debug('JavaScript from accounts.ts is loaded.')
@@ -19,9 +20,15 @@ document.addEventListener('turbo:load', () => {
 
   document.querySelectorAll('.action--view-account-summary').forEach((el: Element | HTMLElement) => {
     el.addEventListener('click', ({ target }) => {
-      const { resourceId: accountId } = (target as HTMLElement).dataset
-      console.debug('View account summary was clicked', { accountId, target })
-      if (accountId) emitLoadAccountEvent(accountId, el)
+      const { resourceId: accountId, modalTargetAsync, modalToggleAsync } = (target as HTMLElement).dataset
+      console.debug('View account summary was clicked', { accountId, modalTargetAsync, modalToggleAsync, target })
+      if (accountId) {
+        emitLoadAccountEvent(accountId, el)
+        // Open the account modal
+        const modalEl = document.querySelector(`#${modalTargetAsync}`)
+        const modal = new Modal(modalEl)
+        modal.toggle()
+      }
     })
   })
 })

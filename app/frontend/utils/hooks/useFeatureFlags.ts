@@ -2,19 +2,20 @@ import { useEffect, useState } from 'react'
 import { getFeatureFlags } from '../api'
 
 export interface FeatureFlagsProps {
-  loading: boolean
   error: Error | unknown
   flags: Record<string, boolean>
   refetch: () => Promise<Record<string, boolean> | null>
+  loading?: boolean
 }
 
 export default function useFeatureFlags() {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState<boolean>()
   const [error, setError] = useState<Error | unknown>()
   const [flags, setFlags] = useState<Record<string, boolean>>({})
 
   const asyncFetch = async () => {
     try {
+      setLoading(true)
       const latestFlags = await getFeatureFlags()
       setFlags(latestFlags)
       return latestFlags

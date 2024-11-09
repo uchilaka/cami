@@ -47,7 +47,6 @@ RSpec.describe '/accounts', type: :request do
 
         context 'with the default format' do
           it 'renders a successful response' do
-            # account = Account.create! valid_attributes
             get account_url(account)
             expect(response).to be_successful
           end
@@ -71,6 +70,16 @@ RSpec.describe '/accounts', type: :request do
                 'httpMethod' => 'GET',
                 'label' => 'Back to accounts',
                 'url' => accounts_url
+              },
+              'transactionsIndex' => {
+                'httpMethod' => 'GET',
+                'label' => 'Transactions',
+                'url' => account_invoices_url(account)
+              },
+              'profilesIndex' => {
+                'httpMethod' => 'GET',
+                'label' => 'Profiles',
+                'url' => account_profiles_url(account)
               }
             }
           end
@@ -101,6 +110,12 @@ RSpec.describe '/accounts', type: :request do
 
             expect(data.dig('actions', 'show')).to \
               match(hash_including(expected_actions['show']))
+
+            expect(data.dig('actions', 'transactionsIndex')).to \
+              match(hash_including(expected_actions['transactionsIndex']))
+
+            expect(data.dig('actions', 'profilesIndex')).to \
+              match(hash_including(expected_actions['profilesIndex']))
           end
 
           it 'returns the actions as a list' do
@@ -142,6 +157,10 @@ RSpec.describe '/accounts', type: :request do
                 expect(data['invoices']).not_to be_nil
               end
             end
+
+            pending 'with a profile'
+
+            pending 'without a profile'
           end
 
           context 'when the account is an individual' do
@@ -151,7 +170,7 @@ RSpec.describe '/accounts', type: :request do
               expect(data['email']).to eq(account.email)
             end
 
-            context 'with profiles' do
+            context 'with several profiles' do
               let(:account) { Fabricate :individual_with_profiles, users: [user] }
 
               it 'returns the profiles' do
@@ -159,6 +178,8 @@ RSpec.describe '/accounts', type: :request do
                 expect(data['profiles'].count).to eq(account.profiles.count)
               end
             end
+
+            pending 'with 1 profile'
           end
         end
       end

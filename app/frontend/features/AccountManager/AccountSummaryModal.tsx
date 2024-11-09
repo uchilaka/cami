@@ -1,4 +1,5 @@
-import React, { ComponentProps, useEffect, useState } from 'react'
+import React, { ComponentProps, useEffect, useState, useRef } from 'react'
+import { Modal } from 'flowbite'
 import withAllTheProviders from '@/components/withAllTheProviders'
 import LoadingAnimation from '../../components/LoadingAnimation'
 import { useAccountContext, withAccountProvider } from '@/features/AccountManager/AccountProvider'
@@ -10,6 +11,7 @@ import { useLogTransport } from '@/components/LogTransportProvider'
 
 const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ...props }) => {
   const [accountLoader, setAccountLoader] = useState<AbortController>()
+  const modalRef = useRef<HTMLDivElement>(null)
   const { logger } = useLogTransport()
   const modalId = id ?? 'account--summary-modal'
 
@@ -26,10 +28,20 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountLoader])
 
+  const closeModal = async () => {
+    if (!modalRef.current) return
+    const modal = new Modal(modalRef.current)
+    logger.debug('Closing account summary modal')
+    modal.hide()
+  }
+
+  logger.debug({ modalId, account })
+
   return (
     <div
       {...props}
       id={modalId}
+      ref={modalRef}
       data-testid="account-summary-modal"
       tabIndex={-1}
       aria-hidden="true"
@@ -49,6 +61,7 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
                 type="button"
                 className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-hide={modalId}
+                onClick={closeModal}
               >
                 <CloseIcon />
                 <span className="sr-only">Close modal</span>

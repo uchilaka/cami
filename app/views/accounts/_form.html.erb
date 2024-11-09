@@ -18,8 +18,8 @@
 
   <hr class="my-4">
 
-  <div class="flex justify-end items-center">
+  <div class="flex justify-end items-start">
     <%= yield :account_form_actions %>
-    <%= form.submit class: primary_btn_classes %>
+    <%= form.submit class: primary_btn_classes('px-5 py-3') %>
   </div>
 <% end %>
