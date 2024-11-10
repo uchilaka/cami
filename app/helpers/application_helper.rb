@@ -23,6 +23,7 @@ module ApplicationHelper
   end
 
   def page_title
-    Rails.application.class.module_parent_name
+    Rails.application.config.application_short_name ||
+      Rails.application.class.module_parent_name
   end
 end
