@@ -23,14 +23,20 @@
                             'actiontext', media: 'all' %>
   </head>
 
-  <body>
+  <body class="h-full">
+    <%= yield :modal_containers %>
+    <% if Flipper.enabled? :feat__navbar_v2 %>
+      <%= render "shared/navbar/v2/index" %>
+    <% end %>
     <div class="flex flex-col h-screen">
-      <%= render "shared/navbar" %>
+      <% unless Flipper.enabled? :feat__navbar_v2 %>
+        <%= render "shared/navbar" %>
+      <% end %>
       <%= render "shared/flash" %>
-      <main class="container flex flex-col flex-1 px-5 mx-auto my-12">
+      <main class="container flex flex-col flex-1 px-5 mx-auto mt-0 max-w-screen-xl mb-12">
         <%= yield %>
       </main>
-      <%= render "shared/footer" %>
+      <%= render "shared/footer/full" %>
     </div>
   </body>
 </html>
