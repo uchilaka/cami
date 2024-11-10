@@ -6,7 +6,6 @@ require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
   # resources :invoices
-  get 'healthz', to: 'healthz#show'
 
   devise_for :users,
              controllers: {
