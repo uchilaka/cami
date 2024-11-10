@@ -103,7 +103,6 @@ GEM
       msgpack (~> 1.2)
     brakeman (6.2.2)
       racc
-    bson (5.0.1)
     builder (3.3.0)
     bumbler (0.9.0)
     capybara (3.40.0)
@@ -140,9 +139,6 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
-    database_cleaner-mongoid (2.0.1)
-      database_cleaner-core (~> 2.0.0)
-      mongoid
     date (3.4.0)
     debug (1.9.2)
       irb (~> 1.10)
@@ -274,12 +270,6 @@ GEM
     mini_magick (4.13.2)
     mini_mime (1.1.5)
     minitest (5.25.1)
-    mongo (2.21.0)
-      bson (>= 4.14.1, < 6.0.0)
-    mongoid (9.0.2)
-      activemodel (>= 5.1, < 7.3, != 7.0.0)
-      concurrent-ruby (>= 1.0.5, < 2.0)
-      mongo (>= 2.18.0, < 3.0.0)
     msgpack (1.7.3)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
@@ -614,7 +604,6 @@ DEPENDENCIES
   dartsass-rails
   data_migrate (~> 9, >= 9.3.0)
   database_cleaner-active_record
-  database_cleaner-mongoid
   debug
   devise
   devise-jwt (~> 0.11)
