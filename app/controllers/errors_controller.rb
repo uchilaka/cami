@@ -11,14 +11,13 @@ class ErrorsController < ApplicationController
   rescue_from LarCity::Errors::InternalServerError, with: :server_error
   rescue_from LarCity::Errors::ResourceNotFound, with: :not_found
 
-  def emit_routing_exception
-    if %r{/admin/}.match?(request.fullpath)
-      raise LarCity::Errors::ElevatedPrivilegesRequired if request.params[:unmatched].present?
+  def show
+    @exception = request.env['action_dispatch.exception']
+    @status_code =
+      @exception.try(:status_code) ||
+        ActionDispatch::ExceptionWrapper.new(request.env, @exception).status_code
 
-      raise LarCity::Errors::UnprocessableEntity
-    end
-
-    raise LarCity::Errors::ResourceNotFound
+    render view_for_code(@status_code), status: @status_code
   end
 
   def unprocessable_entity
@@ -35,5 +34,29 @@ class ErrorsController < ApplicationController
 
   def server_error
     render 'errors/server_error', status: :internal_server_error
+  end
+
+  private
+
+  def view_for_code(code)
+    supported_error_codes.fetch(code, '404')
+  end
+
+  def supported_error_codes
+    {
+      403 => 'errors/forbidden',
+      404 => 'errors/not_found',
+      500 => 'errors/server_error'
+    }.with_indifferent_access
+  end
+
+  def emit_routing_exception
+    if %r{/admin/}.match?(request.fullpath)
+      raise LarCity::Errors::ElevatedPrivilegesRequired if request.params[:unmatched].present?
+
+      raise LarCity::Errors::UnprocessableEntity
+    end
+
+    raise LarCity::Errors::ResourceNotFound
   end
 end

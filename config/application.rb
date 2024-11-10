@@ -33,6 +33,10 @@ module Cami
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
 
+    config.exceptions_app = lambda do |env|
+      ErrorsController.action(:show).call(env)
+    end
+
     config.active_storage.variant_processor = :vips
 
     config.time_zone = 'Eastern Time (US & Canada)'
