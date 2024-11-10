@@ -18,8 +18,10 @@ class VirtualOfficeManager
     def default_url_options
       # Only run this in the context of a job
       if !defined?(Rails::Server) && Flipper.enabled?(:feat__hostname_health_check)
-        healthz_endpoint = "https://#{hostname}/healthz"
-        return { host: hostname } if AppUtils.healthy?(healthz_endpoint)
+        # TODO: Dynamically determine whether HTTPS or HTTP should be used for this check
+        protocol = hostname_is_nginx_proxy? ? 'https' : 'http'
+        health_endpoint = "#{protocol}://#{hostname}/up"
+        return { host: hostname } if AppUtils.healthy?(health_endpoint)
       end
 
       { host: hostname, port: hostname_is_nginx_proxy? ? nil : ENV.fetch('PORT') }.compact

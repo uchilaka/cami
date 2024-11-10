@@ -73,6 +73,9 @@ jobs:
       - name: Setup DB
         run: bin/rake db:drop db:create db:migrate && bin/rake db:seed
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
