@@ -103,6 +103,8 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem 'rubocop-rails-omakase', require: false
+
+  gem 'rspec-rails', '~> 7.0.0'
 end
 
 group :development do
@@ -134,9 +136,6 @@ group :test do
 
   gem 'database_cleaner-active_record'
 
-  # TODO: The transaction strategy is not supported by Mongoid.
-  #   You can use the deletion strategy to clean the document store.
-  gem 'database_cleaner-mongoid'
   # gem 'database_cleaner-redis'
 
   gem 'climate_control'
