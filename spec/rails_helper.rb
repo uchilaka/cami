@@ -1,14 +1,21 @@
+# frozen_string_literal: true
+
+# RSpec docs: https://rspec.info/features/3-12/rspec-core/
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 # Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
-# Uncomment the line below in case you have `--require rails_helper` in the `.rspec` file
-# that will avoid rails generators crashing because migrations haven't been run yet
-# return unless Rails.env.test?
-require 'rspec/rails'
+abort('The Rails environment is running in production mode!') if Rails.env.production?
 # Add additional requires below this line. Rails is not loaded until this point!
+require 'rspec/rails'
+# require 'rspec/wait'
+require 'aasm/rspec'
+require 'database_cleaner/active_record'
+require 'sidekiq/testing'
+require 'devise/test/integration_helpers'
+require 'vcr'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -23,7 +30,7 @@ require 'rspec/rails'
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Rails.root.glob('spec/support/**/*.rb').sort_by(&:to_s).each { |f| require f }
+Rails.root.glob('spec/support/**/*.rb').sort.each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
@@ -32,11 +39,49 @@ begin
 rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
+
+# VCR usage docs https://benoittgt.github.io/vcr
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/cassettes'
+  c.hook_into :faraday
+  c.allow_http_connections_when_no_cassette = true
+
+  # IMPORTANT: Enables automatic cassette naming based on tags
+  c.configure_rspec_metadata!
+
+  # Setup :before_record hook to intercept PII data and prevent it from leaking into the cassettes
+  c.before_record(:obfuscate) do |interaction, cassette|
+    if interaction.response.body.present?
+      if cassette.name.present? &&
+        interaction.response.headers['content-type'].any? { |t| %r{application/json}.match?(t) }
+        # Some housekeeping to prepare for making a dub of the original response
+        dub_file = Rails.root.join('spec', 'fixtures', 'pii', "#{cassette.name}.json").to_s
+        pii_path = File.dirname(dub_file)
+        FileUtils.mkdir_p(pii_path) unless File.directory?(pii_path)
+        # Prettify the JSON data for easier reading by humans
+        og_response_data = JSON.pretty_generate(JSON.parse(interaction.response.body))
+        # Save the original response body to a fixture location that can be
+        #  validated but not committed to source control
+        File.write(dub_file, og_response_data)
+      end
+      interaction.response.body = PIISanitizer.sanitize(interaction.response.body)
+    end
+  end
+  # TODO: Ensure Authorization header data with tokens don't end up in a cassette
+end
+
 RSpec.configure do |config|
+  config.fail_fast = AppUtils.yes?(ENV.fetch('RSPEC_FAIL_FAST', false)) ? true : false
+
+  # # Configure rspec-wait: https://github.com/laserlemon/rspec-wait?tab=readme-ov-file#configuration
+  # config.wait_timeout = 10 # seconds
+  # config.wait_delay = 1 # seconds
+  # config.clone_wait_matcher = true
+
+  config.include Mongoid::Matchers, type: :model
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_paths = [
-    Rails.root.join('spec/fixtures')
-  ]
+  config.fixture_path = Rails.root.join('spec/fixtures')
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -58,11 +103,45 @@ RSpec.configure do |config|
   #     end
   #
   # The different available types are documented in the features, such as in
-  # https://rspec.info/features/7-0/rspec-rails
+  # https://rspec.info/features/6-0/rspec-rails
   config.infer_spec_type_from_file_location!
 
   # Filter lines from Rails gems in backtraces.
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  # Devise integration helpers https://github.com/heartcombo/devise?tab=readme-ov-file#integration-tests
+  config.include Devise::Test::IntegrationHelpers, type: :feature
+  config.include Devise::Test::IntegrationHelpers, type: :request
+  config.include Devise::Test::IntegrationHelpers, type: :view
+
+  # Internationalization guide: https://guides.rubyonrails.org/i18n.html
+  config.include AbstractController::Translation, type: :view
+  config.include AbstractController::Translation, type: :helper
+
+  config.before(:suite) do
+    # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example
+    DatabaseCleaner[:active_record].strategy = :transaction
+    DatabaseCleaner[:active_record].clean_with(:truncation)
+
+    # Load seeds
+    Rails.application.load_seed
+
+    # Sidekiq setup
+    Sidekiq::Testing.fake!
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning { example.run }
+    # Clean up all test double state
+    RSpec::Mocks.teardown
+  end
+end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
 end

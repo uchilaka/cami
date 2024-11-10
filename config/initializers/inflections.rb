@@ -13,6 +13,10 @@
 # end
 
 # These inflection rules are supported but not enabled by default:
-# ActiveSupport::Inflector.inflections(:en) do |inflect|
-#   inflect.acronym "RESTful"
-# end
+ActiveSupport::Inflector.inflections(:en) do |inflect|
+  # inflect.acronym 'RESTful'
+  inflect.acronym 'URL'
+  inflect.acronym 'API'
+  inflect.acronym 'CLI'
+  inflect.acronym 'VAT'
+end
