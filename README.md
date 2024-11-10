@@ -38,3 +38,19 @@ rails new cami --no-rc --skip-webpack-install --skip-javascript \
 # Active storage overview: https://guides.rubyonrails.org/active_storage_overview.html
 # Action mailbox overview: https://guides.rubyonrails.org/action_mailbox_basics.html
 ```
+
+## Known issues 
+
+### Deprecation notice for `fixture_path` in Rails 7.1
+
+```shell
+Deprecation Warnings:
+
+Rails 7.1 has deprecated the singular fixture_path in favour of an array.You should migrate to plural:
+
+
+If you need more of the backtrace for any of these deprecations to
+identify where to make the necessary changes, you can configure
+`config.raise_errors_for_deprecations!`, and it will turn the
+deprecation warnings into errors, giving you the full backtrace.
+```

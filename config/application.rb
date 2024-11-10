@@ -15,6 +15,10 @@ require 'action_text/engine'
 require 'action_view/railtie'
 require 'action_cable/engine'
 # require "rails/test_unit/railtie"
+require 'active_support/core_ext/integer/time'
+require_relative '../lib/virtual_office_manager'
+require_relative '../lib/app_utils'
+require_relative '../lib/log_utils'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -22,7 +26,10 @@ Bundler.require(*Rails.groups)
 
 module Cami
   class Application < Rails::Application
-    config.application_name = Rails.application.class.module_parent_name
+    # config.application_name = Rails.application.class.module_parent_name
+    config.application_name = 'Customer Account Management & Invoicing'
+    config.application_short_name = 'CAMI'
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
 

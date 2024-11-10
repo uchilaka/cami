@@ -14,6 +14,11 @@ gem 'sprockets-rails'
 # IMPORTANT: This should be loaded as early as possible
 gem 'dotenv', groups: %i[development test], require: 'dotenv/load'
 
+# Redis feature flag adapter for Flipper
+gem 'flipper-api', '~> 1.2'
+gem 'flipper-redis', '~> 1.2'
+gem 'flipper-ui', '~> 1.2'
+
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
 
@@ -98,6 +103,8 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem 'rubocop-rails-omakase', require: false
+
+  gem 'rspec-rails', '~> 7.0.0'
 end
 
 group :development do
@@ -129,9 +136,6 @@ group :test do
 
   gem 'database_cleaner-active_record'
 
-  # TODO: The transaction strategy is not supported by Mongoid.
-  #   You can use the deletion strategy to clean the document store.
-  gem 'database_cleaner-mongoid'
   # gem 'database_cleaner-redis'
 
   gem 'climate_control'
