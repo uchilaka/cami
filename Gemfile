@@ -45,7 +45,7 @@ gem 'bootsnap', require: false
 gem 'tailwindcss-rails', '~> 3.0'
 
 # Integrate Dart Sass with the asset pipeline in Rails [https://github.com/rails/dartsass-rails]
-gem 'dartsass-rails'
+gem 'dartsass-rails', '~> 0.5'
 
 # Integrate SassC-Ruby into Rails.
 gem 'sassc-rails', '~> 2.1'
