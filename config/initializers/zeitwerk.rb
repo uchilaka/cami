@@ -10,7 +10,8 @@ end
 
 Rails.autoloaders.main.inflector.inflect(
   'lar-city' => 'LarCity',
-  'flipper_api_constraint' => 'FlipperApiConstraint'
+  'flipper_api_constraint' => 'FlipperApiConstraint',
+  'pii_helper' => 'PIIHelper'
 )
 
 # Ignoring resources https://guides.rubyonrails.org/classic_to_zeitwerk_howto.html#having-app-in-the-autoload-paths
