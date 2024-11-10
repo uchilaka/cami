@@ -78,8 +78,6 @@ RSpec.configure do |config|
   # config.wait_delay = 1 # seconds
   # config.clone_wait_matcher = true
 
-  config.include Mongoid::Matchers, type: :model
-
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = Rails.root.join('spec/fixtures')
 
