@@ -81,8 +81,8 @@ class User < ApplicationRecord
 
     def from_omniauth(access_token = nil)
       access_token ||= Current.auth_provider
-      _uid = access_token.uid
-      _provider = access_token.provider
+      uid = access_token.uid
+      provider = access_token.provider
       given_name, family_name, email, _image_url = access_token.info.values_at(
         'first_name', 'last_name', 'email', 'image'
       )
@@ -92,26 +92,26 @@ class User < ApplicationRecord
         password: Devise.friendly_token[0, 20]
       )
 
-      # transaction do
-      #   # TODO: Update the customers array of providers after they are re-confirmed
-      #   #   when a new auth provider is detected
-      #   # user.providers << provider unless user.providers.include?(provider)
-      #   user.uids[provider] = uid if user.uids[provider].blank?
-      #   if user.save!
-      #     profile = user.profile
-      #     profile.image_url = image_url
-      #     profile[provider] = {
-      #       **access_token.info,
-      #       # TODO: This will no longer be needed when we implement
-      #       #   Devise :confirmable in the User model.
-      #       confirmation_sent_at: Time.now,
-      #       # TODO: This will be used to keep track of whether this
-      #       #   provider has been verified or not (via email, phone or TOTP)
-      #       verified: false
-      #     }
-      #     profile.save!
-      #   end
-      # end
+      transaction do
+        # TODO: Update the customers array of providers after they are re-confirmed
+        #   when a new auth provider is detected
+        user.providers << provider unless user.providers.include?(provider)
+        user.uids[provider] = uid if user.uids[provider].blank?
+        if user.save!
+          # profile = user.profile
+          # profile.image_url = image_url
+          # profile[provider] = {
+          #   **access_token.info,
+          #   # TODO: This will no longer be needed when we implement
+          #   #   Devise :confirmable in the User model.
+          #   confirmation_sent_at: Time.now,
+          #   # TODO: This will be used to keep track of whether this
+          #   #   provider has been verified or not (via email, phone or TOTP)
+          #   verified: false
+          # }
+          # profile.save!
+        end
+      end
 
       # TODO: Send confirmation request if current auth provider is not confirmed for the user
       # if !user.matching_auth_provider[:verified]
