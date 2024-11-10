@@ -48,6 +48,12 @@ class User < ApplicationRecord
   # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
   has_person_name
 
+  def assign_default_role
+    add_role(:user) if roles.blank?
+  end
+
+  # TODO: Is this used anywhere? If so, refactor that implementation to reference
+  #   JSONB data stored on the User model (instead of a separate Profile model)
   def matching_auth_provider
     nil
   end
