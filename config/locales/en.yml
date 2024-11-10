@@ -1,6 +1,6 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
 #
 # To use the locales, use `I18n.t`:
 #
@@ -16,16 +16,82 @@
 #
 # This would use the information in config/locales/es.yml.
 #
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
+# The following keys must be escaped otherwise they will not be retrieved by
+# the default I18n backend:
 #
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
+# true, false, on, off, yes, no
 #
-#     en:
-#       "yes": yup
-#       enabled: "ON"
+# Instead, surround them with single quotes.
+#
+# en:
+#   "true": "foo"
+#
+# To learn more, please read the Rails Internationalization guide
+# available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  accessibility:
+    main:
+      logo: "LarCity logo"
+    footer:
+      logo: "LarCity logo (footer)"
+      about: "About"
+      contact: "Contact"
+      privacy: "Privacy Policy"
+      licensing: "Licensing"
+      terms: "Terms"
+  ctas:
+    main:
+      sign_up: "Sign Up"
+      sign_in: "Sign In"
+      return_home: "Return Home"
+  labels:
+    invoices:
+      create: "New invoice"
+      search: "Search for invoices"
+    accounts:
+      create: "New account"
+      search: "Search for accounts"
+  shared:
+    navbar:
+      home: "Home"
+      dashboard: "Dashboard"
+      services: "Services"
+      products: "Products"
+      accounts: "Accounts"
+      invoices: "Invoices"
+      sign_out: "Sign Out"
+      registration: "Settings"
+  models:
+    account:
+      errors:
+        user_limit_exceeded: "cannot have more than one user"
+    invoice:
+      errors:
+        record_missing: "%{label} is missing"
+        invalid_payment_vendor: "%{value} is not a valid payment vendor"
+    invoice_account:
+      errors:
+        invalid: "is not a valid invoice account"
+        exists: "already exists"
+    metadata:
+      business:
+        errors:
+          invalid: "is not a valid business"
+          should_have_email_or_phone_number: "should have an email address or phone number"
+  workflows:
+    import_account:
+      errors:
+        generic: "An error occurred while creating the invoice account"
+        already_exists: "A matching invoice account already exists"
+    import_user_profile:
+      errors:
+        generic: "An error occurred while updating the user profile"
+        email_required: "Email address is required to create a user profile"
+        name_required: "A given/first or family/last name is required to create a user profile"
+        already_exists: "A matching user profile already exists"
+  validators:
+    errors:
+      invalid_email: "%{value} is not a valid email address"
+      invalid_password: "is not a valid password"
+      invalid_username: "%{value} is not a valid username"
