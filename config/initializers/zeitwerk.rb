@@ -11,7 +11,8 @@ end
 Rails.autoloaders.main.inflector.inflect(
   'lar-city' => 'LarCity',
   'flipper_api_constraint' => 'FlipperApiConstraint',
-  'pii_helper' => 'PIIHelper'
+  'pii_helper' => 'PIIHelper',
+  'update_mailer_default_url_options_job' => 'UpdateMailerDefaultURLOptionsJob'
 )
 
 # Ignoring resources https://guides.rubyonrails.org/classic_to_zeitwerk_howto.html#having-app-in-the-autoload-paths
