@@ -73,16 +73,14 @@ jobs:
       - name: Setup DB
         run: bin/rake db:drop db:create db:migrate && bin/rake db:seed
 
+      - name: Enable corepack
+        run: corepack enable
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
-
-      - name: Enable corepack
-        run: |
-          corepack enable
-          yarn set version berry
 
       - name: Install Yarn dependencies
         run: yarn install --immutable
