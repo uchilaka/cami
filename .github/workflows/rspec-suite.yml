@@ -11,7 +11,6 @@ jobs:
       matrix:
         ruby-version: [3.2.2]
         node-version: [18.x, 20.x]
-        mongodb-version: ['7.0.6-jammy']
     env:
       CI: true
       PORT: 3000
@@ -79,6 +78,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Check corepack
+        run: yarn exec env
 
       - name: Install Yarn dependencies
         run: yarn install --immutable
