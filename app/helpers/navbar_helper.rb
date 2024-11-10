@@ -38,6 +38,11 @@ module NavbarHelper
         public: true
       },
       {
+        label: t('shared.navbar.about'),
+        path: '/app/about',
+        public: true
+      },
+      {
         label: t('shared.navbar.dashboard'),
         path: pages_dashboard_path
       },
