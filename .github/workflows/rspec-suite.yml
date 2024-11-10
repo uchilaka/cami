@@ -11,7 +11,6 @@ jobs:
       matrix:
         ruby-version: [3.2.2]
         node-version: [18.x, 20.x]
-        mongodb-version: ['7.0.6-jammy']
     env:
       CI: true
       PORT: 3000
@@ -24,7 +23,6 @@ jobs:
       APP_DATABASE_USER: ${{ secrets.APP_DATABASE_USER }}
       APP_DATABASE_PASSWORD: ${{ secrets.APP_DATABASE_PASSWORD }}
       APP_DATABASE_PORT: 5432
-      MONGODB_TEST_PORT: 27017
     services:
       postgres:
         # https://hub.docker.com/_/postgres
@@ -80,6 +78,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
+
+      - name: Enable corepack
+        run: |
+          corepack enable
+          yarn set version berry
 
       - name: Install Yarn dependencies
         run: yarn install --immutable
