@@ -16,10 +16,16 @@ gem 'dotenv', groups: %i[development test], require: 'dotenv/load'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
+
+# OO authorization for Rails [https://github.com/varvet/pundit]
+gem 'pundit', '~> 2.3'
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '>= 5.0'
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem 'jbuilder'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
@@ -36,10 +42,13 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 gem 'bootsnap', require: false
 
 # Use Tailwind CSS for stylesheets [https://tailwindcss.com/docs/guides/ruby-on-rails]
-gem 'tailwindcss-rails', '~> 2.3'
+gem 'tailwindcss-rails', '~> 3.0'
 
 # Integrate Dart Sass with the asset pipeline in Rails [https://github.com/rails/dartsass-rails]
 gem 'dartsass-rails'
+
+# Integrate SassC-Ruby into Rails.
+gem 'sassc-rails', '~> 2.1'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem 'image_processing', '~> 1.2'
@@ -157,3 +166,18 @@ gem 'ruby-vips', '~> 2.1', '>= 2.1.4'
 
 # Use Vite in Rails for JS https://github.com/ElMassimo/vite_ruby
 gem 'vite_rails', '~> 3.0', '>= 3.0.17'
+
+# Simple, efficient background processing for Ruby [https://github.com/sidekiq/sidekiq/wiki/Getting-Started]
+gem 'sidekiq', '~> 7.3'
+
+# Scheduler/Cron for Sidekiq jobs [https://github.com/sidekiq-cron/sidekiq-cron?tab=readme-ov-file#adding-cron-job]
+gem 'sidekiq-cron'
+
+# Process manager for applications with multiple components
+gem 'foreman'
+
+# Rake tasks to migrate data alongside schema changes [https://github.com/ilyakatz/data-migrate]
+gem 'data_migrate', '~> 9', '>= 9.3.0'
+
+# Simple interactor implementation
+gem 'interactor', '~> 3.1'

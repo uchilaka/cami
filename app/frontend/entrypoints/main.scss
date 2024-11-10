@@ -1,10 +1,16 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
+@use "tailwindcss/base";
+@use "tailwindcss/components";
 
-@import "./stylesheets/global";
-@import "./stylesheets/buttons";
-@import "./stylesheets/form";
-@import "./stylesheets/alert";
-@import "./stylesheets/navbar";
+@use "stylesheets/global";
+@use "stylesheets/buttons";
+@use "stylesheets/form";
+@use "stylesheets/alert";
+@use "stylesheets/navbar";
 
-@import "tailwindcss/utilities";
+@use "tailwindcss/utilities";
+
+/** Turn visibility of website back on **/
+html {
+  visibility: visible;
+  opacity: 1;
+}
