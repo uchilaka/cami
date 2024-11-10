@@ -24,7 +24,6 @@ jobs:
       APP_DATABASE_USER: ${{ secrets.APP_DATABASE_USER }}
       APP_DATABASE_PASSWORD: ${{ secrets.APP_DATABASE_PASSWORD }}
       APP_DATABASE_PORT: 5432
-      MONGODB_TEST_PORT: 27017
     services:
       postgres:
         # https://hub.docker.com/_/postgres
