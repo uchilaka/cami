@@ -1,17 +1,19 @@
-require_relative "boot"
+# frozen_string_literal: true
 
-require "rails"
+require_relative 'boot'
+
+require 'rails'
 # Pick the frameworks you want:
-require "active_model/railtie"
-require "active_job/railtie"
-require "active_record/railtie"
-require "active_storage/engine"
-require "action_controller/railtie"
-require "action_mailer/railtie"
+require 'active_model/railtie'
+require 'active_job/railtie'
+require 'active_record/railtie'
+require 'active_storage/engine'
+require 'action_controller/railtie'
+require 'action_mailer/railtie'
 # require "action_mailbox/engine"
-require "action_text/engine"
-require "action_view/railtie"
-require "action_cable/engine"
+require 'action_text/engine'
+require 'action_view/railtie'
+require 'action_cable/engine'
 # require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
@@ -23,6 +25,10 @@ module Cami
     config.application_name = Rails.application.class.module_parent_name
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
+
+    config.active_storage.variant_processor = :vips
+
+    config.time_zone = 'Eastern Time (US & Canada)'
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
@@ -36,8 +42,23 @@ module Cami
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.eager_load_paths << "#{root}/lib"
+
+    # Autoload paths
+    config.autoload_paths << "#{root}/lib/workflows"
+    config.autoload_paths << "#{root}/lib/commands"
+    config.autoload_paths << "#{root}/config/vcr"
+
+    config.assets.paths << "#{root}/vendor/assets"
+
+    # Configure allowed hosts. See doc https://guides.rubyonrails.org/configuring.html#actiondispatch-hostauthorization
+    config.hosts += config_for(:allowed_hosts)
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Doc for jbuilder: https://github.com/rails/jbuilder
+    Jbuilder.key_format camelize: :lower
+    Jbuilder.deep_format_keys true
   end
 end

@@ -7,23 +7,9 @@ dotenv_required_keys = %w[
   APP_DATABASE_USER
   APP_DATABASE_PASSWORD
   ADMIN_REMOTE_IP_ADDRESSES
-  MONGODB_USERNAME
-  MONGODB_PASSWORD
-  MONGODB_DATABASE
-  MONGODB_PORT
 ]
 
-if Rails.env.test?
-  %w[
-    MONGODB_USERNAME
-    MONGODB_PASSWORD
-    MONGODB_DATABASE
-    MONGODB_PORT
-    ADMIN_REMOTE_IP_ADDRESSES
-  ].each { |key| dotenv_required_keys.delete key }
-  dotenv_required_keys.unshift 'MONGODB_TEST_PORT' \
-    unless Rails.application.credentials.mongodb.port.present?
-end
+%w[ADMIN_REMOTE_IP_ADDRESSES].each { |key| dotenv_required_keys.delete key } if Rails.env.test?
 
 if Rails.env.development?
   dotenv_required_keys.unshift 'NGROK_PROFILE_CONFIG_PATH',

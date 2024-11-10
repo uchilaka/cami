@@ -1,23 +1,25 @@
-source "https://rubygems.org"
+# frozen_string_literal: true
 
-ruby "3.2.2"
+source 'https://rubygems.org'
+
+ruby '3.2.2'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.2", ">= 7.2.0"
+gem 'rails', '~> 7.2', '>= 7.2.0'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem "sprockets-rails"
+gem 'sprockets-rails'
 
 # Autoload dotenv in Rails https://github.com/bkeepers/dotenv
 # IMPORTANT: This should be loaded as early as possible
 gem 'dotenv', groups: %i[development test], require: 'dotenv/load'
 
 # Use postgresql as the database for Active Record
-gem "pg", "~> 1.1"
+gem 'pg', '~> 1.1'
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", ">= 5.0"
+gem 'puma', '>= 5.0'
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
+gem 'jbuilder'
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
@@ -28,35 +30,130 @@ gem "jbuilder"
 # gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ windows jruby ]
+gem 'tzinfo-data', platforms: %i[windows jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", require: false
+gem 'bootsnap', require: false
+
+# Use Tailwind CSS for stylesheets [https://tailwindcss.com/docs/guides/ruby-on-rails]
+gem 'tailwindcss-rails', '~> 2.3'
+
+# Integrate Dart Sass with the asset pipeline in Rails [https://github.com/rails/dartsass-rails]
+gem 'dartsass-rails'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+gem 'image_processing', '~> 1.2'
+
+# Refer to any model with a URI: gid://app/class/id
+gem 'globalid', '~> 1.2'
+
+gem 'awesome_print'
+
+# Gem validates phone numbers with Google libphonenumber database [https://github.com/daddyz/phonelib]
+gem 'phonelib'
+
+# Roles library with resource scoping
+gem 'rolify', '~> 6.0'
+
+# State machine mixin for Ruby objects
+gem 'aasm', '~> 5.5'
+
+# Feature rich logging framework that replaces the Rails logger.
+gem 'rails_semantic_logger'
+
+# Better Stack Rails integration
+gem 'logtail-rails'
+
+# Find slowly loading gems for your Bundler-based projects
+gem 'bumbler'
+
+# Rationale: setup "staging" environments to be identical to production, distinguished by their domain name.
+gem 'sib-api-v3-sdk', groups: %i[production]
 
 group :development, :test do
+  gem 'active_model_serializers'
+  gem 'capybara'
+  gem 'capybara_accessibility_audit'
+  gem 'fabrication'
+  gem 'faker'
+  gem 'open3'
+  # gem 'rspec-wait'
+  gem 'rubocop'
+  gem 'strong_migrations'
+
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  gem 'debug', platforms: %i[mri mingw x64_mingw windows], require: 'debug/prelude'
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
-  gem "brakeman", require: false
+  gem 'brakeman', require: false
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
-  gem "rubocop-rails-omakase", require: false
+  gem 'rubocop-rails-omakase', require: false
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
-  gem "web-console"
+  gem 'web-console'
 
   # Annotates Rails Models, routes, fixtures, and others based on the database schema.
-  gem "annotate"
+  gem 'annotate'
+
+  # Preview mail in browser instead of sending.
+  gem 'letter_opener'
 end
 
-gem "vite_rails", "~> 3.0", ">= 3.0.17"
-gem "vite_ruby", "~> 3.2", ">= 3.2.2"
-gem "ruby-vips", "~> 2.1", ">= 2.1.4"
-gem "devise"
-gem "name_of_person"
+group :test do
+  gem 'rubocop-capybara', require: false
+  gem 'rubocop-performance'
+  gem 'rubocop-rails'
+  gem 'rubocop-rspec'
+
+  # Record your test suite's HTTP interactions and replay them during future test runs for fast,
+  #   deterministic, accurate tests
+  gem 'vcr', '~> 6.2'
+
+  gem 'shoulda-matchers'
+
+  # Selenium is a browser automation tool for automated
+  #   testing of webapps and more [https://www.selenium.dev/documentation/en/]
+  gem 'selenium-webdriver'
+
+  gem 'database_cleaner-active_record'
+
+  # TODO: The transaction strategy is not supported by Mongoid.
+  #   You can use the deletion strategy to clean the document store.
+  gem 'database_cleaner-mongoid'
+  # gem 'database_cleaner-redis'
+
+  gem 'climate_control'
+end
+
+# Flexible authentication solution for Rails with Warden https://github.com/heartcombo/devise
+gem 'devise'
+
+# JWT authentication for devise
+gem 'devise-jwt', '~> 0.11'
+
+# Middleware for enabling Cross-Origin Resource Sharing in Rack apps
+gem 'rack-cors', '~> 2.0'
+
+# Passwordless (email-only) login strategy for Devise https://github.com/abevoelker/devise-passwordless
+gem 'devise-passwordless'
+
+# Provides CSRF protection on OmniAuth request endpoint on Rails application.
+gem 'omniauth-rails_csrf_protection'
+
+# OmniAuth strategy for Sign in with Apple https://github.com/nhosoya/omniauth-apple
+# gem 'omniauth-apple'
+
+# A Google OAuth2 strategy for OmniAuth 1.x https://github.com/zquestz/omniauth-google-oauth2
+gem 'omniauth-google-oauth2'
+
+# Presenting names of people in full, familiar, abbreviated, and initialized forms (but without titulation etc)
+gem 'name_of_person'
+
+# A fast image processing library with low memory needs
+gem 'ruby-vips', '~> 2.1', '>= 2.1.4'
+
+# Use Vite in Rails for JS https://github.com/ElMassimo/vite_ruby
+gem 'vite_rails', '~> 3.0', '>= 3.0.17'
