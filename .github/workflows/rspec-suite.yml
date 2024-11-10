@@ -80,10 +80,9 @@ jobs:
           cache: 'yarn'
 
       - name: Enable corepack
-        run: corepack enable
-
-      - name: Check corepack
-        run: yarn exec env
+        run: |
+          corepack enable
+          yarn set version berry
 
       - name: Install Yarn dependencies
         run: yarn install --immutable
