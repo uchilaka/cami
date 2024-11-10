@@ -29,6 +29,7 @@ module Cami
     # config.application_name = Rails.application.class.module_parent_name
     config.application_name = 'Customer Account Management & Invoicing'
     config.application_short_name = 'CAMI'
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
 

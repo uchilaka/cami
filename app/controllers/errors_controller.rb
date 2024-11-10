@@ -6,19 +6,19 @@ class ErrorsController < ApplicationController
   protect_from_forgery with: :null_session
 
   rescue_from ActionController::RoutingError, with: :emit_routing_exception
-  rescue_from Errors::ElevatedPrivilegesRequired, with: :forbidden
-  rescue_from Errors::UnprocessableEntity, with: :unprocessable_entity
-  rescue_from Errors::InternalServerError, with: :server_error
-  rescue_from Errors::ResourceNotFound, with: :not_found
+  rescue_from LarCity::Errors::ElevatedPrivilegesRequired, with: :forbidden
+  rescue_from LarCity::Errors::UnprocessableEntity, with: :unprocessable_entity
+  rescue_from LarCity::Errors::InternalServerError, with: :server_error
+  rescue_from LarCity::Errors::ResourceNotFound, with: :not_found
 
   def emit_routing_exception
     if %r{/admin/}.match?(request.fullpath)
-      raise Errors::ElevatedPrivilegesRequired if request.params[:unmatched].present?
+      raise LarCity::Errors::ElevatedPrivilegesRequired if request.params[:unmatched].present?
 
-      raise Errors::UnprocessableEntity
+      raise LarCity::Errors::UnprocessableEntity
     end
 
-    raise Errors::ResourceNotFound
+    raise LarCity::Errors::ResourceNotFound
   end
 
   def unprocessable_entity
