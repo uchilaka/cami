@@ -30,11 +30,14 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'pages/home'
+  get 'pages/dashboard'
+  # get 'pages/services'
+
   match 'app/*path', to: 'pages#home', via: :get
 
   root to: 'pages#home'
 
-  get 'pages/home'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -51,6 +54,5 @@ Rails.application.routes.draw do
 
   draw :flipper
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  match '*unmatched', to: 'errors#emit_routing_exception', via: :all
 end
