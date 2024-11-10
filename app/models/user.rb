@@ -48,6 +48,10 @@ class User < ApplicationRecord
   # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
   has_person_name
 
+  def admin?
+    has_role?(:admin)
+  end
+
   def assign_default_role
     add_role(:user) if roles.blank?
   end
