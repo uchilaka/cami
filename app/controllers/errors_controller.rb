@@ -5,6 +5,8 @@ class ErrorsController < ApplicationController
   #   customer experienced an error?
   protect_from_forgery with: :null_session
 
+  skip_before_action :authenticate_user!
+
   rescue_from ActionController::RoutingError, with: :emit_routing_exception
   rescue_from LarCity::Errors::ElevatedPrivilegesRequired, with: :forbidden
   rescue_from LarCity::Errors::UnprocessableEntity, with: :unprocessable_entity
@@ -36,6 +38,16 @@ class ErrorsController < ApplicationController
     render 'errors/server_error', status: :internal_server_error
   end
 
+  def emit_routing_exception
+    if %r{/admin/}.match?(request.fullpath)
+      raise LarCity::Errors::ElevatedPrivilegesRequired if request.params[:unmatched].present?
+
+      raise LarCity::Errors::UnprocessableEntity
+    end
+
+    raise LarCity::Errors::ResourceNotFound
+  end
+
   private
 
   def view_for_code(code)
@@ -48,15 +60,5 @@ class ErrorsController < ApplicationController
       404 => 'errors/not_found',
       500 => 'errors/server_error'
     }.with_indifferent_access
-  end
-
-  def emit_routing_exception
-    if %r{/admin/}.match?(request.fullpath)
-      raise LarCity::Errors::ElevatedPrivilegesRequired if request.params[:unmatched].present?
-
-      raise LarCity::Errors::UnprocessableEntity
-    end
-
-    raise LarCity::Errors::ResourceNotFound
   end
 end

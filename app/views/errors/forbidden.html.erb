@@ -5,9 +5,6 @@
   You are forbidden from accessing this resource. You will need elevated privileges before you can proceed. If you are the application owner reach out to the <a href="mailto:devsecops@lar.city?subject=I+need+application+access" target="_blank">
     engineering or security team
   </a>.
-
 </p>
-<a href="<%= cta_resource_url %>" class="flex items-center space-x-2 btn btn-primary" title="<%= cta_label %>">
-  <span class="fa-solid fa-house"></span>
-  <span><%= cta_label %></span>
-</a>
+
+<%= render 'errors/links' %>
