@@ -20,7 +20,7 @@ jobs:
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
       PROJECT_ROOT: .
       APP_DATABASE_HOST: localhost
-      APP_DATABASE_NAME: account_manager_test
+      APP_DATABASE_NAME: sails_test
       APP_DATABASE_USER: ${{ secrets.APP_DATABASE_USER }}
       APP_DATABASE_PASSWORD: ${{ secrets.APP_DATABASE_PASSWORD }}
       APP_DATABASE_PORT: 5432
