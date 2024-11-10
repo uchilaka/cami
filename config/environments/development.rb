@@ -16,8 +16,14 @@ Rails.application.configure do
   # Show full error reports.
   config.consider_all_requests_local = true
 
-  # Enable server timing.
+  # Enable server timing
   config.server_timing = true
+
+  config.rails_semantic_logger.started    = true
+  config.rails_semantic_logger.processing = AppUtils.yes?(ENV.fetch('SEMANTIC_LOGGER_PROCESSING_ENABLED', 'no'))
+  config.rails_semantic_logger.rendered   = AppUtils.yes?(ENV.fetch('SEMANTIC_LOGGER_RENDERED_ENABLED', 'no'))
+  config.semantic_logger.backtrace_level = :info
+  config.log_level = :debug
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
