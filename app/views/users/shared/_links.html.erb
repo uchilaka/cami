@@ -1,5 +1,9 @@
+<%- if devise_mapping.magic_link_authenticatable? && controller_name != 'passwordless' %>
+  <%= link_to "Log in with an access link", new_session_path(resource_name), class: "btn" %><br>
+<% end %>
+
 <%- if controller_name != 'sessions' %>
-  <%= link_to "Log in", new_session_path(resource_name), class: "btn" %><br>
+  <%= link_to "Log in with password", new_user_fallback_session_path, class: "btn" %><br>
 <% end %>
 
 <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
@@ -11,9 +15,9 @@
 <% end %>
 
 <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
-  <%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name) %><br>
+  <%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name), class: "block py-0.5 mb-1" %><br>
 <% end %>
 
 <%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
-  <%= link_to "Didn't receive unlock instructions?", new_user_unlock_path(resource_name) %><br>
+  <%= link_to "Didn't receive unlock instructions?", new_user_unlock_path(resource_name), class: "block py-0.5 mb-1" %><br>
 <% end %>
