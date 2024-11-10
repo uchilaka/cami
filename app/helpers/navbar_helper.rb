@@ -53,8 +53,8 @@ module NavbarHelper
       #   label: t('shared.navbar.services'),
       #   path: services_path
       # },
-      # # TODO: Eventually take products off this list - intended navigation
-      # #   is to traverse via services to the component products
+      # TODO: Eventually take products off this list - intended navigation
+      #   is to traverse via services to the component products
       # {
       #   label: t('shared.navbar.products'),
       #   path: products_path

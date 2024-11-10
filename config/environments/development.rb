@@ -34,7 +34,7 @@ Rails.application.configure do
   # Show full error reports.
   config.consider_all_requests_local = AppUtils.yes?(ENV.fetch('ENV_CONSIDER_ALL_REQUESTS_LOCAL', 'yes'))
 
-  # Enable server timing.
+  # Enable server timing
   config.server_timing = true
 
   config.rails_semantic_logger.started    = true

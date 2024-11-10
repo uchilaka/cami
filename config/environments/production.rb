@@ -14,6 +14,10 @@ Rails.application.configure do
   # Rake tasks automatically ignore this option for performance.
   config.eager_load = true
 
+  # Disable serving static files from the `/public` folder by default since
+  # Apache or NGINX already handles this.
+  config.public_file_server.enabled = AppUtils.yes?(ENV.fetch('RAILS_SERVE_STATIC_FILES', true))
+
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
@@ -56,10 +60,10 @@ Rails.application.configure do
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
-  # Log to STDOUT by default
-  config.logger = ActiveSupport::Logger.new($stdout)
-                    .tap  { |logger| logger.formatter = Logger::Formatter.new }
-                    .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
+  config.rails_semantic_logger.started    = true
+  config.rails_semantic_logger.processing = true
+  config.rails_semantic_logger.rendered   = true
+  config.semantic_logger.backtrace_level = :error
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
@@ -68,6 +72,20 @@ Rails.application.configure do
   # information to avoid inadvertent exposure of personally identifiable information (PII). If you
   # want to log everything, set the level to "debug".
   config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'info')
+
+  # Use default logging formatter so that PID and timestamp are not suppressed.
+  config.log_formatter = ::Logger::Formatter.new
+
+  # Use a different logger for distributed setups.
+  # require "syslog/logger"
+  # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new "app-name")
+
+  if ENV['RAILS_LOG_TO_STDOUT'].present?
+    # Log to STDOUT by default
+    config.logger = ActiveSupport::Logger.new($stdout)
+                                         .tap  { |logger| logger.formatter = Logger::Formatter.new }
+                                         .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
+  end
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
