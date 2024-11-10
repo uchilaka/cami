@@ -34,6 +34,7 @@ Rails.application.routes.draw do
   match 'app/*path', to: 'pages#home', via: :get
 
   root to: 'pages#home'
+
   get 'pages/home'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -44,6 +45,12 @@ Rails.application.routes.draw do
   # Render dynamic PWA files from app/views/pwa/*
   get 'service-worker' => 'rails/pwa#service_worker', as: :pwa_service_worker
   get 'manifest' => 'rails/pwa#manifest', as: :pwa_manifest
+
+  namespace :api do
+    resources :features, only: %i[index], defaults: { format: :json }
+  end
+
+  draw :flipper
 
   # Defines the root path route ("/")
   # root "posts#index"

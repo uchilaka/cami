@@ -2,7 +2,9 @@
 
 module UsersHelper
   def avatar_url(user)
-    return user.profile.image_url if user_signed_in?
+    # TODO: Create a metadata (aliased as profile) field in the user model
+    #   and store the image_url there
+    # return user.profile.image_url if user_signed_in?
 
     image_url 'person-default.svg'
   end
