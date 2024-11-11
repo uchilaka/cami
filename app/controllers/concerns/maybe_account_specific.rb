@@ -28,8 +28,10 @@ module MaybeAccountSpecific
 
   def set_account
     opts = action_options(self.class.authorized_actions[action_name])
-    return unless (account_id = params[:account_id]).present?
+    param_key = (opts[:id_keys] || []).find { |key| params[key].present? }
+    return if param_key.blank?
 
+    account_id = params[param_key]
     @account =
       if opts[:optional]
         Account.find_by(id: account_id)
@@ -48,7 +50,13 @@ module MaybeAccountSpecific
   private
 
   def action_options(opts = {})
-    opts.reverse_merge!(optional: true, bounce_to: :root_path)
+    opts.reverse_merge!(
+      optional: true,
+      bounce_to: :root_path,
+      # NOTE: The order here is important! Ensure that you configure
+      #   the more specific key that first when this option is customized.
+      id_keys: %i[account_id id]
+    )
     opts[:bounce_to] = send(opts[:bounce_to]) if respond_to?(opts[:bounce_to])
     opts
   end

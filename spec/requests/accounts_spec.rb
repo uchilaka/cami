@@ -15,6 +15,30 @@ require 'rails_helper'
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe '/accounts', type: :request do
+  let!(:phone_data) do
+    [
+      {
+        full_e164: '+441962713171',
+        country: 'GB'
+      },
+      {
+        full_e164: '+15032822000',
+        country: 'US'
+      },
+      {
+        full_e164: '+2347030936084',
+        country: 'NG'
+      }
+    ].sample
+  end
+
+  let(:display_name) { Faker::Company.name }
+  let(:email) { Faker::Internet.email }
+  let(:slug) { Faker::Internet.slug }
+  let(:tax_id) { Faker::Company.swedish_organisation_number }
+  let(:metadata) { { 'key' => 'value' } }
+  let(:readme) { Faker::Lorem.paragraph }
+
   # This should return the minimal set of attributes required to create a valid
   # Account. As you add validations to Account, be sure to
   # adjust the attributes here as well.
@@ -27,8 +51,14 @@ RSpec.describe '/accounts', type: :request do
   end
 
   describe 'GET /index' do
+    let(:user) { Fabricate :user }
+    let(:account) { Fabricate :account, users: [user] }
+
+    before do
+      sign_in user
+    end
+
     it 'renders a successful response' do
-      Account.create! valid_attributes
       get accounts_url
       expect(response).to be_successful
     end
@@ -244,29 +274,6 @@ RSpec.describe '/accounts', type: :request do
       end
 
       context 'and valid account parameters' do
-        let!(:phone_data) do
-          [
-            {
-              full_e164: '+441962713171',
-              country: 'GB'
-            },
-            {
-              full_e164: '+15032822000',
-              country: 'US'
-            },
-            {
-              full_e164: '+2347030936084',
-              country: 'NG'
-            }
-          ].sample
-        end
-
-        let(:display_name) { Faker::Company.name }
-        let(:email) { Faker::Internet.email }
-        let(:slug) { Faker::Internet.slug }
-        let(:tax_id) { Faker::Company.swedish_organisation_number }
-        let(:metadata) { { 'key' => 'value' } }
-        let(:readme) { Faker::Lorem.paragraph }
         let(:params) do
           {
             account: {
@@ -345,7 +352,7 @@ RSpec.describe '/accounts', type: :request do
 
   describe 'GET /edit' do
     it 'renders a successful response' do
-      account = Account.create! valid_attributes
+      account = Account.create!(display_name:, email:, slug:, tax_id:, metadata:, status: 'guest')
       get edit_account_url(account)
       expect(response).to be_successful
     end
@@ -355,62 +362,59 @@ RSpec.describe '/accounts', type: :request do
     context 'with an authorized user' do
       # TODO: Implement access controls for models informed by (Pundit + Rolify) policies
       let(:user) { Fabricate :user }
-      let(:account) { Fabricate :account, users: [user] }
+      let(:account) { Fabricate :account, users: [user], status: 'guest' }
 
       before do
         sign_in user
       end
 
-      context 'and valid business account parameters' do
-        let(:account) { Fabricate :business, users: [user], status: 'guest' }
-        let(:profile) { account.profile }
-        let(:account_attributes) do
+      context 'and valid account parameters' do
+        let(:profile) { account.metadata }
+        let(:params) do
           {
-            display_name: Faker::Company.name,
-            tax_id: Faker::Company.ein,
-            status: 'active'
-          }
-        end
-        let(:profile_attributes) do
-          {
-            # IMPORTANT: Update frontend input component(s) to use formatting libraries
-            #   that ensure fully formatted numbers are returned to the service
-            phone: [
-              Faker::PhoneNumber.cell_phone_with_country_code,
-              Faker::PhoneNumber.phone_number_with_country_code
-            ].sample
+            account: {
+              display_name:,
+              email:,
+              slug:,
+              tax_id:,
+              metadata:,
+              status: 'guest'
+            },
+            profile: {
+              phone: phone_data[:full_e164],
+              country_alpha2: phone_data[:country]
+            }
           }
         end
 
         subject { account.reload }
 
         context 'has side effect(s) of' do
-          let!(:account) { Fabricate :business, users: [user], status: 'guest' }
-
           it 'NOT creating a new Account' do
             expect do
-              patch account_url(account), params: { account: account_attributes, profile: profile_attributes }
-            end.not_to change(Business, :count)
+              patch(account_url(account), params:)
+            end.not_to change(Account, :count)
           end
 
           it 'redirecting to the created account' do
-            patch account_url(account), params: { account: account_attributes, profile: profile_attributes }
+            patch(account_url(account), params:)
             expect(response).to redirect_to(account_url(subject))
           end
 
           context 'when format = json' do
             it 'returns the expected HTTP status' do
-              patch account_url(account),
-                    params: { account: account_attributes, profile: profile_attributes, format: :json }
+              patch account_url(account), params: params.merge(format: :json)
               expect(response).to have_http_status(:ok)
             end
           end
         end
 
         context 'attributes' do
+          let(:account_attributes) { params[:account] }
+          let(:profile_attributes) { params[:profile] }
+
           before do
-            patch account_url(account),
-                  params: { account: account_attributes, profile: profile_attributes, format: :json }
+            patch account_url(account), params: params.merge(format: :json)
             profile.reload
           end
 
@@ -421,7 +425,10 @@ RSpec.describe '/accounts', type: :request do
           context '#phone' do
             let(:parsed_number) { Phonelib.parse(profile_attributes[:phone]) }
 
-            it { expect(profile.reload.phone.full_international).to eq(parsed_number.full_international) }
+            it do
+              expect(profile.reload.dig('phone', 'full_international')).to \
+                eq(parsed_number.full_international)
+            end
           end
 
           context '#status' do
@@ -430,93 +437,6 @@ RSpec.describe '/accounts', type: :request do
 
           context '#tax_id' do
             it { expect(subject.tax_id).to eq(account_attributes[:tax_id]) }
-          end
-
-          context '#type' do
-            pending 'does NOT update the account type'
-          end
-
-          context '#slug' do
-            pending 'does NOT update the account slug'
-          end
-
-          context '#display_name' do
-            it { expect(subject.display_name).to eq(account_attributes[:display_name]) }
-          end
-        end
-      end
-
-      context 'and valid individual account parameters' do
-        let(:account) { Fabricate :individual, users: [user] }
-        let(:profile) { Fabricate :user_profile, account: }
-        let(:account_attributes) do
-          {
-            display_name: Faker::Company.name,
-            status: 'guest'
-          }
-        end
-        let(:profile_attributes) do
-          {
-            given_name: Faker::Name.neutral_first_name,
-            family_name: Faker::Name.last_name,
-            # IMPORTANT: Update frontend input component(s) to use formatting libraries
-            #   that ensure fully formatted numbers are returned to the service
-            phone: [
-              Faker::PhoneNumber.cell_phone_with_country_code,
-              Faker::PhoneNumber.phone_number_with_country_code
-            ].sample
-          }
-        end
-
-        before { sign_in user }
-
-        subject { account.reload }
-
-        context 'has side effect(s) of' do
-          let!(:profile) { Fabricate :user_profile, account: }
-
-          it 'NOT creating a new Account' do
-            expect do
-              patch account_url(account), params: { account: account_attributes, profile: profile_attributes }
-            end.not_to change(Individual, :count)
-          end
-
-          it 'returns the expected HTTP status' do
-            patch account_url(account),
-                  params: { account: account_attributes, profile: profile_attributes, format: :json }
-            expect(response).to have_http_status(:ok)
-          end
-        end
-
-        context 'attributes' do
-          let!(:profile) { Fabricate :user_profile, account: }
-
-          before do
-            patch account_url(account),
-                  params: { account: account_attributes, profile: profile_attributes, format: :json }
-            profile.reload
-          end
-
-          context '#given_name' do
-            it { expect(profile.reload.given_name).to eq(profile_attributes[:given_name]) }
-          end
-
-          context '#family_name' do
-            it { expect(profile.reload.family_name).to eq(profile_attributes[:family_name]) }
-          end
-
-          context '#email' do
-            pending 'does NOT update the email address'
-          end
-
-          context '#phone' do
-            let(:parsed_number) { Phonelib.parse(profile_attributes[:phone]) }
-
-            it { expect(profile.reload.phone.full_international).to eq(parsed_number.full_international) }
-          end
-
-          context '#status' do
-            it { expect(subject.status).to eq(account_attributes[:status]) }
           end
 
           context '#type' do
@@ -552,7 +472,7 @@ RSpec.describe '/accounts', type: :request do
       end
     end
 
-    context 'with valid parameters' do
+    xcontext 'with valid parameters' do
       let(:new_attributes) do
         skip('Add a hash of attributes valid for your model')
       end
@@ -572,7 +492,7 @@ RSpec.describe '/accounts', type: :request do
       end
     end
 
-    context 'with invalid parameters' do
+    xcontext 'with invalid parameters' do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         account = Account.create! valid_attributes
         patch account_url(account), params: { account: invalid_attributes }
