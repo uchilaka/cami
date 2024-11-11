@@ -28,13 +28,18 @@
 #
 #  fk_rails_...  (user_id => users.id)
 Fabricator(:identity_provider_profile) do
-  provider_name        'whatsapp'
+  uid                  { SecureRandom.alphanumeric(21) }
+  provider             'whatsapp'
   verified              false
   email                { Faker::Internet.email }
-  unverified_email      { |attrs| attrs[:email] }
-  email_verified        false
   given_name           { Faker::Name.neutral_first_name }
   family_name          { Faker::Name.last_name }
   display_name         { |attrs| "#{attrs[:given_name]} #{attrs[:family_name]}".strip }
-  metadata             { '{}' }
+  metadata             do |attrs|
+    {
+      unverified_email: attrs[:email],
+      email_verified: false,
+      confirmed_at: nil
+    }.merge(attrs[:metadata] || {})
+  end
 end

@@ -46,29 +46,27 @@ RSpec.describe User, type: :model do
 
   describe 'callbacks' do
     describe ':after_destroy_commit' do
-      subject { Fabricate(:user, email:) }
+      subject do
+        Fabricate(:user_with_provider_profiles, email:, providers: %w[google whatsapp])
+      end
 
-      it 'destroys the user profile' do
-        expect(subject.profile.present?).to be(true)
-        expect { subject.destroy }.to change { Metadata::Profile.count }.by(-1)
+      it 'destroys any identity provider profiles' do
+        expect(subject.identity_provider_profiles.size).to be(2)
+        expect { subject.destroy }.to change { IdentityProviderProfile.count }.by(-2)
       end
     end
   end
 
   describe '#profile' do
-    # subject { find_or_create_mock_user!(email:) }
-    subject { Fabricate(:user, email:) }
+    context 'with phone number' do
+      let(:phone_number) { Faker::PhoneNumber.cell_phone }
 
-    it 'returns the expected user profile' do
-      expect(subject.profile).to eq(Metadata::Profile.find_by(user_id: subject.id))
-    end
+      subject { Fabricate(:user, email:, phone_number:) }
 
-    it 'returns a Metadata::Profile' do
-      expect(subject.profile).to be_a(Metadata::Profile)
-    end
-
-    it 'is persisted' do
-      expect(subject.profile).to be_persisted
+      it 'supports saving the phone number' do
+        parsed_phone_number = Phonelib.parse(phone_number)
+        expect(subject.profile['phone_e164']).to eq(parsed_phone_number.full_e164)
+      end
     end
   end
 

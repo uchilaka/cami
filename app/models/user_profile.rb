@@ -10,13 +10,13 @@ class UserProfile
 
   attr_accessor :image_url,
                 :phone_e164,
-                :phone_country_code
+                :phone_country
 
   def attributes
     {
       image_url: nil,
       phone_e164: nil,
-      phone_country_code: nil
+      phone_country: nil
     }
   end
 end
