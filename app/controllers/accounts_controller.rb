@@ -1,5 +1,6 @@
 class AccountsController < ApplicationController
   include MaybeAccountSpecific
+  include LarCity::ProfileParameters
 
   load_account %i[show edit update destroy]
 
@@ -23,15 +24,24 @@ class AccountsController < ApplicationController
 
   # POST /accounts or /accounts.json
   def create
-    @account = Account.new(create_account_params)
+    result = UpsertAccountWorkflow.call(
+      account_params: create_account_params,
+      profile_params: create_profile_params
+    )
+    @account = result.account
 
     respond_to do |format|
-      if @account.save
-        format.html { redirect_to @account, notice: "Account was successfully created." }
+      if result.success?
+        format.html { redirect_to account_url(@account), notice: 'Account was successfully created.' }
         format.json { render :show, status: :created, location: @account }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @account.errors, status: :unprocessable_entity }
+        format.json do
+          render json: {
+            account: result.account&.errors,
+            profile: result.profile&.errors
+          }, status: :unprocessable_entity
+        end
       end
     end
   end
@@ -68,7 +78,7 @@ class AccountsController < ApplicationController
   def create_account_params
     params
       .require(:account)
-      .permit(:slug, :display_name, :readme, :status, :tax_id, :type)
+      .permit(:slug, :display_name, :email, :readme, :status, :tax_id, :type)
   end
 
   def create_profile_params
@@ -87,6 +97,11 @@ class AccountsController < ApplicationController
   end
 
   def update_account_param_keys
-    %i[display_name readme status tax_id]
+    base_keys = %i[display_name readme status tax_id]
+    if Current.user&.admin?
+      base_keys + %i[email]
+    else
+      base_keys
+    end
   end
 end
