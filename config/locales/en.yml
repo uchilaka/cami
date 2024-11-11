@@ -50,6 +50,8 @@ en:
       create: "New invoice"
       search: "Search for invoices"
     accounts:
+      tax_id: "Tax ID (E.g. EIN)"
+      notes: "Notes"
       create: "New account"
       search: "Search for accounts"
   shared:
