@@ -307,7 +307,7 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
             let(:parsed_number) { Phonelib.parse(phone_data[:full_e164]) }
 
             it do
-              expect(subject.metadata.dig('phone', 'full_e164')).to \
+              expect(subject.phone['full_e164']).to \
                 eq(parsed_number.full_e164)
             end
           end
@@ -356,8 +356,17 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
 
   describe 'PATCH /update' do
     context 'with an authorized user' do
+      let!(:current_phone_data) { Phonelib.parse('+2347129248348', 'NG') }
       let!(:account) do
-        Fabricate :account, users: [user], status: 'guest'
+        Fabricate :account,
+                  metadata: {
+                    phone: {
+                      full_e164: current_phone_data.full_e164,
+                      country: 'NG'
+                    }
+                  },
+                  users: [user],
+                  status: 'guest'
       end
 
       # TODO: Implement access controls for models informed by (Pundit + Rolify) policies
@@ -425,7 +434,7 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
             let(:parsed_number) { Phonelib.parse(phone_data[:full_e164]) }
 
             it do
-              expect(subject.metadata.dig('phone', 'full_e164')).to \
+              expect(subject.phone['full_e164']).to \
                 eq(parsed_number.full_e164)
             end
           end

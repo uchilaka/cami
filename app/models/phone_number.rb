@@ -6,6 +6,7 @@ class PhoneNumber
   include ActiveModel::API
   include ActiveModel::Serialization
   extend ActiveModel::Callbacks
+  extend ActiveModel::Validations::Callbacks
   include ActiveModel::Dirty
 
   attr_accessor :value,
@@ -24,7 +25,7 @@ class PhoneNumber
     clear_attribute_changes(%w[value country])
   end
 
-  define_model_callbacks :save
+  define_model_callbacks :initialize, :save, :update, :validation
 
   # Phonelib ActiveRecord integration:
   # https://github.com/daddyz/phonelib?tab=readme-ov-file#activerecord-integration
@@ -32,7 +33,7 @@ class PhoneNumber
             phone: { possible: true, allow_blank: false },
             if: :should_validate_possibility?
 
-  before_save :parse_number_value_and_type
+  validate :parse_number_value_and_type
 
   def save
     if valid? && resource
@@ -58,12 +59,18 @@ class PhoneNumber
     return if value.blank?
 
     phone = Phonelib.parse(value)
+    if phone.invalid?
+      errors.add(:value, 'is not a valid phone number')
+      return
+    end
+
     self.country ||= phone.country
     self.full_e164 = phone.full_e164
     # TODO: Assert in spec that value == phone.full_international
     self.full_international = phone.full_international
     intersect_types = supported_types.intersection phone.types
     self.number_type = intersect_types.any? ? intersect_types.first : phone.types.first
+    resource.phone = serializable_hash if resource.respond_to?(:phone)
   end
 
   def supported_types
