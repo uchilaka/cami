@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: identity_provider_profiles
@@ -28,15 +30,15 @@
 #
 Fabricator(:identity_provider_profile) do
   user                 nil
-  provider_name        "MyString"
+  provider_name        'MyString'
   verified             false
-  email                "MyString"
-  unverified_email     "MyString"
+  email                'MyString'
+  unverified_email     'MyString'
   email_verified       false
-  given_name           "MyString"
-  family_name          "MyString"
-  display_name         "MyString"
-  image_url            "MyString"
-  confirmation_sent_at "2024-11-10 23:00:52"
-  metadata             ""
+  given_name           'MyString'
+  family_name          'MyString'
+  display_name         'MyString'
+  image_url            'MyString'
+  confirmation_sent_at '2024-11-10 23:00:52'
+  metadata             ''
 end

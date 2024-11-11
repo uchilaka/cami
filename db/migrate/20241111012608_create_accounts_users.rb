@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # 20241111012608_create_accounts_users.rb
 class CreateAccountsUsers < ActiveRecord::Migration[7.2]
   def change

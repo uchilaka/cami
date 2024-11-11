@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: invoices
@@ -29,18 +31,18 @@ Fabricator(:invoice) do
   transient :account
   transient :user
 
-  invoiceable_id         ""
-  invoiceable_type       "MyString"
-  payments               ""
-  links                  ""
-  updated_accounts_at    "2024-11-11 01:29:44"
-  invoice_number         "MyString"
+  invoiceable_id         ''
+  invoiceable_type       'MyString'
+  payments               ''
+  links                  ''
+  updated_accounts_at    '2024-11-11 01:29:44'
+  invoice_number         'MyString'
   status                 1
-  issued_at              "2024-11-11 01:29:44"
-  due_at                 "2024-11-11 01:29:44"
-  paid_at                "2024-11-11 01:29:44"
-  amount                 "9.99"
-  due_amount             "9.99"
-  currency_code          "MyString"
-  notes                  "MyText"
+  issued_at              '2024-11-11 01:29:44'
+  due_at                 '2024-11-11 01:29:44'
+  paid_at                '2024-11-11 01:29:44'
+  amount                 '9.99'
+  due_amount             '9.99'
+  currency_code          'MyString'
+  notes                  'MyText'
 end

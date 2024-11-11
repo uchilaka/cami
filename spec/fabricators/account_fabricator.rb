@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: accounts
@@ -16,10 +18,10 @@
 #  tax_id       :string
 #
 Fabricator(:account) do
-  display_name "MyString"
-  slug         "MyString"
+  display_name 'MyString'
+  slug         'MyString'
   status       1
-  type         ""
-  tax_id       "MyString"
-  readme       "MyText"
+  type         ''
+  tax_id       'MyString'
+  readme       'MyText'
 end

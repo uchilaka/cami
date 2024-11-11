@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # 20241111062944_create_invoices.rb
 class CreateInvoices < ActiveRecord::Migration[7.2]
   def change

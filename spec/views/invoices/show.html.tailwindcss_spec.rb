@@ -1,24 +1,26 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "invoices/show", type: :view do
+RSpec.describe 'invoices/show', type: :view do
   before(:each) do
     assign(:invoice, Invoice.create!(
-      invoiceable_id: "",
-      invoiceable_type: "Invoiceable Type",
-      account: nil,
-      user: nil,
-      payments: "",
-      links: "",
-      invoice_number: "Invoice Number",
-      status: 2,
-      amount: "9.99",
-      due_amount: "9.99",
-      currency_code: "Currency Code",
-      notes: "MyText"
-    ))
+                       invoiceable_id: '',
+                       invoiceable_type: 'Invoiceable Type',
+                       account: nil,
+                       user: nil,
+                       payments: '',
+                       links: '',
+                       invoice_number: 'Invoice Number',
+                       status: 2,
+                       amount: '9.99',
+                       due_amount: '9.99',
+                       currency_code: 'Currency Code',
+                       notes: 'MyText'
+                     ))
   end
 
-  it "renders attributes in <p>" do
+  it 'renders attributes in <p>' do
     render
     expect(rendered).to match(//)
     expect(rendered).to match(/Invoiceable Type/)

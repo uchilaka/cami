@@ -19,8 +19,8 @@ module ViteRails
     #
     # Example:
     #   <%= vite_asset_path 'calendar.css' %> # => "/vite/assets/calendar-1016838bab065ae1e122.css"
-    def vite_asset_path(name, **options)
-      path_to_asset vite_manifest.path_for(name, **options)
+    def vite_asset_path(name, **)
+      path_to_asset vite_manifest.path_for(name, **)
     end
 
     # Public: Renders a <script> tag for the specified Vite entrypoints.
@@ -31,24 +31,24 @@ module ViteRails
                             skip_style_tags: false,
                             crossorigin: 'anonymous',
                             media: 'screen',
-                            **options)
+                            **)
       entries = vite_manifest.resolve_entries(*names, type: asset_type)
       tags = javascript_include_tag(*entries.fetch(:scripts), crossorigin:, type:, extname: false,
-                                                              **options)
-      tags << vite_preload_tag(*entries.fetch(:imports), crossorigin:, **options) unless skip_preload_tags
-      tags << stylesheet_link_tag(*entries.fetch(:stylesheets), media:, **options) unless skip_style_tags
+                                                              **)
+      tags << vite_preload_tag(*entries.fetch(:imports), crossorigin:, **) unless skip_preload_tags
+      tags << stylesheet_link_tag(*entries.fetch(:stylesheets), media:, **) unless skip_style_tags
       tags
     end
 
     # Public: Renders a <script> tag for the specified Vite entrypoints.
-    def vite_typescript_tag(*names, **options)
-      vite_javascript_tag(*names, asset_type: :typescript, **options)
+    def vite_typescript_tag(*names, **)
+      vite_javascript_tag(*names, asset_type: :typescript, **)
     end
 
     # Public: Renders a <link> tag for the specified Vite entrypoints.
-    def vite_stylesheet_tag(*names, **options)
+    def vite_stylesheet_tag(*names, **)
       style_paths = names.map { |name| vite_asset_path(name, type: :stylesheet) }
-      stylesheet_link_tag(*style_paths, **options)
+      stylesheet_link_tag(*style_paths, **)
     end
 
     # Public: Renders an <img> tag for the specified Vite asset.

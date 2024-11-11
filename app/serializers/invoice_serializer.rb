@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: invoices
@@ -26,7 +28,8 @@
 #  index_invoices_on_invoiceable_type_and_invoiceable_id  (invoiceable_type,invoiceable_id)
 #
 class InvoiceSerializer < ActiveModel::Serializer
-  attributes :id, :invoiceable_id, :invoiceable_type, :payments, :links, :viewed_by_recipient_at, :updated_accounts_at, :invoice_number, :status, :issued_at, :due_at, :paid_at, :amount, :due_amount, :currency_code, :notes
+  attributes :id, :invoiceable_id, :invoiceable_type, :payments, :links, :viewed_by_recipient_at, :updated_accounts_at,
+             :invoice_number, :status, :issued_at, :due_at, :paid_at, :amount, :due_amount, :currency_code, :notes
   has_one :account
   has_one :user
 end
