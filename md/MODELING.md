@@ -4,9 +4,10 @@
 
 ```shell
 bin/rails g model IdentityProviderProfile \
-  user:references name:string \
+  user:references provider_name:string verified:boolean \
   email:string unverified_email:string email_verified:boolean \
-  metadata:jsonb \
+  given_name:string family_name:string display_name:string \
+  image_url:string confirmation_sent_at:timestamp metadata:jsonb \
   --pretend
 ```
 

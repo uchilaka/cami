@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_11_014729) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_11_040052) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,7 +23,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_014729) do
     t.string "type"
     t.string "tax_id"
     t.text "readme"
-    t.jsonb "metadata"
+    t.jsonb "metadata", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -52,6 +52,25 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_014729) do
     t.index ["user_id"], name: "index_allowlisted_jwts_on_user_id"
   end
 
+  create_table "identity_provider_profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.string "provider_name"
+    t.boolean "verified", default: false
+    t.string "email"
+    t.string "unverified_email"
+    t.boolean "email_verified"
+    t.string "given_name", default: ""
+    t.string "family_name", default: ""
+    t.string "display_name"
+    t.string "image_url"
+    t.datetime "confirmation_sent_at", precision: nil
+    t.jsonb "metadata", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "provider_name"], name: "index_identity_provider_profiles_on_user_id_and_provider_name", unique: true
+    t.index ["user_id"], name: "index_identity_provider_profiles_on_user_id"
+  end
+
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "resource_type"
@@ -65,7 +84,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_014729) do
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "given_name"
     t.string "family_name"
-    t.jsonb "metadata"
+    t.jsonb "metadata", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", default: "", null: false
@@ -109,4 +128,5 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_014729) do
   end
 
   add_foreign_key "allowlisted_jwts", "users", on_delete: :cascade
+  add_foreign_key "identity_provider_profiles", "users"
 end
