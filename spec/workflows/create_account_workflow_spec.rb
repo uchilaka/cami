@@ -60,7 +60,12 @@ RSpec.describe CreateAccountWorkflow do
         end
       end
 
-      pending 'with the expected notes'
+      context 'with the expected notes' do
+        it do
+          result = subject
+          expect(result.account.readme.to_plain_text).to eq(readme)
+        end
+      end
     end
   end
 end
