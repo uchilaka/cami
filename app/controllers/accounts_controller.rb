@@ -25,7 +25,7 @@ class AccountsController < ApplicationController
 
   # POST /accounts or /accounts.json
   def create
-    result = UpsertAccountWorkflow.call(
+    result = CreateAccountWorkflow.call(
       account_params: create_account_params,
       profile_params: create_profile_params
     )
@@ -46,7 +46,7 @@ class AccountsController < ApplicationController
 
   # PATCH/PUT /accounts/1 or /accounts/1.json
   def update
-    result = UpsertAccountWorkflow.call(
+    result = UpdateAccountWorkflow.call(
       account:, current_user:,
       account_params: update_params[:account],
       profile_params: update_params[:profile]
