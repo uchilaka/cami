@@ -32,23 +32,35 @@ RSpec.describe CreateAccountWorkflow do
 
     it { is_expected.to be_a_success }
 
-    it 'returns the account' do
-      expect(subject.account).to be_a(Account)
-    end
+    context 'returns the account' do
+      it { expect(subject.account).to be_a(Account) }
 
-    it 'returns the account with the correct attributes' do
-      expect(subject.account.serializable_hash).to \
-        match(
-          hash_including(
-            display_name:,
-            slug:,
-            tax_id:
-            # metadata:
-            # email:,
-            # phone:,
-            # readme:
-          )
-        )
+      context 'with the correct display_name, slug and tax_id' do
+        let(:account_hash) do
+          subject
+            .account
+            .serializable_hash
+            .symbolize_keys
+            .slice(:display_name, :slug, :tax_id)
+        end
+
+        it do
+          expect(account_hash).to \
+            match(
+              hash_including(display_name:, slug:, tax_id:)
+            )
+        end
+      end
+
+      context 'with the right phone number' do
+        let(:parsed_number) { Phonelib.parse(phone) }
+
+        it do
+          expect(subject.account.metadata.dig('phone', 'full_e164')).to eq(parsed_number.full_e164)
+        end
+      end
+
+      pending 'with the expected notes'
     end
   end
 end
