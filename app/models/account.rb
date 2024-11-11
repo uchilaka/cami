@@ -5,6 +5,7 @@
 #  id           :uuid             not null, primary key
 #  display_name :string
 #  email        :string
+#  metadata     :jsonb
 #  phone        :jsonb
 #  readme       :text
 #  slug         :string
@@ -23,13 +24,13 @@ class Account < ApplicationRecord
   # See https://guides.rubyonrails.org/active_record_encryption.html#deterministic-and-non-deterministic-encryption
   encrypts :tax_id, deterministic: true
 
-  attribute :type, :string, default: 'Account' # Possible future STI for Individual, Business, Government, Nonprofit, etc.
+  attribute :type, :string, default: 'Account'
   attribute :slug, :string, default: -> { SecureRandom.alphanumeric(4).downcase }
   attribute :email, :string
 
   validates :display_name, presence: true
   validates :email, email: true, allow_nil: true
-  validates :type, presence: true, inclusion: { in: %w[Account Business Individual] }
+  validates :type, presence: true, inclusion: { in: %w[Account Business Individual Government Nonprofit] }
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
   validates :tax_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
 

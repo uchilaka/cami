@@ -23,13 +23,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_014729) do
     t.string "type"
     t.string "tax_id"
     t.text "readme"
+    t.jsonb "metadata"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "accounts_roles", id: false, force: :cascade do |t|
-    t.uuid "account_id"
-    t.uuid "role_id"
+    t.bigint "account_id"
+    t.bigint "role_id"
     t.index ["account_id", "role_id"], name: "index_accounts_roles_on_account_id_and_role_id"
     t.index ["account_id"], name: "index_accounts_roles_on_account_id"
     t.index ["role_id"], name: "index_accounts_roles_on_role_id"
@@ -62,6 +63,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_014729) do
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "given_name"
+    t.string "family_name"
+    t.jsonb "metadata"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", default: "", null: false
@@ -69,8 +73,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_014729) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.string "given_name"
-    t.string "family_name"
     t.string "providers", default: [], array: true
     t.jsonb "uids", default: {}
     t.string "confirmation_token"

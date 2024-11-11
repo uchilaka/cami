@@ -5,6 +5,7 @@
 #  id           :uuid             not null, primary key
 #  display_name :string
 #  email        :string
+#  metadata     :jsonb
 #  phone        :jsonb
 #  readme       :text
 #  slug         :string

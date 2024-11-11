@@ -15,6 +15,7 @@
 #  given_name             :string
 #  last_request_at        :datetime
 #  locked_at              :datetime
+#  metadata               :jsonb
 #  nickname               :string
 #  providers              :string           default([]), is an Array
 #  remember_created_at    :datetime
