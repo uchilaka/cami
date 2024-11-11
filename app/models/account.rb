@@ -24,6 +24,8 @@ class Account < ApplicationRecord
   # See https://guides.rubyonrails.org/active_record_encryption.html#deterministic-and-non-deterministic-encryption
   encrypts :tax_id, deterministic: true
 
+  has_rich_text :readme
+
   attribute :type, :string, default: 'Account'
   attribute :slug, :string, default: -> { SecureRandom.alphanumeric(4).downcase }
 

@@ -16,6 +16,7 @@
 #  last_request_at        :datetime
 #  locked_at              :datetime
 #  nickname               :string
+#  profile                :jsonb
 #  providers              :string           default([]), is an Array
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
@@ -26,14 +27,12 @@
 #  unlock_token           :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
-#  primary_profile_id     :string
 #
 # Indexes
 #
-#  index_users_on_confirmation_token         (confirmation_token) UNIQUE
-#  index_users_on_email                      (email) UNIQUE
-#  index_users_on_id_and_primary_profile_id  (id,primary_profile_id) UNIQUE
-#  index_users_on_reset_password_token       (reset_password_token) UNIQUE
+#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
+#  index_users_on_email                 (email) UNIQUE
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 require 'rails_helper'
 
