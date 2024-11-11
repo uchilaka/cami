@@ -43,6 +43,7 @@ class UpsertUserFromOmniauthWorkflow
       #   when a new auth provider is detected
       user.providers << provider unless user.providers.include?(provider)
       user.uids[provider] = uid if user.uids[provider].blank?
+      # Barebones user profile setup to capture the profile image URL
       user.profile = UserProfile.new(image_url:) if user.profile.blank?
       user.save!
     end

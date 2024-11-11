@@ -1,25 +1,48 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: accounts
 #
 #  id           :uuid             not null, primary key
-#  display_name :string
-#  email        :string
-#  metadata     :jsonb
-#  phone        :jsonb
-#  readme       :text
+#  display_name :string           not null
 #  slug         :string
 #  status       :integer
-#  type         :string
+#  type         :string           not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  tax_id       :string
 #
+# Indexes
+#
+#  index_accounts_on_slug    (slug) UNIQUE
+#  index_accounts_on_tax_id  (tax_id) UNIQUE WHERE (tax_id IS NOT NULL)
+#
 Fabricator(:account) do
-  display_name "MyString"
-  slug         "MyString"
-  status       1
-  type         ""
-  tax_id       "MyString"
-  readme       "MyText"
+  transient :users
+
+  display_name { Faker::Company.name }
+  users { [Fabricate(:user)] }
+  slug { SecureRandom.alphanumeric(4).downcase }
+  type 'Account'
+
+  after_build do |account, transients|
+    if transients[:users].is_a?(Array)
+      transients[:users].each do |user|
+        account.users << user
+      end
+    end
+  end
+end
+
+Fabricator(:account_with_invoices, from: :account) do
+  transient :invoices
+
+  after_build do |account, transients|
+    if transients[:invoices].is_a?(Array)
+      transients[:invoices].each do |invoice|
+        account.add_role(:customer, invoice.record)
+      end
+    end
+  end
 end
