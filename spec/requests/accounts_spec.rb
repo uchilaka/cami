@@ -267,10 +267,10 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
               slug:,
               tax_id:,
               metadata:,
+              phone: phone_data[:full_e164],
               status: 'active'
             },
             profile: {
-              phone: phone_data[:full_e164],
               country_alpha2: phone_data[:country]
             }
           }
@@ -326,6 +326,10 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
 
           context '#display_name' do
             it { expect(subject.display_name).to eq(params.dig(:account, :display_name)) }
+          end
+
+          context '#metadata' do
+            it { expect(subject.metadata).to eq(params.dig(:account, :metadata)) }
           end
         end
       end
@@ -386,10 +390,10 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
               slug:,
               tax_id:,
               metadata:,
+              phone: phone_data[:full_e164],
               status: 'guest'
             },
             profile: {
-              phone: phone_data[:full_e164],
               country_alpha2: phone_data[:country]
             }
           }
@@ -423,7 +427,6 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
 
           before do
             patch account_url(account), params: params.merge(format: :json)
-            # account.reload
           end
 
           context '#email' do
@@ -457,6 +460,10 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
 
           context '#display_name' do
             it { expect(subject.display_name).to eq(account_attributes[:display_name]) }
+          end
+
+          context '#metadata' do
+            it { expect(subject.metadata).to eq(account_attributes[:metadata]) }
           end
         end
       end

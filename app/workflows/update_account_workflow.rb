@@ -8,23 +8,21 @@ class UpdateAccountWorkflow
   # (params:, current_user:, account_params:, profile_params:)
   def call
     account = context.account
-    raise ArgumentError, 'an account must be provided' if context.account.blank?
-    raise ArgumentError, 'account parameters are required' if context.account_params.blank?
+    context.fail!(messages: ['an account must be provided']) if account.blank?
+    context.fail!(messages: ['account update parameters are required']) if context.account_params.blank?
+    return unless context.success?
 
     update_params =
       context
         .account_params
         .to_h.symbolize_keys
         .slice(*self.class.allowed_parameter_keys)
+    context.fail!(messages: ['No valid account update parameters found']) unless update_params.present?
+    return unless context.success?
+
     account.assign_attributes(update_params)
     # Ensure metadata is initialized
     account.metadata ||= {}
-
-    profile_params =
-      context.profile_params.to_h.symbolize_keys
-    # Save profile params to metadata
-    account.metadata = account.metadata.merge(profile_params) \
-      if profile_params.present?
 
     # Attempt to process the account phone number
     input_number = update_params.delete(:phone)
@@ -39,6 +37,13 @@ class UpdateAccountWorkflow
     end
 
     return unless context.success?
+
+    # Capture profile parameters
+    profile_params =
+      context.profile_params.to_h.symbolize_keys
+    # Save profile params to metadata
+    account.metadata = account.metadata.merge(profile_params) \
+      if profile_params.present?
 
     account.save
     context.fail!(messages: account.errors.full_messages) if account.errors.any?

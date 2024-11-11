@@ -27,7 +27,8 @@ class AccountsController < ApplicationController
   def create
     result = CreateAccountWorkflow.call(
       account_params: create_account_params,
-      profile_params: create_profile_params
+      profile_params: create_profile_params,
+      current_user:
     )
     @account = result.account
 
