@@ -125,10 +125,11 @@ class User < ApplicationRecord
 
     def from_omniauth(access_token = nil)
       access_token ||= Current.auth_provider
+      uid, provider = access_token.values_at('uid', 'provider')
       uid = access_token.uid
       provider = access_token.provider
-      given_name, family_name, email, _image_url = access_token.info.values_at(
-        'first_name', 'last_name', 'email', 'image'
+      given_name, family_name, email, _unverified_email, _email_verified, _image_url = access_token.info.values_at(
+        'first_name', 'last_name', 'email', 'unverified_email', 'email_verified', 'image'
       )
       user = User.find_by(email:)
       user ||= User.new(

@@ -8,6 +8,8 @@ module Profiles
     include ActiveModel::Dirty
 
     attr_accessor :email,
+                  :unverified_email,
+                  :email_verified,
                   :provider_name,
                   :given_name,
                   :family_name,
@@ -19,6 +21,8 @@ module Profiles
     def attributes
       {
         email: nil,
+        unverified_email: nil,
+        email_verified: false,
         provider_name: nil,
         given_name: '',
         family_name: '',
