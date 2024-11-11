@@ -16,6 +16,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_012608) do
 
   create_table "accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "display_name"
+    t.string "email"
+    t.jsonb "phone"
     t.string "slug"
     t.integer "status"
     t.string "type"

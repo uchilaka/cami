@@ -4,6 +4,8 @@
 #
 #  id           :uuid             not null, primary key
 #  display_name :string
+#  email        :string
+#  phone        :jsonb
 #  readme       :text
 #  slug         :string
 #  status       :integer
