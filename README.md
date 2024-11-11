@@ -57,6 +57,7 @@ deprecation warnings into errors, giving you the full backtrace.
 
 ## Future reading 
 
+- [ ] Working with JSONB columns in your Active Record models with Active Model: <https://betacraft.com/2023-06-08-active-model-jsonb-column/>
 - [ ] Building your Turbo application: <https://turbo.hotwired.dev/handbook/building>
 - [ ] Custom errors in rails: <https://dev.to/ayushn21/custom-error-pages-in-rails-4i43>
 - [ ] E2E testing
