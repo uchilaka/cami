@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateAccountWorkflow
+class UpsertAccountWorkflow
   include Interactor
   include LarCity::ProfileParameters
 
@@ -9,7 +9,7 @@ class CreateAccountWorkflow
   # (params:, current_user:)
   def call
     create_params = compose_create_params(context.params)
-    account = Account.new(create_params)
+    account = context.account || Account.new(create_params)
     account.metadata ||= {}
     profile_params =
       context

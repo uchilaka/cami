@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe CreateAccountWorkflow do
+RSpec.describe UpsertAccountWorkflow, type: :workflow do
   context 'with valid attributes' do
     let(:display_name) { Faker::Company.name }
     let(:email) { Faker::Internet.email }
