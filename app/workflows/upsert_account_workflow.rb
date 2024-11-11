@@ -2,7 +2,7 @@
 
 class UpsertAccountWorkflow
   include Interactor
-  include LarCity::ProfileParameters
+  include LarCity::ProfileParameterUtils
 
   # TODO: Include asserting the authorized account
   #   via Current.user

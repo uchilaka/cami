@@ -2,7 +2,6 @@
 
 class CreateAccountWorkflow
   include Interactor
-  include LarCity::ProfileParameters
 
   # TODO: Include asserting the authorized account
   #   via Current.user
@@ -10,9 +9,15 @@ class CreateAccountWorkflow
   def call
     create_params =
       if context.account_params.present?
-        context.account_params
+        context
+          .account_params
+          .to_h.symbolize_keys
+          .slice(*self.class.allowed_parameter_keys)
       elsif context.params.present?
-        compose_create_params(context.params)
+        context
+          .params
+          .to_h.symbolize_keys
+          .slice(*self.class.allowed_parameter_keys)
       end
 
     # Support some initialization of the account happening outside of the workflow
@@ -58,5 +63,11 @@ class CreateAccountWorkflow
     context.fail!(messages: account.errors.full_messages) if account.errors.any?
   ensure
     context.account = account
+  end
+
+  class << self
+    def allowed_parameter_keys
+      %i[display_name status email slug tax_id phone metadata readme]
+    end
   end
 end

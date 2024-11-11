@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module LarCity
-  module ProfileParameters
+  module ProfileParameterUtils
     extend ActiveSupport::Concern
 
     def compose_create_params(request_params)

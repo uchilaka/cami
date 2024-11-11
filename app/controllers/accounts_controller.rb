@@ -1,6 +1,6 @@
 class AccountsController < ApplicationController
   include MaybeAccountSpecific
-  include LarCity::ProfileParameters
+  include LarCity::ProfileParameterUtils
 
   # load_account %i[show edit update destroy], optional: true
   load_account :all, optional: true, id_keys: %i[account_id id]
@@ -70,7 +70,7 @@ class AccountsController < ApplicationController
     @account.destroy!
 
     respond_to do |format|
-      format.html { redirect_to accounts_path, status: :see_other, notice: "Account was successfully destroyed." }
+      format.html { redirect_to accounts_path, status: :see_other, notice: 'Account was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -84,7 +84,7 @@ class AccountsController < ApplicationController
   def create_account_params
     params
       .require(:account)
-      .permit(:slug, :display_name, :email, :readme, :status, :tax_id, :type)
+      .permit(:slug, :display_name, :email, :readme, :status, :tax_id, :type, :phone)
   end
 
   def create_profile_params
@@ -103,7 +103,7 @@ class AccountsController < ApplicationController
   end
 
   def update_account_param_keys
-    base_keys = %i[display_name readme status tax_id]
+    base_keys = %i[display_name readme status tax_id phone]
     if Current.user&.admin?
       base_keys + %i[email]
     else

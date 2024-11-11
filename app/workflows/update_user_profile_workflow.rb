@@ -2,7 +2,7 @@
 
 class UpdateUserProfileWorkflow
   include Interactor
-  include LarCity::ProfileParameters
+  include LarCity::ProfileParameterUtils
 
   # (profile_params:, current_user:, account: nil)
   def call
