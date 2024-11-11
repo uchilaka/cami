@@ -872,7 +872,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hotwired/turbo-rails@npm:^8.0.10":
+"@hotwired/turbo-rails@npm:^8.0.12":
   version: 8.0.12
   resolution: "@hotwired/turbo-rails@npm:8.0.12"
   dependencies:
@@ -1301,7 +1301,7 @@ __metadata:
     "@headlessui/react": "npm:^1.7.18"
     "@heroicons/react": "npm:^2.1.1"
     "@hotwired/turbo": "npm:^8.0.10"
-    "@hotwired/turbo-rails": "npm:^8.0.10"
+    "@hotwired/turbo-rails": "npm:^8.0.12"
     "@jest/globals": "npm:^29.7.0"
     "@rails/actiontext": "npm:^7.1.3-2"
     "@storybook/addon-essentials": "npm:^8.3.5"

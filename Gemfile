@@ -10,6 +10,9 @@ gem 'rails', '~> 7.2', '>= 7.2.0'
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
 
+# The speed of a single-page web application without having to write any JavaScript.
+gem 'turbo-rails', '~> 2.0'
+
 # Autoload dotenv in Rails https://github.com/bkeepers/dotenv
 # IMPORTANT: This should be loaded as early as possible
 gem 'dotenv', groups: %i[development test], require: 'dotenv/load'

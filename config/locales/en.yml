@@ -55,6 +55,7 @@ en:
   shared:
     navbar:
       home: "Home"
+      about: "About Us"
       dashboard: "Dashboard"
       services: "Services"
       products: "Products"
