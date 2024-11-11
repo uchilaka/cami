@@ -35,6 +35,22 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
+  class << self
+    # Docs on Devise passwordless customization: https://github.com/abevoelker/devise-passwordless#customization
+    def passwordless_login_within
+      15.minutes
+    end
+
+    def from_omniauth(access_token = nil)
+      access_token ||= Current.auth_provider
+      result = UpsertUserFromOmniauthWorkflow.call(access_token:)
+      # Returns either the user instance with errors or the persisted user record
+      # TODO: Add a spec that asserts that when the transaction fails, a user instance
+      #   with errors is returned
+      result.user
+    end
+  end
+
   rolify
 
   # Alumnus->Product: Has been a customer or subscriber to a product or service in the past and is currently
@@ -85,6 +101,8 @@ class User < ApplicationRecord
   has_many :identity_provider_profiles, dependent: :destroy
   has_and_belongs_to_many :accounts, join_table: 'accounts_users'
 
+  before_validation :cleanup_providers, if: :providers_changed?
+
   def admin?
     has_role?(:admin)
   end
@@ -114,19 +132,11 @@ class User < ApplicationRecord
     confirm unless confirmed?
   end
 
-  class << self
-    # Docs on Devise passwordless customization: https://github.com/abevoelker/devise-passwordless#customization
-    def passwordless_login_within
-      15.minutes
-    end
+  private
 
-    def from_omniauth(access_token = nil)
-      access_token ||= Current.auth_provider
-      result = UpsertUserFromOmniauthWorkflow.call(access_token:)
-      # Returns either the user instance with errors or the persisted user record
-      # TODO: Add a spec that asserts that when the transaction fails, a user instance
-      #   with errors is returned
-      result.user
-    end
+  def cleanup_providers
+    return if providers.blank?
+
+    self.providers = providers.uniq
   end
 end

@@ -23,7 +23,7 @@ class AccountsController < ApplicationController
 
   # POST /accounts or /accounts.json
   def create
-    @account = Account.new(account_params)
+    @account = Account.new(create_account_params)
 
     respond_to do |format|
       if @account.save
@@ -38,15 +38,8 @@ class AccountsController < ApplicationController
 
   # PATCH/PUT /accounts/1 or /accounts/1.json
   def update
-    result =
-      UpdateAccountWorkflow.call(
-        account_params: update_params[:account],
-        profile_params: update_params[:profile],
-        current_user:,
-        account:
-      )
     respond_to do |format|
-      if @account.update(account_params)
+      if @account.update(update_params[:account])
         format.html { redirect_to @account, notice: "Account was successfully updated." }
         format.json { render :show, status: :ok, location: @account }
       else

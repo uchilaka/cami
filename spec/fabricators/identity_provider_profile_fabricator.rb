@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: identity_provider_profiles
@@ -25,18 +27,14 @@
 # Foreign Keys
 #
 #  fk_rails_...  (user_id => users.id)
-#
 Fabricator(:identity_provider_profile) do
-  user                 nil
-  provider_name        "MyString"
-  verified             false
-  email                "MyString"
-  unverified_email     "MyString"
-  email_verified       false
-  given_name           "MyString"
-  family_name          "MyString"
-  display_name         "MyString"
-  image_url            "MyString"
-  confirmation_sent_at "2024-11-10 23:00:52"
-  metadata             ""
+  provider_name        'whatsapp'
+  verified              false
+  email                { Faker::Internet.email }
+  unverified_email      { |attrs| attrs[:email] }
+  email_verified        false
+  given_name           { Faker::Name.neutral_first_name }
+  family_name          { Faker::Name.last_name }
+  display_name         { |attrs| "#{attrs[:given_name]} #{attrs[:family_name]}".strip }
+  metadata             { '{}' }
 end

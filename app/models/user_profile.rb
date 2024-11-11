@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# JSONB modeling guide:
+# https://betacraft.com/2023-06-08-active-model-jsonb-column/#:~:text=Bringing%20it%20all%20together
 class UserProfile
   include ActiveModel::API
   include ActiveModel::Serialization
