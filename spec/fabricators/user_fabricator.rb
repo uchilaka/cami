@@ -18,14 +18,20 @@ Fabricator(:user) do
 end
 
 Fabricator(:user_with_provider_profiles, from: :user) do
-  providers   { ['google'] }
-  uids        { { 'google' => SecureRandom.alphanumeric(21) } }
+  providers   { %w[google apple whatsapp] }
+  uids        do
+    {
+      'google' => SecureRandom.alphanumeric(21),
+      'apple' => SecureRandom.alphanumeric(21),
+      'whatsapp' => SecureRandom.alphanumeric(21)
+    }
+  end
 
   after_create do |user|
     user.providers.each do |provider|
       user.uids[provider] ||= SecureRandom.alphanumeric(21)
       Fabricate(:identity_provider_profile, uid: user.uids[provider], user:, provider:)
-      user.save!
     end
+    user.save!
   end
 end
