@@ -72,4 +72,10 @@ RSpec.describe CreateAccountWorkflow, type: :workflow, real_world_data: true do
       end
     end
   end
+
+  context 'with invalid' do
+    pending 'phone number'
+    pending 'email'
+    pending 'other attributes'
+  end
 end
