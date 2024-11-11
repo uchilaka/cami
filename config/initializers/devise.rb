@@ -14,7 +14,7 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = '5991df14520eabf911552766ae24d34c6ef7693c0909d102f1d4069f70d21e13ef4a66a02354145f30596ac5b68e56b053765490f57dad37a905cba8ffdb02ce'
+  # config.secret_key = 'fd33ab559798416167be2c75d3eaa6d6c4de0b313dec8c60dd5511a7576d0301b745686034ec6497f9cbcb47cc3e5db66cdd0fe3b81da0167de4bc29917bb7fd'
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
@@ -24,7 +24,7 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
+  config.mailer_sender = ENV.fetch('SMTP_USER', Rails.application.credentials.brevo.smtp_user)
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
@@ -126,7 +126,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 12
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = 'dc23e260434f2f121b1e495b175c443b763df93f3ed0a8364041f6e1afb68c023f7f2f347df2116ac68f5549134abe9a872fa51f294bc92e57546adb8bd6e6e1'
+  # config.pepper = '23e2b0f742ad8bf28144d62e45874e739db9b6c1f80d7b7c0b5b2f4e317c7fd85510178b12d6352745f54960716198d48ab9d69826b392a515f0b1db7d9d89ad'
 
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false
@@ -143,7 +143,7 @@ Devise.setup do |config|
   # without confirming their account.
   # Default is 0.days, meaning the user cannot access the website without
   # confirming their account.
-  # config.allow_unconfirmed_access_for = 2.days
+  config.allow_unconfirmed_access_for = 7.days
 
   # A period that the user is allowed to confirm their account before their
   # token becomes invalid. For example, if set to 3.days, the user can confirm
@@ -183,12 +183,12 @@ Devise.setup do |config|
   # Email regex used to validate email formats. It simply asserts that
   # one (and only one) @ exists in the given string. This is mainly
   # to give user feedback and not to assert the e-mail validity.
-  config.email_regexp = /\A[^@\s]+@[^@\s]+\z/
+  config.email_regexp = URI::MailTo::EMAIL_REGEXP
 
   # ==> Configuration for :timeoutable
   # The time you want to timeout the user session without activity. After this
   # time the user will be asked for credentials again. Default is 30 minutes.
-  # config.timeout_in = 30.minutes
+  config.timeout_in = 24.hours
 
   # ==> Configuration for :lockable
   # Defines which strategy will be used to lock an account.
@@ -224,7 +224,7 @@ Devise.setup do |config|
   # Time interval you can reset your password with a reset password key.
   # Don't put a too small interval or your users won't have the time to
   # change their passwords.
-  config.reset_password_within = 6.hours
+  config.reset_password_within = 24.hours
 
   # When set to false, does not sign a user in automatically after their password is
   # reset. Defaults to true, so a user is signed in automatically after a reset.
@@ -272,6 +272,7 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
+  # NOTE: Configuring omniauth in config/initializers/omniauth.rb
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
@@ -310,4 +311,44 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+
+  # ==> Configuration for :magic_link_authenticatable
+
+  # Need to use a custom Devise mailer in order to send magic links.
+  # If you're already using a custom mailer just have it inherit from
+  # Devise::Passwordless::Mailer instead of Devise::Mailer
+  config.mailer = "Devise::Passwordless::Mailer"
+
+  # Which algorithm to use for tokenizing magic links. See README for descriptions
+  config.passwordless_tokenizer = "::LarCity::SignedGlobalIdTokenizer"
+
+  # Time period after a magic login link is sent out that it will be valid for.
+  # config.passwordless_login_within = 20.minutes
+
+  # The secret key used to generate passwordless login tokens. The default value
+  # is nil, which means defer to Devise's `secret_key` config value. Changing this
+  # key will render invalid all existing passwordless login tokens. You can
+  # generate your own secret value with e.g. `rake secret`
+  # config.passwordless_secret_key = nil
+
+  # When using the :trackable module, set to true to consider magic link tokens
+  # generated before the user's current sign in time to be expired. In other words,
+  # each time you sign in, all existing magic links will be considered invalid.
+  # config.passwordless_expire_old_tokens_on_sign_in = false
+
+  # ==> Configuration for Devise JWT
+  # Configure the expiration time of the JWT token.
+  config.jwt do |jwt|
+    jwt.secret = Rails.application.credentials.devise_jwt_secret_key!
+    # TODO: Test that the configuration of dispatches for JWT tokens
+    #   is working as expected. This could be done quickly with Insomnia.
+    jwt.dispatch_requests = [
+      ['POST', %r{^/users/sign_in$}]
+    ]
+    jwt.revocation_requests = [
+      ['DELETE', %r{^/users/sign_out$}]
+    ]
+    # Configure other JWT options as needed
+    # jwt.expiration_time = 1.day.to_i
+  end
 end

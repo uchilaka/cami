@@ -1,0 +1,26 @@
+---
+# Test your cron expression here: https://crontab.guru/
+# On job source, see: https://github.com/sidekiq-cron/sidekiq-cron?tab=readme-ov-file#schedule-vs-dynamic-jobs
+sync_paypal_products_job:
+  cron: '0 4 * * 6' # At 04:00 on Saturday
+  class: 'PayPal::SyncProductsJob'
+  source: schedule # default: dynamic
+  queue: yeet
+
+fetch_paypal_invoices_job:
+  cron: '0 18 * * 1-6' # At 18:00 from Monday to Saturday
+  class: 'PayPal::FetchInvoicesJob'
+  source: schedule # default: dynamic
+  queue: yeet
+
+upsert_invoice_records_job:
+  cron: '*/15 5-22 * * 1-6' # Every 15 minutes from 05:00 to 22:00 from Monday to Saturday
+  class: 'UpsertInvoiceRecordsJob'
+  source: schedule # default: dynamic
+  queue: whenever
+
+update_mailer_default_url_options_job:
+  cron: '*/5 6-22 * * *' # Every 5 minutes from 06:00 to 22:00 daily
+  class: 'UpdateMailerDefaultURLOptionsJob'
+  source: schedule # default: dynamic
+  queue: default

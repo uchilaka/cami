@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'sidekiq/api'
+
 # This class is intended to facilitate access to business related
 #   defaults and information with support for retrieving
 #   data from secure or encrypted sources.
@@ -13,6 +15,12 @@ class VirtualOfficeManager
 
     def hostname_is_nginx_proxy?
       /\.ngrok\.(dev|app)/.match?(hostname)
+    end
+
+    def job_queue_is_running?
+      scheduled_set = Sidekiq::ScheduledSet.new
+      job_stats = Sidekiq::Stats.new
+      scheduled_set.size > 0 || job_stats.enqueued > 0
     end
 
     def default_url_options
