@@ -20,7 +20,7 @@ module LarCity
     end
 
     def business_profile_param_keys
-      common_profile_param_keys
+      common_profile_param_keys - %i[email]
     end
 
     def individual_profile_param_keys
@@ -28,7 +28,7 @@ module LarCity
     end
 
     def common_profile_param_keys
-      %i[phone email]
+      %i[phone email country_alpha2]
     end
   end
 end

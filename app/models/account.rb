@@ -28,6 +28,7 @@ class Account < ApplicationRecord
 
   attribute :type, :string, default: 'Account'
   attribute :slug, :string, default: -> { SecureRandom.alphanumeric(4).downcase }
+  attribute :metadata, :jsonb, default: {}
 
   validates :display_name, presence: true
   validates :email, email: true, allow_nil: true

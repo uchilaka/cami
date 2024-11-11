@@ -12,11 +12,13 @@ class UserProfile
                 :phone_e164,
                 :phone_country
 
+  define_attribute_methods :image_url, :phone_e164, :phone_country
+
   def attributes
     {
-      image_url: nil,
-      phone_e164: nil,
-      phone_country: nil
+      'image_url' => nil,
+      'phone_e164' => nil,
+      'phone_country' => nil
     }
   end
 end

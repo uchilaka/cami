@@ -8,30 +8,46 @@ class PhoneNumber
   extend ActiveModel::Callbacks
   include ActiveModel::Dirty
 
-  attr_accessor :value, :full_e164, :full_international, :number_purpose, :number_type, :country
+  attr_accessor :value,
+                :full_e164,
+                :full_international,
+                :number_purpose,
+                :number_type,
+                :country,
+                :resource
 
-  # TODO: Figure out how to effectively validate the phone number
-  #   without breaking the ability to save "good enough" partially
-  #   validated records
-  # validates :number_purpose, allow_nil: true, inclusion: { in: %w[personal business other] }
-  # validates :number_type, allow_nil: true, inclusion: { in: :supported_types }
+  define_attribute_methods :value
+
+  def initialize(args = {})
+    super
+    @errors = ActiveModel::Errors.new(self)
+    clear_attribute_changes(%w[value country])
+  end
+
+  define_model_callbacks :save
+
   # Phonelib ActiveRecord integration:
   # https://github.com/daddyz/phonelib?tab=readme-ov-file#activerecord-integration
   validates :value,
             phone: { possible: true, allow_blank: false },
             if: :should_validate_possibility?
 
-  before_validation :parse_number_value_and_type
+  before_save :parse_number_value_and_type
 
-  def attributes
-    {
-      value: nil,
-      full_e164: nil,
-      full_international: nil,
-      number_purpose: nil,
-      number_type: nil,
-      country: nil
-    }
+  def save
+    if valid? && resource
+      run_callbacks(:save) do
+        resource[:phone] = serializable_hash.symbolize_keys
+        resource.save if resource.respond_to?(:save)
+      end
+    else
+      false
+    end
+  end
+
+  def update(attributes = {})
+    assign_attributes(attributes) if attributes
+    save
   end
 
   def should_validate_possibility?
@@ -52,6 +68,17 @@ class PhoneNumber
 
   def supported_types
     self.class.supported_types
+  end
+
+  def attributes
+    {
+      'value' => nil,
+      'full_e164' => nil,
+      'full_international' => nil,
+      'number_purpose' => nil,
+      'number_type' => nil,
+      'country' => nil
+    }
   end
 
   class << self
