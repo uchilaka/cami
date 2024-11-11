@@ -118,6 +118,9 @@ RSpec.configure do |config|
   config.include AbstractController::Translation, type: :view
   config.include AbstractController::Translation, type: :helper
 
+  # Sample phone numbers
+  config.include_context 'for phone number testing', real_world_data: true
+
   config.before(:suite) do
     # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example
     DatabaseCleaner[:active_record].strategy = :transaction

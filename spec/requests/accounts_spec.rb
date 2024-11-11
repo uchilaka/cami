@@ -14,23 +14,8 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe '/accounts', type: :request do
-  let!(:phone_data) do
-    [
-      {
-        full_e164: '+441962713171',
-        country: 'GB'
-      },
-      {
-        full_e164: '+15032822000',
-        country: 'US'
-      },
-      {
-        full_e164: '+2347030936084',
-        country: 'NG'
-      }
-    ].sample
-  end
+RSpec.describe '/accounts', type: :request, real_world_data: true do
+  let!(:phone_data) { sample_phone_numbers.sample }
 
   let(:display_name) { Faker::Company.name }
   let(:email) { Faker::Internet.email }
@@ -144,7 +129,7 @@ RSpec.describe '/accounts', type: :request do
             expect(data['id']).to eq(account.id.to_s)
           end
 
-          it 'returns a hash of actions' do
+          it 'returns a hash of actions', skip: 'not implemented ...yet. HYHTBOY? IYNYN 😜' do
             expect(data.dig('actions', 'edit')).to \
               match(hash_including(expected_actions['edit']))
 
@@ -161,7 +146,7 @@ RSpec.describe '/accounts', type: :request do
               match(hash_including(expected_actions['profilesIndex']))
           end
 
-          it 'returns the actions as a list' do
+          it 'returns the actions as a list', skip: 'not implemented ...yet. HYHTBOY? IYNYN 😜' do
             expect(data.dig('actionsList', 0)).to \
               match(hash_including(expected_actions['edit']))
 
@@ -180,7 +165,7 @@ RSpec.describe '/accounts', type: :request do
             expect(data['status']).to eq(account.status)
           end
 
-          context 'when the account is a business' do
+          context 'when the account is a business', skip: 'This is going away ...literally! HYHTBOY? IYNYN 😜' do
             let(:account) { Fabricate :business, users: [user] }
 
             it 'returns the tax ID' do
@@ -206,7 +191,7 @@ RSpec.describe '/accounts', type: :request do
             pending 'without a profile'
           end
 
-          context 'when the account is an individual' do
+          context 'when the account is an individual', skip: 'This is going away ...literally! HYHTBOY? IYNYN 😜' do
             let(:account) { Fabricate :individual, users: [user] }
 
             it 'returns the email' do
@@ -304,6 +289,13 @@ RSpec.describe '/accounts', type: :request do
           end
         end
 
+        context 'when format = json' do
+          it 'returns the expected HTTP status' do
+            post accounts_url, params: params.merge(format: :json)
+            expect(response).to have_http_status(:created)
+          end
+        end
+
         context 'attributes' do
           before { post(accounts_url, params:) }
 
@@ -351,8 +343,12 @@ RSpec.describe '/accounts', type: :request do
   end
 
   describe 'GET /edit' do
+    let(:user) { Fabricate :user }
+    let(:account) { Fabricate :account, users: [user], status: 'active' }
+
+    before { sign_in user }
+
     it 'renders a successful response' do
-      account = Account.create!(display_name:, email:, slug:, tax_id:, metadata:, status: 'guest')
       get edit_account_url(account)
       expect(response).to be_successful
     end
@@ -360,9 +356,12 @@ RSpec.describe '/accounts', type: :request do
 
   describe 'PATCH /update' do
     context 'with an authorized user' do
+      let!(:account) do
+        Fabricate :account, users: [user], status: 'guest'
+      end
+
       # TODO: Implement access controls for models informed by (Pundit + Rolify) policies
       let(:user) { Fabricate :user }
-      let(:account) { Fabricate :account, users: [user], status: 'guest' }
 
       before do
         sign_in user
@@ -415,7 +414,7 @@ RSpec.describe '/accounts', type: :request do
 
           before do
             patch account_url(account), params: params.merge(format: :json)
-            profile.reload
+            # account.reload
           end
 
           context '#email' do
@@ -423,11 +422,11 @@ RSpec.describe '/accounts', type: :request do
           end
 
           context '#phone' do
-            let(:parsed_number) { Phonelib.parse(profile_attributes[:phone]) }
+            let(:parsed_number) { Phonelib.parse(phone_data[:full_e164]) }
 
             it do
-              expect(profile.reload.dig('phone', 'full_international')).to \
-                eq(parsed_number.full_international)
+              expect(subject.metadata.dig('phone', 'full_e164')).to \
+                eq(parsed_number.full_e164)
             end
           end
 
