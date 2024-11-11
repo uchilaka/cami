@@ -2,7 +2,7 @@
 #
 # Table name: roles
 #
-#  id            :bigint           not null, primary key
+#  id            :uuid             not null, primary key
 #  name          :string
 #  resource_type :string
 #  created_at    :datetime         not null
