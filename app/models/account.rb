@@ -41,6 +41,10 @@ class Account < ApplicationRecord
 
   has_rich_text :readme
 
+  def assign_default_role
+    add_role(:owner, Current.user) unless Current.user.nil? || Current.user.admin?
+  end
+
   def primary_users_confirmed?
     # TODO: Check that all primary users have confirmed their email addresses
     true

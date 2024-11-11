@@ -6,18 +6,18 @@ class CreateAccountWorkflow
 
   # TODO: Include asserting the authorized account
   #   via Current.user
-  # (params:, account_params:, profile_params:)
+  # (params:, account_params:, profile_params:, current_user:)
   def call
     create_params = compose_create_params(context.params)
     account = Account.new(create_params)
     profile_params =
-      if account.is_a?(Business)
-        context.params.slice(*business_profile_param_keys)
-      else
-        context.params.slice(*individual_profile_param_keys)
-      end.to_h.symbolize_keys
+      context
+        .params
+        .slice(*business_profile_param_keys)
+        .to_h.symbolize_keys
     account.save
-    context.fail!(message: account.errors.full_messages) if account.errors.any?
+    context.fail!(messages: account.errors.full_messages) if account.errors.any?
+
     if context.success? && profile_params.present?
       input_number = profile_params.delete(:phone)
       profile_params[:phone] = PhoneNumber.new(value: input_number) if input_number.present?
@@ -28,7 +28,7 @@ class CreateAccountWorkflow
         context.profile = Metadata::Profile.new(profile_params)
       end
       context.profile.update(profile_params)
-      context.fail!(message: context.profile.errors.full_messages) if context.profile.errors.any?
+      context.fail!(messages: context.profile.errors.full_messages) if context.profile.errors.any?
     end
     context.account = account
   end

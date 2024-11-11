@@ -38,6 +38,8 @@ RSpec.describe UpsertUserFromOmniauthWorkflow, type: :workflow do
         expect { subject }.to change { User.count }.by(0).and \
           change { IdentityProviderProfile.count }.by(1)
       end
+
+      it { is_expected.to be_a_success }
     end
 
     context 'with a matching identity provider profile' do
@@ -50,13 +52,35 @@ RSpec.describe UpsertUserFromOmniauthWorkflow, type: :workflow do
           Fabricate(:user_with_provider_profiles, email:, providers: [provider], uids: { provider => uid })
         end
 
+        it { is_expected.to be_a_success }
+
         it do
           expect { subject }.to change { User.count }.by(0).and \
             change { IdentityProviderProfile.count }.by(0)
         end
       end
 
-      pending 'but a different token uid'
+      context 'but a different token uid' do
+        let(:uid) { SecureRandom.alphanumeric(21) }
+
+        let!(:user) do
+          Fabricate(:user_with_provider_profiles, email:, providers: [provider], uids: { provider => 'something_else' })
+        end
+
+        it do
+          expect { subject }.to change { User.count }.by(0).and \
+            change { IdentityProviderProfile.count }.by(0)
+        end
+
+        it { is_expected.to be_a_failure }
+
+        it 'adds an error message' do
+          result = subject
+          expect(result.user.errors.full_messages).to include(
+            I18n.t('workflows.upsert_user_from_omniauth.errors.token_conflict', provider:, context: 'for [uid]')
+          )
+        end
+      end
     end
   end
 
@@ -65,6 +89,8 @@ RSpec.describe UpsertUserFromOmniauthWorkflow, type: :workflow do
       expect { subject }.to change { User.count }.by(1).and \
         change { IdentityProviderProfile.count }.by(1)
     end
+
+    it { is_expected.to be_a_success }
   end
 
   pending 'when the token is not verified'

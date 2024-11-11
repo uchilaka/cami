@@ -34,7 +34,12 @@ class UpsertUserFromOmniauthWorkflow
     provider_profile ||= IdentityProviderProfile.new(provider_profile_attrs)
 
     # Fail the account setup if an existing profile is found for this provider with a different UID
-    context.fail!(message: 'Identity provider access token mismatch: UID') if provider_profile.uid != uid
+    if provider_profile.uid != uid
+      error_message =
+        I18n.t('workflows.upsert_user_from_omniauth.errors.token_conflict', provider:, context: 'for [uid]')
+      user.errors.add(:base, error_message)
+      context.fail!(messages: [error_message])
+    end
 
     return unless context.success?
 
