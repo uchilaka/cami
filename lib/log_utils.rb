@@ -29,7 +29,7 @@ module LogUtils
 
     def log_path
       log_path = Rails.root.join('log', Time.now.strftime('%Y-%m-%d')).to_s
-      FileUtils.mkdir_p(log_path) unless Dir.exist?(log_path)
+      FileUtils.mkdir_p(log_path)
       log_path
     end
 

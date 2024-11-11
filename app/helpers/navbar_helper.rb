@@ -133,7 +133,7 @@ module NavbarHelper
     return true if item[:public]
 
     # Optionally compose feature flag for menu item
-    item[:feature_flag] ||= "feat__#{item[:label].to_s.parameterize(separator: '_')}".to_sym
+    item[:feature_flag] ||= :"feat__#{item[:label].to_s.parameterize(separator: '_')}"
     return Flipper.enabled?(item[:feature_flag]) if current_user.blank?
 
     # Check if feature flag is enabled for current user

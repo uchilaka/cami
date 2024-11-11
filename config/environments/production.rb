@@ -74,7 +74,7 @@ Rails.application.configure do
   config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'info')
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  config.log_formatter = Logger::Formatter.new
 
   # Use a different logger for distributed setups.
   # require "syslog/logger"
@@ -83,8 +83,8 @@ Rails.application.configure do
   if ENV['RAILS_LOG_TO_STDOUT'].present?
     # Log to STDOUT by default
     config.logger = ActiveSupport::Logger.new($stdout)
-                                         .tap  { |logger| logger.formatter = Logger::Formatter.new }
-                                         .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
+                      .tap  { |logger| logger.formatter = Logger::Formatter.new }
+                      .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
   end
 
   # Use a different cache store in production.
