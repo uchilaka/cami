@@ -82,6 +82,7 @@ class User < ApplicationRecord
   # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
   has_person_name
 
+  has_many :invoices, as: :invoiceable, dependent: :nullify
   has_many :identity_provider_profiles, dependent: :destroy
   has_and_belongs_to_many :accounts, join_table: 'accounts_users'
 

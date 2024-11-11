@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_11_040052) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_11_062944) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -68,6 +68,27 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_040052) do
     t.index ["uid", "provider"], name: "index_identity_provider_profiles_on_uid_and_provider", unique: true
     t.index ["user_id", "provider"], name: "index_identity_provider_profiles_on_user_id_and_provider", unique: true
     t.index ["user_id"], name: "index_identity_provider_profiles_on_user_id"
+  end
+
+  create_table "invoices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "invoiceable_type"
+    t.uuid "invoiceable_id"
+    t.jsonb "payments"
+    t.jsonb "links"
+    t.datetime "updated_accounts_at", precision: nil
+    t.string "invoice_number"
+    t.integer "status"
+    t.datetime "issued_at", precision: nil
+    t.datetime "due_at", precision: nil
+    t.datetime "paid_at", precision: nil
+    t.decimal "amount", precision: 10, scale: 2
+    t.decimal "due_amount", precision: 10, scale: 2
+    t.string "currency_code"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invoiceable_type", "invoiceable_id"], name: "index_invoices_on_invoiceable"
+    t.index ["invoiceable_type", "invoiceable_id"], name: "index_invoices_on_invoiceable_type_and_invoiceable_id"
   end
 
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -15,7 +15,8 @@ Here's sample code used in setting up the scaffolding for the core features of t
 ## Accounts
 
 ```shell
-bin/rails g scaffold accounts display_name:string slug:string status:integer type:string tax_id:string readme:text --force
+bin/rails g scaffold accounts display_name:string slug:string status:integer \
+  type:string tax_id:string readme:text --force
 ```
 
 ### Scaffolding output (dry-run)
@@ -72,8 +73,7 @@ bin/rails g scaffold invoices \
     viewed_by_recipient_at:timestamp updated_accounts_at:timestamp \
     invoice_number:string status:integer issued_at:timestamp \
     due_at:timestamp paid_at:timestamp amount:decimal{10-2} \
-    due_amount:decimal{10,2} currency_code:string notes:text \
-    --skip --pretend
+    due_amount:decimal{10-2} currency_code:string notes:text --skip
 ```
 
 ### Scaffolding output (dry-run)
