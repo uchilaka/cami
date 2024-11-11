@@ -144,6 +144,8 @@ group :test do
   gem 'climate_control'
 end
 
+gem 'paper_trail', '~> 15.2'
+
 # Flexible authentication solution for Rails with Warden https://github.com/heartcombo/devise
 gem 'devise'
 

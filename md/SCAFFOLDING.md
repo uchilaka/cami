@@ -66,12 +66,16 @@ bin/rails g scaffold accounts --skip \
 
 ## Invoices
 
+We will need to manually setup JSONB fields for `payments`, `links`
+
 ```shell
 bin/rails g scaffold invoices --skip --pretend \
     invoiceable_id:uuid invoiceable_type:string \
     account:references user:references payment:references \
-    invoice_number:string status:integer issued_at:date \
-    due_at:date amount:decimal{10-2} currency:string notes:text
+    viewed_by_recipient_at:timestamp updated_accounts_at:timestamp \
+    invoice_number:string status:integer issued_at:timestamp \
+    due_at:timestamp paid_at:timestamp amount:decimal{10-2} \
+    due_amount:decimal{10,2} currency:string notes:text
 ```
 
 ### Scaffolding output (dry-run)
