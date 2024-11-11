@@ -11,8 +11,8 @@ class UpdateUserProfileWorkflow
     profile.reverse_merge!(UserProfile.new)
     profile_params =
       (context.profile_params.slice(*individual_profile_param_keys) if context.profile_params.present?)
-
-    return unless profile_params.present?
+    context.fail!(messages: ['No profile parameters provided']) unless profile_params.present?
+    return unless context.success?
 
     # TODO: Improve this logic to allow for updating the email address on
     #   a profile if a User does not exist for it - otherwise, profile emails
