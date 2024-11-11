@@ -54,20 +54,19 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_040052) do
 
   create_table "identity_provider_profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false
-    t.string "provider_name"
-    t.boolean "verified", default: false
+    t.string "uid"
+    t.string "provider"
     t.string "email"
-    t.string "unverified_email"
-    t.boolean "email_verified"
+    t.boolean "verified", default: false
     t.string "given_name", default: ""
     t.string "family_name", default: ""
     t.string "display_name"
     t.string "image_url"
-    t.datetime "confirmation_sent_at", precision: nil
     t.jsonb "metadata", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id", "provider_name"], name: "index_identity_provider_profiles_on_user_id_and_provider_name", unique: true
+    t.index ["uid", "provider"], name: "index_identity_provider_profiles_on_uid_and_provider", unique: true
+    t.index ["user_id", "provider"], name: "index_identity_provider_profiles_on_user_id_and_provider", unique: true
     t.index ["user_id"], name: "index_identity_provider_profiles_on_user_id"
   end
 
@@ -84,7 +83,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_040052) do
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "given_name"
     t.string "family_name"
-    t.jsonb "metadata", default: {}
+    t.jsonb "profile", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", default: "", null: false

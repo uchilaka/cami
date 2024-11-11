@@ -3,7 +3,7 @@ class CreateUsers < ActiveRecord::Migration[7.2]
     create_table :users, id: :uuid do |t|
       t.string :given_name
       t.string :family_name
-      t.jsonb :metadata, default: {}
+      t.jsonb :profile, default: {}
 
       t.timestamps
     end

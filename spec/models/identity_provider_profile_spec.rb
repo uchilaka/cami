@@ -2,26 +2,25 @@
 #
 # Table name: identity_provider_profiles
 #
-#  id                   :uuid             not null, primary key
-#  confirmation_sent_at :datetime
-#  display_name         :string
-#  email                :string
-#  email_verified       :boolean
-#  family_name          :string           default("")
-#  given_name           :string           default("")
-#  image_url            :string
-#  metadata             :jsonb
-#  provider_name        :string
-#  unverified_email     :string
-#  verified             :boolean          default(FALSE)
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  user_id              :uuid             not null
+#  id           :uuid             not null, primary key
+#  display_name :string
+#  email        :string
+#  family_name  :string           default("")
+#  given_name   :string           default("")
+#  image_url    :string
+#  metadata     :jsonb
+#  provider     :string
+#  uid          :string
+#  verified     :boolean          default(FALSE)
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  user_id      :uuid             not null
 #
 # Indexes
 #
-#  index_identity_provider_profiles_on_user_id                    (user_id)
-#  index_identity_provider_profiles_on_user_id_and_provider_name  (user_id,provider_name) UNIQUE
+#  index_identity_provider_profiles_on_uid_and_provider      (uid,provider) UNIQUE
+#  index_identity_provider_profiles_on_user_id               (user_id)
+#  index_identity_provider_profiles_on_user_id_and_provider  (user_id,provider) UNIQUE
 #
 # Foreign Keys
 #
