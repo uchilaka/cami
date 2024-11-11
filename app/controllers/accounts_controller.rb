@@ -1,14 +1,17 @@
 class AccountsController < ApplicationController
-  before_action :set_account, only: %i[ show edit update destroy ]
+  include MaybeAccountSpecific
+
+  load_account %i[show edit update destroy]
+
+  # before_action :set_account, only: %i[ show edit update destroy ]
 
   # GET /accounts or /accounts.json
   def index
-    @accounts = Account.all
+    @accounts = policy_scope(Account)
   end
 
   # GET /accounts/1 or /accounts/1.json
-  def show
-  end
+  def show; end
 
   # GET /accounts/new
   def new
@@ -16,8 +19,7 @@ class AccountsController < ApplicationController
   end
 
   # GET /accounts/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /accounts or /accounts.json
   def create
@@ -36,6 +38,13 @@ class AccountsController < ApplicationController
 
   # PATCH/PUT /accounts/1 or /accounts/1.json
   def update
+    result =
+      UpdateAccountWorkflow.call(
+        account_params: update_params[:account],
+        profile_params: update_params[:profile],
+        current_user:,
+        account:
+      )
     respond_to do |format|
       if @account.update(account_params)
         format.html { redirect_to @account, notice: "Account was successfully updated." }
@@ -58,13 +67,33 @@ class AccountsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_account
-      @account = Account.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def account_params
-      params.require(:account).permit(:display_name, :slug, :status, :type, :tax_id, :readme)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+
+  # TODO: Refactor the :create action to expect :account_params
+  #   and :profile_params discretely from the frontend
+  def create_account_params
+    params
+      .require(:account)
+      .permit(:slug, :display_name, :readme, :status, :tax_id, :type)
+  end
+
+  def create_profile_params
+    params.permit(profile: create_profile_param_keys)[:profile]
+  end
+
+  def create_profile_param_keys
+    (individual_profile_param_keys + business_profile_param_keys).uniq
+  end
+
+  def update_params
+    params.permit(
+      account: update_account_param_keys,
+      profile: create_profile_param_keys
+    )
+  end
+
+  def update_account_param_keys
+    %i[display_name readme status tax_id]
+  end
 end
