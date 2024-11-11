@@ -144,6 +144,7 @@ group :test do
   gem 'climate_control'
 end
 
+# Track changes to your models https://github.com/paper-trail-gem/paper_trail
 gem 'paper_trail', '~> 15.2'
 
 # Flexible authentication solution for Rails with Warden https://github.com/heartcombo/devise

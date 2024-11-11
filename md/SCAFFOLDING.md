@@ -15,8 +15,7 @@ Here's sample code used in setting up the scaffolding for the core features of t
 ## Accounts
 
 ```shell
-bin/rails g scaffold accounts --skip \
-  display_name:string slug:string status:integer type:string tax_id:string readme:text
+bin/rails g scaffold accounts display_name:string slug:string status:integer type:string tax_id:string readme:text --force
 ```
 
 ### Scaffolding output (dry-run)
@@ -66,16 +65,15 @@ bin/rails g scaffold accounts --skip \
 
 ## Invoices
 
-We will need to manually setup JSONB fields for `payments`, `links`
-
 ```shell
-bin/rails g scaffold invoices --skip --pretend \
+bin/rails g scaffold invoices \
     invoiceable_id:uuid invoiceable_type:string \
-    account:references user:references payment:references \
+    account:references user:references payments:jsonb links:jsonb \
     viewed_by_recipient_at:timestamp updated_accounts_at:timestamp \
     invoice_number:string status:integer issued_at:timestamp \
     due_at:timestamp paid_at:timestamp amount:decimal{10-2} \
-    due_amount:decimal{10,2} currency:string notes:text
+    due_amount:decimal{10,2} currency_code:string notes:text \
+    --skip --pretend
 ```
 
 ### Scaffolding output (dry-run)
