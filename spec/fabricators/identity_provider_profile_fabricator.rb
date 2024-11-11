@@ -29,6 +29,7 @@
 #  fk_rails_...  (user_id => users.id)
 Fabricator(:identity_provider_profile) do
   uid                  { SecureRandom.alphanumeric(21) }
+  # user                 { Fabricate(:user) }
   provider             'whatsapp'
   verified              false
   email                { Faker::Internet.email }

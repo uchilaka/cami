@@ -33,6 +33,11 @@ class UpsertUserFromOmniauthWorkflow
       (user.identity_provider_profiles.find_by(provider: provider) if user.persisted?)
     provider_profile ||= IdentityProviderProfile.new(provider_profile_attrs)
 
+    # Fail the account setup if an existing profile is found for this provider with a different UID
+    context.fail!(message: 'Identity provider access token mismatch: UID') if provider_profile.uid != uid
+
+    return unless context.success?
+
     User.transaction do
       # TODO: Update the customers array of providers after they are re-confirmed
       #   when a new auth provider is detected
@@ -47,7 +52,7 @@ class UpsertUserFromOmniauthWorkflow
     provider_profile.save if provider_profile.changed?
 
     # All good?
-    context.fail!(error: provider_profile.errors.full_messages) \
+    context.fail!(messages: provider_profile.errors.full_messages) \
       if provider_profile.errors.any?
   ensure
     context.user = user

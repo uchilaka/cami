@@ -15,20 +15,17 @@ Fabricator(:user) do
       phone_country: phone_number.country
     }
   end
-
-  after_build do |attrs|
-    Fabricate.build(:identity_provider_profile, user_id: attrs.id)
-  end
 end
 
 Fabricator(:user_with_provider_profiles, from: :user) do
   providers   { ['google'] }
   uids        { { 'google' => SecureRandom.alphanumeric(21) } }
 
-  after_create do |attrs|
-    attrs['providers'].map do |provider|
-      uid = attrs.uids[provider] || SecureRandom.alphanumeric(21)
-      Fabricate(:identity_provider_profile, uid:, user_id: attrs.id, provider:)
+  after_create do |user|
+    user.providers.each do |provider|
+      user.uids[provider] ||= SecureRandom.alphanumeric(21)
+      Fabricate(:identity_provider_profile, uid: user.uids[provider], user:, provider:)
+      user.save!
     end
   end
 end
