@@ -41,10 +41,10 @@ module NavbarHelper
         label: t('shared.navbar.dashboard'),
         path: pages_dashboard_path
       },
-      # {
-      #   label: t('shared.navbar.invoices'),
-      #   path: invoices_path
-      # },
+      {
+        label: t('shared.navbar.invoices'),
+        path: invoices_path
+      },
       {
         label: t('shared.navbar.accounts'),
         path: accounts_path
