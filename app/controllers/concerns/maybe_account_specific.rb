@@ -70,7 +70,7 @@ module MaybeAccountSpecific
 
   def action_options(opts = {}, action_name: nil)
     opts.reverse_merge!(
-      optional: !%i[show edit update].include?(action_name.to_s.to_sym),
+      optional: !%w[show edit update].include?(action_name.to_s),
       bounce_to: :root_path,
       # NOTE: The order here is important! Ensure that you configure
       #   the more specific key that first when this option is customized.
