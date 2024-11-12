@@ -79,7 +79,7 @@ RSpec.configure do |config|
   # config.clone_wait_matcher = true
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = Rails.root.join('spec/fixtures')
+  config.fixture_path = [Rails.root.join('spec/fixtures')]
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -117,6 +117,9 @@ RSpec.configure do |config|
   # Internationalization guide: https://guides.rubyonrails.org/i18n.html
   config.include AbstractController::Translation, type: :view
   config.include AbstractController::Translation, type: :helper
+
+  # Sample phone numbers
+  config.include_context 'for phone number testing', real_world_data: true
 
   config.before(:suite) do
     # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example

@@ -5,7 +5,7 @@ require 'sidekiq/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
-  # resources :invoices
+  resources :accounts
 
   devise_for :users,
              controllers: {

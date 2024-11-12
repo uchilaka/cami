@@ -31,6 +31,11 @@ interface UserProfile {
   phone?: string
 }
 
+interface RichText {
+  html: string
+  plaintext: string
+}
+
 export interface Account {
   id: string
   displayName: string
@@ -40,7 +45,7 @@ export interface Account {
   actions: Record<ActionKey, AccountAction>
   invoices: Invoice[]
   email?: string
-  readme?: string
+  readme?: RichText
 }
 
 export interface IndividualAccount extends Account {

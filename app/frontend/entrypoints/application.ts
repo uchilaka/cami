@@ -10,7 +10,7 @@ import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import Home from '@views/Home'
 import Dashboard from '@views/Dashboard'
-// import AccountSummaryModal from '@/features/AccountManager/AccountSummaryModal'
+import AccountSummaryModal from '@/features/AccountManager/AccountSummaryModal'
 
 function mountIfContainerIsLoaded(containerId: string, Component: any) {
   const domContainer = document.querySelector(`#${containerId}`)
@@ -27,5 +27,5 @@ document.addEventListener('turbo:load', () => {
   console.debug('DOM fully loaded and parsed')
   mountIfContainerIsLoaded('home', Home)
   mountIfContainerIsLoaded('dashboard', Dashboard)
-  // mountIfContainerIsLoaded('account-summary-modal-container', AccountSummaryModal)
+  mountIfContainerIsLoaded('account-summary-modal-container', AccountSummaryModal)
 })

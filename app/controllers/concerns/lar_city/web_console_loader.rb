@@ -1,13 +1,8 @@
 # frozen_string_literal: true
 
 module LarCity
-  module WebConsole
+  module WebConsoleLoader
     extend ActiveSupport::Concern
-
-    included do
-      before_action :initialize_web_console, only: supported_actions
-    end
-
     module ClassMethods
       def load_console(actions = supported_actions, options = {})
         [*actions].flatten.each { |action| authorized_actions[action] = options }

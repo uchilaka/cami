@@ -9,6 +9,16 @@ require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
+  Dotenv.load(*%w[.env.test .env].select do |file|
+    File.exist?(file)
+  end)
+
+  # https://github.com/heartcombo/devise?tab=readme-ov-file#testing
+  config.middleware.insert_before Warden::Manager, ActionDispatch::Cookies
+  config.middleware.insert_before Warden::Manager, ActionDispatch::Session::CookieStore
+
+  # Turn false under Spring and add config.action_view.cache_template_loading = true.
+  config.cache_classes = true
 
   # While tests run files are not watched, reloading is not necessary.
   config.enable_reloading = false
@@ -47,7 +57,7 @@ Rails.application.configure do
 
   # Unlike controllers, the mailer instance doesn't have any context about the
   # incoming request so you'll need to provide the :host parameter yourself.
-  config.action_mailer.default_url_options = { host: 'www.example.com' }
+  config.action_mailer.default_url_options = { host: 'accounts.larcity.test', port: ENV.fetch('PORT') }
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr

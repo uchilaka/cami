@@ -122,10 +122,14 @@ Rails.application.configure do
   config.active_record.migration_error = :page_load
 
   # Highlight code that triggered database queries in logs.
-  config.active_record.verbose_query_logs = true
+  # For more on configuring active record query logs:
+  # https://api.rubyonrails.org/classes/ActiveRecord/QueryLogs.html
+  config.active_record.verbose_query_logs =
+    AppUtils.yes?(ENV.fetch('ENV_VERBOSE_QUERY_LOGS', 'no'))
 
   # Highlight code that enqueued background job in logs.
-  config.active_job.verbose_enqueue_logs = true
+  config.active_job.verbose_enqueue_logs =
+    AppUtils.yes?(ENV.fetch('ENV_VERBOSE_ENQUEUE_LOGS', 'no'))
 
   # Suppress logger output for asset requests.
   config.assets.quiet = true
