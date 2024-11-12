@@ -26,4 +26,10 @@ class UpdateUserProfileWorkflow
   ensure
     context.current_user = current_user.reload
   end
+
+  class << self
+    def allowed_parameter_keys
+      %i[image_url family_name given_name phone email country_alpha2]
+    end
+  end
 end

@@ -85,7 +85,7 @@ class AccountsController < ApplicationController
   def create_account_params
     params
       .require(:account)
-      .permit(:slug, :display_name, :email, :readme, :status, :tax_id, :type, :phone)
+      .permit(*CreateAccountWorkflow.allowed_parameter_keys)
   end
 
   def create_profile_params

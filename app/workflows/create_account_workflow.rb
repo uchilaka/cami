@@ -48,17 +48,13 @@ class CreateAccountWorkflow
     return unless context.success?
 
     # Calculate profile params. This is a bit of a mess and should be refactored.
-    profile_params =
+    source_profile_params =
       if context.profile_params.present?
-        context
-          .profile_params
-          .to_h.symbolize_keys
+        context.profile_params
       elsif context.params.present?
-        context
-          .params
-          .slice(*business_profile_param_keys)
-          .to_h.symbolize_keys
+        context.params.to_h.symbolize_keys.slice(*business_profile_param_keys)
       end
+    profile_params = source_profile_params.to_h.symbolize_keys
     # Save profile params to metadata
     account.metadata = account.metadata.merge(profile_params) \
       if profile_params.present?

@@ -4,6 +4,7 @@ module LarCity
   module ProfileParameterUtils
     extend ActiveSupport::Concern
 
+    # @deprecated Use the CreateAccountWorkflow, UpdateAccountWorkflow or UpdateUserProfileWorkflow interceptors instead
     def compose_create_params(request_params)
       raise ArgumentError, 'request_params must be a Hash' \
         unless supported_input?(request_params)
@@ -19,10 +20,12 @@ module LarCity
       false
     end
 
+    # @deprecated Use the CreateAccountWorkflow.allowed_parameter_keys class method instead
     def business_profile_param_keys
       common_profile_param_keys - %i[email]
     end
 
+    # @deprecated Use the UpdateUserProfileWorkflow.allowed_parameter_keys class method instead
     def individual_profile_param_keys
       common_profile_param_keys + %i[image_url family_name given_name]
     end

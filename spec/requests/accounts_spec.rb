@@ -21,7 +21,7 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
   let(:email) { Faker::Internet.email }
   let(:slug) { Faker::Internet.slug }
   let(:tax_id) { Faker::Company.swedish_organisation_number }
-  let(:metadata) { { 'key' => 'value' } }
+  let(:metadata) { { 'echo' => 'ack' } }
   let(:readme) { Faker::Lorem.paragraph }
 
   # This should return the minimal set of attributes required to create a valid
@@ -363,11 +363,19 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
       let!(:current_phone_data) { Phonelib.parse('+2347129248348', 'NG') }
       let!(:account) do
         Fabricate :account,
+                  phone: {
+                    full_e164: current_phone_data.full_e164,
+                    country: current_phone_data.country
+                  },
                   metadata: {
-                    phone: {
-                      full_e164: current_phone_data.full_e164,
-                      country: 'NG'
-                    }
+                    marco: 'polo',
+                    address: {
+                      street: '123 Main St',
+                      city: 'Anytown',
+                      state: 'AS',
+                      postal_code: '12345'
+                    },
+                    country_alpha2: current_phone_data.country
                   },
                   users: [user],
                   status: 'guest'
