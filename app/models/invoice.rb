@@ -28,5 +28,14 @@
 #  index_invoices_on_invoiceable_type_and_invoiceable_id  (invoiceable_type,invoiceable_id)
 #
 class Invoice < ApplicationRecord
-  belongs_to :invoiceable, polymorphic: true
+  resourcify
+
+  # belongs_to :invoiceable, polymorphic: true
+  belongs_to :customer, lambda { |_y|
+    where('roles.name = ?', 'customer')
+  }, through: :roles, source: :resource, class_name: 'Account', source_type: 'Account'
+
+  has_and_belongs_to_many :contacts, lambda { |_x|
+    where('roles.name = ?', 'contact')
+  }, class_name: 'User', through: :roles, source: :resource, source_type: 'User'
 end

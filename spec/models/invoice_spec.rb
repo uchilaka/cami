@@ -30,5 +30,11 @@
 require 'rails_helper'
 
 RSpec.describe Invoice, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe '#customer' do
+    pending 'can be accessed via "customer" role on account'
+  end
+
+  describe '#contacts' do
+    pending 'can be accessed via "contact" role on users'
+  end
 end

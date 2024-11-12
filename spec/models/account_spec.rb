@@ -79,12 +79,24 @@ RSpec.describe Account, type: :model do
     end
   end
 
-  describe '#users' do
+  describe '#invoices' do
+    let(:account) { Fabricate :account }
+    let(:invoice) { Fabricate :invoice }
+
+    pending 'can be accessed via "customer" role'
+  end
+
+  describe '#members' do
     let(:account) { Fabricate :account }
     let(:user) { Fabricate :user }
 
-    before do
-      account.users << user
-    end
+    pending 'can be listed via "member" role'
+  end
+
+  describe '#owners' do
+    let(:account) { Fabricate :account }
+    let(:user) { Fabricate :user }
+
+    pending 'can be listed via "owner" role'
   end
 end
