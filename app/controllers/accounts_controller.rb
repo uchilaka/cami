@@ -43,9 +43,9 @@ class AccountsController < ApplicationController
         format.html { redirect_to account_url(@account), notice: 'Account was successfully created.' }
         format.json { render :show, status: :created, location: @account }
       else
-        format.html { render :new, status: :unprocessable_content }
+        format.html { render :new, status: :bad_request }
         format.json do
-          render status: :unprocessable_content, json: { account: result.account&.errors }
+          render status: :bad_request, json: { account: result.account&.errors }
         end
       end
     end
@@ -64,9 +64,9 @@ class AccountsController < ApplicationController
         format.html { redirect_to account_url(@account), notice: 'Account was successfully created.' }
         format.json { render :show, status: :ok, location: @account }
       else
-        format.html { render :new, status: :unprocessable_content }
+        format.html { render :new, status: :bad_request }
         format.json do
-          render status: :unprocessable_content, json: { account: result.account&.errors }
+          render status: :bad_request, json: { account: result.account&.errors }
         end
       end
     end

@@ -21,10 +21,10 @@ require 'phonelib'
 Fabricator(:account) do
   transient             :phone_number
   transient             :country_alpha2
-  # transient :users
+  transient             :users
 
   display_name          { Faker::Company.name }
-  users                 { [Fabricate(:user)] }
+  # users                 { [Fabricate(:user)] }
   slug                  { SecureRandom.alphanumeric(4).downcase }
   tax_id                { Faker::Company.ein }
   type                  'Account'
@@ -46,13 +46,13 @@ Fabricator(:account) do
 
   # TODO: Should not need to handle users transiently, since active record
   #   should just work when the users array argument is provided 🤞🏾
-  # after_build do |account, transients|
-  #   if transients[:users].is_a?(Array)
-  #     transients[:users].each do |user|
-  #       account.users << user
-  #     end
-  #   end
-  # end
+  after_create do |account, transients|
+    if transients[:users].is_a?(Array)
+      transients[:users].each do |user|
+        account.users << user
+      end
+    end
+  end
 end
 
 Fabricator(:account_with_invoices, from: :account) do

@@ -76,4 +76,10 @@ module AccountsHelper
       }
     end
   end
+
+  def account_status_options
+    Account.defined_enums['status'].map do |status, _|
+      [status.titleize, status]
+    end
+  end
 end

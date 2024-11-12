@@ -13,7 +13,7 @@
 
   <div class="my-5">
     <%= form.label :status %>
-    <%= form.number_field :status, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.select(:status, options_for_select(account_status_options), class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full") %>
   </div>
 
   <div class="my-5">
