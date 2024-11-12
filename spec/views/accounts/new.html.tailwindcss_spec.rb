@@ -23,11 +23,11 @@ RSpec.describe "accounts/new", type: :view do
 
       assert_select "input[name=?]", "account[status]"
 
-      assert_select "input[name=?]", "account[type]"
-
       assert_select "input[name=?]", "account[tax_id]"
 
-      assert_select "textarea[name=?]", "account[readme]"
+      assert_select 'trix-editor#account_readme'
+
+      assert_select 'input[type="hidden"][name=?]', 'account[readme]'
     end
   end
 end
