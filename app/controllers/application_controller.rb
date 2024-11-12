@@ -2,7 +2,7 @@
 
 class ApplicationController < ActionController::Base
   include LarCity::CurrentAttributes
-  include LarCity::WebConsole
+  include LarCity::WebConsoleLoader
   include Pundit::Authorization
 
   before_action :set_paper_trail_whodunnit

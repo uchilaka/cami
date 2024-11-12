@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # 20241111040052_create_identity_provider_profiles.rb
 class CreateIdentityProviderProfiles < ActiveRecord::Migration[7.2]
   def change
@@ -23,6 +21,9 @@ class CreateIdentityProviderProfiles < ActiveRecord::Migration[7.2]
               unique: true, if_not_exists: true
     add_index :identity_provider_profiles,
               %i[uid provider],
+              unique: true, if_not_exists: true
+    add_index :identity_provider_profiles,
+              %i[email provider],
               unique: true, if_not_exists: true
   end
 end

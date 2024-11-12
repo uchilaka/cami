@@ -38,11 +38,6 @@ module NavbarHelper
         public: true
       },
       {
-        label: t('shared.navbar.about'),
-        path: '/app/about',
-        public: true
-      },
-      {
         label: t('shared.navbar.dashboard'),
         path: pages_dashboard_path
       },
@@ -50,10 +45,10 @@ module NavbarHelper
       #   label: t('shared.navbar.invoices'),
       #   path: invoices_path
       # },
-      # {
-      #   label: t('shared.navbar.accounts'),
-      #   path: accounts_path
-      # },
+      {
+        label: t('shared.navbar.accounts'),
+        path: accounts_path
+      },
       # {
       #   label: t('shared.navbar.services'),
       #   path: services_path
@@ -64,6 +59,11 @@ module NavbarHelper
       #   label: t('shared.navbar.products'),
       #   path: products_path
       # },
+      {
+        label: t('shared.navbar.about'),
+        path: '/app/about',
+        public: true
+      },
     ].map { |item| build_menu_item(item) }.filter(&:enabled)
   end
 

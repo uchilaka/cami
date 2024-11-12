@@ -20,6 +20,7 @@
 #
 # Indexes
 #
+#  index_identity_provider_profiles_on_email_and_provider    (email,provider) UNIQUE
 #  index_identity_provider_profiles_on_uid_and_provider      (uid,provider) UNIQUE
 #  index_identity_provider_profiles_on_user_id               (user_id)
 #  index_identity_provider_profiles_on_user_id_and_provider  (user_id,provider) UNIQUE
@@ -29,16 +30,19 @@
 #  fk_rails_...  (user_id => users.id)
 #
 Fabricator(:identity_provider_profile) do
-  user                 nil
-  provider_name        'MyString'
-  verified             false
-  email                'MyString'
-  unverified_email     'MyString'
-  email_verified       false
-  given_name           'MyString'
-  family_name          'MyString'
-  display_name         'MyString'
-  image_url            'MyString'
-  confirmation_sent_at '2024-11-10 23:00:52'
-  metadata             ''
+  uid                  { SecureRandom.alphanumeric(21) }
+  # user                 { Fabricate(:user) }
+  provider             'whatsapp'
+  verified              false
+  email                { Faker::Internet.email }
+  given_name           { Faker::Name.neutral_first_name }
+  family_name          { Faker::Name.last_name }
+  display_name         { |attrs| "#{attrs[:given_name]} #{attrs[:family_name]}".strip }
+  metadata             do |attrs|
+    {
+      unverified_email: attrs[:email],
+      email_verified: false,
+      confirmed_at: nil
+    }.merge(attrs[:metadata] || {})
+  end
 end

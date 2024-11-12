@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: identity_provider_profiles
@@ -20,6 +18,7 @@
 #
 # Indexes
 #
+#  index_identity_provider_profiles_on_email_and_provider    (email,provider) UNIQUE
 #  index_identity_provider_profiles_on_uid_and_provider      (uid,provider) UNIQUE
 #  index_identity_provider_profiles_on_user_id               (user_id)
 #  index_identity_provider_profiles_on_user_id_and_provider  (user_id,provider) UNIQUE

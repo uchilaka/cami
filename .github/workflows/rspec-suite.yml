@@ -13,6 +13,7 @@ jobs:
         node-version: [18.x, 20.x]
     env:
       CI: true
+      # TODO: Change to 16006 to match the port in the docker-compose.yml file
       PORT: 3000
       RAILS_ENV: test
       RSPEC_FAIL_FAST: false

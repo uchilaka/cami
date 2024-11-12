@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: accounts
@@ -26,9 +24,11 @@ class Account < ApplicationRecord
   # See https://guides.rubyonrails.org/active_record_encryption.html#deterministic-and-non-deterministic-encryption
   encrypts :tax_id, deterministic: true
 
+  has_rich_text :readme
+
   attribute :type, :string, default: 'Account'
   attribute :slug, :string, default: -> { SecureRandom.alphanumeric(4).downcase }
-  attribute :email, :string
+  attribute :metadata, :jsonb, default: {}
 
   validates :display_name, presence: true
   validates :email, email: true, allow_nil: true
@@ -37,11 +37,14 @@ class Account < ApplicationRecord
   validates :tax_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
 
   has_and_belongs_to_many :users, join_table: 'accounts_users'
-  has_many :invoices, as: :invoiceable, dependent: :nullify
 
   before_validation :format_tax_id, if: :tax_id_changed?
 
   has_rich_text :readme
+
+  def assign_default_role
+    add_role(:owner, Current.user) unless Current.user.nil? || Current.user.admin?
+  end
 
   def primary_users_confirmed?
     # TODO: Check that all primary users have confirmed their email addresses
