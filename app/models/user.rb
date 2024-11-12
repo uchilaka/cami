@@ -99,7 +99,8 @@ class User < ApplicationRecord
   has_person_name
 
   has_many :identity_provider_profiles, dependent: :destroy
-  has_and_belongs_to_many :accounts, join_table: 'accounts_users'
+  # has_and_belongs_to_many :accounts, join_table: 'accounts_users'
+  has_and_belongs_to_many :accounts, through: :roles, source: :resource, source_type: 'Account'
 
   before_validation :cleanup_providers, if: :providers_changed?
 

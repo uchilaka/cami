@@ -78,4 +78,8 @@ RSpec.describe Account, type: :model do
       it { expect(account.status).to eq 'demo' }
     end
   end
+
+  describe '#users' do
+
+  end
 end
