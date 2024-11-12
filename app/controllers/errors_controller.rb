@@ -17,13 +17,13 @@ class ErrorsController < ApplicationController
     @exception = request.env['action_dispatch.exception']
     @status_code =
       @exception.try(:status_code) ||
-      ActionDispatch::ExceptionWrapper.new(request.env, @exception).status_code
+        ActionDispatch::ExceptionWrapper.new(request.env, @exception).status_code
 
     render view_for_code(@status_code), status: @status_code
   end
 
   def unprocessable_entity
-    render 'errors/unprocessable_entity', status: :unprocessable_entity
+    render 'errors/unprocessable_entity', status: :unprocessable_content
   end
 
   def not_found
