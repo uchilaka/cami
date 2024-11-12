@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
+# 20241110090223_rolify_create_roles.rb
 class RolifyCreateRoles < ActiveRecord::Migration[7.2]
   def change
     create_table(:roles, id: :uuid) do |t|
       t.string :name
-      t.references :resource, polymorphic: true
+      t.references :resource, polymorphic: true, type: :uuid
 
       t.timestamps
     end
