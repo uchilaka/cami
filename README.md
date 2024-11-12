@@ -63,6 +63,7 @@ deprecation warnings into errors, giving you the full backtrace.
 - [ ] E2E testing
   - [ ] Integrate Playwright with CypressOnRails: <https://github.com/shakacode/cypress-on-rails?tab=readme-ov-file#totally-new-to-playwright>
   - [ ] Running rails system tests with playwright instead of selenium: https://justin.searls.co/posts/running-rails-system-tests-with-playwright-instead-of-selenium/
+- [ ] Inheriting class methods from modules / mixins in Ruby: <https://stackoverflow.com/a/45127350>
 
 ## Future Work
 
