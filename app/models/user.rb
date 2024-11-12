@@ -98,6 +98,7 @@ class User < ApplicationRecord
   # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
   has_person_name
 
+  has_many :invoices, as: :invoiceable, dependent: :nullify
   has_many :identity_provider_profiles, dependent: :destroy
   # has_and_belongs_to_many :accounts, join_table: 'accounts_users'
   has_and_belongs_to_many :accounts, through: :roles, source: :resource, source_type: 'Account'
@@ -131,6 +132,22 @@ class User < ApplicationRecord
     # NOTE: Consider the successful completion of a magic link authentication
     #  as a confirmation of the user's email address
     confirm unless confirmed?
+  end
+
+  class << self
+    # Docs on Devise passwordless customization: https://github.com/abevoelker/devise-passwordless#customization
+    def passwordless_login_within
+      15.minutes
+    end
+
+    def from_omniauth(access_token = nil)
+      access_token ||= Current.auth_provider
+      result = UpsertUserFromOmniauthWorkflow.call(access_token:)
+      # Returns either the user instance with errors or the persisted user record
+      # TODO: Add a spec that asserts that when the transaction fails, a user instance
+      #   with errors is returned
+      result.user
+    end
   end
 
   private

@@ -396,7 +396,6 @@ yq -p json -o yaml ./path/to/fixture.json > ./path/to/fixture.yml
   - [Handling nil objects](https://github.com/varvet/pundit?tab=readme-ov-file#nilclasspolicy)
 - [CanCanCan developer guide](https://github.com/CanCanCommunity/cancancan/blob/develop/docs/README.md) - an alternative to `Pundit`
 - [Feature flags for backup providers](https://www.flippercloud.io/docs/guides/backup-providers) e.g. with feature flagging payment providers like Stripe, PayPal & SplitIt or auth providers like Apple, Google & native passwordless authentication
-- [Dynamic roles in a Rails app](https://nicholusmuwonge.medium.com/dynamic-roles-in-a-rails-app-using-rolify-devise-invitable-and-pundit-b72011451239)
 - [Using yq to parse YAML (fixture) files](https://stackoverflow.com/a/67610900)
 
 ## Known issues 
@@ -417,13 +416,14 @@ deprecation warnings into errors, giving you the full backtrace.
 
 ## Future reading 
 
-- [ ] Working with JSONB columns in your Active Record models with Active Model: <https://betacraft.com/2023-06-08-active-model-jsonb-column/>
-- [ ] Building your Turbo application: <https://turbo.hotwired.dev/handbook/building>
-- [ ] Custom errors in rails: <https://dev.to/ayushn21/custom-error-pages-in-rails-4i43>
+- [ ] [Working with JSONB columns in your Active Record models with Active Model](https://betacraft.com/2023-06-08-active-model-jsonb-column/)
+- [ ] [Building your Turbo application](https://turbo.hotwired.dev/handbook/building)
+- [ ] [Dynamic roles in a Rails app](https://nicholusmuwonge.medium.com/dynamic-roles-in-a-rails-app-using-rolify-devise-invitable-and-pundit-b72011451239)
+- [ ] [Custom errors in rails](https://dev.to/ayushn21/custom-error-pages-in-rails-4i43)
 - [ ] E2E testing
-  - [ ] Integrate Playwright with CypressOnRails: <https://github.com/shakacode/cypress-on-rails?tab=readme-ov-file#totally-new-to-playwright>
-  - [ ] Running rails system tests with playwright instead of selenium: https://justin.searls.co/posts/running-rails-system-tests-with-playwright-instead-of-selenium/
-- [ ] Inheriting class methods from modules / mixins in Ruby: <https://stackoverflow.com/a/45127350>
+  - [ ] [Integrate Playwright with CypressOnRails](https://github.com/shakacode/cypress-on-rails?tab=readme-ov-file#totally-new-to-playwright)
+  - [ ] [Running rails system tests with playwright instead of selenium](https://justin.searls.co/posts/running-rails-system-tests-with-playwright-instead-of-selenium/)
+- [ ] [Inheriting class methods from modules / mixins in Ruby](https://stackoverflow.com/a/45127350)
 
 ## Future Work
 

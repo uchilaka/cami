@@ -110,10 +110,31 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_143445) do
     t.index ["user_id"], name: "index_identity_provider_profiles_on_user_id"
   end
 
+  create_table "invoices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "invoiceable_type"
+    t.uuid "invoiceable_id"
+    t.jsonb "payments"
+    t.jsonb "links"
+    t.datetime "updated_accounts_at", precision: nil
+    t.string "invoice_number"
+    t.integer "status"
+    t.datetime "issued_at", precision: nil
+    t.datetime "due_at", precision: nil
+    t.datetime "paid_at", precision: nil
+    t.decimal "amount", precision: 10, scale: 2
+    t.decimal "due_amount", precision: 10, scale: 2
+    t.string "currency_code"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invoiceable_type", "invoiceable_id"], name: "index_invoices_on_invoiceable"
+    t.index ["invoiceable_type", "invoiceable_id"], name: "index_invoices_on_invoiceable_type_and_invoiceable_id"
+  end
+
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "resource_type"
-    t.bigint "resource_id"
+    t.uuid "resource_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"

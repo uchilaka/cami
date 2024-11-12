@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateAllowlistedJwts < ActiveRecord::Migration[7.2]
   def change
     # Docs on the Allowlist JWT Revocation Strategy: https://github.com/waiting-for-dev/devise-jwt?tab=readme-ov-file#allowlist

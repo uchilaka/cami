@@ -80,6 +80,11 @@ RSpec.describe Account, type: :model do
   end
 
   describe '#users' do
+    let(:account) { Fabricate :account }
+    let(:user) { Fabricate :user }
 
+    before do
+      account.users << user
+    end
   end
 end

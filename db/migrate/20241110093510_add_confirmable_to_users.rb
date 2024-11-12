@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # 20241110093510_add_confirmable_to_users.rb
 class AddConfirmableToUsers < ActiveRecord::Migration[7.2]
   disable_ddl_transaction!

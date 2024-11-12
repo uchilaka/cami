@@ -41,10 +41,10 @@ module NavbarHelper
         label: t('shared.navbar.dashboard'),
         path: pages_dashboard_path
       },
-      # {
-      #   label: t('shared.navbar.invoices'),
-      #   path: invoices_path
-      # },
+      {
+        label: t('shared.navbar.invoices'),
+        path: invoices_path
+      },
       {
         label: t('shared.navbar.accounts'),
         path: accounts_path
@@ -133,7 +133,7 @@ module NavbarHelper
     return true if item[:public]
 
     # Optionally compose feature flag for menu item
-    item[:feature_flag] ||= "feat__#{item[:label].to_s.parameterize(separator: '_')}".to_sym
+    item[:feature_flag] ||= :"feat__#{item[:label].to_s.parameterize(separator: '_')}"
     return Flipper.enabled?(item[:feature_flag]) if current_user.blank?
 
     # Check if feature flag is enabled for current user
