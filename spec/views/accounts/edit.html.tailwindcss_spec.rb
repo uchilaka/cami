@@ -8,6 +8,7 @@ RSpec.describe 'accounts/edit', type: :view do
 
   before(:each) do
     sign_in user
+    allow(view).to receive(:current_user).and_return(user)
     assign(:account, account)
   end
 
@@ -19,7 +20,7 @@ RSpec.describe 'accounts/edit', type: :view do
 
       assert_select 'input[name=?]', 'account[slug]'
 
-      assert_select 'input[name=?]', 'account[status]'
+      assert_select 'select[name=?]', 'account[status]'
 
       assert_select 'input[name=?]', 'account[tax_id]'
 
