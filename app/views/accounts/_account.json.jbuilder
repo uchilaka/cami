@@ -18,4 +18,4 @@ end
 
 json.is_vendor account.has_role?(:vendor)
 
-json.invoices account.invoices, partial: 'invoices/invoice', as: :invoice
+# json.invoices account.invoices, partial: 'invoices/invoice', as: :invoice

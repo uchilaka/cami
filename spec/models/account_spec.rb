@@ -78,4 +78,13 @@ RSpec.describe Account, type: :model do
       it { expect(account.status).to eq 'demo' }
     end
   end
+
+  describe '#users' do
+    let(:account) { Fabricate :account }
+    let(:user) { Fabricate :user }
+
+    before do
+      account.users << user
+    end
+  end
 end
