@@ -3,9 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe 'accounts/edit', type: :view do
-  let(:account) { Fabricate :account }
+  let(:user) { Fabricate :user }
+  let(:account) { Fabricate :account, users: [user] }
 
   before(:each) do
+    sign_in user
     assign(:account, account)
   end
 

@@ -1,18 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe 'accounts/show', type: :view do
-  before(:each) do
-    assign(
+  let(:user) { Fabricate :user }
+  let(:account) do
+    Fabricate(
       :account,
-      Fabricate(
-        :account,
-        display_name: 'Display Name',
-        slug: 'slugtastic',
-        status: 2,
-        tax_id: '01-123456789',
-        readme: 'MyText'
-      )
+      display_name: 'Display Name',
+      slug: 'slugtastic',
+      status: 2,
+      tax_id: '01-123456789',
+      readme: 'MyText',
+      users: [user]
     )
+  end
+  before(:each) do
+    sign_in user
+    assign(:account, account)
   end
 
   it 'renders attributes in <p>' do
