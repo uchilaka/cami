@@ -19,7 +19,7 @@ RSpec.describe 'accounts/edit', type: :view do
 
       assert_select 'input[name=?]', 'account[slug]'
 
-      assert_select 'input[name=?]', 'account[status]'
+      assert_select 'select[name=?]', 'account[status]'
 
       assert_select 'input[name=?]', 'account[tax_id]'
 
