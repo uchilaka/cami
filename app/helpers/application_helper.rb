@@ -3,6 +3,8 @@
 module ApplicationHelper
   include StyleHelper
 
+  # @deprecated Use `modal_dom_id` implemented in `AccountsHelper` or other
+  #   more specific helpers instead.
   def modal_dom_id(resource, content_type: nil)
     return "#{resource.model_name.singular}--#{content_type}--modal|#{resource.id}|" if content_type.present?
 
