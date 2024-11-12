@@ -85,7 +85,7 @@ class AccountsController < ApplicationController
   def create_account_params
     params
       .require(:account)
-      .permit(*CreateAccountWorkflow.allowed_parameter_keys)
+      .permit(*CreateAccountWorkflow.allowed_parameter_keys, metadata: {})
   end
 
   def create_profile_params
@@ -98,7 +98,7 @@ class AccountsController < ApplicationController
 
   def update_params
     params.permit(
-      account: update_account_param_keys,
+      account: [*update_account_param_keys, { metadata: {} }],
       profile: create_profile_param_keys
     )
   end

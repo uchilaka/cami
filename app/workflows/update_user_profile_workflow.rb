@@ -29,7 +29,9 @@ class UpdateUserProfileWorkflow
 
   class << self
     def allowed_parameter_keys
-      %i[image_url family_name given_name phone email country_alpha2]
+      # For standardized timezones: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+      # For IANA timezones: https://nodatime.org/TimeZones
+      %i[image_url family_name given_name email phone country_alpha2 timezone]
     end
   end
 end

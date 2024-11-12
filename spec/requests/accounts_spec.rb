@@ -271,7 +271,7 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
               status: 'active'
             },
             profile: {
-              country_alpha2: phone_data[:country]
+              'country_alpha2' => phone_data[:country]
             }
           }
         end
@@ -329,7 +329,15 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
           end
 
           context '#metadata' do
-            it { expect(subject.metadata).to eq(params.dig(:account, :metadata)) }
+            it do
+              expect(subject.metadata).to \
+                match(params.dig(:account, :metadata).merge(params[:profile]))
+            end
+
+            it do
+              expect(subject.metadata).to \
+                match(hash_including(params.dig(:account, :metadata)))
+            end
           end
         end
       end
@@ -389,7 +397,6 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
       end
 
       context 'and valid account parameters' do
-        let(:profile) { account.metadata }
         let(:params) do
           {
             account: {
@@ -402,7 +409,7 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
               status: 'guest'
             },
             profile: {
-              country_alpha2: phone_data[:country]
+              'country_alpha2' => phone_data[:country]
             }
           }
         end
@@ -471,7 +478,10 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
           end
 
           context '#metadata' do
-            it { expect(subject.metadata).to eq(account_attributes[:metadata]) }
+            it do
+              expect(subject.metadata).to \
+                match(hash_including(account_attributes[:metadata].merge(profile_attributes)))
+            end
           end
         end
       end
