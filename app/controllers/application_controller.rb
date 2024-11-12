@@ -2,11 +2,11 @@
 
 class ApplicationController < ActionController::Base
   include LarCity::CurrentAttributes
-  include LarCity::WebConsole
+  include LarCity::WebConsoleLoader
   include Pundit::Authorization
 
   before_action :set_paper_trail_whodunnit
-  
+
   # For more on action controller filters, see https://guides.rubyonrails.org/action_controller_overview.html#filters
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :authenticate_user!, unless: :public_resource?

@@ -2,8 +2,9 @@ class AccountsController < ApplicationController
   include MaybeAccountSpecific
   include LarCity::ProfileParameterUtils
 
-  # load_account %i[show edit update destroy], optional: true
   load_account :all, optional: true, id_keys: %i[account_id id]
+
+  load_console %i[index show edit]
 
   # before_action :set_account, only: %i[show edit update destroy]
 

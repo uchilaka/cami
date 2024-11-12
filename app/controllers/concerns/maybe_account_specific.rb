@@ -34,9 +34,9 @@ module MaybeAccountSpecific
     account_id = params[param_key]
     @account =
       if opts[:optional]
-        Account.find_by(id: account_id)
+        policy_scope(Account).find_by(id: account_id)
       else
-        Account.find(account_id)
+        policy_scope(Account).find(account_id)
       end
   rescue ActiveRecord::RecordNotFound
     respond_to do |format|
