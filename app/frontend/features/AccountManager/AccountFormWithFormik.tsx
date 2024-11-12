@@ -75,7 +75,13 @@ const composeFormValues = (account?: IndividualAccount | BusinessAccount | null,
   return {
     displayName: account?.displayName ?? '',
     email: account?.email ?? '',
-    readme: account?.readme?.html ?? '',
+    /**
+     * TODO: There's a warning about this output (how we're processing it
+     * on the backend using :to_plain_text on the ActionText::RichText object)
+     * not being HTML safe:
+     * https://api.rubyonrails.org/v8.0.0/classes/ActionText/RichText.html#method-i-to_plain_text
+     */
+    readme: account?.readme?.plaintext ?? '',
     phone: (isBusinessAccount(account) ? account?.phone : '') ?? '',
     type: account?.type ?? initialType ?? 'Business',
     ...(isIndividualAccount(account)
