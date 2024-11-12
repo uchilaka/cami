@@ -43,6 +43,17 @@ module Cami
 
     config.active_job.queue_adapter = :sidekiq
 
+    config.active_record.query_log_tags =
+      %i[
+        application
+        controller
+        namespaced_controller
+        action
+        db_host
+        database
+        job
+      ]
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.

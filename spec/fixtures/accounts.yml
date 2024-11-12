@@ -3,18 +3,17 @@
 # Table name: accounts
 #
 #  id           :uuid             not null, primary key
-#  display_name :string           not null
+#  display_name :string
+#  email        :string
+#  metadata     :jsonb
+#  phone        :jsonb
+#  readme       :text
 #  slug         :string
 #  status       :integer
-#  type         :string           not null
+#  type         :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  tax_id       :string
-#
-# Indexes
-#
-#  index_accounts_on_slug    (slug) UNIQUE
-#  index_accounts_on_tax_id  (tax_id) UNIQUE WHERE (tax_id IS NOT NULL)
 #
 ---
 - display_name: Acme Corporation

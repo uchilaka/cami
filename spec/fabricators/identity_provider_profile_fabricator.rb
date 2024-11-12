@@ -20,6 +20,7 @@
 #
 # Indexes
 #
+#  index_identity_provider_profiles_on_email_and_provider    (email,provider) UNIQUE
 #  index_identity_provider_profiles_on_uid_and_provider      (uid,provider) UNIQUE
 #  index_identity_provider_profiles_on_user_id               (user_id)
 #  index_identity_provider_profiles_on_user_id_and_provider  (user_id,provider) UNIQUE
@@ -27,6 +28,7 @@
 # Foreign Keys
 #
 #  fk_rails_...  (user_id => users.id)
+#
 Fabricator(:identity_provider_profile) do
   uid                  { SecureRandom.alphanumeric(21) }
   # user                 { Fabricate(:user) }

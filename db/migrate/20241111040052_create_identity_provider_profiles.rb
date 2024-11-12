@@ -22,5 +22,8 @@ class CreateIdentityProviderProfiles < ActiveRecord::Migration[7.2]
     add_index :identity_provider_profiles,
               %i[uid provider],
               unique: true, if_not_exists: true
+    add_index :identity_provider_profiles,
+              %i[email provider],
+              unique: true, if_not_exists: true
   end
 end
