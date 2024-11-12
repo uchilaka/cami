@@ -7,10 +7,8 @@ module AccountsHelper
     Flipper.enabled?(:feat__account_filtering, current_user)
   end
 
-  def modal_dom_id(resource, content_type: nil)
-    return "#{resource.class.table_name.singularize}--#{content_type}-modal" if content_type == 'summary'
-
-    super
+  def modal_dom_id(resource, content_type: '')
+    "#{resource.class.table_name.singularize}--#{content_type}-modal"
   end
 
   def model_actions(resource)

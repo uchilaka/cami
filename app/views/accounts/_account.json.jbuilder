@@ -1,5 +1,9 @@
-json.extract! account, :id, :display_name, :slug, :status, :type, :tax_id, :email, :readme, :created_at, :updated_at
+json.extract! account, :id, :display_name, :slug, :status, :type, :tax_id, :email, :created_at, :updated_at
 
+json.readme do
+  json.html account.readme.to_s
+  json.plaintext account.readme.to_plain_text
+end
 json.url account_url(account, format: :json)
 
 json.actions model_actions(account)

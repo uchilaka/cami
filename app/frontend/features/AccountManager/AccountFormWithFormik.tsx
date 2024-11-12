@@ -75,7 +75,7 @@ const composeFormValues = (account?: IndividualAccount | BusinessAccount | null,
   return {
     displayName: account?.displayName ?? '',
     email: account?.email ?? '',
-    readme: account?.readme ?? '',
+    readme: account?.readme?.html ?? '',
     phone: (isBusinessAccount(account) ? account?.phone : '') ?? '',
     type: account?.type ?? initialType ?? 'Business',
     ...(isIndividualAccount(account)
