@@ -123,8 +123,8 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example
-    DatabaseCleaner[:active_record].strategy = :transaction
-    DatabaseCleaner[:active_record].clean_with(:truncation)
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
 
     # Load seeds
     Rails.application.load_seed

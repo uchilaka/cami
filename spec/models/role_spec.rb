@@ -19,5 +19,32 @@
 require 'rails_helper'
 
 RSpec.describe Role, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:role_name) { 'doodad' }
+
+  describe '#users' do
+    let(:user) { Fabricate :user }
+    let(:account) { Fabricate :account }
+
+    context 'when granting a customer role to a user on an invoice' do
+      let(:role_name) { 'customer' }
+      let(:resource) { Fabricate :invoice }
+
+      context "who isn't a member on the account" do
+        describe '#has_role?' do
+          it do
+            expect { user.add_role(role_name, resource) }.to \
+              change { user.reload.has_role?(role_name, resource) }.to(true)
+          end
+        end
+      end
+
+      context 'who is a member on the account' do
+        let(:account) { Fabricate :account, users: [user] }
+
+        describe '#has_role?' do
+          pending 'works the same?'
+        end
+      end
+    end
+  end
 end

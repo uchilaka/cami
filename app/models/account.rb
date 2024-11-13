@@ -17,7 +17,6 @@
 #
 class Account < ApplicationRecord
   rolify
-  resourcify
 
   include AASM
 
@@ -37,15 +36,8 @@ class Account < ApplicationRecord
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
   validates :tax_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
 
-  has_many :roles, as: :resource, dependent: :destroy
-
-  has_many :invoices, through: :roles, source: :resource, source_type: 'Invoice'
-  # has_many :invoices, as: :invoiceable, dependent: :nullify
-
-  has_and_belongs_to_many :members, lambda { |_o|
-    where('roles.name = ?', 'owner')
-  }, through: :roles, class_name: 'User', source: :resource, source_type: 'User'
-  # has_and_belongs_to_many :users, join_table: 'accounts_users'
+  has_many :roles, join_table: 'accounts_roles', dependent: :destroy
+  has_and_belongs_to_many :users
 
   before_validation :format_tax_id, if: :tax_id_changed?
 
