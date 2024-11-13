@@ -27,10 +27,10 @@ class InvoicePolicy < ApplicationPolicy
     # performance of this access control check. It might need
     # a refactor to come up  with an ad-hoc query to rule all
     # the access control via rolify problems 🤔
-    return true if resource.invoiceable == user
-    return true if user.has_role?(:customer, resource)
-    return true if user.has_role?(:contact, resource)
+    return true if record.invoiceable == user
     return true if current_account_is?(:customer)
+    return true if user.has_role?(:customer, record)
+    return true if user.has_role?(:contact, record)
 
     false
   end
