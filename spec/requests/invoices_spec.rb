@@ -43,9 +43,15 @@ RSpec.describe '/invoices', type: :request do
   end
 
   describe 'GET /new' do
-    it 'renders a successful response' do
-      get new_invoice_url
-      expect(response).to be_successful
+    let(:user) { Fabricate :user }
+
+    context 'when signed in' do
+      before { sign_in user }
+
+      it 'renders a successful response' do
+        get new_invoice_url
+        expect(response).to be_successful
+      end
     end
   end
 

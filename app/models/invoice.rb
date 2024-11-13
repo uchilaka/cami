@@ -30,6 +30,8 @@
 class Invoice < ApplicationRecord
   resourcify
 
+  has_rich_text :notes
+
   has_many :roles, as: :resource, dependent: :destroy
 
   belongs_to :invoiceable, polymorphic: true
