@@ -26,6 +26,7 @@ RSpec.describe Account, type: :model do
   it { should validate_presence_of :slug }
   it { should validate_uniqueness_of(:slug).case_insensitive }
   it { should have_and_belong_to_many(:members) }
+  it { should have_many(:invoices) }
 
   describe '#tax_id' do
     context 'when blank' do

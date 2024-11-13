@@ -98,20 +98,11 @@ class User < ApplicationRecord
   # Doc on name_of_person gem: https://github.com/basecamp/name_of_person
   has_person_name
 
-  has_and_belongs_to_many :accounts, inverse_of: :members
-  has_and_belongs_to_many :roles, inverse_of: :users, join_table: 'users_roles', dependent: :destroy
-
-  # has_many :invoices, through: :roles, source: :resource, source_type: 'Invoice'
-  # has_many :invoices, as: :invoiceable, dependent: :nullify
-
+  has_many :invoices, as: :invoiceable, dependent: :nullify
   has_many :identity_provider_profiles, dependent: :destroy
 
-  # has_many :accounts, lambda { |user|
-  #   includes(:roles, :accounts)
-  #     .where('roles.name = ?', 'member')
-  #     .where('roles.resource_type = ?', 'Account')
-  #     .where(users_roles: { user: })
-  # }, inverse_of: :members
+  has_and_belongs_to_many :accounts, inverse_of: :members
+  has_and_belongs_to_many :roles, inverse_of: :users, join_table: 'users_roles', dependent: :destroy
 
   before_validation :cleanup_providers, if: :providers_changed?
 

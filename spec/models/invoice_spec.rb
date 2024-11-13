@@ -30,11 +30,20 @@
 require 'rails_helper'
 
 RSpec.describe Invoice, type: :model do
-  describe '#customer' do
-    pending 'can be accessed via "customer" role on account'
-  end
+  let(:account) { Fabricate :account }
 
-  describe '#contacts' do
-    pending 'can be accessed via "contact" role on users'
+  subject { Fabricate(:invoice, invoiceable: account) }
+
+  # The basics
+  it { is_expected.to have_many(:roles).dependent(:destroy) }
+
+  describe 'can be accessed' do
+    let(:user) { Fabricate :user }
+    let(:account) { Fabricate :account }
+
+    context 'by a user' do
+      pending 'with a "customer" role on the invoice'
+      pending 'with a "contact" role on the invoice'
+    end
   end
 end

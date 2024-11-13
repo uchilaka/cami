@@ -30,9 +30,15 @@
 class Invoice < ApplicationRecord
   resourcify
 
-  has_many :roles, as: :resource
+  has_many :roles, as: :resource, dependent: :destroy
 
-  # belongs_to :invoiceable, polymorphic: true
+  # TODO: Add validation to only allow 1 account per invoice
+  # belongs_to :account, lambda { |resource|
+  #   where('roles.name = ?', 'customer')
+  #     .where(roles: { resource: })
+  # }, polymorphic: true, class_name: 'Account', source_type: 'Account'
+
+  belongs_to :invoiceable, polymorphic: true
 
   # belongs_to :customer, lambda { |_y|
   #   where('roles.name = ?', 'customer')

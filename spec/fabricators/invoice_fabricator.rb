@@ -28,13 +28,8 @@
 #  index_invoices_on_invoiceable_type_and_invoiceable_id  (invoiceable_type,invoiceable_id)
 #
 Fabricator(:invoice) do
-  transient :account
-  transient :user
-
-  invoiceable_id         ''
-  invoiceable_type       'MyString'
-  payments               ''
-  links                  ''
+  payments               { [] }
+  links                  { [] }
   updated_accounts_at    '2024-11-11 01:29:44'
   invoice_number         'MyString'
   status                 1
