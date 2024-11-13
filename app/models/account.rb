@@ -39,6 +39,8 @@ class Account < ApplicationRecord
   has_and_belongs_to_many :roles, inverse_of: :accounts, join_table: 'accounts_roles', dependent: :destroy
   has_and_belongs_to_many :members, class_name: 'User', join_table: 'accounts_users'
 
+  alias users members
+
   before_validation :format_tax_id, if: :tax_id_changed?
 
   has_rich_text :readme
