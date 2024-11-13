@@ -22,7 +22,17 @@ class InvoicePolicy < ApplicationPolicy
   end
 
   def accessible_to_user?
-    user.admin? || current_account_is?(:customer)
+    return true if user.admin?
+    # These seem terrible... Figure out a way to measure the
+    # performance of this access control check. It might need
+    # a refactor to come up  with an ad-hoc query to rule all
+    # the access control via rolify problems 🤔
+    return true if resource.invoiceable == user
+    return true if user.has_role?(:customer, resource)
+    return true if user.has_role?(:contact, resource)
+    return true if current_account_is?(:customer)
+
+    false
   end
 
   def current_account_is?(role)
@@ -35,7 +45,7 @@ class InvoicePolicy < ApplicationPolicy
     def resolve
       # TODO: Figure out active query to filter against accounts_users
       #   and rolify tables for the invoices having :customer role
-      #   against accounts accessible to this user
+      #   against accounts accessible to this user (see :accessible_to_user?)
       scope.all
     end
   end
