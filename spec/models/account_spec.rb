@@ -25,8 +25,7 @@ RSpec.describe Account, type: :model do
   it { should validate_presence_of :display_name }
   it { should validate_presence_of :slug }
   it { should validate_uniqueness_of(:slug).case_insensitive }
-  xit { should have_and_belong_to_many(:members) }
-  it { should have_many(:members).through(:roles) }
+  it { should have_and_belong_to_many(:members) }
 
   describe '#tax_id' do
     context 'when blank' do
@@ -85,59 +84,5 @@ RSpec.describe Account, type: :model do
     let(:invoice) { Fabricate :invoice }
 
     pending 'can be accessed via "customer" role'
-  end
-
-  describe '#users' do
-    let(:account) { Fabricate :account }
-    let(:user) { Fabricate :user }
-
-    context 'can be managed via "member" role' do
-      context 'when granting' do
-        it 'can be added' do
-          expect { user.add_role(:member, account) }.to \
-            change { user.reload.has_role?(:member, account) }.to(true)
-        end
-      end
-
-      xit 'can be removed' do
-        user.add_role(:member, account)
-
-        expect { user.remove_role(:member, account) }.to change { account.users.count }.by(-1)
-      end
-    end
-
-    it 'can be listed via "member" role' do
-      user.add_role(:member, account)
-
-      expect(account.users).to eq([user])
-    end
-  end
-
-  describe '#members', skip: 'figure out direct relationship first before aliasing... maybe' do
-    let(:account) { Fabricate :account }
-    let(:user) { Fabricate :user }
-
-    context 'can be managed via "member" role' do
-      context 'when granting' do
-        it 'can be added' do
-          expect { user.add_role(:member, account) }.to change { account.members.count }.by(1)
-        end
-      end
-
-      it 'can be removed' do
-        user.add_role(:member, account)
-
-        expect { user.remove_role(:member, account) }.to change { account.members.count }.by(-1)
-      end
-    end
-
-    pending 'can be listed via "member" role'
-  end
-
-  describe '#owners', skip: 'pending' do
-    let(:account) { Fabricate :account }
-    let(:user) { Fabricate :user }
-
-    pending 'can be listed via "owner" role'
   end
 end
