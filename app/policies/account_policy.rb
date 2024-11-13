@@ -31,8 +31,8 @@ class AccountPolicy < ApplicationPolicy
         scope.all
       else
         scope
-          .includes(:accounts_users)
-          .where(accounts_users: { user_id: user.id })
+          .includes(:members)
+          .where(members: { id: user.id })
       end
     end
   end

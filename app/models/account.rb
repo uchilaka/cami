@@ -40,6 +40,8 @@ class Account < ApplicationRecord
   has_and_belongs_to_many :roles, inverse_of: :accounts, join_table: 'accounts_roles', dependent: :destroy
   has_and_belongs_to_many :members, class_name: 'User', join_table: 'accounts_users'
 
+  # @deprecated use the direct "members" relationship instead. I guess we're
+  #   going to learn interesting things about aliasing associations in Rails 😅
   alias users members
 
   before_validation :format_tax_id, if: :tax_id_changed?
