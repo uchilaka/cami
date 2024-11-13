@@ -38,10 +38,10 @@ class AccountPolicy < ApplicationPolicy
               .where(
                 roles: {
                   name: %w[customer contact],
-                  users: { id: user.id }
+                  users: { id: user.id },
+                  resource_type: 'Account'
                 }
               )
-              .where('roles.resource_type = ?', 'Account')
           )
       end
     end

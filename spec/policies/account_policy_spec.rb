@@ -37,5 +37,15 @@ RSpec.describe AccountPolicy, type: :policy do
     end
   end
 
-  pending 'for member access via "contact" role'
+  context 'for member access via "contact" role' do
+    before { user.add_role(:contact, account) }
+
+    describe '#create?' do
+      pending 'fails because the user is not an admin'
+    end
+
+    describe '#accessible_to_user?' do
+      pending 'succeeds because the user is a contact'
+    end
+  end
 end
