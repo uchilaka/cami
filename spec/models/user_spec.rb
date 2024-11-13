@@ -49,7 +49,7 @@ RSpec.describe User, type: :model do
   it { should validate_uniqueness_of(:email).case_insensitive }
   it { should have_many(:identity_provider_profiles).dependent(:destroy) }
   it { should have_many(:roles).dependent(:destroy) }
-  it { should have_many(:accounts).through(:roles) }
+  it { should have_and_belong_to_many(:accounts).inverse_of(:members) }
 
   describe 'callbacks' do
     describe ':after_destroy_commit' do

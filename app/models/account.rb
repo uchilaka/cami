@@ -36,7 +36,7 @@ class Account < ApplicationRecord
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
   validates :tax_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
 
-  has_many :roles, join_table: 'accounts_roles', dependent: :destroy
+  has_and_belongs_to_many :roles, inverse_of: :accounts, join_table: 'accounts_roles', dependent: :destroy
   has_and_belongs_to_many :members, class_name: 'User', join_table: 'accounts_users'
 
   before_validation :format_tax_id, if: :tax_id_changed?
