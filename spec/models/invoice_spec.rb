@@ -37,12 +37,16 @@ RSpec.describe Invoice, type: :model do
   # The basics
   it { is_expected.to have_many(:roles).dependent(:destroy) }
 
-  describe 'can be accessed' do
+  describe 'when accessed' do
     let(:user) { Fabricate :user }
     let(:account) { Fabricate :account }
 
     context 'by a user' do
-      pending 'with a "customer" role on the invoice'
+      context 'with a "customer" role on the invoice' do
+        before { user.add_role(:customer, subject) }
+
+        it { expect(user.has_role?(:customer, subject)).to be true }
+      end
       pending 'with a "contact" role on the invoice'
     end
   end
