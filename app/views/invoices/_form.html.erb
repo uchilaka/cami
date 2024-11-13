@@ -68,7 +68,11 @@
 
   <div class="my-5">
     <%= form.label :currency_code %>
-    <%= form.text_field :currency_code, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.select(:currency_code,
+                    options_for_select(currency_code_options),
+                    {},
+                    class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full",
+                    disabled: true) %>
   </div>
 
   <div class="my-5">

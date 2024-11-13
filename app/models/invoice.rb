@@ -32,9 +32,23 @@ class Invoice < ApplicationRecord
 
   has_rich_text :notes
 
+  # TODO: Refactor amount fields to *_in_cents
+  monetize :amount, as: :amount_in_cents
+  monetize :due_amount, as: :due_amount_in_cents
+
   has_many :roles, as: :resource, dependent: :destroy
 
   belongs_to :invoiceable, polymorphic: true
+
+  attribute :currency_code, :string, default: 'USD'
+  attribute :amount, :decimal, default: 0.0
+
+  validates :currency_code,
+            presence: true,
+            inclusion: { in: Money::Currency.all.map(&:iso_code) }
+  validates :amount, presence: true
+
+  # TODO: Implement AASM status
 
   def account=(account)
     self.invoiceable = account

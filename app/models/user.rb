@@ -102,7 +102,7 @@ class User < ApplicationRecord
   has_many :identity_provider_profiles, dependent: :destroy
 
   has_and_belongs_to_many :accounts, inverse_of: :members
-  has_and_belongs_to_many :roles, inverse_of: :users, join_table: 'users_roles', dependent: :destroy
+  # has_and_belongs_to_many :roles, inverse_of: :users, join_table: 'users_roles', dependent: :destroy
 
   before_validation :cleanup_providers, if: :providers_changed?
 
