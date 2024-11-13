@@ -30,13 +30,13 @@ RSpec.describe Role, type: :model do
 
     context 'when granting a customer role to a user on an invoice' do
       let(:role_name) { 'customer' }
-      let(:resource) { Fabricate :invoice }
+      let(:resource) { Fabricate :invoice, invoiceable: account }
 
       context "who isn't a member on the account" do
         describe '#has_role?' do
           it do
             expect { user.add_role(role_name, resource) }.to \
-              change { user.reload.has_role?(role_name, resource) }.to(true)
+              change { user.has_role?(role_name, resource) }.to(true)
           end
         end
       end
