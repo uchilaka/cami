@@ -31,8 +31,18 @@ class AccountPolicy < ApplicationPolicy
         scope.all
       else
         scope
-          .includes(:members)
-          .where(members: { id: user.id })
+          .includes(:members, :roles)
+          .where(users: { id: user.id })
+          .or(
+            Account
+              .where(
+                roles: {
+                  name: %w[customer contact],
+                  users: { id: user.id }
+                }
+              )
+              .where('roles.resource_type = ?', 'Account')
+          )
       end
     end
   end

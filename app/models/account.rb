@@ -17,6 +17,7 @@
 #
 class Account < ApplicationRecord
   rolify
+  resourcify
 
   include AASM
 

@@ -46,7 +46,20 @@ class InvoicePolicy < ApplicationPolicy
       # TODO: Figure out active query to filter against accounts_users
       #   and rolify tables for the invoices having :customer role
       #   against accounts accessible to this user (see :accessible_to_user?)
-      scope.all
+      if user.admin?
+        scope.all
+      else
+        scope
+          .where(
+            invoiceable: Account
+              .includes(:members)
+              .where(members: { id: user.id })
+          )
+          .or(
+            scope
+              .where(invoiceable: user)
+          )
+      end
     end
   end
 end

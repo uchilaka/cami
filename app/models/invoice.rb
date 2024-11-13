@@ -30,8 +30,6 @@
 class Invoice < ApplicationRecord
   resourcify
 
-  INVOICEABLE_TYPES = %w[Account User].freeze
-
   has_many :roles, as: :resource, dependent: :destroy
 
   belongs_to :invoiceable, polymorphic: true
@@ -41,6 +39,6 @@ class Invoice < ApplicationRecord
   end
 
   def account
-    invoiceable if invoiceable_type == 'Account'
+    invoiceable if invoiceable.is_a?(Account)
   end
 end
