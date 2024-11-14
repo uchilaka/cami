@@ -2,14 +2,20 @@
 
 # See https://github.com/bkeepers/dotenv?tab=readme-ov-file#customizing-rails
 dotenv_required_keys = %w[
-  PORT
+  ADMIN_REMOTE_IP_ADDRESSES
   APP_DATABASE_NAME
   APP_DATABASE_USER
   APP_DATABASE_PASSWORD
-  ADMIN_REMOTE_IP_ADDRESSES
+  LAN_SUBNET_MASK
+  PORT
 ]
 
-%w[ADMIN_REMOTE_IP_ADDRESSES].each { |key| dotenv_required_keys.delete key } if Rails.env.test?
+if Rails.env.test?
+  %w[
+    ADMIN_REMOTE_IP_ADDRESSES
+    LAN_SUBNET_MASK
+  ].each { |key| dotenv_required_keys.delete key }
+end
 
 if Rails.env.development?
   dotenv_required_keys.unshift 'NGROK_PROFILE_CONFIG_PATH',

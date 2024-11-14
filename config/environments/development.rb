@@ -3,6 +3,10 @@
 require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
+  # Note on issues with calling the web console:
+  # https://github.com/rails/web-console?tab=readme-ov-file#why-does-the-console-only-appear-on-error-pages-but-not-when-i-call-it
+  config.middleware.insert(0, Rack::Deflater)
+
   # Enable web console for all IP addresses (see https://stackoverflow.com/a/71292229)
   # To enable all IP v6 addresses, use '::/0'
   config.web_console.permissions = '0.0.0.0/0'
@@ -12,10 +16,6 @@ Rails.application.configure do
   #
   # If you don't want to see this message anymore, set this option to false:
   config.web_console.whiny_requests = true
-
-  # Note on issues with calling the web console:
-  # https://github.com/rails/web-console?tab=readme-ov-file#why-does-the-console-only-appear-on-error-pages-but-not-when-i-call-it
-  config.middleware.insert(0, Rack::Deflater)
 
   # Settings specified here will take precedence over those in config/application.rb.
 
