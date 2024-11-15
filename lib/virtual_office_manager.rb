@@ -65,7 +65,7 @@ class VirtualOfficeManager
     end
 
     def web_console_permissions
-      return nil unless Rails.env.test?
+      return nil if Rails.env.test?
 
       ENV.fetch('LAN_SUBNET_MASK', Rails.application.credentials.web_console.permissions)
     end
