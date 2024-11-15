@@ -5,9 +5,10 @@
 # Table name: invoices
 #
 #  id                  :uuid             not null, primary key
-#  amount              :decimal(10, 2)
-#  currency_code       :string
-#  due_amount          :decimal(10, 2)
+#  amount_cents        :integer          default(0), not null
+#  amount_currency     :string           default("USD"), not null
+#  due_amount_cents    :integer          default(0), not null
+#  due_amount_currency :string           default("USD"), not null
 #  due_at              :datetime
 #  invoice_number      :string
 #  invoiceable_type    :string

@@ -121,9 +121,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_143445) do
     t.datetime "issued_at", precision: nil
     t.datetime "due_at", precision: nil
     t.datetime "paid_at", precision: nil
-    t.decimal "amount", precision: 10, scale: 2
-    t.decimal "due_amount", precision: 10, scale: 2
-    t.string "currency_code"
+    t.integer "amount_cents", default: 0, null: false
+    t.string "amount_currency", default: "USD", null: false
+    t.integer "due_amount_cents", default: 0, null: false
+    t.string "due_amount_currency", default: "USD", null: false
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
