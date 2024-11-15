@@ -5,9 +5,10 @@
 # Table name: invoices
 #
 #  id                  :uuid             not null, primary key
-#  amount              :decimal(10, 2)
-#  currency_code       :string
-#  due_amount          :decimal(10, 2)
+#  amount_cents        :integer          default(0), not null
+#  amount_currency     :string           default("USD"), not null
+#  due_amount_cents    :integer          default(0), not null
+#  due_amount_currency :string           default("USD"), not null
 #  due_at              :datetime
 #  invoice_number      :string
 #  invoiceable_type    :string
@@ -33,15 +34,12 @@ class Invoice < ApplicationRecord
   has_rich_text :notes
 
   # TODO: Refactor amount fields to *_in_cents
-  monetize :amount, as: :amount_in_cents
-  monetize :due_amount, as: :due_amount_in_cents
+  monetize :amount_cents
+  monetize :due_amount_cents
 
   has_many :roles, as: :resource, dependent: :destroy
 
   belongs_to :invoiceable, polymorphic: true
-
-  attribute :currency_code, :string, default: 'USD'
-  attribute :amount, :decimal, default: 0.0
 
   validates :currency_code,
             presence: true,
@@ -49,6 +47,17 @@ class Invoice < ApplicationRecord
   validates :amount, presence: true
 
   # TODO: Implement AASM status
+
+  # @deprecated Use `amount_currency` or `due_amount_currency` instead
+  def currency_code
+    amount_currency
+  end
+
+  # @deprecated Use assignment to `amount_currency` or `due_amount_currency` instead
+  def currency_code=(currency_code)
+    self.amount_currency ||= currency_code
+    self.due_amount_currency ||= currency_code
+  end
 
   def account=(account)
     self.invoiceable = account

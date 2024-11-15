@@ -192,5 +192,5 @@ gem 'data_migrate', '~> 9', '>= 9.3.0'
 # Simple interactor implementation
 gem 'interactor', '~> 3.1'
 
-# Money gem integration with Rails
+# Money gem integration with Rails: https://github.com/RubyMoney/money-rails
 gem 'money-rails', '~> 1.15'
