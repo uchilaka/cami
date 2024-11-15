@@ -15,10 +15,7 @@ class CreateInvoices < ActiveRecord::Migration[7.2]
       t.timestamp :due_at
       t.timestamp :paid_at
       t.monetize :amount
-      # t.decimal :amount, precision: 10, scale: 2
       t.monetize :due_amount
-      # t.decimal :due_amount, precision: 10, scale: 2
-      # t.string :currency_code
       t.text :notes
 
       t.timestamps

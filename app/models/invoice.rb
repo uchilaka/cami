@@ -29,7 +29,39 @@
 #  index_invoices_on_invoiceable_type_and_invoiceable_id  (invoiceable_type,invoiceable_id)
 #
 class Invoice < ApplicationRecord
-  belongs_to :invoiceable, polymorphic: true
+  resourcify
 
   has_rich_text :notes
+
+  # TODO: Refactor amount fields to *_in_cents
+  monetize :amount_cents
+  monetize :due_amount_cents
+
+  has_many :roles, as: :resource, dependent: :destroy
+
+  belongs_to :invoiceable, polymorphic: true
+
+  validates :currency_code,
+            presence: true,
+            inclusion: { in: Money::Currency.all.map(&:iso_code) }
+  validates :amount, presence: true
+
+  # TODO: Implement AASM status
+
+  def currency_code
+    amount_currency
+  end
+
+  def currency_code=(currency_code)
+    self.amount_currency ||= currency_code
+    self.due_amount_currency ||= currency_code
+  end
+
+  def account=(account)
+    self.invoiceable = account
+  end
+
+  def account
+    invoiceable if invoiceable.is_a?(Account)
+  end
 end

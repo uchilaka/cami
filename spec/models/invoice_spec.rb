@@ -31,5 +31,24 @@
 require 'rails_helper'
 
 RSpec.describe Invoice, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:account) { Fabricate :account }
+
+  subject { Fabricate(:invoice, invoiceable: account) }
+
+  # The basics
+  it { is_expected.to have_many(:roles).dependent(:destroy) }
+
+  describe 'when accessed' do
+    let(:user) { Fabricate :user }
+    let(:account) { Fabricate :account }
+
+    context 'by a user' do
+      context 'with a "customer" role on the invoice' do
+        before { user.add_role(:customer, subject) }
+
+        it { expect(user.has_role?(:customer, subject)).to be true }
+      end
+      pending 'with a "contact" role on the invoice'
+    end
+  end
 end
