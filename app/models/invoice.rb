@@ -48,10 +48,12 @@ class Invoice < ApplicationRecord
 
   # TODO: Implement AASM status
 
+  # @deprecated Use `amount_currency` or `due_amount_currency` instead
   def currency_code
     amount_currency
   end
 
+  # @deprecated Use assignment to `amount_currency` or `due_amount_currency` instead
   def currency_code=(currency_code)
     self.amount_currency ||= currency_code
     self.due_amount_currency ||= currency_code
