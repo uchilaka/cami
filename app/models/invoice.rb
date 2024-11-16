@@ -40,6 +40,8 @@ class Invoice < ApplicationRecord
   monetize :amount_cents
   monetize :due_amount_cents
 
+  attribute :payment_vendor, :string, default: 'paypal'
+
   PAYPAL_BASE_URL = ENV.fetch('PAYPAL_BASE_URL', Rails.application.credentials.paypal&.base_url).freeze
 
   has_many :roles, as: :resource, dependent: :destroy
