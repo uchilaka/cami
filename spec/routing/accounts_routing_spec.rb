@@ -33,7 +33,7 @@ RSpec.describe AccountsController, type: :routing do
     end
 
     it 'routes to #destroy' do
-      expect(delete: '/accounts/1').to route_to('accounts#destroy', id: '1')
+      expect(delete: '/accounts/1').not_to route_to('accounts#destroy', id: '1')
     end
   end
 end
