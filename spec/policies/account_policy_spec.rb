@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# Pundit rspec examples: https://github.com/varvet/pundit?tab=readme-ov-file#rspec
 RSpec.describe AccountPolicy, type: :policy do
   let(:user) { Fabricate :user }
   let(:account) { Fabricate :account }
@@ -13,13 +14,6 @@ RSpec.describe AccountPolicy, type: :policy do
 
   describe '#accessible_to_user?' do
     it { expect(account_policy.accessible_to_user?).to be false }
-  end
-
-  describe AccountPolicy::Scope do
-    let(:scope) { Account.all }
-    let(:account_policy_scope) { described_class.new(user, scope).resolve }
-
-    it { expect(account_policy_scope).to eq [] }
   end
 
   context 'for member direct access via account' do
@@ -59,5 +53,12 @@ RSpec.describe AccountPolicy, type: :policy do
     describe '#accessible_to_user?' do
       pending 'succeeds because the user is a contact'
     end
+  end
+
+  describe AccountPolicy::Scope do
+    let(:scope) { Account.all }
+    let(:account_policy_scope) { described_class.new(user, scope).resolve }
+
+    it { expect(account_policy_scope).to eq [] }
   end
 end

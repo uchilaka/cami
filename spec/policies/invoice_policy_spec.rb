@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# Pundit rspec examples: https://github.com/varvet/pundit?tab=readme-ov-file#rspec
 RSpec.describe InvoicePolicy do
   let(:user) { Fabricate :user }
   let(:account) { Fabricate :account }

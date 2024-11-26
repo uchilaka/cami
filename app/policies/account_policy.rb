@@ -22,6 +22,8 @@ class AccountPolicy < ApplicationPolicy
   end
 
   def accessible_to_user?
+    return true if user.has_role?(:customer, record)
+
     record.users.include?(user)
   end
 
