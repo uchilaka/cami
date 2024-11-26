@@ -22,6 +22,18 @@ RSpec.describe AccountPolicy, type: :policy do
     it { expect(account_policy_scope).to eq [] }
   end
 
+  context 'for member direct access via account' do
+    before { account.add_member(user) }
+
+    describe '#create?' do
+      it { expect(account_policy.create?).to be false }
+    end
+
+    describe '#accessible_to_user?' do
+      it { expect(account_policy.accessible_to_user?).to be true }
+    end
+  end
+
   context 'for member access via "customer" role' do
     before { user.add_role(:customer, account) }
 

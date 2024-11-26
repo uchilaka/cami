@@ -2,23 +2,36 @@
 
 class InvoicePolicy < ApplicationPolicy
   def index?
-    user.admin? || accessible_to_user?
+    return true if user.admin?
+
+    if Current.account.present?
+      is_account_member?
+    else
+      user.has_role?(:customer) || user.has_role?(:contact)
+    end
   end
 
   def show?
-    user.admin? || accessible_to_user?
+    return true if user.admin?
+    return true if user.has_role?(:contact, record)
+
+    update?
   end
 
   def create?
-    user.admin?
+    user.admin? || user.has_role?(:customer, record)
   end
 
   def update?
-    user.admin? || accessible_to_user?
+    return true if create?
+    return true if record.invoiceable == user
+    return true if is_account_member? && current_account_is?(:customer)
+
+    false
   end
 
   def destroy?
-    user.admin? || accessible_to_user?
+    user.admin? || update?
   end
 
   def accessible_to_user?
@@ -28,11 +41,17 @@ class InvoicePolicy < ApplicationPolicy
     # a refactor to come up  with an ad-hoc query to rule all
     # the access control via rolify problems 🤔
     return true if record.invoiceable == user
-    return true if current_account_is?(:customer)
     return true if user.has_role?(:customer, record)
     return true if user.has_role?(:contact, record)
+    return true if current_account_is?(:customer)
 
     false
+  end
+
+  def is_account_member?
+    return false unless Current.account.present?
+
+    Current.account.members.include?(user)
   end
 
   def current_account_is?(role)

@@ -116,6 +116,10 @@ class Account < ApplicationRecord
     end
   end
 
+  def add_member(user)
+    members << user
+  end
+
   private
 
   def format_tax_id
