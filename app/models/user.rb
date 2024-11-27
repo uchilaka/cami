@@ -35,22 +35,6 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
-  class << self
-    # Docs on Devise passwordless customization: https://github.com/abevoelker/devise-passwordless#customization
-    def passwordless_login_within
-      15.minutes
-    end
-
-    def from_omniauth(access_token = nil)
-      access_token ||= Current.auth_provider
-      result = UpsertUserFromOmniauthWorkflow.call(access_token:)
-      # Returns either the user instance with errors or the persisted user record
-      # TODO: Add a spec that asserts that when the transaction fails, a user instance
-      #   with errors is returned
-      result.user
-    end
-  end
-
   rolify
 
   # Alumnus->Product: Has been a customer or subscriber to a product or service in the past and is currently
@@ -76,6 +60,22 @@ class User < ApplicationRecord
 
   SELF_SERVICE_ROLES = %i[admin manager subscriber user].freeze
 
+  class << self
+    # Docs on Devise passwordless customization: https://github.com/abevoelker/devise-passwordless#customization
+    def passwordless_login_within
+      15.minutes
+    end
+
+    def from_omniauth(access_token = nil)
+      access_token ||= Current.auth_provider
+      result = UpsertUserFromOmniauthWorkflow.call(access_token:)
+      # Returns either the user instance with errors or the persisted user record
+      # TODO: Add a spec that asserts that when the transaction fails, a user instance
+      #   with errors is returned
+      result.user
+    end
+  end
+
   # JWT model configuration docs: https://github.com/waiting-for-dev/devise-jwt?tab=readme-ov-file#model-configuration
   include Devise::JWT::RevocationStrategies::Allowlist
   # Include default devise modules. Others available are:
@@ -100,7 +100,7 @@ class User < ApplicationRecord
 
   has_many :invoices, as: :invoiceable, dependent: :nullify
   has_many :identity_provider_profiles, dependent: :destroy
-  has_and_belongs_to_many :accounts, join_table: 'accounts_users'
+  has_and_belongs_to_many :accounts, inverse_of: :members
 
   before_validation :cleanup_providers, if: :providers_changed?
 

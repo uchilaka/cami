@@ -3,39 +3,19 @@
 require 'rails_helper'
 
 RSpec.describe 'invoices/new', type: :view do
+  let(:user) { Fabricate :user }
+  let(:invoice) { Fabricate :invoice, invoiceable: user }
+
   before(:each) do
-    assign(:invoice, Invoice.new(
-                       invoiceable_id: '',
-                       invoiceable_type: 'MyString',
-                       account: nil,
-                       user: nil,
-                       payments: '',
-                       links: '',
-                       invoice_number: 'MyString',
-                       status: 1,
-                       amount: '9.99',
-                       due_amount: '9.99',
-                       currency_code: 'MyString',
-                       notes: 'MyText'
-                     ))
+    sign_in user
+    allow(view).to receive(:current_user).and_return(user)
+    assign(:invoice, Fabricate.build(:invoice, invoiceable: user))
   end
 
   it 'renders new invoice form' do
     render
 
     assert_select 'form[action=?][method=?]', invoices_path, 'post' do
-      assert_select 'input[name=?]', 'invoice[invoiceable_id]'
-
-      assert_select 'input[name=?]', 'invoice[invoiceable_type]'
-
-      assert_select 'input[name=?]', 'invoice[account_id]'
-
-      assert_select 'input[name=?]', 'invoice[user_id]'
-
-      assert_select 'input[name=?]', 'invoice[payments]'
-
-      assert_select 'input[name=?]', 'invoice[links]'
-
       assert_select 'input[name=?]', 'invoice[invoice_number]'
 
       assert_select 'input[name=?]', 'invoice[status]'
@@ -44,9 +24,11 @@ RSpec.describe 'invoices/new', type: :view do
 
       assert_select 'input[name=?]', 'invoice[due_amount]'
 
-      assert_select 'input[name=?]', 'invoice[currency_code]'
+      assert_select 'select[name=?]', 'invoice[currency_code]'
 
-      assert_select 'textarea[name=?]', 'invoice[notes]'
+      assert_select 'trix-editor#invoice_notes'
+
+      assert_select 'input[type="hidden"][name=?]', 'invoice[notes]'
     end
   end
 end

@@ -3,6 +3,8 @@
 class ApplicationPolicy
   attr_reader :user, :record
 
+  alias resource record
+
   def initialize(user, record)
     @user = user
     @record = record

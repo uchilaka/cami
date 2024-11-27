@@ -5,18 +5,21 @@ class CreateInvoices < ActiveRecord::Migration[7.2]
   def up
     create_table :invoices, id: :uuid do |t|
       t.belongs_to :invoiceable, polymorphic: true, type: :uuid
-      t.jsonb :payments
-      t.jsonb :links
-      # t.timestamp :viewed_by_recipient_at # TODO Figure out queries of paper_trail data instead for this
-      t.timestamp :updated_accounts_at
+      t.string :vendor_record_id
+      t.string :vendor_recurring_group_id
       t.string :invoice_number
+      t.string :payment_vendor
       t.integer :status
       t.timestamp :issued_at
+      # t.timestamp :viewed_by_recipient_at # TODO Figure out queries of paper_trail data instead for this
+      t.timestamp :updated_accounts_at
       t.timestamp :due_at
       t.timestamp :paid_at
       t.monetize :amount
       t.monetize :due_amount
       t.text :notes
+      t.jsonb :payments
+      t.jsonb :links
 
       t.timestamps
     end

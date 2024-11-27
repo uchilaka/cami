@@ -1,22 +1,16 @@
 <div id="<%= dom_id invoice %>">
   <p class="my-5">
-    <strong class="block font-medium mb-1">Invoiceable:</strong>
-    <%= invoice.invoiceable_id %>
+    <strong class="block font-medium mb-1">Invoice #:</strong>
+    <%= invoice.invoice_number %>
   </p>
 
   <p class="my-5">
-    <strong class="block font-medium mb-1">Invoiceable type:</strong>
-    <%= invoice.invoiceable_type %>
-  </p>
-
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Account:</strong>
-    <%= invoice.account_id %>
-  </p>
-
-  <p class="my-5">
-    <strong class="block font-medium mb-1">User:</strong>
-    <%= invoice.user_id %>
+    <% if invoice.invoiceable.is_a?(Account) %>
+      <strong class="block font-medium mb-1">Account ID:</strong>
+    <% elsif invoice.invoiceable.is_a?(User) %>
+      <strong class="block font-medium mb-1">User ID:</strong>
+    <% end %>
+    <%= invoice.invoiceable&.id %>
   </p>
 
   <p class="my-5">
@@ -29,19 +23,15 @@
     <%= invoice.links %>
   </p>
 
+  <!--
   <p class="my-5">
     <strong class="block font-medium mb-1">Viewed by recipient at:</strong>
-    <%= invoice.viewed_by_recipient_at %>
   </p>
+  -->
 
   <p class="my-5">
     <strong class="block font-medium mb-1">Updated accounts at:</strong>
     <%= invoice.updated_accounts_at %>
-  </p>
-
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Invoice number:</strong>
-    <%= invoice.invoice_number %>
   </p>
 
   <p class="my-5">
@@ -72,11 +62,6 @@
   <p class="my-5">
     <strong class="block font-medium mb-1">Due amount:</strong>
     <%= invoice.due_amount %>
-  </p>
-
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Currency code:</strong>
-    <%= invoice.currency_code %>
   </p>
 
   <p class="my-5">

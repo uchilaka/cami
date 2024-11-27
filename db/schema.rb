@@ -113,12 +113,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_143445) do
   create_table "invoices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "invoiceable_type"
     t.uuid "invoiceable_id"
-    t.jsonb "payments"
-    t.jsonb "links"
-    t.datetime "updated_accounts_at", precision: nil
+    t.string "vendor_record_id"
+    t.string "vendor_recurring_group_id"
     t.string "invoice_number"
+    t.string "payment_vendor"
     t.integer "status"
     t.datetime "issued_at", precision: nil
+    t.datetime "updated_accounts_at", precision: nil
     t.datetime "due_at", precision: nil
     t.datetime "paid_at", precision: nil
     t.integer "amount_cents", default: 0, null: false
@@ -126,6 +127,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_143445) do
     t.integer "due_amount_cents", default: 0, null: false
     t.string "due_amount_currency", default: "USD", null: false
     t.text "notes"
+    t.jsonb "payments"
+    t.jsonb "links"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["invoiceable_type", "invoiceable_id"], name: "index_invoices_on_invoiceable"

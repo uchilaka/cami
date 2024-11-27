@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 class InvoicesController < ApplicationController
+  include MaybeAccountSpecific
+
+  load_account :all,
+               optional: true,
+               id_keys: %i[account_id],
+               bounce_to: :invoices_path
+
   before_action :set_invoice, only: %i[show edit update destroy]
 
   # GET /invoices or /invoices.json
@@ -28,8 +35,8 @@ class InvoicesController < ApplicationController
         format.html { redirect_to @invoice, notice: 'Invoice was successfully created.' }
         format.json { render :show, status: :created, location: @invoice }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @invoice.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
+        format.json { render json: @invoice.errors, status: :unprocessable_content }
       end
     end
   end
@@ -41,8 +48,8 @@ class InvoicesController < ApplicationController
         format.html { redirect_to @invoice, notice: 'Invoice was successfully updated.' }
         format.json { render :show, status: :ok, location: @invoice }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @invoice.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @invoice.errors, status: :unprocessable_content }
       end
     end
   end
@@ -66,7 +73,19 @@ class InvoicesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def invoice_params
-    params.require(:invoice).permit(:invoiceable_id, :invoiceable_type, :account_id, :user_id, :payments, :links,
-                                    :viewed_by_recipient_at, :updated_accounts_at, :invoice_number, :status, :issued_at, :due_at, :paid_at, :amount, :due_amount, :currency_code, :notes)
+    params
+      .require(:invoice)
+      .permit(
+        :account_id,
+        :user_id,
+        :invoice_number,
+        :status,
+        :issued_at,
+        :due_at,
+        :amount,
+        :due_amount,
+        :currency_code,
+        :notes
+      )
   end
 end

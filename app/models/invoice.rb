@@ -4,24 +4,27 @@
 #
 # Table name: invoices
 #
-#  id                  :uuid             not null, primary key
-#  amount_cents        :integer          default(0), not null
-#  amount_currency     :string           default("USD"), not null
-#  due_amount_cents    :integer          default(0), not null
-#  due_amount_currency :string           default("USD"), not null
-#  due_at              :datetime
-#  invoice_number      :string
-#  invoiceable_type    :string
-#  issued_at           :datetime
-#  links               :jsonb
-#  notes               :text
-#  paid_at             :datetime
-#  payments            :jsonb
-#  status              :integer
-#  updated_accounts_at :datetime
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  invoiceable_id      :uuid
+#  id                        :uuid             not null, primary key
+#  amount_cents              :integer          default(0), not null
+#  amount_currency           :string           default("USD"), not null
+#  due_amount_cents          :integer          default(0), not null
+#  due_amount_currency       :string           default("USD"), not null
+#  due_at                    :datetime
+#  invoice_number            :string
+#  invoiceable_type          :string
+#  issued_at                 :datetime
+#  links                     :jsonb
+#  notes                     :text
+#  paid_at                   :datetime
+#  payment_vendor            :string
+#  payments                  :jsonb
+#  status                    :integer
+#  updated_accounts_at       :datetime
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#  invoiceable_id            :uuid
+#  vendor_record_id          :string
+#  vendor_recurring_group_id :string
 #
 # Indexes
 #
@@ -37,16 +40,36 @@ class Invoice < ApplicationRecord
   monetize :amount_cents
   monetize :due_amount_cents
 
+  attribute :payment_vendor, :string, default: 'paypal'
+
+  PAYPAL_BASE_URL = ENV.fetch('PAYPAL_BASE_URL', Rails.application.credentials.paypal&.base_url).freeze
+
   has_many :roles, as: :resource, dependent: :destroy
 
   belongs_to :invoiceable, polymorphic: true
 
-  validates :currency_code,
+  validates :payment_vendor,
             presence: true,
+            inclusion: { in: %w[paypal] }
+  validates :amount_currency,
+            allow_nil: true,
             inclusion: { in: Money::Currency.all.map(&:iso_code) }
-  validates :amount, presence: true
+  validates :due_amount_currency,
+            allow_nil: true,
+            inclusion: { in: Money::Currency.all.map(&:iso_code) }
+  validates :amount_cents, presence: true
+  # validates :due_amount_cents, presence: true
 
   # TODO: Implement AASM status
+
+  def payment_vendor_url
+    case payment_vendor
+    when 'paypal'
+      "#{PAYPAL_BASE_URL}/invoice/s/details/#{vendor_record_id}"
+    else
+      ''
+    end
+  end
 
   # @deprecated Use `amount_currency` or `due_amount_currency` instead
   def currency_code

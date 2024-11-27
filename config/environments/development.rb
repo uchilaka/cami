@@ -132,7 +132,10 @@ Rails.application.configure do
     AppUtils.yes?(ENV.fetch('ENV_VERBOSE_ENQUEUE_LOGS', 'no'))
 
   # Suppress logger output for asset requests.
-  config.assets.quiet = true
+  config.assets.quiet = !AppUtils.debug_assets?
+
+  # Turn on source maps
+  config.assets.debug = AppUtils.debug_assets?
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true

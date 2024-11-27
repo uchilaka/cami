@@ -25,7 +25,8 @@ RSpec.describe Account, type: :model do
   it { should validate_presence_of :display_name }
   it { should validate_presence_of :slug }
   it { should validate_uniqueness_of(:slug).case_insensitive }
-  it { should have_and_belong_to_many(:users) }
+  it { should have_and_belong_to_many(:members) }
+  it { should have_many(:invoices) }
 
   describe '#tax_id' do
     context 'when blank' do
@@ -79,12 +80,10 @@ RSpec.describe Account, type: :model do
     end
   end
 
-  describe '#users' do
+  describe '#invoices', skip: 'pending' do
     let(:account) { Fabricate :account }
-    let(:user) { Fabricate :user }
+    let(:invoice) { Fabricate :invoice }
 
-    before do
-      account.users << user
-    end
+    pending 'can be accessed via "customer" role'
   end
 end

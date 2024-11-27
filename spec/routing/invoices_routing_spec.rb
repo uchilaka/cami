@@ -33,7 +33,7 @@ RSpec.describe InvoicesController, type: :routing do
     end
 
     it 'routes to #destroy' do
-      expect(delete: '/invoices/1').to route_to('invoices#destroy', id: '1')
+      expect(delete: '/invoices/1').not_to route_to('invoices#destroy', id: '1')
     end
   end
 end

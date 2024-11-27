@@ -38,7 +38,12 @@ class Account < ApplicationRecord
   validates :tax_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
 
   has_many :invoices, as: :invoiceable, dependent: :nullify
-  has_and_belongs_to_many :users, join_table: 'accounts_users'
+  # has_and_belongs_to_many :roles, inverse_of: :accounts, join_table: 'accounts_roles', dependent: :destroy
+  has_and_belongs_to_many :members, class_name: 'User', join_table: 'accounts_users'
+
+  # @deprecated use the direct "members" relationship instead. I guess we're
+  #   going to learn interesting things about aliasing associations in Rails 😅
+  alias users members
 
   before_validation :format_tax_id, if: :tax_id_changed?
 
@@ -109,6 +114,10 @@ class Account < ApplicationRecord
     event :deactivate do
       transitions from: %i[active payment_due overdue suspended], to: :deactivated
     end
+  end
+
+  def add_member(user)
+    members << user
   end
 
   private
