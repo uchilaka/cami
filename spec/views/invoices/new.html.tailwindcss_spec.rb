@@ -9,17 +9,7 @@ RSpec.describe 'invoices/new', type: :view do
   before(:each) do
     sign_in user
     allow(view).to receive(:current_user).and_return(user)
-    assign(
-      :invoice,
-      Invoice.new(
-        invoiceable: user,
-        invoice_number: 'MyString',
-        status: 1,
-        amount_cents: 999,
-        due_amount_cents: 999,
-        notes: 'MyText'
-      )
-    )
+    assign(:invoice, Fabricate.build(:invoice, invoiceable: user))
   end
 
   it 'renders new invoice form' do
@@ -34,9 +24,11 @@ RSpec.describe 'invoices/new', type: :view do
 
       assert_select 'input[name=?]', 'invoice[due_amount]'
 
-      assert_select 'input[name=?]', 'invoice[currency_code]'
+      assert_select 'select[name=?]', 'invoice[currency_code]'
 
-      assert_select 'textarea[name=?]', 'invoice[notes]'
+      assert_select 'trix-editor#invoice_notes'
+
+      assert_select 'input[type="hidden"][name=?]', 'invoice[notes]'
     end
   end
 end

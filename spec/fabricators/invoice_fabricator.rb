@@ -35,13 +35,11 @@ Fabricator(:invoice) do
   payments               { [] }
   links                  { [] }
   updated_accounts_at    '2024-11-11 01:29:44'
-  invoice_number         'MyString'
+  invoice_number         { sequence(:invoice_number) { |n| "INV-#{(n + 1).to_s.rjust(4, '0')}" } }
   status                 1
-  issued_at              '2024-11-11 01:29:44'
-  due_at                 '2024-11-11 01:29:44'
-  paid_at                '2024-11-11 01:29:44'
-  amount                 '9.99'
-  due_amount             '9.99'
-  currency_code          'MyString'
-  notes                  'MyText'
+  issued_at              { Time.zone.now - 7.days }
+  due_at                 { Time.zone.now + 23.days }
+  paid_at                { Time.zone.now }
+  amount_cents           999
+  due_amount_cents       999
 end
