@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class InteractorInvoiceProcessing
+module InteractorInvoiceProcessing
+  extend ActiveSupport::Concern
+
   included do
     include InteractorErrorHandling
 
