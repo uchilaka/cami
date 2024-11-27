@@ -21,5 +21,7 @@ module LarCity
         @vendor = vendor
       end
     end
+
+    class InvalidInvoiceDocument < StandardError; end
   end
 end

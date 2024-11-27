@@ -12,6 +12,7 @@
 #  due_at                    :datetime
 #  invoice_number            :string
 #  invoiceable_type          :string
+#  invoicer                  :jsonb
 #  issued_at                 :datetime
 #  links                     :jsonb
 #  notes                     :text
@@ -19,6 +20,7 @@
 #  payment_vendor            :string
 #  payments                  :jsonb
 #  status                    :integer
+#  type                      :string           default("Invoice")
 #  updated_accounts_at       :datetime
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
@@ -40,13 +42,17 @@ class Invoice < ApplicationRecord
   monetize :amount_cents
   monetize :due_amount_cents
 
-  attribute :payment_vendor, :string, default: 'paypal'
+  attribute :payment_vendor, :string
+  # Payment vendor documentation for invoice status:
+  # https://developer.paypal.com/docs/api/invoicing/v2/#definition-invoice_status
+  attribute :status, :string
 
   PAYPAL_BASE_URL = ENV.fetch('PAYPAL_BASE_URL', Rails.application.credentials.paypal&.base_url).freeze
 
   has_many :roles, as: :resource, dependent: :destroy
 
-  belongs_to :invoiceable, polymorphic: true
+  # TODO: Validate on update that the invoiceable is an Account or User
+  belongs_to :invoiceable, polymorphic: true, optional: true
 
   validates :payment_vendor,
             presence: true,

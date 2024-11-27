@@ -35,25 +35,31 @@
 #
 require 'rails_helper'
 
-RSpec.describe Invoice, type: :model do
-  let(:account) { Fabricate :account }
+RSpec.describe InvoiceSerializer do
+  context 'with a simple invoice' do
+    let(:invoiceable) { Fabricate :account }
+    let(:invoice) { Fabricate(:invoice, invoiceable:) }
 
-  subject { Fabricate(:invoice, invoiceable: account) }
+    subject { described_class.new(invoice).serializable_hash }
 
-  # The basics
-  it { is_expected.to have_many(:roles).dependent(:destroy) }
-
-  describe 'when accessed' do
-    let(:user) { Fabricate :user }
-    let(:account) { Fabricate :account }
-
-    context 'by a user' do
-      context 'with a "customer" role on the invoice' do
-        before { user.add_role(:customer, subject) }
-
-        it { expect(user.has_role?(:customer, subject)).to be true }
-      end
-      pending 'with a "contact" role on the invoice'
+    it 'serializes the invoice' do
+      expect(subject).to match(
+        id: invoice.id.to_s,
+        invoice_number: invoice.invoice_number,
+        invoicer: invoice.invoicer,
+        accounts: invoice.accounts,
+        amount: invoice.amount,
+        currency_code: invoice.currency_code,
+        due_amount: invoice.due_amount,
+        payment_vendor: invoice.payment_vendor,
+        invoiced_at: invoice.invoiced_at,
+        due_at: invoice.due_at,
+        links: [],
+        status: 'SENT',
+        viewed_by_recipient: false,
+        vendor_record_id: invoice.vendor_record_id,
+        vendor_recurring_group_id: invoice.vendor_recurring_group_id
+      )
     end
   end
 end

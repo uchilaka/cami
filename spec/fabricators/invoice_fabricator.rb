@@ -12,6 +12,7 @@
 #  due_at                    :datetime
 #  invoice_number            :string
 #  invoiceable_type          :string
+#  invoicer                  :jsonb
 #  issued_at                 :datetime
 #  links                     :jsonb
 #  notes                     :text
@@ -19,6 +20,7 @@
 #  payment_vendor            :string
 #  payments                  :jsonb
 #  status                    :integer
+#  type                      :string           default("Invoice")
 #  updated_accounts_at       :datetime
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
@@ -34,6 +36,9 @@
 Fabricator(:invoice) do
   payments               { [] }
   links                  { [] }
+  payment_vendor         'paypal'
+  invoicer               { { 'email' => Faker::Internet.email } }
+  type                   'Invoice'
   updated_accounts_at    '2024-11-11 01:29:44'
   invoice_number         { sequence(:invoice_number) { |n| "INV-#{(n + 1).to_s.rjust(4, '0')}" } }
   status                 1

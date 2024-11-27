@@ -12,6 +12,7 @@
 #  due_at                    :datetime
 #  invoice_number            :string
 #  invoiceable_type          :string
+#  invoicer                  :jsonb
 #  issued_at                 :datetime
 #  links                     :jsonb
 #  notes                     :text
@@ -19,6 +20,7 @@
 #  payment_vendor            :string
 #  payments                  :jsonb
 #  status                    :integer
+#  type                      :string           default("Invoice")
 #  updated_accounts_at       :datetime
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
@@ -32,8 +34,31 @@
 #  index_invoices_on_invoiceable_type_and_invoiceable_id  (invoiceable_type,invoiceable_id)
 #
 class InvoiceSerializer < ActiveModel::Serializer
-  attributes :id, :invoiceable_id, :invoiceable_type, :payments, :links, :viewed_by_recipient_at, :updated_accounts_at,
-             :invoice_number, :status, :issued_at, :due_at, :paid_at, :amount, :due_amount, :currency_code, :notes
-  has_one :account
-  has_one :user
+  attributes :id,
+             :vendor_record_id,
+             :vendor_recurring_group_id,
+             :invoice_number,
+             :status,
+             :invoicer,
+             :payment_vendor,
+             :accounts,
+             :viewed_by_recipient,
+             :invoiced_at,
+             :due_at,
+             :currency_code,
+             :amount,
+             :due_amount,
+             :links
+
+  def id
+    object.id.to_s
+  end
+
+  def account
+    object.invoiceable if object.invoiceable_type == 'Account'
+  end
+
+  def user
+    object.invoiceable if object.invoiceable_type == 'User'
+  end
 end
