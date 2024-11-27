@@ -7,25 +7,24 @@ module PayPal
         vendor_record_id:,
         vendor_recurring_group_id:,
         invoice_number:,
-        vendor_id:,
         payment_vendor:,
         status:,
         invoicer:,
-        accounts:,
-        viewed_by_recipient:,
-        invoiced_at:,
+        issued_at:,
         due_at:,
-        currency_code:,
-        amount:,
-        due_amount:,
+        amount_cents:,
+        amount_currency:,
+        due_amount_cents:,
+        due_amount_currency:,
         payments:,
-        note:,
-        links:
+        notes:,
+        links:,
+        metadata:
       }
     end
 
     def status
-      object['status']
+      object['status'].to_s.downcase
     end
 
     def vendor_record_id
@@ -56,8 +55,24 @@ module PayPal
       serialize(object['amount'], to: 'Amount')
     end
 
+    def amount_cents
+      amount[:value_in_cents]
+    end
+
+    def amount_currency
+      currency_code
+    end
+
     def due_amount
       serialize(object['due_amount'], to: 'Amount')
+    end
+
+    def due_amount_cents
+      due_amount[:value_in_cents]
+    end
+
+    def due_amount_currency
+      currency_code
     end
 
     def payments
@@ -71,7 +86,7 @@ module PayPal
       object['links']
     end
 
-    def invoiced_at
+    def issued_at
       object.dig('detail', 'invoice_date')
     end
 
@@ -87,7 +102,7 @@ module PayPal
       object.dig('detail', 'currency_code')
     end
 
-    def note
+    def notes
       object.dig('detail', 'note')
     end
 
@@ -95,10 +110,20 @@ module PayPal
       primary_recipients.map { |recipient| serialize(recipient, to: 'InvoiceAccount') }
     end
 
+    def metadata
+      {
+        accounts:,
+        amount:,
+        due_amount:,
+        vendor_id:,
+        viewed_by_recipient:
+      }
+    end
+
     private
 
     def vendor
-      @vendor ||= Business.find_by(slug: payment_vendor)
+      @vendor ||= Account.find_by(slug: payment_vendor)
     end
 
     def primary_recipients

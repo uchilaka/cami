@@ -15,6 +15,7 @@
 #  invoicer                  :jsonb
 #  issued_at                 :datetime
 #  links                     :jsonb
+#  metadata                  :jsonb
 #  notes                     :text
 #  paid_at                   :datetime
 #  payment_vendor            :string
@@ -41,9 +42,8 @@ class InvoiceSerializer < ActiveModel::Serializer
              :status,
              :invoicer,
              :payment_vendor,
-             :accounts,
              :viewed_by_recipient,
-             :invoiced_at,
+             :issued_at,
              :due_at,
              :currency_code,
              :amount,
@@ -60,5 +60,17 @@ class InvoiceSerializer < ActiveModel::Serializer
 
   def user
     object.invoiceable if object.invoiceable_type == 'User'
+  end
+
+  def currency_code
+    object.amount_currency
+  end
+
+  def status
+    object.status.upcase
+  end
+
+  def viewed_by_recipient
+    object.metadata['viewed_by_recipient']
   end
 end

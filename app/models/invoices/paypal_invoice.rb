@@ -15,6 +15,7 @@
 #  invoicer                  :jsonb
 #  issued_at                 :datetime
 #  links                     :jsonb
+#  metadata                  :jsonb
 #  notes                     :text
 #  paid_at                   :datetime
 #  payment_vendor            :string

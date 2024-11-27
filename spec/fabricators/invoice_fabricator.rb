@@ -15,6 +15,7 @@
 #  invoicer                  :jsonb
 #  issued_at                 :datetime
 #  links                     :jsonb
+#  metadata                  :jsonb
 #  notes                     :text
 #  paid_at                   :datetime
 #  payment_vendor            :string
@@ -41,7 +42,6 @@ Fabricator(:invoice) do
   type                   'Invoice'
   updated_accounts_at    '2024-11-11 01:29:44'
   invoice_number         { sequence(:invoice_number) { |n| "INV-#{(n + 1).to_s.rjust(4, '0')}" } }
-  status                 1
   issued_at              { Time.zone.now - 7.days }
   due_at                 { Time.zone.now + 23.days }
   paid_at                { Time.zone.now }

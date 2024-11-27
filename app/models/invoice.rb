@@ -15,6 +15,7 @@
 #  invoicer                  :jsonb
 #  issued_at                 :datetime
 #  links                     :jsonb
+#  metadata                  :jsonb
 #  notes                     :text
 #  paid_at                   :datetime
 #  payment_vendor            :string
@@ -36,6 +37,8 @@
 class Invoice < ApplicationRecord
   resourcify
 
+  include AASM
+
   has_rich_text :notes
 
   # TODO: Refactor amount fields to *_in_cents
@@ -43,9 +46,6 @@ class Invoice < ApplicationRecord
   monetize :due_amount_cents
 
   attribute :payment_vendor, :string
-  # Payment vendor documentation for invoice status:
-  # https://developer.paypal.com/docs/api/invoicing/v2/#definition-invoice_status
-  attribute :status, :string
 
   PAYPAL_BASE_URL = ENV.fetch('PAYPAL_BASE_URL', Rails.application.credentials.paypal&.base_url).freeze
 
@@ -66,7 +66,64 @@ class Invoice < ApplicationRecord
   validates :amount_cents, presence: true
   # validates :due_amount_cents, presence: true
 
-  # TODO: Implement AASM status
+  # Payment vendor documentation for invoice status:
+  # https://developer.paypal.com/docs/api/invoicing/v2/#definition-invoice_status
+  enum :status, {
+    draft: 1,
+    sent: 10,
+    scheduled: 20,
+    unpaid: 30,
+    cancelled: 40,
+    payment_pending: 50,
+    partially_paid: 60,
+    marked_as_paid: 70,
+    paid: 80,
+    marked_as_refunded: 90,
+    partially_refunded: 100,
+    refunded: 110
+  }
+
+  aasm column: :status, enum: true, logger: Rails.logger do
+    state :draft, initial: true
+    state :sent
+    state :scheduled
+    state :unpaid
+    state :cancelled
+    state :payment_pending
+    state :partially_paid
+    state :marked_as_paid
+    state :paid
+    state :marked_as_refunded
+    state :partially_refunded
+    state :refunded
+
+    # TODO: Should require invoiceable (with confirmed email address) to send bill
+    event :send_bill do
+      transitions from: %i[draft scheduled], to: :sent
+    end
+
+    event :partial_payment do
+      transitions from: %i[draft sent scheduled unpaid payment_pending partially_paid], to: :partially_paid
+    end
+
+    event :paid_in_full do
+      transitions from: %i[draft sent scheduled unpaid payment_pending partially_paid], to: :paid
+    end
+
+    event :paid_via_transfer do
+      transitions from: %i[draft sent scheduled unpaid payment_pending partially_paid], to: :marked_as_paid
+    end
+
+    event :late_payment_30_days do
+      # TODO: Mark as unpaid with payment provider
+      transitions from: %i[sent scheduled unpaid payment_pending], to: :unpaid
+    end
+
+    event :late_payment_90_days do
+      # TODO: Mark as canceled with payment provider
+      transitions from: %i[sent scheduled unpaid payment_pending], to: :cancelled
+    end
+  end
 
   def payment_vendor_url
     case payment_vendor

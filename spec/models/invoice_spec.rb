@@ -15,6 +15,7 @@
 #  invoicer                  :jsonb
 #  issued_at                 :datetime
 #  links                     :jsonb
+#  metadata                  :jsonb
 #  notes                     :text
 #  paid_at                   :datetime
 #  payment_vendor            :string
@@ -42,6 +43,44 @@ RSpec.describe Invoice, type: :model do
 
   # The basics
   it { is_expected.to have_many(:roles).dependent(:destroy) }
+
+  describe '#status' do
+    it { transition_from(%i[draft scheduled]).to(:sent).on_event(:send_bill) }
+
+    it do
+      transition_from(%i[sent scheduled unpaid payment_pending partially_paid])
+        .to(:paid)
+        .on_event(:paid_in_full)
+    end
+
+    it do
+      transition_from(%i[sent scheduled unpaid payment_pending partially_paid])
+        .to(:paid)
+        .on_event(:paid_via_transfer)
+    end
+
+    it do
+      transition_from(%i[sent scheduled unpaid payment_pending partially_paid])
+        .to(:partially_paid)
+        .on_event(:partial_payment)
+    end
+
+    it do
+      transition_from(%i[sent scheduled unpaid payment_pending])
+        .to(:unpaid)
+        .on_event(:late_payment_30_days)
+    end
+
+    it do
+      transition_from(%i[sent scheduled unpaid payment_pending])
+        .to(:unpaid)
+        .on_event(:late_payment_90_days)
+    end
+
+    it 'is draft by default' do
+      expect(subject.status).to eq 'draft'
+    end
+  end
 
   describe 'when accessed' do
     let(:user) { Fabricate :user }
