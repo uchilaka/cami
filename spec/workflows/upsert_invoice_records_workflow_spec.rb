@@ -87,13 +87,12 @@ RSpec.describe UpsertInvoiceRecordsWorkflow do
       end
 
       context 'for the business account' do
-        let(:accounts_by_role) { Account.with_role(:customer, invoice) }
         let(:account) { Account.find_by(email: business_account['email']) }
 
         before { subject }
 
         it "assigns the 'customer' role to the account" do
-          expect(accounts_by_role).to include(account)
+          expect(account.has_role?(:customer, invoice)).to be(true)
         end
 
         it 'properly sets the account display name' do

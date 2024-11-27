@@ -32,7 +32,7 @@ class ImportAccountWorkflow
 
     if account.persisted?
       account.add_role(:customer, invoice)
-      invoice.invoiceable = account if invoice.invoiceable.blank?
+      invoice.update(invoiceable: account) if invoice.invoiceable.blank?
     else
       context.errors = account.errors.full_messages
       context.fail!(message: I18n.t('workflows.import_account.errors.generic'))
