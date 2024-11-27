@@ -19,7 +19,7 @@ class Invoicer
 
   define_model_callbacks :initialize, :save, :update, :validation
 
-  validate :email, email: true, allow_nil: true
+  validates :email, email: true, allow_nil: true
 
   def attributes
     { 'email' => nil }
