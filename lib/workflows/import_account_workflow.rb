@@ -21,12 +21,19 @@ class ImportAccountWorkflow
     display_name = email if display_name.blank?
 
     # Create an account for the business
-    account = Account.create(display_name:, email:)
+    account = Account.new(display_name:, email:)
+
     if email.present?
-      # TODO: Add user contact(s) to account metadata
+      contact = AccountContact.new(display_name:, email:, resource: account)
+      account.metadata['contacts'] << contact.compose
     end
 
-    if account.errors.any?
+    account.save
+
+    if account.persisted?
+      account.add_role(:customer, invoice)
+      invoice.invoiceable = account if invoice.invoiceable.blank?
+    else
       context.errors = account.errors.full_messages
       context.fail!(message: I18n.t('workflows.import_account.errors.generic'))
     end
@@ -42,16 +49,14 @@ class ImportAccountWorkflow
   # Returns a list of any matching account(s) found
   def lookup(params)
     working_params = params.symbolize_keys
-    email, display_name, _type = working_params.values_at(:email, :display_name, :type)
-    if email.present?
-      # Check for a business account
-      records = Account.where(email:)
-      return records if records.any?
+    email, _display_name, _type = working_params.values_at(:email, :display_name, :type)
+    return Account.none unless email.present?
 
-      # Check for accounts linked to a user via the invoice email address
-      User.find_by(email:)&.accounts || records
-    else
-      Account.where(display_name:)
-    end
+    # Check for a business account
+    records = Account.where(email:)
+    return records if records.any?
+
+    # Check for accounts linked to a user via the invoice email address
+    User.find_by(email:)&.accounts || records
   end
 end
