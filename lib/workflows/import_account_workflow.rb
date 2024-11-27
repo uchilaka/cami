@@ -7,17 +7,17 @@ class ImportAccountWorkflow
   def call
     account, invoice = nil
     invoice_account = context.invoice_account
-    invoice = invoice_account.invoice
+    invoice = context.invoice
     require_invoice_record_presence!
 
-    context.accounts = lookup(invoice_account.serializable_hash)
+    context.accounts = lookup(invoice_account)
     if context.accounts.any?
       context.fail!(message: I18n.t('workflows.import_account.errors.already_exists'))
       return
     end
 
     email, display_name, _given_name, _family_name, _type =
-      invoice_account.serializable_hash.values_at 'email', 'display_name', 'given_name', 'family_name', 'type'
+      invoice_account.values_at 'email', 'display_name', 'given_name', 'family_name', 'type'
     display_name = email if display_name.blank?
 
     # Create an account for the business
@@ -37,7 +37,7 @@ class ImportAccountWorkflow
       context.errors = account.errors.full_messages
       context.fail!(message: I18n.t('workflows.import_account.errors.generic'))
     end
-  rescue LarCity::Errors::InvalidInvoiceDocument => e
+  rescue LarCity::Errors::InvalidInvoiceRecord => e
     context.fail!(message: e.message)
   ensure
     context.invoice = invoice
