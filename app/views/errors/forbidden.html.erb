@@ -1,9 +1,11 @@
 <p class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-wider text-gray-300 mt-2">
-  Forbidden
+  <%= t('exceptions.forbidden_short') %>
 </p>
 <p class="text-lg md:text-xl lg:text-2xl text-gray-500 my-12">
-  You are forbidden from accessing this resource. You will need elevated privileges before you can proceed. If you are the application owner reach out to the <a href="mailto:devsecops@lar.city?subject=I+need+application+access" target="_blank">
-    engineering or security team
+  <%= t('exceptions.forbidden') %>
+  <%= t('exceptions.help_prefix') %>
+   <a href="mailto:devsecops@lar.city?subject=I+need+application+access" target="_blank">
+    <%= t('labels.engineering_or_support') %>
   </a>.
 </p>
 
