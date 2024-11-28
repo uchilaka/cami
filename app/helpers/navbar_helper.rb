@@ -107,15 +107,34 @@ module NavbarHelper
       # TODO: Update AppUtils to compose the application's URL based on whether
       #   the NGINX tunnel is running or not.
       {
-        label: 'Mailhog (Testing email inbox)',
-        url: 'http://localhost:8025',
+        label: 'Test email inbox',
+        url: test_inbox_url,
         admin: true,
         enabled: Rails.env.development?
       },
+      {
+        label: 'PayPal Dashboard',
+        url: paypal_developer_dashboard_url,
+        admin: true,
+        enabled: true
+      }
     ].map { |item| build_menu_item(item) }.filter(&:enabled)
   end
 
   private
+
+  # @deprecated Refactor this method to fetch a configured resource link from the application credentials store instead
+  def test_inbox_url
+    # Mailhog URL
+    'http://localhost:8025'
+  end
+
+  # @deprecated Refactor this method to fetch a configured resource link from the application credentials store instead
+  def paypal_developer_dashboard_url
+    paypal_env = Rails.env.production? ? 'live' : 'sandbox'
+
+    "https://developer.paypal.com/dashboard/applications/#{paypal_env}"
+  end
 
   def system_log_url
     @system_log_url ||= VirtualOfficeManager.logstream_vendor_url

@@ -8,26 +8,16 @@ module PayPal
       Sidekiq::Testing.inline! { example.run }
     end
 
+    let(:paypal_bearer_token) do
+      username = ENV.fetch('PAYPAL_CLIENT_ID')
+      password = ENV.fetch('PAYPAL_CLIENT_SECRET')
+      Base64.strict_encode64("#{username}:#{password}")
+    end
+
     context 'when the request is authorized' do
       around do |example|
-        # API docs: https://rubydoc.info/gems/vcr/6.2.0/VCR#use_cassette-instance_method
-        VCR.use_cassette(
-          'paypal/fetch_invoices',
-          # NOTE: in development, change (from :none) to `record: :new_episodes` to update the cassette
-          record: :none,
-          tag: :obfuscate
-        ) do
-          # NOTE: When working in development to update the cassette, disable this block
-          with_modified_env(
-            PAYPAL_API_BASE_URL: Rails.application.credentials.paypal.api_base_url,
-            PAYPAL_CLIENT_ID: Rails.application.credentials.paypal.client_id,
-            PAYPAL_CLIENT_SECRET: Rails.application.credentials.paypal.client_secret
-          ) do
-            example.run
-          end
-          # # NOTE: When working in development to update the cassette, enable this line
-          # #   after disabling ☝🏾 block
-          # example.run
+        maybe_record_cassette(name: 'paypal/fetch_invoices', record: :once, tag: :obfuscate) do
+          example.run
         end
       end
 
