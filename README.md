@@ -432,3 +432,10 @@ deprecation warnings into errors, giving you the full backtrace.
 
 - [ ] Configure error reporting: <https://guides.rubyonrails.org/error_reporting.html>
 - [ ] Setup E2E test suite. Partial to Playwright over Cypress, but we should decide based on the needs of the project (See [future reading](#future-reading-))
+- [ ] React Router v7 Future Flag Warnings
+  - [ ] React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+  - [ ] Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath
+  - [ ] The persistence behavior of fetchers is changing in v7. You can use the `v7_fetcherPersist` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_fetcherpersist. 
+  - [ ] Casing of `formMethod` fields is being normalized to uppercase in v7. You can use the `v7_normalizeFormMethod` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_normalizeformmethod.
+  - [ ] `RouterProvider` hydration behavior is changing in v7. You can use the `v7_partialHydration` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_partialhydration.
+  - [ ] The revalidation behavior after 4xx/5xx `action` responses is changing in v7. You can use the `v7_skipActionErrorRevalidation` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_skipactionerrorrevalidation.
