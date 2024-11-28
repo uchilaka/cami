@@ -41,7 +41,7 @@
 
 # Ignore files that might contain PII
 /spec/cassettes/paypal/
-!/spec/cassettes/paypal/*_sanitized.yml
+/spec/fixtures/pii/paypal/
 
 # Ignore master key for decrypting credentials and more.
 /config/credentials/*.key

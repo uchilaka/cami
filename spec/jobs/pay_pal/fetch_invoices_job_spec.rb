@@ -13,7 +13,7 @@ module PayPal
         # API docs: https://rubydoc.info/gems/vcr/6.2.0/VCR#use_cassette-instance_method
         VCR.use_cassette(
           'paypal/fetch_invoices',
-          # NOTE: in development, change to `record: :new_episodes` to update the cassette
+          # NOTE: in development, change (from :none) to `record: :new_episodes` to update the cassette
           record: :none,
           tag: :obfuscate
         ) do
@@ -25,8 +25,8 @@ module PayPal
           ) do
             example.run
           end
-          # NOTE: When working in development to update the cassette, enable this line
-          #   after disabling ☝🏾 block
+          # # NOTE: When working in development to update the cassette, enable this line
+          # #   after disabling ☝🏾 block
           # example.run
         end
       end
