@@ -3,6 +3,8 @@
 class UpsertInvoiceRecordsJob < ApplicationJob
   queue_as :whenever
 
+  sidekiq_options retry: 3
+
   BATCH_LIMIT = 25
 
   def perform
