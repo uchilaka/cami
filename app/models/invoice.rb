@@ -82,7 +82,7 @@ class Invoice < ApplicationRecord
     marked_as_refunded: 90,
     partially_refunded: 100,
     refunded: 110
-  }
+  }, scopes: true
 
   aasm column: :status, enum: true, logger: Rails.logger do
     state :draft, initial: true
@@ -122,7 +122,7 @@ class Invoice < ApplicationRecord
 
     event :late_payment_90_days do
       # TODO: Mark as canceled with payment provider
-      transitions from: %i[sent scheduled unpaid payment_pending], to: :cancelled
+      transitions from: %i[sent scheduled unpaid payment_pending], to: :unpaid
     end
   end
 

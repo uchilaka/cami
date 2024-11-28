@@ -11,8 +11,6 @@ module Users
     # before_action :configure_sign_up_params, only: [:create]
     # before_action :configure_account_update_params, only: [:update]
 
-    attr_accessor :global_privilege_level, :most_privileged_role, :available_roles
-
     # # GET /resource/sign_up
     # def new
     #   super

@@ -45,37 +45,41 @@ RSpec.describe Invoice, type: :model do
   it { is_expected.to have_many(:roles).dependent(:destroy) }
 
   describe '#status' do
-    it { transition_from(%i[draft scheduled]).to(:sent).on_event(:send_bill) }
+    # draft or scheduled to sent on send_bill
+    it { is_expected.to transition_from(:draft).to(:sent).on_event(:send_bill) }
+    it { is_expected.to transition_from(:scheduled).to(:sent).on_event(:send_bill) }
 
-    it do
-      transition_from(%i[sent scheduled unpaid payment_pending partially_paid])
-        .to(:paid)
-        .on_event(:paid_in_full)
-    end
+    # sent, scheduled, unpaid, payment_pending OR partially_paid to paid on paid_in_full
+    it { is_expected.to transition_from(:scheduled).to(:paid).on_event(:paid_in_full) }
+    it { is_expected.to transition_from(:sent).to(:paid).on_event(:paid_in_full) }
+    it { is_expected.to transition_from(:unpaid).to(:paid).on_event(:paid_in_full) }
+    it { is_expected.to transition_from(:payment_pending).to(:paid).on_event(:paid_in_full) }
+    it { is_expected.to transition_from(:partially_paid).to(:paid).on_event(:paid_in_full) }
 
-    it do
-      transition_from(%i[sent scheduled unpaid payment_pending partially_paid])
-        .to(:paid)
-        .on_event(:paid_via_transfer)
-    end
+    # sent, scheduled, unpaid, payment_pending OR partially_paid to marked_as_paid on paid_via_transfer
+    it { is_expected.to transition_from(:scheduled).to(:marked_as_paid).on_event(:paid_via_transfer) }
+    it { is_expected.to transition_from(:sent).to(:marked_as_paid).on_event(:paid_via_transfer) }
+    it { is_expected.to transition_from(:unpaid).to(:marked_as_paid).on_event(:paid_via_transfer) }
+    it { is_expected.to transition_from(:payment_pending).to(:marked_as_paid).on_event(:paid_via_transfer) }
+    it { is_expected.to transition_from(:partially_paid).to(:marked_as_paid).on_event(:paid_via_transfer) }
 
-    it do
-      transition_from(%i[sent scheduled unpaid payment_pending partially_paid])
-        .to(:partially_paid)
-        .on_event(:partial_payment)
-    end
+    # sent, scheduled, unpaid OR payment_pending to partially_paid on partial_payment
+    it { is_expected.to transition_from(:sent).to(:partially_paid).on_event(:partial_payment) }
+    it { is_expected.to transition_from(:scheduled).to(:partially_paid).on_event(:partial_payment) }
+    it { is_expected.to transition_from(:unpaid).to(:partially_paid).on_event(:partial_payment) }
+    it { is_expected.to transition_from(:payment_pending).to(:partially_paid).on_event(:partial_payment) }
 
-    it do
-      transition_from(%i[sent scheduled unpaid payment_pending])
-        .to(:unpaid)
-        .on_event(:late_payment_30_days)
-    end
+    # sent, scheduled, unpaid OR payment_pending to unpaid on late_payment_30_days
+    it { is_expected.to transition_from(:sent).to(:unpaid).on_event(:late_payment_30_days) }
+    it { is_expected.to transition_from(:scheduled).to(:unpaid).on_event(:late_payment_30_days) }
+    it { is_expected.to transition_from(:unpaid).to(:unpaid).on_event(:late_payment_30_days) }
+    it { is_expected.to transition_from(:payment_pending).to(:unpaid).on_event(:late_payment_30_days) }
 
-    it do
-      transition_from(%i[sent scheduled unpaid payment_pending])
-        .to(:unpaid)
-        .on_event(:late_payment_90_days)
-    end
+    # sent, scheduled, unpaid OR payment_pending to canceled on late_payment_90_days
+    it { is_expected.to transition_from(:sent).to(:unpaid).on_event(:late_payment_90_days) }
+    it { is_expected.to transition_from(:scheduled).to(:unpaid).on_event(:late_payment_90_days) }
+    it { is_expected.to transition_from(:unpaid).to(:unpaid).on_event(:late_payment_90_days) }
+    it { is_expected.to transition_from(:payment_pending).to(:unpaid).on_event(:late_payment_90_days) }
 
     it 'is draft by default' do
       expect(subject.status).to eq 'draft'
