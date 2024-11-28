@@ -34,12 +34,18 @@ module PayPal
     end
 
     context 'when the request is unauthorized' do
+      # TODO: Is there a way to stub the connection more concisely i.e. with the expected
+      #   request parameters (uri in particular)?
       let(:stubs)  { Faraday::Adapter::Test::Stubs.new }
       let(:conn)   { Faraday.new { |b| b.adapter(:test, stubs) } }
 
       before do
         allow_any_instance_of(described_class).to receive(:connection) { conn }
         allow(Rails.logger).to receive(:error)
+      end
+
+      around do |example|
+        with_paypal_api_credentials { example.run }
       end
 
       after do

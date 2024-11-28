@@ -138,16 +138,6 @@ RSpec.configure do |config|
   end
 
   config.around(:each) do |example|
-    # # E.g. Load VCR cassettes
-    # cassettes = Rails.application.config_for(:vcr)[:cassettes].entries.map do |key, tuple|
-    #   { name: tuple[:name] || key, options: tuple[:options] }
-    # end.select { |tape| tape[:name] != :default }
-    # DatabaseCleaner.cleaning do
-    #   VCR.use_cassettes(cassettes) do |_cassette|
-    #     example.run
-    #   end
-    # end
-
     DatabaseCleaner.cleaning { example.run }
 
     # Clean up all test double state
