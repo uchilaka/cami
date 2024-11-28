@@ -41,6 +41,11 @@ module Cami
 
     config.time_zone = 'Eastern Time (US & Canada)'
 
+    # Setting the Active Job backend: https://guides.rubyonrails.org/active_job_basics.html#setting-the-backend
+    config.active_job.queue_adapter = :sidekiq
+    # # Active Job queues: https://guides.rubyonrails.org/active_job_basics.html#queues
+    # config.active_job.queue_name_prefix = Rails.env
+
     config.active_record.query_log_tags =
       %i[
         application
