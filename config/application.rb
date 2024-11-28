@@ -87,5 +87,8 @@ module Cami
     # Doc for jbuilder: https://github.com/rails/jbuilder
     Jbuilder.key_format camelize: :lower
     Jbuilder.deep_format_keys true
+
+    # Make sure Warden::Manager is loaded before the middleware that uses it
+    config.middleware.insert_before ActionDispatch::Cookies, Warden::Manager
   end
 end

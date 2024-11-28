@@ -109,7 +109,11 @@ class User < ApplicationRecord
   end
 
   def assign_default_role
-    add_role(:user) if roles.blank?
+    add_role(:user)
+  end
+
+  def maybe_assign_default_role
+    assign_default_role unless has_role?(:user)
   end
 
   # def jwt_payload
@@ -128,6 +132,7 @@ class User < ApplicationRecord
   # end
   #
   def after_magic_link_authentication
+    maybe_assign_default_role
     # NOTE: Consider the successful completion of a magic link authentication
     #  as a confirmation of the user's email address
     confirm unless confirmed?
