@@ -41,8 +41,6 @@ module Cami
 
     config.time_zone = 'Eastern Time (US & Canada)'
 
-    config.active_job.queue_adapter = :sidekiq
-
     config.active_record.query_log_tags =
       %i[
         application

@@ -76,7 +76,7 @@ RSpec.describe Account, type: :model do
 
       it { expect(account).to be_valid }
 
-      it { expect(account.status).to eq 'demo' }
+      it { expect(account.status).to eq('demo') }
     end
   end
 

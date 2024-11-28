@@ -46,6 +46,7 @@ class Invoice < ApplicationRecord
   monetize :due_amount_cents
 
   attribute :payment_vendor, :string
+  attribute :metadata, :jsonb, default: { accounts: [] }
 
   PAYPAL_BASE_URL = ENV.fetch('PAYPAL_BASE_URL', Rails.application.credentials.paypal&.base_url).freeze
 

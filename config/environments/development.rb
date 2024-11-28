@@ -127,6 +127,9 @@ Rails.application.configure do
   config.active_record.verbose_query_logs =
     AppUtils.yes?(ENV.fetch('ENV_VERBOSE_QUERY_LOGS', 'no'))
 
+  # Setting the Active Job backend: https://guides.rubyonrails.org/active_job_basics.html#setting-the-backend
+  config.active_job.queue_adapter = :sidekiq
+
   # Highlight code that enqueued background job in logs.
   config.active_job.verbose_enqueue_logs =
     AppUtils.yes?(ENV.fetch('ENV_VERBOSE_ENQUEUE_LOGS', 'no'))
