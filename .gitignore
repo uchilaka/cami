@@ -40,7 +40,6 @@
 /config/secrets/
 
 # Ignore files that might contain PII
-/spec/cassettes/paypal/
 /spec/fixtures/pii/paypal/
 
 # Ignore master key for decrypting credentials and more.

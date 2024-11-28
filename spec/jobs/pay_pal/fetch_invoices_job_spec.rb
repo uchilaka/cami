@@ -16,6 +16,10 @@ module PayPal
 
     context 'when the request is authorized' do
       around do |example|
+        # IMPORTANT: The `record: :once` option is used to prevent the cassette from being
+        #  overwritten on subsequent test runs. If you need to update the cassette, change
+        #  this option to `record: :new_episodes` and run the test once. Then revert the
+        #  option back to `record: :once` to prevent the cassette from being overwritten.
         maybe_record_cassette(name: 'paypal/fetch_invoices', record: :once, tag: :obfuscate) do
           example.run
         end

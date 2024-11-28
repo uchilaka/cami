@@ -43,7 +43,7 @@ end
 
 # VCR usage docs https://benoittgt.github.io/vcr
 VCR.configure do |c|
-  c.cassette_library_dir = 'spec/cassettes'
+  c.cassette_library_dir = 'spec/fixtures/cassettes'
   c.hook_into :faraday
   c.allow_http_connections_when_no_cassette = true
 
@@ -68,7 +68,6 @@ VCR.configure do |c|
       interaction.response.body = PIISanitizer.sanitize(interaction.response.body)
     end
   end
-  # TODO: Ensure Authorization header data with tokens don't end up in a cassette
 end
 
 RSpec.configure do |config|
