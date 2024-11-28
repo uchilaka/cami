@@ -24,7 +24,7 @@ class ImportAccountWorkflow
     account = Account.new(display_name:, email:)
 
     if email.present?
-      contact = AccountContact.new(display_name:, email:, resource: account)
+      contact = AccountContact.new(display_name:, email:)
       account.metadata['contacts'] << contact.compose
     end
 

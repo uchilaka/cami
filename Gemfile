@@ -94,7 +94,7 @@ group :development, :test do
   gem 'fabrication'
   gem 'faker'
   gem 'open3'
-  # gem 'rspec-wait'
+  gem 'rspec-wait'
   gem 'rubocop'
   gem 'strong_migrations'
 
