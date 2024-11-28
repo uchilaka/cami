@@ -8,11 +8,14 @@ module PayPal
       Sidekiq::Testing.inline! { example.run }
     end
 
+    let(:client_id) { ENV.fetch('PAYPAL_CLIENT_ID', nil) }
+    let(:client_secret) { ENV.fetch('PAYPAL_CLIENT_SECRET', nil) }
     let(:paypal_bearer_token) do
-      username = ENV.fetch('PAYPAL_CLIENT_ID')
-      password = ENV.fetch('PAYPAL_CLIENT_SECRET')
-      Base64.strict_encode64("#{username}:#{password}")
+      Base64.strict_encode64("#{client_id}:#{client_secret}") \
+        if client_id.present? && client_secret.present?
     end
+
+    let(:cassette) { vcr_cassettes[:paypal] }
 
     context 'when the request is authorized' do
       around do |example|
@@ -20,8 +23,8 @@ module PayPal
         #  overwritten on subsequent test runs. If you need to update the cassette, change
         #  this option to `record: :new_episodes` and run the test once. Then revert the
         #  option back to `record: :once` to prevent the cassette from being overwritten.
-        maybe_record_cassette(name: 'paypal/fetch_invoices', record: :once, tag: :obfuscate) do
-          example.run
+        VCR.use_cassette('paypal/fetch_invoices', cassette[:options]) do
+          with_paypal_api_credentials { example.run }
         end
       end
 

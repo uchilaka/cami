@@ -68,6 +68,10 @@ VCR.configure do |c|
       interaction.response.body = PIISanitizer.sanitize(interaction.response.body)
     end
   end
+
+  c.before_http_request do |req|
+    Rails.logger.info "VCR: Request", { method: req.method, uri: req.uri, headers: req.headers }
+  end
 end
 
 RSpec.configure do |config|
@@ -134,7 +138,18 @@ RSpec.configure do |config|
   end
 
   config.around(:each) do |example|
+    # # E.g. Load VCR cassettes
+    # cassettes = Rails.application.config_for(:vcr)[:cassettes].entries.map do |key, tuple|
+    #   { name: tuple[:name] || key, options: tuple[:options] }
+    # end.select { |tape| tape[:name] != :default }
+    # DatabaseCleaner.cleaning do
+    #   VCR.use_cassettes(cassettes) do |_cassette|
+    #     example.run
+    #   end
+    # end
+
     DatabaseCleaner.cleaning { example.run }
+
     # Clean up all test double state
     RSpec::Mocks.teardown
   end
