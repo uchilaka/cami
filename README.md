@@ -135,6 +135,23 @@ System dependencies are defined in the following configuration files:
     </tr>
 </table>
 
+### Environment variables 
+
+#### `LAN_SUBNET_MASK`
+
+This configuration is intended to give us a way to allow certain app management features based on the virtual network location of our teams. 
+
+Specifically, this `ENV` variable is an override to configure access to the app's [web console](https://github.com/rails/web-console) (also see [the docs](https://github.com/rails/web-console?tab=readme-ov-file#configweb_consolepermissions), as well as `VirtualOfficeManager#web_console_permissions`).
+
+The built-in configuration option is to set the following in the corresponding [custom credential file](https://guides.rubyonrails.org/security.html#custom-credentials): 
+
+> Tip: run `EDITOR=code bin/thor lx-cli:secrets:edit` in your development environment to edit the credentials file.
+
+```yaml
+web_console:
+  permissions: 
+```
+
 ## Running the app for the first time
 
 ### 1. Setup the environment
