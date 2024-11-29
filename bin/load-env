@@ -6,4 +6,15 @@ echo "Project root: ${PROJECT_ROOT}"
 
 echo "Loading environment variables..."
 
-source "${PROJECT_ROOT}/.env.local"
+MISSING_ENV_MSG=$(cat <<- SKIP
+No .env.local file found. If your development environment supports direnv, \
+you should run "direnv allow" and make sure your .envrc file is configured \
+correctly. If you are not using direnv, you should create a .env.local file.
+SKIP
+)
+
+if [ -f "${PROJECT_ROOT}/.env.local" ]; then
+    source "${PROJECT_ROOT}/.env.local"
+else
+    echo "$MISSING_ENV_MSG"
+fi

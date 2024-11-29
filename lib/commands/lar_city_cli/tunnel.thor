@@ -8,6 +8,29 @@ module LarCityCLI
   class Tunnel < Base
     namespace :'lx-cli:tunnel'
 
+    desc 'init', 'Initialize ngrok config for the project'
+    def init
+      if Rails.env.test?
+        say 'Skipping initialization of ngrok config in test environment.', Color::RED
+        return
+      end
+
+      config_file_template = Rails.root.join('config', 'ngrok.yml.erb')
+      return unless File.exist?(config_file_template)
+
+      # Process an ERB config file if one is found
+      config_file = Rails.root.join('config', 'ngrok.yml')
+      if File.exist?(config_file)
+        say "ngrok config already exists at #{config_file}.", Color::YELLOW
+        return
+      end
+
+      puts 'Processing ngrok config ERB...'
+      yaml_config = ERB.new(File.read(config_file_template)).result
+      puts "Writing ngrok config to #{config_file}"
+      File.write config_file, yaml_config unless dry_run?
+    end
+
     desc 'open_all', 'Open ngrok tunnels for the project'
     def open_all
       if auth_token_nil?

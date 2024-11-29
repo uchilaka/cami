@@ -14,16 +14,15 @@ services:
     restart: unless-stopped
     environment:
       NGROK_AUTHTOKEN: ${NGROK_AUTH_TOKEN}
-      NGROK_PROFILE_CONFIG_PATH: /root/.ngrok2/ngrok.yml
     command:
       # CLI docs: https://ngrok.com/docs/agent/cli/#ngrok-start
       - "start"
       - "--all"
       - "--config"
-      - "/etc/ngrok.yml,/etc/ngrok-auth.yml"
+      - "/etc/ngrok.yml"
     volumes:
+      # Be sure to run bin/thor lx-cli:tunnel:init to generate the ngrok.yml file
       - ./config/ngrok.yml:/etc/ngrok.yml
-      - ~/.ngrok2/ngrok.yml:/etc/ngrok-auth.yml
     ports:
       - 4040:4040
 
