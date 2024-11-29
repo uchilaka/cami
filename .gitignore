@@ -36,8 +36,9 @@
 ############################## Secrets ############################
 ###################################################################
 
-# Ignore secret files
+# Ignore sensitive files
 /config/secrets/
+/config/ngrok.yml
 
 # Ignore master key for decrypting credentials and more.
 /config/credentials/*.key
