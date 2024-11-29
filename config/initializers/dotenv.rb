@@ -8,6 +8,7 @@ dotenv_required_keys = %w[
   APP_DATABASE_PASSWORD
   LAN_SUBNET_MASK
   PORT
+  REDIS_URL
 ]
 
 if Rails.env.test?
