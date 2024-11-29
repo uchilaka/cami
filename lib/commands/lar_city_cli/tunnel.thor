@@ -15,12 +15,11 @@ module LarCityCLI
         return
       end
 
-      config_file_template = Rails.root.join('config', 'ngrok.yml.erb')
+      config_file_template = config_file(name: 'ngrok.yml.erb')
       return unless File.exist?(config_file_template)
 
       # Process an ERB config file if one is found
-      config_file = Rails.root.join('config', 'ngrok.yml')
-      if File.exist?(config_file)
+      if config_file_exists?
         say "ngrok config already exists at #{config_file}.", Color::YELLOW
         return
       end
@@ -83,6 +82,14 @@ module LarCityCLI
     end
 
     private
+
+    def config_file(name: 'ngrok.yml')
+      @config_file ||= Rails.root.join('config', name).to_s
+    end
+
+    def config_file_exists?
+      File.exist?(config_file)
+    end
 
     def auth_token_nil?
       ENV.fetch('NGROK_AUTH_TOKEN', nil).nil?
