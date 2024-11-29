@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+PROJECT_ROOT="$(git rev-parse --show-toplevel)"
+
+source "${PROJECT_ROOT}/.env.local"
