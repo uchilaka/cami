@@ -63,5 +63,11 @@ class VirtualOfficeManager
     def logstream_vendor
       Rails.application.credentials.betterstack
     end
+
+    def web_console_permissions
+      return nil if Rails.env.test?
+
+      ENV.fetch('LAN_SUBNET_MASK', Rails.application.credentials.web_console.permissions)
+    end
   end
 end

@@ -16,6 +16,7 @@ jobs:
       # TODO: Change to 16006 to match the port in the docker-compose.yml file
       PORT: 3000
       RAILS_ENV: test
+      REDIS_URL: redis://localhost:16079/1
       RSPEC_FAIL_FAST: false
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
       PROJECT_ROOT: .
