@@ -8,6 +8,22 @@ services:
       - '1025:1025'
       - '8025:8025'
 
+  # Doc: https://ngrok.com/docs/using-ngrok-with/docker/#:~:text=Using%20ngrok%20with%20Docker%20Compose
+  tunnel:
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTH_TOKEN}
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yml"
+    volumes:
+      - ./config/ngrok.yml:/etc/ngrok.yml
+    ports:
+      - 4040:4040
+
   redis-store:
     container_name: redis.accounts.larcity
     image: redis:7
