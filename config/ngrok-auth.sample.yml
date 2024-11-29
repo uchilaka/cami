@@ -1,0 +1,5 @@
+version: 3
+
+agent:
+  # Obtain a valid auth token from:
+  authtoken:
