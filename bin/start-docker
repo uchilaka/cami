@@ -1,2 +1,6 @@
 #!/usr/bin/env bash
-docker compose up -d && docker compose logs --follow
+
+# Intentionally skips the tunnel service, as it is only needed
+# when testing features like SSO or payment integrations
+docker compose up app-store redis-store mailhog -d &&\
+  docker compose logs --follow
