@@ -91,6 +91,15 @@ jobs:
       - name: Install Yarn dependencies
         run: yarn install --immutable
 
+      - name: Build assets - stylesheets
+        run: |
+          bundle exec rake dartsass:build
+          bundle exec rake tailwindcss:build
+
+      - name: Build assets - frontend JS
+        run: |
+          bundle exec rake vite:build_all
+
       - name: Build and run tests
         run: |
           # Run all specs except those with the option skip_in_ci: true
