@@ -89,5 +89,5 @@ jobs:
 
       - name: Build and run tests
         run: |
-          # Run all specs except those with the option devtool: true
+          # Run all specs except those with the option skip_in_ci: true
           bundle exec rspec --tag ~skip_in_ci:true

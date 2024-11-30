@@ -40,6 +40,10 @@ class Account < ApplicationRecord
   validates :tax_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
 
   has_many :invoices, as: :invoiceable, dependent: :nullify
+  # TODO: This generates the following console error:
+  #   `warning: already initialized constant Account::HABTM_Roles`
+  #   However, without this line, the behavior of assigning
+  #   roles to accounts on invoices breaks.
   has_and_belongs_to_many :roles, inverse_of: :accounts, dependent: :destroy
   has_and_belongs_to_many :members, class_name: 'User', join_table: 'accounts_users'
 

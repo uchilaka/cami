@@ -22,7 +22,7 @@ RSpec.describe Role, type: :model do
   let(:role_name) { 'doodad' }
 
   it { is_expected.to have_and_belong_to_many(:users).join_table('users_roles') }
-  it { is_expected.to have_and_belong_to_many(:accounts).join_table('accounts_roles') }
+  it { is_expected.to have_and_belong_to_many(:accounts) }
 
   describe '#users' do
     let(:user) { Fabricate :user }
