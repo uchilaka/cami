@@ -28,6 +28,21 @@ RSpec.describe Account, type: :model do
   it { should have_and_belong_to_many(:members) }
   it { should have_many(:invoices) }
 
+  shared_examples 'adding a role on an invoice is supported' do |role_name|
+    let(:account) { Fabricate :account }
+    let(:invoice) { Fabricate :invoice }
+
+    subject { account.add_role(role_name, invoice) }
+
+    context "when role = #{role_name}" do
+      it { expect { subject }.to change { account.has_role?(role_name, invoice) }.to(true) }
+      it { expect { subject }.to change { invoice.roles.count }.by(1) }
+    end
+  end
+
+  it_should_behave_like 'adding a role on an invoice is supported', :customer
+  it_should_behave_like 'adding a role on an invoice is supported', :contact
+
   describe '#tax_id' do
     context 'when blank' do
       subject { Fabricate :account, tax_id: '' }
