@@ -72,6 +72,9 @@ gem 'phonelib'
 # Roles library with resource scoping
 gem 'rolify', '~> 6.0'
 
+# Executes code after database commit wherever you want in your application (Required by AASM)
+gem 'after_commit_everywhere', '~> 1.0'
+
 # State machine mixin for Ruby objects
 gem 'aasm', '~> 5.5'
 
