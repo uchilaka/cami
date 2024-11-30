@@ -73,7 +73,7 @@ jobs:
           sudo apt-get install -y libvips
 
       - name: Setup DB
-        run: bin/rake db:drop db:create db:migrate && bin/rake db:seed
+        run: bin/rake db:reset db:migrate db:seed data:migrate
 
       - name: Enable Corepack
         run: corepack enable
