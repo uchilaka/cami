@@ -44,6 +44,47 @@ RSpec.describe Invoice, type: :model do
   # The basics
   it { is_expected.to have_many(:roles).dependent(:destroy) }
 
+  describe '#amount' do
+    context 'initialize' do
+      subject { Invoice.new }
+
+      it { expect(subject.amount).to eq 0 }
+      xit do
+        expect { subject.assign_attributes(amount: '4.99') }.to \
+          raise_error(ArgumentError, 'Money#== supports only zero numerics')
+      end
+      it do
+        expect { subject.assign_attributes(amount: 4.99) }.to \
+          change { subject.amount_cents }.to 499
+      end
+      it do
+        expect { subject.update(amount: 0.99) }.to \
+          change { subject.amount_cents }.to 99
+      end
+    end
+
+    context 'after save' do
+      subject { described_class.new(amount: '14.50', payment_vendor: 'paypal') }
+
+      it { expect(subject).to be_valid }
+      it { expect(subject.amount_cents).to eq 1450 }
+      it { expect(subject.amount.format).to eq '$14.50' }
+      it { expect(subject.amount.format(no_cents: true)).to eq '$14' }
+      it { expect(subject.amount.format(symbol: false)).to eq '14.50' }
+      it { expect { subject.save! }.not_to raise_error }
+    end
+
+    context 'after update' do
+      subject { Fabricate :invoice, amount: 0 }
+
+      it 'is valid with "4.99"' do
+        expect { subject.update(amount: '4.99') }.to \
+          change { subject.amount_cents }.to 499
+        expect(subject).to be_valid
+      end
+    end
+  end
+
   describe '#status' do
     # draft or scheduled to sent on send_bill
     it { is_expected.to transition_from(:draft).to(:sent).on_event(:send_bill) }

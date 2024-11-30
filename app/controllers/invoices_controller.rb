@@ -8,6 +8,8 @@ class InvoicesController < ApplicationController
                id_keys: %i[account_id],
                bounce_to: :invoices_path
 
+  load_console
+
   before_action :set_invoice, only: %i[show edit update destroy]
 
   # GET /invoices or /invoices.json
@@ -68,7 +70,7 @@ class InvoicesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_invoice
-    @invoice = Invoice.find(params[:id])
+    @invoice = policy_scope(Invoice).find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.
@@ -77,7 +79,6 @@ class InvoicesController < ApplicationController
       .require(:invoice)
       .permit(
         :account_id,
-        :user_id,
         :invoice_number,
         :status,
         :issued_at,
