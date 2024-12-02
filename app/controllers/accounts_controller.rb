@@ -111,7 +111,7 @@ class AccountsController < ApplicationController
 
   def update_account_param_keys
     base_keys = %i[display_name readme status tax_id phone]
-    if Current.user&.admin?
+    if authorize(@account, :edit?)
       base_keys + %i[email]
     else
       base_keys
