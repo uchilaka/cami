@@ -3,12 +3,9 @@
     <% if notice.present? %>
       <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
     <% end %>
-
-    <div class="flex flex-wrap items-center justify-between mx-auto p-4 text-4xl">
-      <h1 class="text-4xl font-bold">Account</h1>
-      <code><%= @account.slug %></code>
-    </div>
-
+    <!-- Account form header -->
+    <%= render 'accounts/account-header', { account: @account, title: "Account" } %>
+    
     <% content_for :form_actions do %>
       <%= link_to "Back to accounts", accounts_path, class: secondary_btn_classes %>
       <%= button_to "Delete", @account, method: :delete, class: secondary_btn_classes(style: :danger) %>
