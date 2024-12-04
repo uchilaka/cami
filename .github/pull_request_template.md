@@ -4,6 +4,7 @@
 <!--- Please link the Jira card here -->
 
 [LWS-###](https://larcity.atlassian.net/browse/LWS-###)
+[LAR-###](https://linear.app/larcity-and-affiliates/issue/LAR-###)
 
 ## Summary
 <!--- Describe your changes, keeping in mind the Jira card should hold most of the context -->
