@@ -28,6 +28,7 @@ Fabricator(:account) do
   slug                  { SecureRandom.alphanumeric(4).downcase }
   tax_id                { Faker::Company.ein }
   type                  'Account'
+  status                'draft'
 
   phone do |attrs|
     phone_input = attrs[:phone_number] || '+2347129248348'

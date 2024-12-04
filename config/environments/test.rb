@@ -43,6 +43,9 @@ Rails.application.configure do
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
+  # # Setting the Active Job backend: https://guides.rubyonrails.org/active_job_basics.html#setting-the-backend
+  # config.active_job.queue_adapter = :test
+
   # Store uploaded files on the local file system in a temporary directory.
   config.active_storage.service = :test
 
@@ -76,4 +79,7 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # Disable CSS pre-processing in tests: https://stackoverflow.com/a/78148201/3726759
+  config.assets.css_compressor = nil
 end

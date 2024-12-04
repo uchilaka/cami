@@ -1,0 +1,19 @@
+---
+shared:
+  # Api docs: https://rubydoc.info/gems/vcr/6.2.0/VCR#use_cassette-instance_method
+  cassettes:
+    default:
+      options: &default_options
+        match_requests_on:
+          - :method
+          - :uri
+          - :body
+        exclusive: false
+        record: :once
+        allow_playback_repeats: true
+    paypal:
+      name: paypal.com
+      options:
+        <<: *default_options
+        tags:
+          - :obfuscate

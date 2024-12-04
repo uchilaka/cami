@@ -43,6 +43,15 @@ RSpec.describe User, type: :model do
     Sidekiq::Testing.inline! { example.run }
   end
 
+  subject { Fabricate :user }
+
+  it { should validate_presence_of :email }
+  it { should validate_uniqueness_of(:email).case_insensitive }
+  it { should have_many(:identity_provider_profiles).dependent(:destroy) }
+  it { should have_and_belong_to_many(:accounts).inverse_of(:members) }
+  it { should have_and_belong_to_many(:roles).join_table('users_roles') }
+  it { should have_many(:invoices) }
+
   describe 'callbacks' do
     describe ':after_destroy_commit' do
       subject do

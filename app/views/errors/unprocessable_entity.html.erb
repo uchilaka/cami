@@ -1,7 +1,7 @@
 <p class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-wider text-gray-300 mt-2">
-  The change or resource you requested was rejected
+  <%= t('exceptions.unprocessable_content_short') %>
 </p>
 <p class="text-lg md:text-xl lg:text-2xl text-gray-500 my-12">
-  Maybe you tried to change something you didn't have access to. If you are the application owner check the logs for more information.
+  <%= t('exceptions.unprocessable_content') %>
 </p>
 <%= render 'errors/links' %>

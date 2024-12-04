@@ -5,14 +5,19 @@ require 'rails_helper'
 RSpec.describe CreateAccountWorkflow, type: :workflow, real_world_data: true do
   let!(:phone_data) { sample_phone_numbers.sample }
 
+  let(:display_name) { Faker::Company.name }
+  let(:email) { Faker::Internet.email }
+  let(:slug) { Faker::Internet.slug }
+  let(:tax_id) { Faker::Company.swedish_organisation_number }
+  let(:phone) { phone_data[:full_e164] }
+  let(:metadata) { { 'key' => 'value' } }
+  let(:readme) { Faker::Lorem.paragraph }
+  let(:account_params) { {} }
+  let(:profile_params) { {} }
+
+  subject { described_class.call(account_params:, profile_params:) }
+
   context 'with valid attributes' do
-    let(:display_name) { Faker::Company.name }
-    let(:email) { Faker::Internet.email }
-    let(:slug) { Faker::Internet.slug }
-    let(:tax_id) { Faker::Company.swedish_organisation_number }
-    let(:phone) { phone_data[:full_e164] }
-    let(:metadata) { { 'key' => 'value' } }
-    let(:readme) { Faker::Lorem.paragraph }
     let(:account_params) do
       {
         display_name:,
@@ -27,8 +32,6 @@ RSpec.describe CreateAccountWorkflow, type: :workflow, real_world_data: true do
     let(:profile_params) do
       { country_alpha2: phone_data[:country] }
     end
-
-    subject { described_class.call(account_params:, profile_params:) }
 
     it 'creates an account' do
       expect { subject }.to change { Account.count }.by(1)
@@ -74,6 +77,39 @@ RSpec.describe CreateAccountWorkflow, type: :workflow, real_world_data: true do
   end
 
   context 'with invalid' do
+    describe 'phone_number' do
+      let(:phone) { '12345' }
+      let(:account_params) do
+        {
+          display_name:,
+          email:,
+          slug:,
+          tax_id:,
+          phone:,
+          metadata:,
+          readme:
+        }
+      end
+      let(:profile_params) do
+        { country_alpha2: phone_data[:country] }
+      end
+
+      it 'reports the error on the account' do
+        result = subject
+        expect(result.account.errors[:phone]).to include('is invalid')
+      end
+
+      it 'fails the workflow' do
+        result = subject
+        expect(result.success?).to be(false)
+      end
+
+      it 'reports the expected error' do
+        result = subject
+        expect(result.messages).to include("Value '#{phone}' is not a valid phone number")
+      end
+    end
+
     pending 'phone number'
     pending 'email'
     pending 'other attributes'

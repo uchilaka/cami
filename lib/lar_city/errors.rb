@@ -22,6 +22,6 @@ module LarCity
       end
     end
 
-    class InvalidInvoiceDocument < StandardError; end
+    class InvalidInvoiceRecord < StandardError; end
   end
 end

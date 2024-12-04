@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_11_143445) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_27_072422) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -110,10 +110,38 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_143445) do
     t.index ["user_id"], name: "index_identity_provider_profiles_on_user_id"
   end
 
+  create_table "invoices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "invoiceable_type"
+    t.uuid "invoiceable_id"
+    t.string "vendor_record_id"
+    t.string "vendor_recurring_group_id"
+    t.string "invoice_number"
+    t.string "payment_vendor"
+    t.integer "status"
+    t.datetime "issued_at", precision: nil
+    t.datetime "updated_accounts_at", precision: nil
+    t.datetime "due_at", precision: nil
+    t.datetime "paid_at", precision: nil
+    t.integer "amount_cents", default: 0, null: false
+    t.string "amount_currency", default: "USD", null: false
+    t.integer "due_amount_cents", default: 0, null: false
+    t.string "due_amount_currency", default: "USD", null: false
+    t.text "notes"
+    t.jsonb "payments"
+    t.jsonb "links"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "type", default: "Invoice"
+    t.jsonb "invoicer", default: {}
+    t.jsonb "metadata", default: {}
+    t.index ["invoiceable_type", "invoiceable_id"], name: "index_invoices_on_invoiceable"
+    t.index ["invoiceable_type", "invoiceable_id"], name: "index_invoices_on_invoiceable_type_and_invoiceable_id"
+  end
+
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "resource_type"
-    t.bigint "resource_id"
+    t.uuid "resource_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"

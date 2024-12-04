@@ -1,8 +1,8 @@
 <p class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-wider text-gray-300 mt-2">
-  Page Not Found
+  <%= t('exceptions.not_found_short', resource: 'Page') %>
 </p>
 <p class="text-lg md:text-xl lg:text-2xl text-gray-500 my-12">
-  Sorry, the page you are looking for could not be found. If you are the application owner check the logs for more information.
+  <%= t('exceptions.not_found', resource: 'page') %>
 </p>
 
 <%= render 'errors/links' %>

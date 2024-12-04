@@ -2,30 +2,20 @@
 
 # JSONB modeling guide:
 # https://betacraft.com/2023-06-08-active-model-jsonb-column/#:~:text=Bringing%20it%20all%20together
-class PhoneNumber
-  include ActiveModel::API
-  include ActiveModel::Serialization
-  extend ActiveModel::Callbacks
-  extend ActiveModel::Validations::Callbacks
-  include ActiveModel::Dirty
-
+class PhoneNumber < NestedModel
   attr_accessor :value,
                 :full_e164,
                 :full_international,
                 :number_purpose,
                 :number_type,
-                :country,
-                :resource
+                :country
 
   define_attribute_methods :value
 
   def initialize(args = {})
     super
-    @errors = ActiveModel::Errors.new(self)
     clear_attribute_changes(%w[value country])
   end
-
-  define_model_callbacks :initialize, :save, :update, :validation
 
   # Phonelib ActiveRecord integration:
   # https://github.com/daddyz/phonelib?tab=readme-ov-file#activerecord-integration
@@ -35,14 +25,9 @@ class PhoneNumber
 
   validate :parse_number_value_and_type
 
-  def save
-    if valid? && resource
-      run_callbacks(:save) do
-        resource[:phone] = serializable_hash.symbolize_keys
-        resource.save if resource.respond_to?(:save)
-      end
-    else
-      false
+  class << self
+    def supported_types
+      %i[mobile fixed_line fixed_or_mobile personal_number fax other]
     end
   end
 
@@ -60,7 +45,10 @@ class PhoneNumber
 
     phone = Phonelib.parse(value)
     if phone.invalid?
-      errors.add(:value, 'is not a valid phone number')
+      errors.add(
+        :value,
+        I18n.t('validators.errors.invalid_phone_number', value: "'#{value}'")
+      )
       return
     end
 
@@ -86,11 +74,5 @@ class PhoneNumber
       'number_type' => nil,
       'country' => nil
     }
-  end
-
-  class << self
-    def supported_types
-      %i[mobile fixed_line fixed_or_mobile personal_number fax other]
-    end
   end
 end
