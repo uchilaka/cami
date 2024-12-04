@@ -50,6 +50,13 @@ module StyleHelper
     end
   end
 
+  def link_classes(*args)
+    compose_class_names(
+      'font-medium text-blue-600 dark:text-blue-500 hover:underline',
+      args
+    )
+  end
+
   def default_item_action_btn_classes
     @default_action_btn_classes ||= item_action_btn_classes
   end

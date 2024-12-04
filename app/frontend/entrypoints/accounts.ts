@@ -25,7 +25,7 @@ document.addEventListener('turbo:load', () => {
       if (accountId) {
         emitLoadAccountEvent(accountId, el)
         // Open the account modal
-        const modalEl = document.querySelector(`#${modalTargetAsync}`)
+        const modalEl = document.querySelector<HTMLElement>(`#${modalTargetAsync}`)
         const modal = new Modal(modalEl)
         modal.toggle()
       }
