@@ -1594,7 +1594,7 @@ __metadata:
     snakecase-keys: "npm:^8.0.1"
     storybook: "npm:^8.3.5"
     tailwindcss: "npm:^3.4.1"
-    trix: "npm:^2.1.0"
+    trix: "npm:^2.1.10"
     ts-jest: "npm:^29.1.2"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.4.5"
@@ -3031,6 +3031,13 @@ __metadata:
   version: 4.0.5
   resolution: "@types/tough-cookie@npm:4.0.5"
   checksum: 10c0/68c6921721a3dcb40451543db2174a145ef915bc8bcbe7ad4e59194a0238e776e782b896c7a59f4b93ac6acefca9161fccb31d1ce3b3445cb6faa467297fb473
+  languageName: node
+  linkType: hard
+
+"@types/trusted-types@npm:^2.0.7":
+  version: 2.0.7
+  resolution: "@types/trusted-types@npm:2.0.7"
+  checksum: 10c0/4c4855f10de7c6c135e0d32ce462419d8abbbc33713b31d294596c0cc34ae1fa6112a2f9da729c8f7a20707782b0d69da3b1f8df6645b0366d08825ca1522e0c
   languageName: node
   linkType: hard
 
@@ -4876,6 +4883,18 @@ __metadata:
   dependencies:
     webidl-conversions: "npm:^7.0.0"
   checksum: 10c0/774277cd9d4df033f852196e3c0077a34dbd15a96baa4d166e0e47138a80f4c0bdf0d94e4703e6ff5883cec56bb821a6fff84402d8a498e31de7c87eb932a294
+  languageName: node
+  linkType: hard
+
+"dompurify@npm:^3.2.3":
+  version: 3.2.3
+  resolution: "dompurify@npm:3.2.3"
+  dependencies:
+    "@types/trusted-types": "npm:^2.0.7"
+  dependenciesMeta:
+    "@types/trusted-types":
+      optional: true
+  checksum: 10c0/0ce5cb89b76f396d800751bcb48e0d137792891d350ccc049f1bc9a5eca7332cc69030c25007ff4962e0824a5696904d4d74264df9277b5ad955642dfb6f313f
   languageName: node
   linkType: hard
 
@@ -10617,10 +10636,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"trix@npm:^2.1.0":
-  version: 2.1.5
-  resolution: "trix@npm:2.1.5"
-  checksum: 10c0/49153f8d7e678adfe12fdbf8426a6dd4f6532e1950ff96953f89ada6f04ec06c9d5b31c0ac8986d067c54ddca6d47dd975d4802404232cc6812d3eb030578b86
+"trix@npm:^2.1.10":
+  version: 2.1.10
+  resolution: "trix@npm:2.1.10"
+  dependencies:
+    dompurify: "npm:^3.2.3"
+  checksum: 10c0/026276e5f25868114eb0c6823c877ce21d9810cfec81e59c3bf2c410664fa3476f60b28b98b331b61a28b24a82de7a9e7513e542c0a1496d857f4856931fc1cb
   languageName: node
   linkType: hard
 
