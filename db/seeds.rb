@@ -11,8 +11,5 @@
 # Load all thor fixture tasks
 Dir[Rails.root.join('lib', 'tasks', 'fixtures', '*.thor')].each { |file| load file }
 
-# Load business fixtures
-Fixtures::Accounts.new.invoke(:load, [], verbose: Rails.env.development?)
-
 # Load all seed files in db/seeds
 Dir[Rails.root.join('db', 'seeds', '**', '*.rb')].sort.each { |seed| load seed }
