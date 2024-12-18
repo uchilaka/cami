@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect, ChangeEventHandler } from 'react'
+import { Dropdown } from 'flowbite'
 
 import FilterDropdown from './FilterDropdown'
 
@@ -11,21 +12,51 @@ const filterOptions = [
   ['Due this month', 'due_this_month'],
   ['Due next month', 'due_next_month'],
   ['Due later', 'due_later_than_next_month'],
-]
+].map(([label, value]) => [value, label])
 
 const FilterForInvoiceDueDate = () => {
   const [selectedFilter, setSelectedFilter] = useState('past_due_30_days')
+  const optionsLabelHash = Object.fromEntries(filterOptions)
+  const targetRef = useRef(null)
+  const controlRef = useRef(null)
+
+  const onChange: ChangeEventHandler<HTMLInputElement> = ({ target }) => {
+    setSelectedFilter(target.value)
+    console.warn({ newValue: target.value })
+  }
+
+  useEffect(() => {
+    /**
+     * See Tailwind CSS documentation for more information
+     * on how to use the Dropdown component:
+     * https://flowbite.com/docs/components/dropdowns/#example
+     */
+    const $targetEl = targetRef.current
+    const $controlEl = controlRef.current
+
+    if ($targetEl && $controlEl) {
+      new Dropdown(
+        $targetEl,
+        $controlEl,
+        {
+          placement: 'bottom-start',
+        },
+        { id: 'dueDateDropdownRadio' },
+      )
+    }
+  }, [targetRef, controlRef])
 
   return (
     <div className="list-filter">
       <button
+        ref={controlRef}
         id="dueDateDropdownRadioButton"
         data-dropdown-toggle="dueDateDropdownRadio"
         className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
         type="button"
       >
         <i className="mr-2.5 fa-sharp fa-solid fa-filter"></i>
-        Due date
+        {optionsLabelHash[selectedFilter] ?? 'Due date'}
         <svg className="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
           <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
         </svg>
@@ -33,6 +64,7 @@ const FilterForInvoiceDueDate = () => {
 
       {/*<!-- Dropdown menu -->*/}
       <FilterDropdown
+        ref={targetRef}
         id="dueDateDropdownRadio"
         className="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
         data-popper-reference-hidden=""
@@ -40,16 +72,17 @@ const FilterForInvoiceDueDate = () => {
         data-popper-placement="top"
       >
         <ul className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dueDateDropdownRadioButton">
-          {filterOptions.map(([label, value], index) => (
+          {filterOptions.map(([value, label], index) => (
             <li key={`due-date-filter-option-${index + 1}`}>
               <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                 <input
                   id={`filter-radio-${value}`}
                   type="radio"
                   value={value}
-                  checked={selectedFilter === value}
+                  defaultChecked={selectedFilter === value}
                   name="filter-radio"
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  onChange={onChange}
                 />
                 <label
                   htmlFor={`filter-radio-${value}`}
