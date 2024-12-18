@@ -32,7 +32,7 @@ module LarCityCLI
 
     protected
 
-    def thing(count)
+    def things(count)
       'item'.pluralize(count)
     end
 

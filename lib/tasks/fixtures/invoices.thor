@@ -77,6 +77,12 @@ module Fixtures
       end
     end
 
+    protected
+
+    def things(count)
+      'invoice'.pluralize(count)
+    end
+
     private
 
     def record_exists?(record)
@@ -86,10 +92,6 @@ module Fixtures
 
     def vendor(_record)
       'paypal'
-    end
-
-    def things(count)
-      'invoice'.pluralize(count)
     end
 
     def fixtures
