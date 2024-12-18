@@ -11,6 +11,6 @@ unless test_user_1.nil?
   if larcity.users.include?(test_user_1)
     puts "User #{test_user_1.email} already has access to account #{larcity.slug}"
   else
-    account.users << test_user_1
+    larcity.users << test_user_1
   end
 end
