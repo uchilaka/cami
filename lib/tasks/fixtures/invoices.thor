@@ -63,10 +63,10 @@ module Fixtures
       end
 
       # Batch create the records
-      results = Invoice.create!(@processed_records)
+      results = Invoice.create(@processed_records)
 
-      if results&.all?(&:valid?)
-        Rails.logger.info "Saved #{results.count} records"
+      if results.all?(&:valid?)
+        Rails.logger.info "Saved #{things(results.count, with_count: true)}"
       else
         saved_records = results.reject { |record| record.errors.any? }
         Rails.logger.warn "Saved #{saved_records.count} of #{@processed_records.count} records"
@@ -75,12 +75,25 @@ module Fixtures
         @error_records += results.select { |record| record.errors.any? }
         Rails.logger.error "Failed to save #{error_records.count} records"
       end
+
+      return if results.none?(&:valid?)
+
+      # Load invoice accounts
+      results.each do |invoice|
+        accounts = invoice.metadata['accounts']
+        next if accounts.none?
+
+        UpsertInvoiceRecordsWorkflow.call(invoice:)
+      end
     end
 
     protected
 
-    def things(count)
-      'invoice'.pluralize(count)
+    def things(count, with_count: false)
+      pluralized = 'invoice'.pluralize(count)
+      return "#{count} #{pluralized}" if with_count
+
+      pluralized
     end
 
     private

@@ -546,7 +546,8 @@ RSpec.describe Fixtures::Invoices do
     subject { described_class.new.invoke(:load, []) }
 
     it 'loads the fixtures' do
-      expect { subject }.to change(Invoice, :count).by(10)
+      expect { subject }.to change(Invoice, :count).by(10).and \
+        change(Account, :count).by(10)
     end
 
     context 'when some fixtures have already been loaded' do
@@ -564,7 +565,8 @@ RSpec.describe Fixtures::Invoices do
       end
 
       it 'loads only the new fixtures' do
-        expect { subject }.to change(Invoice, :count).by(8)
+        expect { subject }.to change(Invoice, :count).by(8).and \
+          change(Account, :count).by(8)
       end
     end
   end
