@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import { formatDistanceToNow, formatRelative } from 'date-fns'
 import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
 import { Invoice } from '@/utils/api/types'
 import FilterableBadge from './InvoiceBadge/FilterableBadge'
@@ -13,9 +12,6 @@ interface InvoiceItemProps {
 const InvoiceLineItem: FC<InvoiceItemProps> = ({ invoice }) => {
   const { isEnabled } = useFeatureFlagsContext()
   const { vendorRecordId, status, dueAt } = invoice
-  const dueDateDetailId = `due-date-detail--tooltip-${invoice.id}`
-  const relativeDueAt = dueAt ? formatDistanceToNow(dueAt, { addSuffix: true }) : ''
-  const dueDateDetail = dueAt ? formatRelative(dueAt, new Date(), { weekStartsOn: 0 }) : ''
 
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
