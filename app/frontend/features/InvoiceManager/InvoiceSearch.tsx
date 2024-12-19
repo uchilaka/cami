@@ -9,7 +9,7 @@ import ThAmount from './ThAmount'
 import InvoiceLineItem from './InvoiceLineItem'
 
 const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
-  const { loading, invoices } = useInvoiceContext()
+  const { invoices } = useInvoiceContext()
 
   console.debug({ invoices })
 

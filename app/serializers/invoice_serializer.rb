@@ -41,6 +41,7 @@ class InvoiceSerializer < ActiveModel::Serializer
              :invoice_number,
              :status,
              :invoicer,
+             :account,
              :payments,
              :payment_vendor,
              :viewed_by_recipient,
@@ -76,7 +77,9 @@ class InvoiceSerializer < ActiveModel::Serializer
   end
 
   def account
-    object.invoiceable if object.invoiceable_type == 'Account'
+    return unless object.invoiceable_type == 'Account'
+
+    object.invoiceable.serializable_hash
   end
 
   def user

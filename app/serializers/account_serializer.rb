@@ -18,5 +18,12 @@
 #  tax_id       :string
 #
 class AccountSerializer < ActiveModel::Serializer
-  attributes :id, :display_name, :slug, :status, :type, :tax_id, :readme
+  attributes :id, :display_name, :slug,
+             :status, :type, :tax_id, :notes_as_html
+
+  # Read more on rendering rich text content:
+  # https://guides.rubyonrails.org/action_text_overview.html#rendering-rich-text-content
+  def notes_as_html
+    object.readme.to_s
+  end
 end

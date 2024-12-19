@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-json.extract! invoice.serializable_hash, :id, :payment_vendor,
+json.extract! invoice.serializable_hash, :id, :account, :payment_vendor,
               :payments, :links, :viewed_by_recipient_at, :updated_accounts_at, :invoice_number,
               :status, :issued_at, :due_at, :paid_at, :amount, :due_amount, :currency_code, :notes,
               :created_at, :updated_at
 json.number invoice.invoice_number
-json.accounts invoice.metadata['accounts']
+json.contacts invoice.metadata['accounts']
 json.is_recurring invoice.recurring?
 json.tooltip_id record_dom_id(invoice, prefix: 'tooltip-filter')
 # json.item_action_btn_classes = default_item_action_btn_classes
