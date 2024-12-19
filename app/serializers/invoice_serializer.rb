@@ -61,6 +61,20 @@ class InvoiceSerializer < ActiveModel::Serializer
     object.id.to_s
   end
 
+  def amount
+    value = object.amount
+    return if value.blank?
+
+    MonetaryValueSerializer.new(value).serializable_hash
+  end
+
+  def due_amount
+    value = object.due_amount
+    return if value.blank?
+
+    MonetaryValueSerializer.new(value).serializable_hash
+  end
+
   def account
     object.invoiceable if object.invoiceable_type == 'Account'
   end

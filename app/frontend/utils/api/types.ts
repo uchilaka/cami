@@ -11,6 +11,7 @@ type ActionKey = 'delete' | 'edit' | 'show' | 'showProfile' | 'profilesIndex' | 
 
 interface InvoiceAmount {
   value: number
+  formattedValue: string
   currencyCode: string
 }
 

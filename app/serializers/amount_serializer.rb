@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# @deprecated Use `MonetaryValueSerializer` instead.
 class AmountSerializer < AdhocSerializer
   def attributes
     { value:, value_in_cents:, currency_code: }

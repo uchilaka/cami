@@ -4,6 +4,7 @@ import { Invoice } from '@/utils/api/types'
 import FilterableBadge from './InvoiceBadge/FilterableBadge'
 import StaticBadge from './InvoiceBadge/StaticBadge'
 import InvoiceDueDate from './InvoiceDueDate'
+import InvoiceActionsMenu from './InvoiceActionsMenu'
 
 interface InvoiceItemProps {
   invoice: Invoice
@@ -44,7 +45,7 @@ const InvoiceLineItem: FC<InvoiceItemProps> = ({ invoice }) => {
         <div className="flex items-center">{status}</div>
       </td>
       <td className="px-6 py-4">
-        <div className="flex items-center justify-end">{invoice.amount.value}</div>
+        <div className="flex items-center justify-end">{invoice.amount?.formattedValue}</div>
       </td>
       <td className="px-6 py-4 text-end">
         <div className="flex justify-end">
@@ -55,14 +56,7 @@ const InvoiceLineItem: FC<InvoiceItemProps> = ({ invoice }) => {
           >
             <i className="fa fa-copy"></i> New deal
           </a>
-          <a
-            href={invoice.paymentVendorURL}
-            target="_blank"
-            className="text-xs font-medium hover:text-white border dark:hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-3 py-1.5 text-center me-2 text-blue-700 border-blue-700 hover:bg-blue-800 dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-            rel="noreferrer"
-          >
-            <i className="fa-brands fa-paypal"></i> Manage
-          </a>
+          <InvoiceActionsMenu invoice={invoice} />
         </div>
       </td>
     </tr>
