@@ -61,13 +61,13 @@
             <li class="mb-4">
               <a href="/app/legal/privacy" class="hover:underline me-4 md:me-6"><%= t('accessibility.footer.privacy') %></a>
             </li>
-            <li class="mb-4">
-              <a href="/app/legal/terms" class="hover:underline me-4 md:me-6">
-                <%= t('accessibility.footer.terms') %>
-              </a>
-            <li>
-              <a href="#" class="hover:underline">Terms &amp; Conditions</a>
-            </li>
+            <% if Flipper.enabled?('feat__legal_terms') %>
+              <li class="mb-4">
+                <a href="/app/legal/terms" class="hover:underline me-4 md:me-6">
+                  <%= t('accessibility.footer.terms') %>
+                </a>
+              </li>
+            <% end %>
           </ul>
         </div>
       </div>
