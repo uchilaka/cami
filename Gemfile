@@ -72,6 +72,9 @@ gem 'phonelib'
 # Roles library with resource scoping
 gem 'rolify', '~> 6.0'
 
+# Executes code after database commit wherever you want in your application (Required by AASM)
+gem 'after_commit_everywhere', '~> 1.0'
+
 # State machine mixin for Ruby objects
 gem 'aasm', '~> 5.5'
 
@@ -94,7 +97,7 @@ group :development, :test do
   gem 'fabrication'
   gem 'faker'
   gem 'open3'
-  # gem 'rspec-wait'
+  gem 'rspec-wait'
   gem 'rubocop'
   gem 'strong_migrations'
 
@@ -191,3 +194,6 @@ gem 'data_migrate', '~> 9', '>= 9.3.0'
 
 # Simple interactor implementation
 gem 'interactor', '~> 3.1'
+
+# Money gem integration with Rails: https://github.com/RubyMoney/money-rails
+gem 'money-rails', '~> 1.15'

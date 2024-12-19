@@ -60,6 +60,9 @@ class UpsertUserFromOmniauthWorkflow
     # All good?
     context.fail!(messages: provider_profile.errors.full_messages) \
       if provider_profile.errors.any?
+
+    # Make sure the user has the default role assigned
+    user.maybe_assign_default_role
   ensure
     context.user = user
     context.provider_profile = provider_profile

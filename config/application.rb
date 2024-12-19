@@ -19,6 +19,7 @@ require 'active_support/core_ext/integer/time'
 require_relative '../lib/virtual_office_manager'
 require_relative '../lib/app_utils'
 require_relative '../lib/log_utils'
+require_relative '../lib/custom_exceptions_app_wrapper'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -33,15 +34,18 @@ module Cami
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
 
-    config.exceptions_app = lambda do |env|
-      ErrorsController.action(:show).call(env)
-    end
+    # config.exceptions_app = lambda do |env|
+    #   ErrorsController.action(:show).call(env)
+    # end
 
     config.active_storage.variant_processor = :vips
 
     config.time_zone = 'Eastern Time (US & Canada)'
 
+    # Setting the Active Job backend: https://guides.rubyonrails.org/active_job_basics.html#setting-the-backend
     config.active_job.queue_adapter = :sidekiq
+    # # Active Job queues: https://guides.rubyonrails.org/active_job_basics.html#queues
+    # config.active_job.queue_name_prefix = Rails.env
 
     config.active_record.query_log_tags =
       %i[
@@ -78,11 +82,17 @@ module Cami
     # Configure allowed hosts. See doc https://guides.rubyonrails.org/configuring.html#actiondispatch-hostauthorization
     config.hosts += config_for(:allowed_hosts)
 
+    # # Configuring the exceptions app: https://guides.rubyonrails.org/configuring.html#config-exceptions-app
+    # config.exceptions_app = CustomExceptionsAppWrapper.new
+
     # Don't generate system test files.
     config.generators.system_tests = nil
 
     # Doc for jbuilder: https://github.com/rails/jbuilder
     Jbuilder.key_format camelize: :lower
     Jbuilder.deep_format_keys true
+
+    # TODO: Make sure that your application is loading Devise and Warden as expected and that the `Warden::Manager`
+    #   middleware is present in your middleware stack.
   end
 end

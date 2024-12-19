@@ -12,6 +12,9 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'rspec/rails'
 # require 'rspec/wait'
 require 'aasm/rspec'
+require 'pundit/rspec'
+require 'shoulda/matchers'
+require 'shoulda/matchers/integrations/test_frameworks/rspec'
 require 'database_cleaner/active_record'
 require 'sidekiq/testing'
 require 'devise/test/integration_helpers'
@@ -42,7 +45,7 @@ end
 
 # VCR usage docs https://benoittgt.github.io/vcr
 VCR.configure do |c|
-  c.cassette_library_dir = 'spec/cassettes'
+  c.cassette_library_dir = 'spec/fixtures/cassettes'
   c.hook_into :faraday
   c.allow_http_connections_when_no_cassette = true
 
@@ -67,16 +70,19 @@ VCR.configure do |c|
       interaction.response.body = PIISanitizer.sanitize(interaction.response.body)
     end
   end
-  # TODO: Ensure Authorization header data with tokens don't end up in a cassette
+
+  c.before_http_request do |req|
+    Rails.logger.info "VCR: Request", { method: req.method, uri: req.uri, headers: req.headers }
+  end
 end
 
 RSpec.configure do |config|
   config.fail_fast = AppUtils.yes?(ENV.fetch('RSPEC_FAIL_FAST', false)) ? true : false
 
-  # # Configure rspec-wait: https://github.com/laserlemon/rspec-wait?tab=readme-ov-file#configuration
-  # config.wait_timeout = 10 # seconds
-  # config.wait_delay = 1 # seconds
-  # config.clone_wait_matcher = true
+  # Configure rspec-wait: https://github.com/laserlemon/rspec-wait?tab=readme-ov-file#configuration
+  config.wait_timeout = 10 # seconds
+  config.wait_delay = 1 # seconds
+  config.clone_wait_matcher = true
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = [Rails.root.join('spec/fixtures')]
@@ -123,8 +129,8 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example
-    DatabaseCleaner[:active_record].strategy = :transaction
-    DatabaseCleaner[:active_record].clean_with(:truncation)
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
 
     # Load seeds
     Rails.application.load_seed
@@ -135,6 +141,7 @@ RSpec.configure do |config|
 
   config.around(:each) do |example|
     DatabaseCleaner.cleaning { example.run }
+
     # Clean up all test double state
     RSpec::Mocks.teardown
   end

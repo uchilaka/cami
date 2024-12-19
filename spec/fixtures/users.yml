@@ -1,0 +1,12 @@
+---
+- email: uche@larcity.com
+  given_name: <%= Faker::Name.gender_neutral_first_name %>
+  family_name: <%= Faker::Name.last_name %>
+  password: <%= Faker::Internet.password %>
+  profile:
+    image_url: 'https://s3.us-east-1.amazonaws.com/assets.lar.city/images/logo%40128px.png'
+  providers:
+    - google
+  uids:
+    - 115537487871083953453
+  confirmed_at: '2024-12-18T07:00:00-05:00'

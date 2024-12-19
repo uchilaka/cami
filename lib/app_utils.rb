@@ -54,5 +54,11 @@ class AppUtils
       Rails.logger.error "Health check for #{resource_url} failed", error: e.message
       false
     end
+
+    def debug_assets?
+      default_value = Rails.env.development? ? 'yes' : 'no'
+
+      yes?(ENV.fetch('ENV_DEBUG_ASSETS', default_value))
+    end
   end
 end

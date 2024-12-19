@@ -36,10 +36,9 @@ class CreateAccountWorkflow
     # Attempt to process the account phone number
     input_number = create_params.delete(:phone)
     if input_number.present?
-      phone_number = PhoneNumber.new(value: input_number)
-      if phone_number.valid?
-        account.phone = phone_number.serializable_hash
-      else
+      phone_number = PhoneNumber.new(value: input_number, resource: account, resource_attribute_name: :phone)
+      phone_number.load
+      if phone_number.errors.any?
         account.errors.add(:phone, 'is invalid')
         context.fail!(messages: phone_number.errors.full_messages)
       end

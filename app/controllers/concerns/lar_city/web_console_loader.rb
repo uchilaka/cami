@@ -4,7 +4,8 @@ module LarCity
   module WebConsoleLoader
     extend ActiveSupport::Concern
     module ClassMethods
-      def load_console(actions = supported_actions, options = {})
+      def load_console(*actions, options: {})
+        actions += supported_actions if actions.blank?
         [*actions].flatten.each { |action| authorized_actions[action] = options }
 
         before_action :initialize_web_console, only: authorized_actions.keys

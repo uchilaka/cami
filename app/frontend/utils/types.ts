@@ -1,4 +1,4 @@
-import { BusinessAccount, IndividualAccount } from './api/types'
+import { BusinessAccount, IndividualAccount, Invoice } from './api/types'
 
 /**
  * Event detail types should support state composition i.e. if we
@@ -9,6 +9,14 @@ export type LoadAccountEventDetail = {
   accountId: string
 }
 
+export type LoadInvoiceEventDetail = {
+  invoiceId: string
+}
+
 export type LoadedAccountEventDetail = {
   account: IndividualAccount | BusinessAccount
+}
+
+export type LoadedInvoiceEventDetail = {
+  invoice: Invoice
 }

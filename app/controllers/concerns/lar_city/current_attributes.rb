@@ -14,6 +14,11 @@ module LarCity
       return if excluded_controllers.include?(request.params[:controller])
 
       Current.user = current_user
+      # TODO: Set Current.account based on the current user's selected account
+      #   scoped to accounts on which they have one of the following roles:
+      #   - :admin (full access)
+      #   - :customer (limited access, can action on invoices)
+      #   - :contact (limited access, can view invoices)
       Current.request_id = request.uuid
       Current.user_agent = request.user_agent
       Current.ip_address = request.ip
