@@ -83,9 +83,9 @@ Rails.application.configure do
 
   # TODO: This doesn't seem to be doing what it's supposed to do
   config.after_initialize do
-    unless VirtualOfficeManager.job_queue_is_running?
+    if !VirtualOfficeManager.job_queue_is_running? && defined?(Rails::Server)
       # Schedule an NGROK tunnel check to update the mailer default URL options
-      UpdateMailerDefaultURLOptionsJob.set(wait: 15.seconds).perform_later if defined?(Rails::Server)
+      UpdateMailerDefaultURLOptionsJob.set(wait: 15.seconds).perform_later
     end
   end
 
@@ -113,12 +113,18 @@ Rails.application.configure do
   config.active_record.verbose_query_logs =
     AppUtils.yes?(ENV.fetch('ENV_VERBOSE_QUERY_LOGS', 'no'))
 
+  # # Setting the Active Job backend: https://guides.rubyonrails.org/active_job_basics.html#setting-the-backend
+  # config.active_job.queue_adapter = :sidekiq
+
   # Highlight code that enqueued background job in logs.
   config.active_job.verbose_enqueue_logs =
     AppUtils.yes?(ENV.fetch('ENV_VERBOSE_ENQUEUE_LOGS', 'no'))
 
   # Suppress logger output for asset requests.
-  config.assets.quiet = true
+  config.assets.quiet = !AppUtils.debug_assets?
+
+  # Turn on source maps
+  config.assets.debug = AppUtils.debug_assets?
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true

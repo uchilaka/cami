@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: accounts
@@ -17,6 +19,7 @@
 #
 class Account < ApplicationRecord
   rolify
+  resourcify
 
   include AASM
 
@@ -28,7 +31,7 @@ class Account < ApplicationRecord
 
   attribute :type, :string, default: 'Account'
   attribute :slug, :string, default: -> { SecureRandom.alphanumeric(4).downcase }
-  attribute :metadata, :jsonb, default: {}
+  attribute :metadata, :jsonb, default: { contacts: [] }
 
   validates :display_name, presence: true
   validates :email, email: true, allow_nil: true
@@ -36,7 +39,17 @@ class Account < ApplicationRecord
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
   validates :tax_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
 
-  has_and_belongs_to_many :users, join_table: 'accounts_users'
+  has_many :invoices, as: :invoiceable, dependent: :nullify
+  # TODO: This generates the following console error:
+  #   `warning: already initialized constant Account::HABTM_Roles`
+  #   However, without this line, the behavior of assigning
+  #   roles to accounts on invoices breaks.
+  has_and_belongs_to_many :roles, inverse_of: :accounts, dependent: :destroy
+  has_and_belongs_to_many :members, class_name: 'User', join_table: 'accounts_users'
+
+  # @deprecated use the direct "members" relationship instead. I guess we're
+  #   going to learn interesting things about aliasing associations in Rails 😅
+  alias users members
 
   before_validation :format_tax_id, if: :tax_id_changed?
 
@@ -107,6 +120,10 @@ class Account < ApplicationRecord
     event :deactivate do
       transitions from: %i[active payment_due overdue suspended], to: :deactivated
     end
+  end
+
+  def add_member(user)
+    members << user
   end
 
   private

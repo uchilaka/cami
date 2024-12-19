@@ -7,7 +7,9 @@ class ErrorsController < ApplicationController
 
   skip_before_action :authenticate_user!
 
-  rescue_from ActionController::RoutingError, with: :emit_routing_exception
+  rescue_from ActionController::RoutingError do |exception|
+    emit_routing_exception(exception)
+  end
   rescue_from LarCity::Errors::ElevatedPrivilegesRequired, with: :forbidden
   rescue_from LarCity::Errors::UnprocessableEntity, with: :unprocessable_entity
   rescue_from LarCity::Errors::InternalServerError, with: :server_error
@@ -17,13 +19,13 @@ class ErrorsController < ApplicationController
     @exception = request.env['action_dispatch.exception']
     @status_code =
       @exception.try(:status_code) ||
-        ActionDispatch::ExceptionWrapper.new(request.env, @exception).status_code
+      ActionDispatch::ExceptionWrapper.new(request.env, @exception).status_code
 
     render view_for_code(@status_code), status: @status_code
   end
 
   def unprocessable_entity
-    render 'errors/unprocessable_entity', status: :unprocessable_entity
+    render 'errors/unprocessable_entity', status: :unprocessable_content
   end
 
   def not_found
@@ -38,7 +40,7 @@ class ErrorsController < ApplicationController
     render 'errors/server_error', status: :internal_server_error
   end
 
-  def emit_routing_exception
+  def emit_routing_exception(_exception = nil)
     if %r{/admin/}.match?(request.fullpath)
       raise LarCity::Errors::ElevatedPrivilegesRequired if request.params[:unmatched].present?
 

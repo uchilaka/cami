@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddTimeoutableAndLockableToUsers < ActiveRecord::Migration[7.2]
   def change
     # Setup timeoutable columns

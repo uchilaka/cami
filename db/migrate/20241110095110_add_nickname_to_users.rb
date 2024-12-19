@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # 20241110095110_add_nickname_to_users.rb
 class AddNicknameToUsers < ActiveRecord::Migration[7.2]
   def change

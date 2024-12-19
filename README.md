@@ -413,7 +413,6 @@ yq -p json -o yaml ./path/to/fixture.json > ./path/to/fixture.yml
   - [Handling nil objects](https://github.com/varvet/pundit?tab=readme-ov-file#nilclasspolicy)
 - [CanCanCan developer guide](https://github.com/CanCanCommunity/cancancan/blob/develop/docs/README.md) - an alternative to `Pundit`
 - [Feature flags for backup providers](https://www.flippercloud.io/docs/guides/backup-providers) e.g. with feature flagging payment providers like Stripe, PayPal & SplitIt or auth providers like Apple, Google & native passwordless authentication
-- [Dynamic roles in a Rails app](https://nicholusmuwonge.medium.com/dynamic-roles-in-a-rails-app-using-rolify-devise-invitable-and-pundit-b72011451239)
 - [Using yq to parse YAML (fixture) files](https://stackoverflow.com/a/67610900)
 
 ## Known issues 
@@ -434,15 +433,26 @@ deprecation warnings into errors, giving you the full backtrace.
 
 ## Future reading 
 
-- [ ] Working with JSONB columns in your Active Record models with Active Model: <https://betacraft.com/2023-06-08-active-model-jsonb-column/>
-- [ ] Building your Turbo application: <https://turbo.hotwired.dev/handbook/building>
-- [ ] Custom errors in rails: <https://dev.to/ayushn21/custom-error-pages-in-rails-4i43>
+- [ ] [Working with JSONB columns in your Active Record models with Active Model](https://betacraft.com/2023-06-08-active-model-jsonb-column/)
+- [ ] [Building your Turbo application](https://turbo.hotwired.dev/handbook/building)
+- [ ] Access Control
+  - [ ] [Joining polymorphic associations in Active Record](https://veelenga.github.io/joining-polymorphic-associations/) 
+  - [ ] [Dynamic roles in a Rails app](https://nicholusmuwonge.medium.com/dynamic-roles-in-a-rails-app-using-rolify-devise-invitable-and-pundit-b72011451239)
+  - [ ] [Using rolify with Devise and Authority](https://github.com/RolifyCommunity/rolify/wiki/Using-rolify-with-Devise-and-Authority)
+- [ ] [Custom errors in rails](https://dev.to/ayushn21/custom-error-pages-in-rails-4i43)
 - [ ] E2E testing
-  - [ ] Integrate Playwright with CypressOnRails: <https://github.com/shakacode/cypress-on-rails?tab=readme-ov-file#totally-new-to-playwright>
-  - [ ] Running rails system tests with playwright instead of selenium: https://justin.searls.co/posts/running-rails-system-tests-with-playwright-instead-of-selenium/
-- [ ] Inheriting class methods from modules / mixins in Ruby: <https://stackoverflow.com/a/45127350>
+  - [ ] [Integrate Playwright with CypressOnRails](https://github.com/shakacode/cypress-on-rails?tab=readme-ov-file#totally-new-to-playwright)
+  - [ ] [Running rails system tests with playwright instead of selenium](https://justin.searls.co/posts/running-rails-system-tests-with-playwright-instead-of-selenium/)
+- [ ] [Inheriting class methods from modules / mixins in Ruby](https://stackoverflow.com/a/45127350)
 
 ## Future Work
 
 - [ ] Configure error reporting: <https://guides.rubyonrails.org/error_reporting.html>
 - [ ] Setup E2E test suite. Partial to Playwright over Cypress, but we should decide based on the needs of the project (See [future reading](#future-reading-))
+- [ ] React Router v7 Future Flag Warnings
+  - [ ] React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+  - [ ] Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath
+  - [ ] The persistence behavior of fetchers is changing in v7. You can use the `v7_fetcherPersist` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_fetcherpersist. 
+  - [ ] Casing of `formMethod` fields is being normalized to uppercase in v7. You can use the `v7_normalizeFormMethod` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_normalizeformmethod.
+  - [ ] `RouterProvider` hydration behavior is changing in v7. You can use the `v7_partialHydration` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_partialhydration.
+  - [ ] The revalidation behavior after 4xx/5xx `action` responses is changing in v7. You can use the `v7_skipActionErrorRevalidation` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_skipactionerrorrevalidation.

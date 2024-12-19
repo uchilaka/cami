@@ -84,7 +84,7 @@ module LarCityCLI
     private
 
     def config_file(name: 'ngrok.yml')
-      @config_file ||= Rails.root.join('config', name).to_s
+      Rails.root.join('config', name).to_s
     end
 
     def config_file_exists?

@@ -17,7 +17,7 @@
 #
 ---
 - display_name: Acme Corporation
-  email: <%= Faker::Internet.email %>
+  email: acme@fakein.box
   slug: acme
 - display_name: LarCity LLC
   email: support@lar.city

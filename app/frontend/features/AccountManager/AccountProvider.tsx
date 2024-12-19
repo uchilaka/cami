@@ -62,6 +62,9 @@ export const AccountProvider = ({ children }: { children: React.ReactNode }) => 
 
 export const withAccountProvider = <P extends {}>(WrappedComponent: ComponentType<P>) => {
   const displayName = WrappedComponent.displayName ?? WrappedComponent.name ?? 'Component'
+  /**
+   * TODO: Should the ComponentWithAccountProvider `props` type be `P` instead of `any`?
+   */
   const ComponentWithAccountProvider = (props: any) => {
     /**
      * React query functions: https://tanstack.com/query/latest/docs/framework/react/guides/query-functions

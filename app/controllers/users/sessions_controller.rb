@@ -10,9 +10,16 @@ module Users
     # end
 
     # POST /resource/sign_in
-    # def create
-    #   super
-    # end
+    def create
+      # rubocop:disable Style/SymbolProc
+      super do |resource|
+        # # Set the user's locale to the locale of the last invoice
+        # locale = resource&.last_invoice&.locale
+        # I18n.locale = locale if locale.present?
+        resource.maybe_assign_default_role
+      end
+      # rubocop:enable Style/SymbolProc
+    end
 
     # DELETE /resource/sign_out
     # def destroy

@@ -32,6 +32,10 @@ module LarCityCLI
 
     protected
 
+    def things(count)
+      'item'.pluralize(count)
+    end
+
     def verbose?
       options[:verbose]
     end
