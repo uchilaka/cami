@@ -153,4 +153,16 @@ class Invoice < ApplicationRecord
   def account
     invoiceable if invoiceable.is_a?(Account)
   end
+
+  def recurring?
+    vendor_recurring_group_id.present?
+  end
+
+  def past_due?
+    !paid? && due_at.to_date < Time.zone.now.to_date
+  end
+
+  def overdue?
+    past_due? && (Time.zone.now.to_date - due_at.to_date).to_i > 30
+  end
 end

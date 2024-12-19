@@ -1,12 +1,18 @@
-import React from 'react'
+import React, { FC, ComponentProps } from 'react'
 import FilterForInvoiceStatus from './FilterForInvoiceStatus'
 import FilterForInvoiceDueDate from './FilterForInvoiceDueDate'
 import withAllTheProviders from '@/components/withAllTheProviders'
+import { useInvoiceContext, withInvoiceProvider } from './InvoiceProvider'
 import ThDueDate from './ThDueDate'
 import ThStatus from './ThStatus'
 import ThAmount from './ThAmount'
+import InvoiceLineItem from './InvoiceLineItem'
 
-const InvoiceSearch = () => {
+const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
+  const { loading, invoices } = useInvoiceContext()
+
+  console.debug({ invoices })
+
   return (
     <>
       <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 dark:bg-gray-900">
@@ -73,10 +79,14 @@ const InvoiceSearch = () => {
             </th>
           </tr>
         </thead>
-        <tbody>{/* Render returned invoice records */}</tbody>
+        <tbody>
+          {invoices.map((invoice) => (
+            <InvoiceLineItem key={`row--${invoice.id}`} invoice={invoice} />
+          ))}
+        </tbody>
       </table>
     </>
   )
 }
 
-export default withAllTheProviders(InvoiceSearch)
+export default withAllTheProviders(withInvoiceProvider(InvoiceSearch))

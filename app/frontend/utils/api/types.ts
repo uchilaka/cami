@@ -14,14 +14,20 @@ interface InvoiceAmount {
   currencyCode: string
 }
 
-interface Invoice {
+export interface Invoice {
   id: string
+  vendorRecordId: string
+  paymentVendor: 'paypal' | 'stripe'
   createdAt: Date
   dueAt: Date
   updatedAt: Date
   number: string
   status: 'PAID' | 'OVERDUE' | 'SENT'
   amount: InvoiceAmount
+  isRecurring?: boolean
+  tooltipId?: string
+  itemActionBtnClasses?: string
+  paymentVendorURL: string
 }
 
 interface UserProfile {

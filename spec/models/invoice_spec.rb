@@ -44,6 +44,20 @@ RSpec.describe Invoice, type: :model do
   # The basics
   it { is_expected.to have_many(:roles).dependent(:destroy) }
 
+  describe 'when accessed' do
+    let(:user) { Fabricate :user }
+    let(:account) { Fabricate :account }
+
+    context 'by a user' do
+      context 'with a "customer" role on the invoice' do
+        before { user.add_role(:customer, subject) }
+
+        it { expect(user.has_role?(:customer, subject)).to be true }
+      end
+      pending 'with a "contact" role on the invoice'
+    end
+  end
+
   describe '#amount' do
     context 'initialize' do
       subject { Invoice.new }
@@ -127,17 +141,51 @@ RSpec.describe Invoice, type: :model do
     end
   end
 
-  describe 'when accessed' do
-    let(:user) { Fabricate :user }
-    let(:account) { Fabricate :account }
+  describe '#paid?' do
+    context 'when status = "paid"' do
+      subject { Fabricate :invoice, status: :paid, paid_at: Time.current }
 
-    context 'by a user' do
-      context 'with a "customer" role on the invoice' do
-        before { user.add_role(:customer, subject) }
+      it { expect(subject.paid?).to be true }
+    end
 
-        it { expect(user.has_role?(:customer, subject)).to be true }
-      end
-      pending 'with a "contact" role on the invoice'
+    context 'when status != "paid"' do
+      subject { Fabricate :invoice, status: :sent, paid_at: nil }
+
+      it { expect(subject.paid?).to be false }
+    end
+  end
+
+  describe '#past_due?' do
+    context 'when due date is in the past' do
+      subject { Fabricate :invoice, due_at: 1.day.ago }
+
+      it { expect(subject.past_due?).to be true }
+    end
+
+    context 'when due date is in the future' do
+      subject { Fabricate :invoice, due_at: 1.day.from_now }
+
+      it { expect(subject.past_due?).to be false }
+    end
+  end
+
+  describe '#overdue?' do
+    context 'when due date is over 30 days in the past' do
+      subject { Fabricate :invoice, due_at: 31.days.ago }
+
+      it { expect(subject.overdue?).to be true }
+    end
+
+    context 'when past due but not yet overdue' do
+      subject { Fabricate :invoice, due_at: 1.day.ago }
+
+      it { expect(subject.overdue?).to be false }
+    end
+
+    context 'when account is current' do
+      subject { Fabricate :invoice, status: :paid, due_at: 120.days.ago, paid_at: 1.day.ago }
+
+      it { expect(subject.overdue?).to be false }
     end
   end
 end
