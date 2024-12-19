@@ -41,14 +41,21 @@ class InvoiceSerializer < ActiveModel::Serializer
              :invoice_number,
              :status,
              :invoicer,
+             :payments,
              :payment_vendor,
              :viewed_by_recipient,
+             :viewed_by_recipient_at,
+             :updated_accounts_at,
+             :created_at,
+             :updated_at,
              :issued_at,
              :due_at,
+             :paid_at,
              :currency_code,
              :amount,
              :due_amount,
-             :links
+             :links,
+             :notes
 
   def id
     object.id.to_s
@@ -72,5 +79,13 @@ class InvoiceSerializer < ActiveModel::Serializer
 
   def viewed_by_recipient
     object.metadata['viewed_by_recipient']
+  end
+
+  def viewed_by_recipient_at
+    nil
+  end
+
+  def notes
+    ''
   end
 end

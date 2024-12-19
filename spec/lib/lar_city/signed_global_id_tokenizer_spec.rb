@@ -19,11 +19,29 @@ module LarCity
       end
 
       context 'for users' do
-        let(:user) { Fabricate(:user) }
-        let(:token) { described_class.encode(user) }
+        let(:resource) { Fabricate(:user) }
+        let(:token) { described_class.encode(resource) }
 
         it 'encodes the token' do
-          expect(described_class.encode(user)).not_to be_nil
+          expect(described_class.encode(resource)).not_to be_nil
+        end
+      end
+
+      context 'for invoices' do
+        let(:resource) { Fabricate(:invoice) }
+        let(:token) { described_class.encode(resource) }
+
+        it 'encodes the token' do
+          expect(described_class.encode(resource)).not_to be_nil
+        end
+      end
+
+      context 'for accounts' do
+        let(:resource) { Fabricate(:account) }
+        let(:token) { described_class.encode(resource) }
+
+        it 'encodes the token' do
+          expect(described_class.encode(resource)).not_to be_nil
         end
       end
     end
@@ -54,11 +72,32 @@ module LarCity
       end
 
       context 'for users' do
-        let(:user) { Fabricate(:user) }
-        let(:token) { described_class.encode(user) }
+        let(:resource) { Fabricate(:user) }
+
+        subject { described_class.encode(resource) }
 
         it 'decodes the token' do
-          expect(described_class.decode(token, User)).to eq([user, {}])
+          expect(described_class.decode(subject, User)).to eq([resource, {}])
+        end
+      end
+
+      context 'for invoices' do
+        let(:resource) { Fabricate(:invoice) }
+
+        subject { described_class.encode(resource) }
+
+        it 'decodes the token' do
+          expect(described_class.decode(subject, Invoice)).to eq([resource, {}])
+        end
+      end
+
+      context 'for accounts' do
+        let(:resource) { Fabricate(:account) }
+
+        subject { described_class.encode(resource) }
+
+        it 'decodes the token' do
+          expect(described_class.decode(subject, Account)).to eq([resource, {}])
         end
       end
     end
