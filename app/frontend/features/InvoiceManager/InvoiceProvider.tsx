@@ -19,6 +19,7 @@ interface InvoiceContextProps {
   listenForInvoiceLoadEvents: () => AbortController
   setInvoiceId: Dispatch<SetStateAction<string | undefined>>
   setFilterParams: Dispatch<SetStateAction<Partial<InvoiceSearchProps>>>
+  updateFilterParams: (newParams: Partial<InvoiceSearchProps>) => void
   reload: () => Promise<void>
   filterParams?: Partial<InvoiceSearchProps>
   loading?: boolean
@@ -63,13 +64,17 @@ export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
     return invoiceLoader
   }
 
+  const updateFilterParams = useCallback(({ s, q }: Partial<InvoiceSearchProps>) => {}, [filterParams])
+
   useEffect(() => {
     if (invoiceId) reload()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [invoiceId])
 
   return (
-    <InvoiceContext.Provider value={{ filterParams, loading, invoices, reload, listenForInvoiceLoadEvents, setInvoiceId, setFilterParams }}>
+    <InvoiceContext.Provider
+      value={{ filterParams, invoices, loading, reload, listenForInvoiceLoadEvents, setInvoiceId, setFilterParams, updateFilterParams }}
+    >
       {children}
     </InvoiceContext.Provider>
   )
