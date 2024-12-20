@@ -4,11 +4,11 @@ import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
 
 export type VendorType = 'paypal' | 'hubspot' | 'stripe'
 
-interface VendorTabSelectorProps {
+interface InvoicingVendorPickerProps {
   onChange?: (vendor: VendorType) => void
 }
 
-const VendorTabSelector: FC<VendorTabSelectorProps> = ({ onChange }) => {
+const InvoicingVendorPicker: FC<InvoicingVendorPickerProps> = ({ onChange }) => {
   const [activeTab, setActiveTab] = useState<VendorType>('paypal')
   const { isEnabled } = useFeatureFlagsContext()
   const hubspotInvoicingIsEnabled = isEnabled('hubspot_invoicing')
@@ -79,4 +79,4 @@ const VendorTabSelector: FC<VendorTabSelectorProps> = ({ onChange }) => {
   )
 }
 
-export default VendorTabSelector
+export default InvoicingVendorPicker
