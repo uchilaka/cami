@@ -1,8 +1,7 @@
 import React, { FC, ReactEventHandler, useCallback, useEffect, useState } from 'react'
 import TabLink from './TabLink'
 import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
-
-export type VendorType = 'paypal' | 'hubspot' | 'stripe'
+import { VendorType } from './types'
 
 interface InvoicingVendorPickerProps {
   onChange?: (vendor: VendorType) => void

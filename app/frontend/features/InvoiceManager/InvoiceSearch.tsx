@@ -9,7 +9,8 @@ import ThAmount from './ThAmount'
 import InvoiceListItem from './InvoiceListItem'
 import ThAccount from './ThAccount'
 import InvoiceSearchInput from './InvoiceSearchInput'
-import InvoicingVendorPicker, { VendorType } from './VendorTabSelector'
+import InvoicingVendorPicker from './InvoicingVendorPicker'
+import { VendorType } from './types'
 
 const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
   const { invoices } = useInvoiceContext()

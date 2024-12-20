@@ -6,9 +6,14 @@ interface ActionsMenuProps {
   invoice: Invoice
 }
 
+const AT_OR_PAST_SENT_STATUSES: Invoice['status'][] = ['PAID', 'OVERDUE', 'SENT']
+
 const InvoiceActionsMenu: FC<ActionsMenuProps> = ({ invoice }) => {
   const actionsMenuControlId = `actions-menu-control--${invoice.id}`
   const actionsMenuId = `actions-menu--${invoice.id}`
+  const invoiceHasBeenSent = AT_OR_PAST_SENT_STATUSES.includes(invoice.status)
+  const linkAccountLabel = invoice.account ? 'Update account' : 'Link account'
+  const sendInvoiceLabel = invoiceHasBeenSent ? 'Re-send' : 'Send'
 
   const controlRef = React.useRef<HTMLButtonElement>(null)
   const menuRef = React.useRef<HTMLDivElement>(null)
@@ -38,6 +43,11 @@ const InvoiceActionsMenu: FC<ActionsMenuProps> = ({ invoice }) => {
       <div id={actionsMenuId} ref={menuRef} className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
         <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownLeftButton">
           <li>
+            <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+              <i className="fa-solid fa-paper-plane"></i> {sendInvoiceLabel}
+            </a>
+          </li>
+          <li>
             {/* TODO: Show a warning that the re-direct will go to PayPal; Explore implementing this behavior as automatic for external links */}
             <a
               href={invoice.paymentVendorURL}
@@ -46,6 +56,11 @@ const InvoiceActionsMenu: FC<ActionsMenuProps> = ({ invoice }) => {
               rel="noreferrer"
             >
               <i className="fa-brands fa-paypal"></i> Manage
+            </a>
+          </li>
+          <li>
+            <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+              <i className="fa fa-link"></i> {linkAccountLabel}
             </a>
           </li>
           <li>
