@@ -87,10 +87,10 @@ RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = [Rails.root.join('spec/fixtures')]
 
-  # If you're not using ActiveRecord, or you'd prefer not to run each of your
-  # examples within a transaction, remove the following line or assign false
-  # instead of true.
-  config.use_transactional_fixtures = true
+  # If you're using ActiveRecord AND you'd prefer to run each of your
+  # examples within a transaction, un-comment the following line and set
+  # the value to true.
+  # config.use_transactional_fixtures = false
 
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false
@@ -128,10 +128,25 @@ RSpec.configure do |config|
   config.include_context 'for phone number testing', real_world_data: true
 
   config.before(:suite) do
-    # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example
-    DatabaseCleaner.strategy = :transaction
+    if config.use_transactional_fixtures?
+      raise(<<-MSG)
+        Delete line `config.use_transactional_fixtures = true` from rails_helper.rb
+        (or set it to false) to prevent uncommitted transactions being used in
+        JavaScript-dependent specs.
+
+        During testing, the app-under-test that the browser driver connects to
+        uses a different database connection to the database connection used by
+        the spec. The app's database connection would not be able to access
+        uncommitted transaction data setup over the spec's database connection.
+      MSG
+    end
     DatabaseCleaner.clean_with(:truncation)
 
+    # # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example
+    # DatabaseCleaner.clean_with(:truncation)
+    #
+    # DatabaseCleaner.strategy = :transaction
+    #
     # Load seeds
     Rails.application.load_seed
 
@@ -139,8 +154,25 @@ RSpec.configure do |config|
     Sidekiq::Testing.fake!
   end
 
-  config.around(:each) do |example|
-    DatabaseCleaner.cleaning { example.run }
+  # config.around(:each) do |example|
+  #   DatabaseCleaner.cleaning { example.run }
+  #
+  #   # Clean up all test double state
+  #   RSpec::Mocks.teardown
+  # end
+
+  # Review example of RSpec with Capybara configuration:
+  # https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-with-capybara-example
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.append_after(:each) do
+    DatabaseCleaner.clean
 
     # Clean up all test double state
     RSpec::Mocks.teardown
