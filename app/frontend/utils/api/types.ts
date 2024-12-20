@@ -25,6 +25,8 @@ export interface Invoice {
   number: string
   status: 'PAID' | 'OVERDUE' | 'SENT'
   amount: InvoiceAmount
+  // eslint-disable-next-line no-use-before-define
+  account?: Account
   isRecurring?: boolean
   tooltipId?: string
   itemActionBtnClasses?: string

@@ -12,7 +12,7 @@ interface InvoiceItemProps {
 
 const InvoiceLineItem: FC<InvoiceItemProps> = ({ invoice }) => {
   const { isEnabled } = useFeatureFlagsContext()
-  const { vendorRecordId, status, dueAt } = invoice
+  const { account, vendorRecordId, status, dueAt } = invoice
 
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -38,6 +38,12 @@ const InvoiceLineItem: FC<InvoiceItemProps> = ({ invoice }) => {
           )}
         </div>
       </th>
+      <td className="px-6 py-4">
+        <div className="max-sm:flex md:block items-center">
+          <h6 className="text-semibold">{account?.displayName}</h6>
+          {account?.email && <div className="max-sm:hidden">{account?.email}</div>}
+        </div>
+      </td>
       <td className="px-6 py-4">
         <InvoiceDueDate invoiceId={invoice.id} value={dueAt} />
       </td>

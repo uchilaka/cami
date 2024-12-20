@@ -18,7 +18,7 @@
 #  tax_id       :string
 #
 class AccountSerializer < ActiveModel::Serializer
-  attributes :id, :display_name, :slug,
+  attributes :id, :display_name, :slug, :email,
              :status, :type, :tax_id, :notes_as_html
 
   # Read more on rendering rich text content:

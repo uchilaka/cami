@@ -7,6 +7,7 @@ import ThDueDate from './ThDueDate'
 import ThStatus from './ThStatus'
 import ThAmount from './ThAmount'
 import InvoiceLineItem from './InvoiceLineItem'
+import ThAccount from './ThAccount'
 
 const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
   const { invoices } = useInvoiceContext()
@@ -71,6 +72,7 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
             <th scope="col" className="px-6 py-3">
               Invoice #
             </th>
+            <ThAccount />
             <ThDueDate />
             <ThStatus />
             <ThAmount />
