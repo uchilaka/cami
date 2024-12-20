@@ -39,7 +39,7 @@ const InvoiceLineItem: FC<InvoiceItemProps> = ({ invoice }) => {
         </div>
       </th>
       <td className="px-6 py-4">
-        <div className="max-sm:flex md:block items-center">
+        <div className="max-sm:flex max-sm:justify-start md:block items-center">
           <h6 className="text-semibold">{account?.displayName}</h6>
           {account?.email && <div className="max-sm:hidden">{account?.email}</div>}
         </div>
