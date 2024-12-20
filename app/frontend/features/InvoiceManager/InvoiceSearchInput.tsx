@@ -1,7 +1,12 @@
 import React from 'react'
 
 const InvoiceSearchInput = () => {
-  // TODO: Show tooltip hint (on hover) if live search is disabled
+  /**
+   * TODO: Show tooltip hint (on hover) if live search is disabled
+   *
+   * For live search, review the (PayPal) invoice search docs:
+   * https://developer.paypal.com/docs/api/invoicing/v2/#invoices_search-invoices
+   */
   const liveSearchEnabled = false
 
   return (
