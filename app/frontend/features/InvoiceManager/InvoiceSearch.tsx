@@ -6,18 +6,24 @@ import { useInvoiceContext, withInvoiceProvider } from './InvoiceProvider'
 import ThDueDate from './ThDueDate'
 import ThStatus from './ThStatus'
 import ThAmount from './ThAmount'
-import InvoiceLineItem from './InvoiceLineItem'
+import InvoiceListItem from './InvoiceListItem'
 import ThAccount from './ThAccount'
 import InvoiceSearchInput from './InvoiceSearchInput'
+import VendorTabSelector, { VendorType } from './VendorTabSelector'
 
 const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
   const { invoices } = useInvoiceContext()
 
   console.debug({ invoices })
 
+  const vendorSelectionHandler = (vendor: VendorType) => {
+    console.debug(`Vendor changed @InvoiceSearch: ${vendor}`)
+  }
+
   return (
     <>
-      <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 dark:bg-gray-900">
+      <VendorTabSelector onChange={vendorSelectionHandler} />
+      <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 p-4 dark:bg-gray-900">
         <div className="flex flex-row space-x-4">
           <FilterForInvoiceStatus />
           <FilterForInvoiceDueDate />
@@ -54,7 +60,7 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
         </thead>
         <tbody>
           {invoices.map((invoice) => (
-            <InvoiceLineItem key={`row--${invoice.id}`} invoice={invoice} />
+            <InvoiceListItem key={`row--${invoice.id}`} invoice={invoice} />
           ))}
         </tbody>
       </table>

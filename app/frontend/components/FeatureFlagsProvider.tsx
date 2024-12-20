@@ -11,6 +11,8 @@ type FEATURE_FLAGS =
   | 'invoice_bulk_actions'
   | 'invoice_search'
   | 'sortable_invoice_index'
+  | 'stripe_invoicing'
+  | 'hubspot_invoicing'
 
 type FeatureFlagContextProps = Pick<FeatureFlagsProps, 'error' | 'loading' | 'refetch'> & {
   isEnabled: (flag: FEATURE_FLAGS) => boolean

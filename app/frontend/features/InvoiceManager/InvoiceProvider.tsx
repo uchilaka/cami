@@ -1,4 +1,5 @@
 import React, {
+  FC,
   createContext,
   ComponentType,
   Dispatch,
@@ -9,10 +10,10 @@ import React, {
   useEffect,
   useState,
 } from 'react'
-import { Invoice } from '@/utils/api/types'
 import { LoadInvoiceEventDetail, nsEventName } from '@/utils'
 import { useInvoiceSearchQuery } from './hooks/useInvoiceSearchQuery'
 import { InvoiceSearchProps } from './api'
+import { Invoice } from './types'
 
 interface InvoiceContextProps {
   listenForInvoiceLoadEvents: () => AbortController
@@ -27,7 +28,7 @@ const InvoiceContext = createContext<InvoiceContextProps>(null!)
 
 export const useInvoiceContext = () => useContext(InvoiceContext)
 
-export const InvoiceProvider = ({ children }: { children: ReactNode }) => {
+export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [queryParams] = useState<Partial<InvoiceSearchProps>>({})
   const [invoiceId, setInvoiceId] = useState<string>()
   const [loading, setLoading] = useState<boolean>()

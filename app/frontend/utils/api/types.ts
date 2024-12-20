@@ -1,37 +1,6 @@
-type AccountStatus = 'demo' | 'guest' | 'active' | 'payment_due' | 'overdue' | 'paid' | 'suspended' | 'deactivated'
-
-interface AccountAction {
-  domId: string
-  httpMethod: 'GET' | 'POST' | 'PUT' | 'DELETE'
-  label: string
-  url: string
-}
-
-type ActionKey = 'delete' | 'edit' | 'show' | 'showProfile' | 'profilesIndex' | 'transactionsIndex'
-
-interface InvoiceAmount {
-  value: number
-  formattedValue: string
-  currencyCode: string
-}
-
-export interface Invoice {
-  id: string
-  vendorRecordId: string
-  paymentVendor: 'paypal' | 'stripe'
-  createdAt: Date
-  dueAt: Date
-  updatedAt: Date
-  number: string
-  status: 'PAID' | 'OVERDUE' | 'SENT'
-  amount: InvoiceAmount
-  // eslint-disable-next-line no-use-before-define
-  account?: Account
-  isRecurring?: boolean
-  tooltipId?: string
-  itemActionBtnClasses?: string
-  paymentVendorURL: string
-}
+import { Invoice } from '@/features/InvoiceManager/types'
+import { AccountAction, ActionKey } from '@/features/AccountManager/types'
+import { GenericAccount } from './GenericAccount'
 
 interface UserProfile {
   id: string
@@ -45,11 +14,7 @@ interface RichText {
   plaintext: string
 }
 
-export interface Account {
-  id: string
-  displayName: string
-  slug: string
-  status: AccountStatus
+export interface Account extends GenericAccount {
   isVendor: boolean
   actions: Record<ActionKey, AccountAction>
   invoices: Invoice[]

@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
-import { Invoice } from '@/utils/api/types'
+import { Invoice } from './types'
 import FilterableBadge from './InvoiceBadge/FilterableBadge'
 import StaticBadge from './InvoiceBadge/StaticBadge'
 import InvoiceDueDate from './InvoiceDueDate'
@@ -10,7 +10,7 @@ interface InvoiceItemProps {
   invoice: Invoice
 }
 
-const InvoiceLineItem: FC<InvoiceItemProps> = ({ invoice }) => {
+const InvoiceListItem: FC<InvoiceItemProps> = ({ invoice }) => {
   const { isEnabled } = useFeatureFlagsContext()
   const { account, vendorRecordId, status, dueAt } = invoice
 
@@ -69,4 +69,4 @@ const InvoiceLineItem: FC<InvoiceItemProps> = ({ invoice }) => {
   )
 }
 
-export default InvoiceLineItem
+export default InvoiceListItem

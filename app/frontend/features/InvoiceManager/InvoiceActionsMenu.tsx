@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { Dropdown } from 'flowbite'
-import { Invoice } from '@/utils/api/types'
+import { Invoice } from './types'
 
 interface ActionsMenuProps {
   invoice: Invoice
