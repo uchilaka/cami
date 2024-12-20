@@ -1,12 +1,25 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
+import clsx from 'clsx'
 import { Tooltip } from 'flowbite'
 import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
+import { useInvoiceContext } from './InvoiceProvider'
 
 export default function ThAccount() {
   const controlRef = useRef<HTMLAnchorElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const labelText = 'Account'
   const { isEnabled } = useFeatureFlagsContext()
+  const { filterParams, setFilterParams } = useInvoiceContext()
+  const filteringByAccount = filterParams?.field === 'account'
+  const filteringDesc = filteringByAccount && filterParams.direction === 'desc'
+
+  const toggleSortFilter = useCallback(() => {
+    if (filteringByAccount && filteringDesc) {
+      setFilterParams({ field: 'account', direction: 'asc' })
+    } else {
+      setFilterParams({ field: 'account', direction: 'desc' })
+    }
+  }, [filteringByAccount, filteringDesc, setFilterParams])
 
   useEffect(() => {
     if (!controlRef.current || !tooltipRef.current) return
@@ -21,9 +34,17 @@ export default function ThAccount() {
     <th scope="col" className="px-6 py-3">
       {isEnabled('sortable_invoice_index') ? (
         <>
-          <a ref={controlRef} href="?s[][field]=account&s[][direction]=desc" data-tooltip-target="tooltip-sort-by-account">
+          <a
+            ref={controlRef}
+            href="#"
+            className="text-blue-600 dark:text-blue-500 hover:underline"
+            data-tooltip-target="tooltip-sort-by-account"
+            onClick={toggleSortFilter}
+          >
             {labelText}
-            <i className="fa-solid fa-caret-down px-2"></i>
+            <i
+              className={clsx('fa-solid px-2', filteringDesc && 'fa-caret-down', filteringByAccount && !filteringDesc && 'fa-caret-up')}
+            ></i>
           </a>
           <div
             id="tooltip-sort-by-account"

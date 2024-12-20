@@ -18,7 +18,9 @@ import { Invoice } from './types'
 interface InvoiceContextProps {
   listenForInvoiceLoadEvents: () => AbortController
   setInvoiceId: Dispatch<SetStateAction<string | undefined>>
+  setFilterParams: Dispatch<SetStateAction<Partial<InvoiceSearchProps>>>
   reload: () => Promise<void>
+  filterParams?: Partial<InvoiceSearchProps>
   loading?: boolean
   invoice?: Invoice | null
   invoices: Invoice[]
@@ -29,10 +31,11 @@ const InvoiceContext = createContext<InvoiceContextProps>(null!)
 export const useInvoiceContext = () => useContext(InvoiceContext)
 
 export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const [filterParams, setFilterParams] = useState<Partial<InvoiceSearchProps>>({})
   const [queryParams] = useState<Partial<InvoiceSearchProps>>({})
   const [invoiceId, setInvoiceId] = useState<string>()
   const [loading, setLoading] = useState<boolean>()
-  const { invoices, query } = useInvoiceSearchQuery(queryParams)
+  const { invoices, query } = useInvoiceSearchQuery({ ...filterParams, ...queryParams })
 
   const reload = useCallback(async () => {
     console.debug(`Loading invoices:`, { query })
@@ -66,7 +69,7 @@ export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, [invoiceId])
 
   return (
-    <InvoiceContext.Provider value={{ loading, invoices, reload, listenForInvoiceLoadEvents, setInvoiceId }}>
+    <InvoiceContext.Provider value={{ filterParams, loading, invoices, reload, listenForInvoiceLoadEvents, setInvoiceId, setFilterParams }}>
       {children}
     </InvoiceContext.Provider>
   )

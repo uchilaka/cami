@@ -6,7 +6,7 @@ export default function ThAmount() {
   const { isEnabled } = useFeatureFlagsContext()
   return (
     <th scope="col" className="px-6 py-3">
-      {isEnabled('sortable_invoice_index') ? (
+      {isEnabled('sortable_invoice_index', 'invoice_filtering_by_amount') ? (
         <>
           <div className="flex justify-end">
             <a href="?s[][field]=amount&s[][direction]=desc" data-tooltip-target="tooltip-sort-by-amount">

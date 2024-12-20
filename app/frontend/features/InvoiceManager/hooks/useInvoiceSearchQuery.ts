@@ -1,5 +1,5 @@
 import { getInvoices, InvoiceSearchProps } from '@/utils/api'
-import { Invoice } from '@/utils/api/types'
+import { Invoice } from '../types'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
