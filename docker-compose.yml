@@ -24,7 +24,7 @@ services:
       # Be sure to run bin/thor lx-cli:tunnel:init to generate the ngrok.yml file
       - ./config/ngrok.yml:/etc/ngrok.yml
     ports:
-      - 4040:4040
+      - '4040:4040'
 
   redis-store:
     container_name: redis.accounts.larcity

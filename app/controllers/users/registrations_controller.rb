@@ -3,13 +3,13 @@
 module Users
   # Kind of ancient, but hopefully still useful: https://gist.github.com/kinopyo/2343176
   class RegistrationsController < Devise::RegistrationsController
+    include LarCity::AccessControlled
+
     before_action :assign_default_role, only: %i[edit update]
-    before_action :calculate_global_privilege_level,
+    before_action :set_global_privilege_level,
                   :set_available_roles, only: %i[edit update]
     # before_action :configure_sign_up_params, only: [:create]
     # before_action :configure_account_update_params, only: [:update]
-
-    attr_accessor :global_privilege_level, :most_privileged_role, :available_roles
 
     # # GET /resource/sign_up
     # def new
@@ -22,13 +22,9 @@ module Users
     # end
     #
     # GET /resource/edit
-    def edit
-      super
-      # Check for highest privilege role that the user has
-      _most_privileged_role, role_params = ordered_role_entries.find { |(role, _role_tuple)| resource.has_role?(role) }
-      privilege_level, _most_privileged_role_label = role_params
-      @available_roles = ordered_role_entries.select { |_role, role_tuple| role_tuple[0] <= privilege_level }
-    end
+    # def edit
+    #   super
+    # end
 
     # PUT /resource
     def update
@@ -87,18 +83,6 @@ module Users
     # end
 
     private
-
-    def calculate_global_privilege_level
-      @most_privileged_role, role_params = ordered_role_entries.find { |role, _role_tuple| resource.has_role?(role) }
-      @global_privilege_level, _most_privileged_role_label = role_params
-    end
-
-    def set_available_roles
-      calculate_global_privilege_level unless @most_privileged_role.present?
-      @available_roles ||= ordered_role_entries.select do |_role, role_tuple|
-        role_tuple[0] <= global_privilege_level
-      end
-    end
 
     def assign_default_role
       resource.add_role(:user) if resource.present? && resource_supports_roles? && resource.roles.blank?

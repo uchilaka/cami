@@ -30,6 +30,14 @@ class ApplicationController < ActionController::Base
   protected
 
   def public_resource?
-    %w[/up /api/features].include?(request.path)
+    public_page? || %w[/up /api/features].include?(request.path)
+  end
+
+  def public_page?
+    params['controller'] == 'pages' &&
+      (
+        %w[home].include?(params['action']) ||
+        %w[about].include?(params['path'])
+      )
   end
 end

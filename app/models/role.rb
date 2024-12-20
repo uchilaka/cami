@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: roles
@@ -7,7 +9,7 @@
 #  resource_type :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  resource_id   :bigint
+#  resource_id   :uuid
 #
 # Indexes
 #
@@ -15,16 +17,16 @@
 #  index_roles_on_resource                                (resource_type,resource_id)
 #
 class Role < ApplicationRecord
-  has_and_belongs_to_many :users, :join_table => :users_roles
-  
+  has_and_belongs_to_many :users, join_table: 'users_roles'
+  has_and_belongs_to_many :accounts
+
   belongs_to :resource,
-             :polymorphic => true,
-             :optional => true
-  
+             polymorphic: true,
+             optional: true
 
   validates :resource_type,
-            :inclusion => { :in => Rolify.resource_types },
-            :allow_nil => true
+            inclusion: { in: Rolify.resource_types },
+            allow_nil: true
 
   scopify
 end

@@ -1,0 +1,72 @@
+<div id="<%= dom_id invoice %>">
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Invoice #:</strong>
+    <%= invoice.invoice_number %>
+  </p>
+
+  <p class="my-5">
+    <% if invoice.invoiceable.is_a?(Account) %>
+      <strong class="block font-medium mb-1">Account ID:</strong>
+    <% elsif invoice.invoiceable.is_a?(User) %>
+      <strong class="block font-medium mb-1">User ID:</strong>
+    <% end %>
+    <%= invoice.invoiceable&.id %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Payments:</strong>
+    <%= invoice.payments %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Links:</strong>
+    <%= invoice.links %>
+  </p>
+
+  <!--
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Viewed by recipient at:</strong>
+  </p>
+  -->
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Updated accounts at:</strong>
+    <%= invoice.updated_accounts_at %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Status:</strong>
+    <%= invoice.status %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Issued at:</strong>
+    <%= invoice.issued_at %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Due at:</strong>
+    <%= invoice.due_at %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Paid at:</strong>
+    <%= invoice.paid_at %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Amount:</strong>
+    <%= invoice.amount %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Due amount:</strong>
+    <%= invoice.due_amount %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Notes:</strong>
+    <%= invoice.notes %>
+  </p>
+
+</div>

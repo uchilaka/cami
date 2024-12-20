@@ -20,7 +20,7 @@ class VirtualOfficeManager
     def job_queue_is_running?
       scheduled_set = Sidekiq::ScheduledSet.new
       job_stats = Sidekiq::Stats.new
-      scheduled_set.size > 0 || job_stats.enqueued > 0
+      scheduled_set.size.positive? || job_stats.enqueued.positive?
     end
 
     def default_url_options

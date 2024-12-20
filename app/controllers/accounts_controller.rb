@@ -9,7 +9,7 @@ class AccountsController < ApplicationController
   # load_account :all, optional: true, id_keys: %i[account_id id]
   load_account %i[show edit update destroy], optional: false, id_keys: %i[account_id id]
 
-  load_console %i[index show edit]
+  load_console
 
   # before_action :set_account, only: %i[show edit update destroy]
 
@@ -111,7 +111,7 @@ class AccountsController < ApplicationController
 
   def update_account_param_keys
     base_keys = %i[display_name readme status tax_id phone]
-    if Current.user&.admin?
+    if authorize(@account, :edit?)
       base_keys + %i[email]
     else
       base_keys

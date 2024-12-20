@@ -3,18 +3,18 @@
 module StyleHelper
   # When appending to the primary and secondary button classes, you MUST override the default
   #   padding classes (px-# py-#) to ensure consistent padding within the buttons.
-  def primary_btn_classes(append_classes = 'px-5 py-3')
+  def primary_btn_classes(append_classes = 'px-5 py-3 me-2')
     "btn #{append_classes} text-base font-medium text-white bg-gradient-to-br from-green-400 to-blue-600 " \
       'hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 ' \
-      'font-medium rounded-lg text-sm text-center me-2 mb-2'
+      'font-medium rounded-lg text-sm text-center mb-2'
   end
 
   # When appending to the primary and secondary button classes, you MUST override the default
   #   padding classes (px-# py-#) to ensure consistent padding within the buttons.
-  def secondary_btn_classes(append_classes = 'px-5 py-3', style: :default)
+  def secondary_btn_classes(append_classes = 'px-5 py-3 me-2', style: :default)
     append_classes = append_classes.split.append(
       'hover:text-white border focus:ring-4 focus:outline-none',
-      'font-medium rounded-lg text-sm text-center me-2 mb-2',
+      'font-medium rounded-lg text-sm text-center mb-2',
       'dark:hover:text-white'
     )
     case style
@@ -48,6 +48,13 @@ module StyleHelper
         'dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500 dark:focus:ring-blue-800'
       ).join(' ')
     end
+  end
+
+  def link_classes(*args)
+    compose_class_names(
+      'font-medium text-blue-600 dark:text-blue-500 hover:underline',
+      args
+    )
   end
 
   def default_item_action_btn_classes

@@ -22,6 +22,8 @@ class AccountPolicy < ApplicationPolicy
   end
 
   def accessible_to_user?
+    return true if user.has_role?(:customer, record)
+
     record.users.include?(user)
   end
 
@@ -31,8 +33,18 @@ class AccountPolicy < ApplicationPolicy
         scope.all
       else
         scope
-          .includes(:accounts_users)
-          .where(accounts_users: { user_id: user.id })
+          .includes(:members, :roles)
+          .where(users: { id: user.id })
+          .or(
+            Account
+              .where(
+                roles: {
+                  name: %w[customer contact],
+                  users: { id: user.id },
+                  resource_type: 'Account'
+                }
+              )
+          )
       end
     end
   end

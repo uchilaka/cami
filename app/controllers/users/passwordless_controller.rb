@@ -4,6 +4,7 @@
 
 module Users
   class PasswordlessController < Devise::Passwordless::SessionsController
+    skip_before_action :authenticate_user!, only: %i[new create]
     # before_action :configure_sign_in_params, only: [:create]
 
     # GET /resource/sign_in

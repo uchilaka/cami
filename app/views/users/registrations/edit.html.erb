@@ -11,7 +11,8 @@
 
     <div class="field">
       <%= f.label :email, class: "label" %>
-      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email",
+                        readonly: true, class: "input" %>
     </div>
 
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
@@ -41,40 +42,6 @@
         <% end %>
       </ul>
       <p class="text-xs font-normal text-gray-500 dark:text-gray-300">Your access is restricted to one of these available roles: <%= available_role_labels.join(', ') %></p>
-    </div>
-
-    <div class="field">
-      <%= f.label :roles, class: "label" %>
-      <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-          <div class="flex items-center ps-3">
-            <%= check_box_tag "#{resource_name}[roles][]", :admin, nil, {
-              id: "check-admin-role",
-              class: "w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-            }
-            %>
-            <label for="check-admin-role" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Admin</label>
-          </div>
-        </li>
-        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-          <div class="flex items-center ps-3">
-            <input id="react-checkbox-list" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-            <label for="react-checkbox-list" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">React</label>
-          </div>
-        </li>
-        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-          <div class="flex items-center ps-3">
-            <input id="angular-checkbox-list" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-            <label for="angular-checkbox-list" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Angular</label>
-          </div>
-        </li>
-        <li class="w-full dark:border-gray-600">
-          <div class="flex items-center ps-3">
-            <input id="laravel-checkbox-list" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-            <label for="laravel-checkbox-list" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Laravel</label>
-          </div>
-        </li>
-      </ul>
     </div>
 
     <div class="field">

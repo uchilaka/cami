@@ -40,7 +40,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
   const initialValues: AccountFormData = {
     displayName: account?.displayName ?? '',
     email: account?.email ?? '',
-    readme: account?.readme,
+    readme: account?.readme?.plaintext,
     phone: (isBusinessAccount(account) ? account?.phone : '') ?? '',
     type: account?.type ?? 'Business',
     ...(isIndividualAccount(account)

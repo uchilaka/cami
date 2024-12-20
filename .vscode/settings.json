@@ -1,0 +1,21 @@
+{
+  "[ruby]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "Shopify.ruby-lsp"
+  },
+  "rubyLsp.rubyVersionManager": {
+    "identifier": "asdf"
+  },
+  "rubyLsp.formatter": "auto",
+  "rubocop.commandPath": "${userHome}/.rbenv/shims/rubocop",
+  "rubocop.mode": "enableViaGemfileOrMissingGemfile",
+  "[markdown]": {
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.wordWrap": "on",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.markdownlint": "always"
+    }
+  }
+}

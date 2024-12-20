@@ -11,6 +11,7 @@ import { createRoot } from 'react-dom/client'
 import Home from '@views/Home'
 import Dashboard from '@views/Dashboard'
 import AccountSummaryModal from '@/features/AccountManager/AccountSummaryModal'
+import InvoiceSearch from '@/features/InvoiceManager/InvoiceSearch'
 
 function mountIfContainerIsLoaded(containerId: string, Component: any) {
   const domContainer = document.querySelector(`#${containerId}`)
@@ -28,4 +29,5 @@ document.addEventListener('turbo:load', () => {
   mountIfContainerIsLoaded('home', Home)
   mountIfContainerIsLoaded('dashboard', Dashboard)
   mountIfContainerIsLoaded('account-summary-modal-container', AccountSummaryModal)
+  mountIfContainerIsLoaded('invoice-search', InvoiceSearch)
 })

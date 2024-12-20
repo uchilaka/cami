@@ -10,6 +10,8 @@
   - [System Dependencies](#system-dependencies)
   - [Configuration](#configuration)
     - [Development service ports](#development-service-ports)
+    - [Environment variables](#environment-variables)
+      - [`LAN_SUBNET_MASK`](#lan_subnet_mask)
   - [Running the app for the first time](#running-the-app-for-the-first-time)
     - [1. Setup the environment](#1-setup-the-environment)
     - [2. Install dependencies](#2-install-dependencies)
@@ -48,7 +50,7 @@
 Yep! Pivoting back to:
 
 - **1 database ORM** PostgreSQL for all the magical things out of the box i.e. active record, active storage, action mailbox
-- **A much simplified data model** with a focus on the core features of the app (no more profiles, STI account classes ...woof) 
+- **A much simplified data model** with a focus on the core features of the app (no more profiles, STI account classes ...woof)
 
 Here are the scratch notes when exploring the `rails new` command:
 
@@ -64,25 +66,25 @@ gem install railsmdb --pre
 
 # Dry-run project setup (with MongoDB)
 railsmdb new cami --no-rc --skip-webpack-install --skip-javascript \
-	--skip-test --skip-system-test \
-	--template ~/Developer/rails-vite-tailwindcss-template/template.rb \
-	--react --pretend
-	
+ --skip-test --skip-system-test \
+ --template ~/Developer/rails-vite-tailwindcss-template/template.rb \
+ --react --pretend
+ 
 # Dry-run project setup (with PostgreSQL: supports ActiveStorage, 
 #   ActionMailbox & other ActiveRecord dependent features)
 #   We've included ActiveStorage for ActionText (WYSIWYG editing).
 #   Skipping ActionMailbox until we're ready for email automation.
 rails new cami --no-rc --skip-webpack-install --skip-javascript \
-	--database postgresql --skip-test --skip-system-test \
-	--active-storage --skip-action-mailbox \
-	--template ~/Developer/rails-vite-tailwindcss-template/template.rb \
-	--react --pretend
-	
+ --database postgresql --skip-test --skip-system-test \
+ --active-storage --skip-action-mailbox \
+ --template ~/Developer/rails-vite-tailwindcss-template/template.rb \
+ --react --pretend
+ 
 # Active storage overview: https://guides.rubyonrails.org/active_storage_overview.html
 # Action mailbox overview: https://guides.rubyonrails.org/action_mailbox_basics.html
 ```
 
-## Other guides 
+## Other guides
 
 - [Modeling](./md/MODELING.md)
 - [Scaffolding](./md/SCAFFOLDING.md)
@@ -135,15 +137,15 @@ System dependencies are defined in the following configuration files:
     </tr>
 </table>
 
-### Environment variables 
+### Environment variables
 
 #### `LAN_SUBNET_MASK`
 
-This configuration is intended to give us a way to allow certain app management features based on the virtual network location of our teams. 
+This configuration is intended to give us a way to allow certain app management features based on the virtual network location of our teams.
 
 Specifically, this `ENV` variable is an override to configure access to the app's [web console](https://github.com/rails/web-console) (also see [the docs](https://github.com/rails/web-console?tab=readme-ov-file#configweb_consolepermissions), as well as `VirtualOfficeManager#web_console_permissions`).
 
-The built-in configuration option is to set the following in the corresponding [custom credential file](https://guides.rubyonrails.org/security.html#custom-credentials): 
+The built-in configuration option is to set the following in the corresponding [custom credential file](https://guides.rubyonrails.org/security.html#custom-credentials):
 
 > Tip: run `EDITOR=code bin/thor lx-cli:secrets:edit` in your development environment to edit the credentials file.
 
@@ -413,10 +415,9 @@ yq -p json -o yaml ./path/to/fixture.json > ./path/to/fixture.yml
   - [Handling nil objects](https://github.com/varvet/pundit?tab=readme-ov-file#nilclasspolicy)
 - [CanCanCan developer guide](https://github.com/CanCanCommunity/cancancan/blob/develop/docs/README.md) - an alternative to `Pundit`
 - [Feature flags for backup providers](https://www.flippercloud.io/docs/guides/backup-providers) e.g. with feature flagging payment providers like Stripe, PayPal & SplitIt or auth providers like Apple, Google & native passwordless authentication
-- [Dynamic roles in a Rails app](https://nicholusmuwonge.medium.com/dynamic-roles-in-a-rails-app-using-rolify-devise-invitable-and-pundit-b72011451239)
 - [Using yq to parse YAML (fixture) files](https://stackoverflow.com/a/67610900)
 
-## Known issues 
+## Known issues
 
 ### Deprecation notice for `fixture_path` in Rails 7.1
 
@@ -432,17 +433,33 @@ identify where to make the necessary changes, you can configure
 deprecation warnings into errors, giving you the full backtrace.
 ```
 
-## Future reading 
+## Future reading
 
-- [ ] Working with JSONB columns in your Active Record models with Active Model: <https://betacraft.com/2023-06-08-active-model-jsonb-column/>
-- [ ] Building your Turbo application: <https://turbo.hotwired.dev/handbook/building>
-- [ ] Custom errors in rails: <https://dev.to/ayushn21/custom-error-pages-in-rails-4i43>
+- [ ] Tailwind CSS
+  - [ ] [Base Styles](https://tailwindcss.com/docs/preflight)
+  - [ ] [Layout](https://tailwindcss.com/docs/aspect-ratio)
+  - [ ] [Flexbox & Grid](https://tailwindcss.com/docs/flex-basis)
+  - [ ] [Customization](https://tailwindcss.com/docs/configuration)
+- [ ] [Working with JSONB columns in your Active Record models with Active Model](https://betacraft.com/2023-06-08-active-model-jsonb-column/)
+- [ ] [Building your Turbo application](https://turbo.hotwired.dev/handbook/building)
+- [ ] Access Control
+  - [ ] [Joining polymorphic associations in Active Record](https://veelenga.github.io/joining-polymorphic-associations/)
+  - [ ] [Dynamic roles in a Rails app](https://nicholusmuwonge.medium.com/dynamic-roles-in-a-rails-app-using-rolify-devise-invitable-and-pundit-b72011451239)
+  - [ ] [Using rolify with Devise and Authority](https://github.com/RolifyCommunity/rolify/wiki/Using-rolify-with-Devise-and-Authority)
+- [ ] [Custom errors in rails](https://dev.to/ayushn21/custom-error-pages-in-rails-4i43)
 - [ ] E2E testing
-  - [ ] Integrate Playwright with CypressOnRails: <https://github.com/shakacode/cypress-on-rails?tab=readme-ov-file#totally-new-to-playwright>
-  - [ ] Running rails system tests with playwright instead of selenium: https://justin.searls.co/posts/running-rails-system-tests-with-playwright-instead-of-selenium/
-- [ ] Inheriting class methods from modules / mixins in Ruby: <https://stackoverflow.com/a/45127350>
+  - [ ] [Integrate Playwright with CypressOnRails](https://github.com/shakacode/cypress-on-rails?tab=readme-ov-file#totally-new-to-playwright)
+  - [ ] [Running rails system tests with playwright instead of selenium](https://justin.searls.co/posts/running-rails-system-tests-with-playwright-instead-of-selenium/)
+- [ ] [Inheriting class methods from modules / mixins in Ruby](https://stackoverflow.com/a/45127350)
 
 ## Future Work
 
 - [ ] Configure error reporting: <https://guides.rubyonrails.org/error_reporting.html>
 - [ ] Setup E2E test suite. Partial to Playwright over Cypress, but we should decide based on the needs of the project (See [future reading](#future-reading-))
+- [ ] React Router v7 Future Flag Warnings
+  - [ ] React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see <https://reactrouter.com/v6/upgrading/future#v7_starttransition>.
+  - [ ] Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see <https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath>
+  - [ ] The persistence behavior of fetchers is changing in v7. You can use the `v7_fetcherPersist` future flag to opt-in early. For more information, see <https://reactrouter.com/v6/upgrading/future#v7_fetcherpersist>.
+  - [ ] Casing of `formMethod` fields is being normalized to uppercase in v7. You can use the `v7_normalizeFormMethod` future flag to opt-in early. For more information, see <https://reactrouter.com/v6/upgrading/future#v7_normalizeformmethod>.
+  - [ ] `RouterProvider` hydration behavior is changing in v7. You can use the `v7_partialHydration` future flag to opt-in early. For more information, see <https://reactrouter.com/v6/upgrading/future#v7_partialhydration>.
+  - [ ] The revalidation behavior after 4xx/5xx `action` responses is changing in v7. You can use the `v7_skipActionErrorRevalidation` future flag to opt-in early. For more information, see <https://reactrouter.com/v6/upgrading/future#v7_skipactionerrorrevalidation>.
