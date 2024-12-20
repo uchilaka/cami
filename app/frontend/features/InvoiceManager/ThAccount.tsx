@@ -14,7 +14,7 @@ export default function ThAccount() {
     const control = controlRef.current
     const tooltip = tooltipRef.current
 
-    new Tooltip(tooltip, control, { placement: 'left', triggerType: 'hover' }, { id: 'tooltip--sort-by-account' })
+    new Tooltip(tooltip, control, { placement: 'bottom', triggerType: 'hover' }, { id: 'tooltip--sort-by-account' })
   }, [controlRef, tooltipRef])
 
   return (
