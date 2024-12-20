@@ -9,13 +9,14 @@ interface ActionsMenuProps {
 const AT_OR_PAST_SENT_STATUSES: Invoice['status'][] = ['PAID', 'OVERDUE', 'SENT']
 
 const InvoiceActionsMenu: FC<ActionsMenuProps> = ({ invoice }) => {
+  const { status, account, paymentVendorURL } = invoice
   const actionsMenuControlId = `actions-menu-control--${invoice.id}`
   const actionsMenuId = `actions-menu--${invoice.id}`
-  const invoiceHasBeenSent = AT_OR_PAST_SENT_STATUSES.includes(invoice.status)
-  const linkAccountLabel = invoice.account ? 'Update account' : 'Link account'
-  const manageLabel = invoice.status === 'PAID' ? 'Review' : 'Manage'
+  const invoiceHasBeenSent = AT_OR_PAST_SENT_STATUSES.includes(status)
+  const linkAccountLabel = account ? 'Update account' : 'Link account'
+  const manageLabel = status === 'PAID' ? 'Review' : 'Manage'
   const sendInvoiceLabel = invoiceHasBeenSent ? 'Re-send' : 'Send'
-  const invoiceCanBeSent = invoice.account && invoice.status !== 'PAID'
+  const invoiceCanBeSent = account && status !== 'PAID'
 
   const controlRef = React.useRef<HTMLButtonElement>(null)
   const menuRef = React.useRef<HTMLDivElement>(null)
@@ -54,7 +55,7 @@ const InvoiceActionsMenu: FC<ActionsMenuProps> = ({ invoice }) => {
           <li>
             {/* TODO: Show a warning that the re-direct will go to PayPal; Explore implementing this behavior as automatic for external links */}
             <a
-              href={invoice.paymentVendorURL}
+              href={paymentVendorURL ?? '#'}
               target="_blank"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
               rel="noreferrer"
