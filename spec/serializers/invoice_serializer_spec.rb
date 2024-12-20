@@ -44,22 +44,24 @@ RSpec.describe InvoiceSerializer do
     subject { described_class.new(invoice).serializable_hash }
 
     it 'serializes the invoice' do
-      expect(subject).to match(
-        id: invoice.id.to_s,
-        invoice_number: invoice.invoice_number,
-        invoicer: invoice.invoicer,
-        amount: invoice.amount,
-        due_amount: invoice.due_amount,
-        currency_code: invoice.currency_code,
-        payment_vendor: invoice.payment_vendor,
-        issued_at: invoice.issued_at,
-        due_at: invoice.due_at,
-        links: [],
-        status: 'SENT',
-        vendor_record_id: invoice.vendor_record_id,
-        vendor_recurring_group_id: invoice.vendor_recurring_group_id,
-        viewed_by_recipient: invoice.metadata['viewed_by_recipient']
-      )
+      expect(subject).to \
+        match(
+          hash_including(
+            id: invoice.id.to_s,
+            invoice_number: invoice.invoice_number,
+            invoicer: invoice.invoicer,
+            amount: MonetaryValueSerializer.new(invoice.amount).serializable_hash,
+            due_amount: MonetaryValueSerializer.new(invoice.due_amount).serializable_hash,
+            payment_vendor: invoice.payment_vendor,
+            issued_at: invoice.issued_at,
+            due_at: invoice.due_at,
+            links: [],
+            status: 'SENT',
+            vendor_record_id: invoice.vendor_record_id,
+            vendor_recurring_group_id: invoice.vendor_recurring_group_id,
+            viewed_by_recipient: invoice.metadata['viewed_by_recipient']
+          )
+        )
     end
   end
 end

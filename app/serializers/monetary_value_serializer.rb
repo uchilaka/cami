@@ -10,7 +10,7 @@ class MonetaryValueSerializer < AdhocSerializer
   end
 
   def value
-    object.cents * 100.0
+    object.cents / 100.0
   end
 
   def value_in_cents
