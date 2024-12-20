@@ -1,4 +1,5 @@
 import { Invoice } from '../types'
+import { composeFilterQueryParams } from '../utils'
 
 type SortTerm = {
   field: keyof Invoice
@@ -13,8 +14,7 @@ export interface InvoiceSearchProps {
 }
 
 export const getInvoices = async (payload?: Partial<InvoiceSearchProps>) => {
-  // TODO: Build the payload into a query string
-  const params = new URLSearchParams({ format: 'json' })
+  const params = composeFilterQueryParams(payload ?? {}, new URLSearchParams({ format: 'json' }))
   const result = await fetch(`/invoices?${params.toString()}`)
   const data = await result.json()
   return data

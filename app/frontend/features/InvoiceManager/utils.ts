@@ -1,7 +1,7 @@
 import { InvoiceSearchProps } from './api'
 
-export function composeFilterQueryParams(searchProps: Partial<InvoiceSearchProps>) {
-  const params = new URLSearchParams()
+export function composeFilterQueryParams(searchProps: Partial<InvoiceSearchProps>, otherParams?: URLSearchParams): URLSearchParams {
+  const params = otherParams ?? new URLSearchParams()
   for (const [key, value] of Object.entries(searchProps)) {
     if (value) {
       if (typeof value === 'object') {
