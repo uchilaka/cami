@@ -10,14 +10,15 @@ export default function ThAccount() {
   const labelText = 'Account'
   const { isEnabled } = useFeatureFlagsContext()
   const { filterParams, setFilterParams } = useInvoiceContext()
-  const filteringByAccount = filterParams?.field === 'account'
-  const filteringDesc = filteringByAccount && filterParams.direction === 'desc'
+  const filterParam = filterParams?.s?.account
+  const filteringByAccount = !!filterParam
+  const filteringDesc = filteringByAccount && filterParam.direction === 'desc'
 
   const toggleSortFilter = useCallback(() => {
     if (filteringByAccount && filteringDesc) {
-      setFilterParams({ field: 'account', direction: 'asc' })
+      setFilterParams({ s: { account: { field: 'account' } } })
     } else {
-      setFilterParams({ field: 'account', direction: 'desc' })
+      setFilterParams({ s: { account: { field: 'account', direction: 'desc' } } })
     }
   }, [filteringByAccount, filteringDesc, setFilterParams])
 
