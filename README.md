@@ -301,6 +301,28 @@ Your test inbox will be available at `http://localhost:8025`.
 
 ### Using NGROK
 
+> Be sure to follow [these instructions](https://ngrok.com/docs/getting-started/) to setup `ngrok` for your local environment.
+
+#### Instructions on WSL2
+
+Ensure your powershell profile is setup. This is required for execution policies. 
+
+```powershell
+$DirectoryPath = Split-Path -Parent $PROFILE
+New-Item -ItemType Directory -Path $DirectoryPath -Force | Out-Null
+if (!(Test-Path -Path $PROFILE)) {
+    New-Item -ItemType File -Path $PROFILE -Force
+}
+```
+
+Next, in a powershell console, run the following command to setup the required execution policy to run the `bin/tunnel.ps1` script:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
+```
+
+#### Instructions on macOS
+
 Follow these steps to setup `ngrok` for your local environment:
 
 - Ensure you have updated your `.envrc` file with the `NGROK_AUTH_TOKEN`. You can get this from KeePass
@@ -309,8 +331,13 @@ Follow these steps to setup `ngrok` for your local environment:
   ```shell
   ngrok config add-authtoken ${NGROK_AUTH_TOKEN}
   ```
+- Finally, generate your `config/ngrok.yml` file by running the following command:
+    
+  ```shell
+  bin/thor lx-cli:tunnel:init
+  ```
 
-Then you can open a tunnel to your local environment by running:
+Now you can open a tunnel to your local environment by running:
 
 ```shell
 thor lx-cli:tunnel:open_all
