@@ -1,10 +1,10 @@
 <!--- Provide a general summary of your changes in the Title above -->
 
-## Jira Card
-<!--- Please link the Jira card here -->
+## Ticket(s)
+<!--- Please link the Jira/Linear card here -->
 
-[LWS-###](https://larcity.atlassian.net/browse/LWS-###)
-[LAR-###](https://linear.app/larcity-and-affiliates/issue/LAR-###)
+- [LWS-###](https://larcity.atlassian.net/browse/LWS-###)
+- [LAR-###](https://linear.app/larcity-and-affiliates/issue/LAR-###)
 
 ## Summary
 <!--- Describe your changes, keeping in mind the Jira card should hold most of the context -->
