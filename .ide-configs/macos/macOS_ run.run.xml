@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="macOS: run" type="CompoundRunConfigurationType">
     <toRun name="Development: frontend" type="CommandRunConfigurationType" />
-    <toRun name="Development: sidekiq (WSL)" type="CommandRunConfigurationType" />
+    <toRun name="Development: sidekiq" type="CommandRunConfigurationType" />
     <toRun name="rails dartsass:watch" type="CommandRunConfigurationType" />
     <toRun name="rails tailwindcss:watch" type="CommandRunConfigurationType" />
     <toRun name="Development: CAMI (macOS)" type="RailsRunConfigurationType" />
