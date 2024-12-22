@@ -305,12 +305,17 @@ Your test inbox will be available at `http://localhost:8025`.
 
 #### Instructions on WSL2
 
+> Ensure that your run your powershell terminal as an Administrator for the following steps.
+
 Ensure your powershell profile is setup. This is required for execution policies. 
+
+> This powershell script is still in development
 
 ```powershell
 $DirectoryPath = Split-Path -Parent $PROFILE
 New-Item -ItemType Directory -Path $DirectoryPath -Force | Out-Null
 if (!(Test-Path -Path $PROFILE)) {
+    # TODO: the ps1 script to create a powershell user profile config file isn't working
     New-Item -ItemType File -Path $PROFILE -Force
 }
 ```
@@ -318,7 +323,22 @@ if (!(Test-Path -Path $PROFILE)) {
 Next, in a powershell console, run the following command to setup the required execution policy to run the `bin/tunnel.ps1` script:
 
 ```powershell
-Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process
+```
+
+#### Update your NGROK token
+
+On your development PC, ensure that you've set your auth token to the value from here: <https://dashboard.ngrok.com/get-started/your-authtoken>. To do so, run the following command from a powershell terminal:
+
+```powershell
+# See https://ngrok.com/docs/getting-started/#step-2-connect-your-account
+ngrok config add-authtoken ${NGROK_AUTH_TOKEN}
+```
+
+#### Run the tunnel script 
+
+```powershell
+powershell.exe -File \\wsl$\Ubuntu-22.04\home\localadmin\repos\@larcity\cami\bin\tunnel.ps1
 ```
 
 #### Instructions on macOS
