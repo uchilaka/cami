@@ -5,7 +5,6 @@
     <toRun name="rails dartsass:watch" type="CommandRunConfigurationType" />
     <toRun name="rails tailwindcss:watch" type="CommandRunConfigurationType" />
     <toRun name="Development: CAMI (macOS)" type="RailsRunConfigurationType" />
-    <toRun name="Development: ngrok tunnel service script (macOS)" type="ShConfigurationType" />
     <method v="2" />
   </configuration>
 </component>
