@@ -19,7 +19,7 @@ default: &default
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 3 } %>
   host: <%= ENV.fetch('APP_DATABASE_HOST', 'localhost') %>
   port: <%= ENV.fetch('APP_DATABASE_PORT', 5432) %>
   # Related issue: https://github.com/rails/rails/issues/38560

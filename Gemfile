@@ -180,6 +180,9 @@ gem 'ruby-vips', '~> 2.1', '>= 2.1.4'
 # Use Vite in Rails for JS https://github.com/ElMassimo/vite_ruby
 gem 'vite_rails', '~> 3.0', '>= 3.0.17'
 
+# TODO: I think sidekiq needs this (need to verify if this is the case once Sidekiq is working)
+gem 'stringio', '=3.0.4'
+
 # Simple, efficient background processing for Ruby [https://github.com/sidekiq/sidekiq/wiki/Getting-Started]
 gem 'sidekiq', '~> 7.3'
 
