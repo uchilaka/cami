@@ -559,7 +559,7 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
-    stringio (3.0.4)
+    stringio (3.1.2)
     strong_migrations (2.1.0)
       activerecord (>= 6.1)
     tailwindcss-rails (3.0.0)
@@ -698,7 +698,7 @@ DEPENDENCIES
   sidekiq (~> 7.3)
   sidekiq-cron
   sprockets-rails
-  stringio (= 3.0.4)
+  stringio (>= 3.1.2)
   strong_migrations
   tailwindcss-rails (~> 3.0)
   turbo-rails (~> 2.0)
