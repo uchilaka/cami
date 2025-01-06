@@ -36,3 +36,9 @@
 .PhoneInputInput {
   border-width: 0;
 }
+
+.h-full {
+  >.alert {
+    top: 6rem;
+  }
+}
