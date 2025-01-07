@@ -44,7 +44,11 @@ export default function ThAccount() {
           >
             {labelText}
             <i
-              className={clsx('fa-solid px-2', filteringDesc && 'fa-caret-down', filteringByAccount && !filteringDesc && 'fa-caret-up')}
+              className={clsx(
+                'fa-solid px-2',
+                filteringByAccount && filteringDesc && 'fa-caret-down',
+                filteringByAccount && !filteringDesc && 'fa-caret-up',
+              )}
             ></i>
           </a>
           <div

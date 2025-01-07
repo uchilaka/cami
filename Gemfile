@@ -7,6 +7,8 @@ ruby '3.2.2'
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.2', '>= 7.2.0'
 
+gem 'active_record_extended'
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
 
@@ -90,8 +92,9 @@ gem 'bumbler'
 # Rationale: setup "staging" environments to be identical to production, distinguished by their domain name.
 gem 'sib-api-v3-sdk', groups: %i[production]
 
+gem 'active_model_serializers'
+
 group :development, :test do
-  gem 'active_model_serializers'
   gem 'capybara'
   gem 'capybara_accessibility_audit'
   gem 'fabrication'
@@ -200,3 +203,5 @@ gem 'interactor', '~> 3.1'
 
 # Money gem integration with Rails: https://github.com/RubyMoney/money-rails
 gem 'money-rails', '~> 1.15'
+
+gem 'ransack', '~> 4.2'
