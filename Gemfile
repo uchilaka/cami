@@ -204,4 +204,5 @@ gem 'interactor', '~> 3.1'
 # Money gem integration with Rails: https://github.com/RubyMoney/money-rails
 gem 'money-rails', '~> 1.15'
 
+# Object-based searching for Active Record: https://github.com/activerecord-hackery/ransack
 gem 'ransack', '~> 4.2'
