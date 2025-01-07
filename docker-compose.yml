@@ -10,6 +10,7 @@ services:
 
   # Doc: https://ngrok.com/docs/using-ngrok-with/docker/#:~:text=Using%20ngrok%20with%20Docker%20Compose
   tunnel:
+    container_name: ngrok.accounts.larcity
     image: ngrok/ngrok:latest
     restart: unless-stopped
     environment:
