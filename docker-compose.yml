@@ -11,16 +11,15 @@ services:
   # Doc: https://ngrok.com/docs/using-ngrok-with/docker/#:~:text=Using%20ngrok%20with%20Docker%20Compose
   tunnel:
     container_name: ngrok.accounts.larcity
-    image: ngrok/ngrok:latest
+    image: ngrok/ngrok
     restart: unless-stopped
     environment:
       NGROK_AUTHTOKEN: ${NGROK_AUTH_TOKEN}
+      NGROK_CONFIG: /etc/ngrok.yml
     command:
       # CLI docs: https://ngrok.com/docs/agent/cli/#ngrok-start
       - "start"
       - "--all"
-      - "--config"
-      - "/etc/ngrok.yml"
     volumes:
       # Be sure to run bin/thor lx-cli:tunnel:init to generate the ngrok.yml file
       - ./config/ngrok-via-docker.yml:/etc/ngrok.yml
