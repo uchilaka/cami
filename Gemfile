@@ -107,17 +107,17 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw windows], require: 'debug/prelude'
 
-  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
+  # Static analysis for security vulnerabilities https://brakemanscanner.org/
   gem 'brakeman', require: false
 
-  # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
+  # Omakase Ruby styling https://github.com/rails/rubocop-rails-omakase/
   gem 'rubocop-rails-omakase', require: false
 
   gem 'rspec-rails', '~> 7.0.0'
 end
 
 group :development do
-  # Use console on exceptions pages [https://github.com/rails/web-console]
+  # Use console on exceptions pages https://github.com/rails/web-console
   gem 'web-console'
 
   # Annotates Rails Models, routes, fixtures, and others based on the database schema.
@@ -140,7 +140,7 @@ group :test do
   gem 'shoulda-matchers'
 
   # Selenium is a browser automation tool for automated
-  #   testing of webapps and more [https://www.selenium.dev/documentation/en/]
+  #   testing of webapps and more https://www.selenium.dev/documentation/en/
   gem 'selenium-webdriver'
 
   gem 'database_cleaner-active_record'
@@ -186,23 +186,23 @@ gem 'vite_rails', '~> 3.0', '>= 3.0.17'
 # Pin a minimum version of the stringio gem (spaghetti change while troubleshooting Sidekiq on WSL2)
 gem 'stringio', '>= 3.1.2'
 
-# Simple, efficient background processing for Ruby [https://github.com/sidekiq/sidekiq/wiki/Getting-Started]
+# Simple, efficient background processing for Ruby https://github.com/sidekiq/sidekiq/wiki/Getting-Started
 gem 'sidekiq', '~> 7.3'
 
-# Scheduler/Cron for Sidekiq jobs [https://github.com/sidekiq-cron/sidekiq-cron?tab=readme-ov-file#adding-cron-job]
+# Scheduler/Cron for Sidekiq jobs https://github.com/sidekiq-cron/sidekiq-cron?tab=readme-ov-file#adding-cron-job
 gem 'sidekiq-cron'
 
 # Process manager for applications with multiple components
 gem 'foreman'
 
-# Rake tasks to migrate data alongside schema changes [https://github.com/ilyakatz/data-migrate]
+# Rake tasks to migrate data alongside schema changes https://github.com/ilyakatz/data-migrate
 gem 'data_migrate', '~> 9', '>= 9.3.0'
 
 # Simple interactor implementation
 gem 'interactor', '~> 3.1'
 
-# Money gem integration with Rails: https://github.com/RubyMoney/money-rails
+# Money gem integration with Rails https://github.com/RubyMoney/money-rails
 gem 'money-rails', '~> 1.15'
 
-# Object-based searching for Active Record: https://github.com/activerecord-hackery/ransack
+# Object-based searching for Active Record https://github.com/activerecord-hackery/ransack
 gem 'ransack', '~> 4.2'

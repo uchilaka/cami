@@ -22,7 +22,7 @@ services:
       - "/etc/ngrok.yml"
     volumes:
       # Be sure to run bin/thor lx-cli:tunnel:init to generate the ngrok.yml file
-      - ./config/ngrok.yml:/etc/ngrok.yml
+      - ./config/ngrok-via-docker.yml:/etc/ngrok.yml
     ports:
       - '4040:4040'
 

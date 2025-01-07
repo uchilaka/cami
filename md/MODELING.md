@@ -1,4 +1,4 @@
-# Modeling
+# CAMI > Modeling
 
 ## Identity Provider Profiles
 
