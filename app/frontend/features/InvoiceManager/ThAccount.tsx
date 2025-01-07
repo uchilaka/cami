@@ -10,15 +10,18 @@ export default function ThAccount() {
   const labelText = 'Account'
   const { isEnabled } = useFeatureFlagsContext()
   const { filterParams, setFilterParams } = useInvoiceContext()
-  const filterParam = filterParams?.s?.account
-  const filteringByAccount = !!filterParam
-  const filteringDesc = filteringByAccount && filterParam.direction === 'desc'
+  const sortDirection = filterParams?.s?.account
+  const filteringByAccount = !!sortDirection
+  const filteringDesc = sortDirection === 'desc'
 
+  /**
+   * TODO: Should this be mergeSortFilter?
+   */
   const toggleSortFilter = useCallback(() => {
     if (filteringByAccount && filteringDesc) {
-      setFilterParams({ s: { account: { field: 'account' } } })
+      setFilterParams({ s: { account: 'desc' } })
     } else {
-      setFilterParams({ s: { account: { field: 'account', direction: 'desc' } } })
+      setFilterParams({ s: { account: 'asc' } })
     }
   }, [filteringByAccount, filteringDesc, setFilterParams])
 

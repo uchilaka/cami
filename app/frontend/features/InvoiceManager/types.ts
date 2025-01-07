@@ -18,6 +18,7 @@ export interface Invoice {
   number: string
   status: 'PAID' | 'OVERDUE' | 'SENT'
   amount: InvoiceAmount
+  paidAt?: Date
   // eslint-disable-next-line no-use-before-define
   account?: GenericAccount
   isRecurring?: boolean
