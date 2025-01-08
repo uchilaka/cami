@@ -206,3 +206,7 @@ gem 'money-rails', '~> 1.15'
 
 # Object-based searching for Active Record https://github.com/activerecord-hackery/ransack
 gem 'ransack', '~> 4.2'
+
+# # API client for Zoho CRM https://github.com/zoho/zohocrm-ruby-sdk-7.0
+# TODO: Encounters error installing mysql2 (pivoting away from pulling in this dependency)
+# gem 'ZOHOCRMSDK7_0'

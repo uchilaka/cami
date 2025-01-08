@@ -117,6 +117,12 @@ module NavbarHelper
         url: paypal_developer_dashboard_url,
         admin: true,
         enabled: true
+      },
+      {
+        label: 'CRM Dashboard',
+        url: "https://crm.zoho.com/crm/org#{crm_org_id}/tab/Home/begin",
+        admin: true,
+        enabled: true
       }
     ].map { |item| build_menu_item(item) }.filter(&:enabled)
   end
