@@ -8,8 +8,6 @@ module Zoho
         response.body
       end
 
-      # TODO: modify authorization scope to only explicitly include scopes
-      #   that will be used.
       # Docs on scopes: https://www.zoho.com/crm/developer/docs/api/v7/scopes.html
       def supported_scopes
         %w[
