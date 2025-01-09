@@ -4,42 +4,47 @@ module Zoho
   class AccessToken
     class << self
       def generate
-        response = API::Account.connection.post(resource_url) do |req|
-          req.headers[:accept] = 'application/json'
-          req.body = JSON.generate(token_params)
-        end
+        response = connection.post('/oauth/v2/token', token_params)
         response.body
       end
 
+      # TODO: modify authorization scope to only explicitly include scopes
+      #   that will be used.
       # Docs on scopes: https://www.zoho.com/crm/developer/docs/api/v7/scopes.html
       def supported_scopes
         %w[
-          ZohoCRM.modules.accounts
-          ZohoCRM.modules.appointments
-          ZohoCRM.modules.contacts
-          ZohoCRM.modules.deals
-          ZohoCRM.modules.invoices
-          ZohoCRM.modules.leads
-          ZohoCRM.modules.notes
-          ZohoCRM.modules.products
-          ZohoCRM.modules.tasks
-          ZohoCRM.modules.vendors
-          ZohoCRM.users.READ
+          ZohoCRM.modules.accounts.ALL
+          ZohoCRM.modules.appointments.ALL
+          ZohoCRM.modules.contacts.ALL
+          ZohoCRM.modules.deals.ALL
+          ZohoCRM.modules.invoices.ALL
+          ZohoCRM.modules.leads.ALL
+          ZohoCRM.modules.notes.ALL
+          ZohoCRM.modules.products.ALL
+          ZohoCRM.modules.tasks.ALL
+          ZohoCRM.modules.vendors.ALL
         ]
       end
 
       def resource_url
-        "#{API::Account.resource_url}/oauth/v2/auth"
+        "#{API::Account.resource_url}/oauth/v2/token"
       end
 
       private
+
+      def connection
+        @connection ||= Faraday.new(url: API::Account.resource_url) do |b|
+          b.request :url_encoded
+          b.response :json
+          b.response :logger if Rails.env.development?
+        end
+      end
 
       def token_params
         {
           client_id: Credentials.client_id,
           client_secret: Credentials.client_secret,
           grant_type: 'client_credentials',
-          # redirect_uri: Credentials.redirect_uri,
           soid: Credentials.soid,
           scope: supported_scopes.join(',')
         }
