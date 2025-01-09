@@ -17,6 +17,10 @@ class InvoicesController < ApplicationController
     @invoices = policy_scope(Invoice)
   end
 
+  def search
+    @invoices = policy_scope(Invoice)
+  end
+
   # GET /invoices/1 or /invoices/1.json
   def show; end
 

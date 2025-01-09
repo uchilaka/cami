@@ -94,6 +94,7 @@ gem 'sib-api-v3-sdk', groups: %i[production]
 
 gem 'active_model_serializers'
 
+# OpenAPI (formerly named Swagger) tooling for Rails APIs https://github.com/rswag/rswag
 gem 'rswag-api'
 gem 'rswag-ui'
 

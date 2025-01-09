@@ -31,7 +31,75 @@ RSpec.configure do |config|
             }
           }
         }
-      ]
+      ],
+      components: {
+        securitySchemes: {
+          bearer_auth: {
+            type: :http,
+            scheme: :bearer,
+          },
+          basic_auth: {
+            type: :http,
+            scheme: :basic,
+          }
+        },
+        schemas: {
+          account: {
+            type: :object,
+            properties: {
+              id: { type: :string },
+              displayName: { type: :string },
+              email: { type: :string },
+              status: { type: :string },
+              taxId: { type: :string },
+              type: { type: :string },
+            },
+            required: %i[id displayName email status]
+          },
+          contact: {
+            type: :object,
+            properties: {
+              displayName: { type: :string },
+              familyName: { type: :string },
+              givenName: { type: :string },
+              email: { type: :string },
+              type: { type: :string },
+            },
+            required: %i[displayName email]
+          },
+          money: {
+            type: :object,
+            properties: {
+              currencyCode: { type: :string },
+              formattedValue: { type: :string },
+              value: { type: :number },
+              valueInCents: { type: :integer },
+            },
+            required: %i[currencyCode formattedValue value valueInCents]
+          },
+          invoice: {
+            type: :object,
+            properties: {
+              id: { type: :string },
+              account: { '$ref' => '#/components/schemas/account' },
+              contacts: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/contact' }
+              },
+              status: { type: :string },
+              invoiceNumber: { type: :string },
+              currencyCode: { type: :string },
+              createdAt: { type: :string, format: 'date-time' },
+              dueAt: { type: :string, format: 'date-time' },
+              paidAt: { type: :string, format: 'date-time' },
+              amount: { '$ref' => '#/components/schemas/money' },
+              dueAmount: { '$ref' => '#/components/schemas/money' },
+              paymentVendorURL: { type: :string },
+            },
+            required: %i[id account contacts status invoiceNumber currencyCode createdAt dueAt amount dueAmount]
+          }
+        }
+      }
     }
   }
 
