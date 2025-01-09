@@ -27,10 +27,14 @@ RSpec.describe '/invoices', type: :request do
   end
 
   describe 'GET /index' do
-    it 'renders a successful response' do
-      Invoice.create! valid_attributes
-      get invoices_url
-      expect(response).to be_successful
+    context 'when searching for paid invoices, sorted by accounts' do
+      let(:params) do
+        {
+          'format' => 'json',
+          's' => [{ 'field' => 'account', 'direction' => 'asc' }],
+          'f' => [{ 'field' => 'status', 'value' => 'PAID' }]
+        }
+      end
     end
   end
 

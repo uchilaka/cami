@@ -1,4 +1,4 @@
-import { Invoice } from '@/utils/api/types'
+import { Invoice } from '../types'
 import React, { ComponentProps, FC } from 'react'
 
 export const composeTooltipId = (invoice: Invoice) => {

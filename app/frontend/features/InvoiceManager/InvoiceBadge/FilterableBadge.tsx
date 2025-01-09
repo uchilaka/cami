@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import InvoiceBadge, { composeTooltipId } from '.'
-import { Invoice } from '@/utils/api/types'
+import { Invoice } from '../types'
 
 interface InvoiceFilterableBadgeProps {
   invoice: Invoice

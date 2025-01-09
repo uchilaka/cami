@@ -1,5 +1,5 @@
 import { InvoiceSearchProps } from '@/features/InvoiceManager/api'
-import { composeSortQueryParams } from '@/features/InvoiceManager/utils'
+import { composeQueryParams } from '@/features/InvoiceManager/utils'
 
 describe('InvoiceManager utils', () => {
   describe('composeFilterQueryParams', () => {
@@ -13,7 +13,7 @@ describe('InvoiceManager utils', () => {
       }
 
       it('should return a URLSearchParams object with the correct query params', () => {
-        const result = composeSortQueryParams(payload)
+        const result = composeQueryParams(payload)
         expect(decodeURI(result.toString())).toEqual(
           ['s[][field]=account', 's[][direction]=asc', 's[][field]=status', 's[][direction]=desc', 'q=Alvin'].join('&'),
         )
@@ -26,7 +26,7 @@ describe('InvoiceManager utils', () => {
       }
 
       it('should return a URLSearchParams object with the correct query params', () => {
-        const result = composeSortQueryParams(payload)
+        const result = composeQueryParams(payload)
         expect(decodeURI(result.toString())).toEqual('q=Alvin')
       })
     })
@@ -39,7 +39,7 @@ describe('InvoiceManager utils', () => {
       }
 
       it('should return a URLSearchParams object with the correct query params', () => {
-        const result = composeSortQueryParams(payload)
+        const result = composeQueryParams(payload)
         expect(decodeURI(result.toString())).toEqual('s[][field]=account&s[][direction]=asc')
       })
     })
@@ -48,7 +48,7 @@ describe('InvoiceManager utils', () => {
       const payload: Partial<InvoiceSearchProps> = {}
 
       it('should return an empty URLSearchParams object', () => {
-        const result = composeSortQueryParams(payload)
+        const result = composeQueryParams(payload)
         expect(decodeURI(result.toString())).toEqual('')
       })
     })
@@ -59,7 +59,7 @@ describe('InvoiceManager utils', () => {
       }
 
       it('should return an empty URLSearchParams object', () => {
-        const result = composeSortQueryParams(payload)
+        const result = composeQueryParams(payload)
         expect(decodeURI(result.toString())).toEqual('')
       })
     })
@@ -72,7 +72,7 @@ describe('InvoiceManager utils', () => {
       }
 
       it('should return a URLSearchParams object with the correct query params', () => {
-        const result = composeSortQueryParams(payload)
+        const result = composeQueryParams(payload)
         expect(decodeURI(result.toString())).toEqual('')
       })
     })

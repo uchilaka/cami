@@ -1,5 +1,5 @@
 import { Invoice } from '../types'
-import { composeSortQueryParams } from '../utils'
+import { composeQueryParams } from '../utils'
 
 type SortKey = keyof Pick<Invoice, 'account' | 'status' | 'dueAt' | 'paidAt' | 'amount'> | 'account.email' | 'account.displayName'
 type FilterKey = 'status' | 'invoiceNumber' | 'account.displayName' | 'account.email'
@@ -14,7 +14,7 @@ export interface InvoiceSearchProps {
 }
 
 export const getInvoices = async (payload?: Partial<InvoiceSearchProps>) => {
-  const params = composeSortQueryParams(payload ?? {}, new URLSearchParams({ format: 'json' }))
+  const params = composeQueryParams(payload ?? {}, new URLSearchParams({ format: 'json' }))
   const result = await fetch(`/invoices?${params.toString()}`)
   const data = await result.json()
   return data

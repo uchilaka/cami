@@ -94,6 +94,9 @@ gem 'sib-api-v3-sdk', groups: %i[production]
 
 gem 'active_model_serializers'
 
+gem 'rswag-api'
+gem 'rswag-ui'
+
 group :development, :test do
   gem 'capybara'
   gem 'capybara_accessibility_audit'
@@ -114,6 +117,7 @@ group :development, :test do
   gem 'rubocop-rails-omakase', require: false
 
   gem 'rspec-rails', '~> 7.0.0'
+  gem 'rswag-specs'
 end
 
 group :development do
