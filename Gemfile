@@ -100,6 +100,7 @@ gem 'rswag-ui'
 group :development, :test do
   gem 'capybara'
   gem 'capybara_accessibility_audit'
+  gem 'climate_control'
   gem 'fabrication'
   gem 'faker'
   gem 'open3'
@@ -117,6 +118,7 @@ group :development, :test do
   gem 'rubocop-rails-omakase', require: false
 
   gem 'rspec-rails', '~> 7.0.0'
+
   gem 'rswag-specs'
 end
 
@@ -150,8 +152,6 @@ group :test do
   gem 'database_cleaner-active_record'
 
   # gem 'database_cleaner-redis'
-
-  gem 'climate_control'
 end
 
 # Track changes to your models https://github.com/paper-trail-gem/paper_trail
