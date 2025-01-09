@@ -10,6 +10,7 @@ import React, {
   useEffect,
   useState,
 } from 'react'
+import merge from 'lodash.merge'
 import { LoadInvoiceEventDetail, nsEventName } from '@/utils'
 import { useInvoiceSearchQuery } from './hooks/useInvoiceSearchQuery'
 import { InvoiceSearchProps } from './api'
@@ -18,10 +19,10 @@ import { Invoice } from './types'
 interface InvoiceContextProps {
   listenForInvoiceLoadEvents: () => AbortController
   setInvoiceId: Dispatch<SetStateAction<string | undefined>>
-  setFilterParams: Dispatch<SetStateAction<Partial<InvoiceSearchProps>>>
-  updateFilterParams: (newParams: Partial<InvoiceSearchProps>) => void
+  setSearchParams: Dispatch<SetStateAction<Partial<InvoiceSearchProps>>>
+  updateSearchParams: (newParams: Partial<InvoiceSearchProps>) => void
   reload: () => Promise<void>
-  filterParams?: Partial<InvoiceSearchProps>
+  searchParams?: Partial<InvoiceSearchProps>
   loading?: boolean
   invoice?: Invoice | null
   invoices: Invoice[]
@@ -32,11 +33,11 @@ const InvoiceContext = createContext<InvoiceContextProps>(null!)
 export const useInvoiceContext = () => useContext(InvoiceContext)
 
 export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [filterParams, setFilterParams] = useState<Partial<InvoiceSearchProps>>({})
+  const [searchParams, setSearchParams] = useState<Partial<InvoiceSearchProps>>({})
   const [queryParams] = useState<Partial<InvoiceSearchProps>>({})
   const [invoiceId, setInvoiceId] = useState<string>()
   const [loading, setLoading] = useState<boolean>()
-  const { invoices, query } = useInvoiceSearchQuery({ ...filterParams, ...queryParams })
+  const { invoices, query } = useInvoiceSearchQuery(merge(queryParams, searchParams))
 
   const reload = useCallback(async () => {
     console.debug(`Loading invoices:`, { query })
@@ -45,7 +46,7 @@ export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
     console.debug({ result })
     if (result.isSuccess) setLoading(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, invoiceId])
+  }, [query, searchParams])
 
   const listenForInvoiceLoadEvents = () => {
     const invoiceLoader = new AbortController()
@@ -64,16 +65,39 @@ export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
     return invoiceLoader
   }
 
-  const updateFilterParams = useCallback(({ s, q }: Partial<InvoiceSearchProps>) => {}, [filterParams])
+  const updateSearchParams = useCallback(
+    ({ s, f, q }: Partial<InvoiceSearchProps>) => {
+      setSearchParams({
+        s: merge(searchParams.s, s),
+        f: merge(searchParams.f, f),
+        q: q ?? searchParams.q,
+      })
+    },
+    [searchParams],
+  )
 
   useEffect(() => {
-    if (invoiceId) reload()
+    if (invoiceId || !!searchParams.q || !!searchParams.s || !!searchParams.f) reload()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [invoiceId])
+  }, [invoiceId, searchParams])
+
+  useEffect(() => {
+    console.debug(`Updated search params:`, { ...searchParams })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams])
 
   return (
     <InvoiceContext.Provider
-      value={{ filterParams, invoices, loading, reload, listenForInvoiceLoadEvents, setInvoiceId, setFilterParams, updateFilterParams }}
+      value={{
+        searchParams,
+        invoices,
+        loading,
+        reload,
+        listenForInvoiceLoadEvents,
+        setInvoiceId,
+        setSearchParams,
+        updateSearchParams,
+      }}
     >
       {children}
     </InvoiceContext.Provider>
