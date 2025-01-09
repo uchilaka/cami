@@ -4,16 +4,9 @@ module Zoho
   class AccessToken
     class << self
       def generate
-        response = API::Account.connection.get(resource_url) do |req|
-          req.options.params_encoder = Faraday::FlatParamsEncoder
-          req.params = {
-            client_id: Credentials.client_id,
-            client_secret: Credentials.client_secret,
-            grant_type: 'client_credentials',
-            redirect_uri: Credentials.redirect_uri,
-            soid: Credentials.soid,
-            scope: supported_scopes.join(',')
-          }
+        response = API::Account.connection.post(resource_url) do |req|
+          req.headers[:accept] = 'application/json'
+          req.body = JSON.generate(token_params)
         end
         response.body
       end
@@ -37,6 +30,19 @@ module Zoho
 
       def resource_url
         "#{API::Account.resource_url}/oauth/v2/auth"
+      end
+
+      private
+
+      def token_params
+        {
+          client_id: Credentials.client_id,
+          client_secret: Credentials.client_secret,
+          grant_type: 'client_credentials',
+          # redirect_uri: Credentials.redirect_uri,
+          soid: Credentials.soid,
+          scope: supported_scopes.join(',')
+        }
       end
 
       def client_id
