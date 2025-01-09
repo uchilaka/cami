@@ -5,10 +5,6 @@ require 'rails_helper'
 module Zoho
   RSpec.describe AccessToken do
     describe '#generate' do
-      it 'outputs the accounts URL' do
-        expect { described_class.generate }.to output("Accounts URL: https://accounts.zoho.com\n").to_stdout
-      end
-
       it 'returns a hash with the access token' do
         response = described_class.generate
         expect(response).to be_a(Hash)

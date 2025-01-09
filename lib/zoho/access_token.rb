@@ -1,16 +1,6 @@
 # frozen_string_literal: true
 
 module Zoho
-  module Credentials
-    def self.client_id
-      ENV.fetch('ZOHO_CLIENT_ID', Rails.application.credentials&.zoho&.client_id)
-    end
-
-    def self.client_secret
-      ENV.fetch('ZOHO_CLIENT_SECRET', Rails.application.credentials&.zoho&.client_secret)
-    end
-  end
-
   class AccessToken
     class << self
       def generate
@@ -20,8 +10,9 @@ module Zoho
             client_id: Credentials.client_id,
             client_secret: Credentials.client_secret,
             grant_type: 'client_credentials',
-            scope: supported_scopes.join(','),
-            soid: ENV.fetch('CRM_ORG_ID')
+            redirect_uri: Credentials.redirect_uri,
+            soid: Credentials.soid,
+            scope: supported_scopes.join(',')
           }
         end
         response.body
