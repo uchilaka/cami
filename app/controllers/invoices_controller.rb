@@ -34,7 +34,7 @@ class InvoicesController < ApplicationController
 
   # POST /invoices or /invoices.json
   def create
-    @invoice = Invoice.new(invoice_params)
+    @invoice = Invoice.new(invoice_params).ransack(search_predicates)
 
     respond_to do |format|
       if @invoice.save
@@ -71,6 +71,13 @@ class InvoicesController < ApplicationController
   end
 
   private
+
+  def search_predicates
+    @search_query ||= InvoiceSearchQuery.new(params[:q])
+    @search_query.extend(f: params[:f]) if params[:f].present?
+    @search_query.extend(s: params[:s]) if params[:s].present?
+    @search_query.predicates
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_invoice
