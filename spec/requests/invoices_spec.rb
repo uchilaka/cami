@@ -49,9 +49,10 @@ RSpec.describe 'Invoices API', type: :request, invoice_data: true do
         parameter name: :search_params, in: :body, schema: {
           type: :object,
           properties: {
-            q: { type: :string },
+            q: { type: :string, nullable: true },
             f: {
               type: :array,
+              nullable: true,
               items: {
                 type: :object,
                 properties: {
@@ -62,6 +63,7 @@ RSpec.describe 'Invoices API', type: :request, invoice_data: true do
             },
             s: {
               type: :array,
+              nullable: true,
               items: {
                 type: :object,
                 properties: {
