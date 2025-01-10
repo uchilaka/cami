@@ -34,33 +34,35 @@ RSpec.describe 'Invoices API', type: :request do
     path '/invoices/search.json' do
       post 'Retrieves all invoices' do
         tags 'Invoices'
+        consumes 'application/json'
         produces 'application/json'
 
-        parameter name: :q, in: :body, type: :string, required: false
-        parameter name: :f,
-                  in: :body,
-                  schema: {
-                    type: :array,
-                    items: {
-                      type: :object,
-                      properties: {
-                        field: { type: :string },
-                        value: { type: :string }
-                      }
-                    }
-                  }
-        parameter name: :s,
-                  in: :body,
-                  schema: {
-                    type: :array,
-                    items: {
-                      type: :object,
-                      properties: {
-                        field: { type: :string },
-                        direction: { type: :string }
-                      }
-                    }
-                  }
+        parameter name: :search_params, in: :body, schema: {
+          type: :object,
+          properties: {
+            q: { type: :string },
+            f: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: {
+                  field: { type: :string },
+                  value: { type: :string }
+                }
+              }
+            },
+            s: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: {
+                  field: { type: :string },
+                  direction: { type: :string }
+                }
+              }
+            }
+          }
+        }
 
         response '200', 'invoices found' do
           schema type: :array,
@@ -68,9 +70,7 @@ RSpec.describe 'Invoices API', type: :request do
 
           context 'where status is PAID' do
             let(:f) do
-              [
-                { 'field' => 'status', 'value' => 'PAID' }
-              ]
+              [{ 'field' => 'status', 'value' => 'PAID' }]
             end
             let(:s) do
               [
@@ -78,6 +78,7 @@ RSpec.describe 'Invoices API', type: :request do
                 { 'field' => 'account', 'direction' => 'desc' },
               ]
             end
+            let(:search_params) { { q: 'AEL', s:, f: } }
 
             run_test!
           end
