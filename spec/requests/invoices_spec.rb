@@ -79,19 +79,42 @@ RSpec.describe 'Invoices API', type: :request, invoice_data: true do
           schema type: :array,
                  items: { '$ref' => '#/components/schemas/invoice' }
 
-          context 'where status is PAID' do
-            let(:f) do
-              [{ 'field' => 'status', 'value' => 'PAID' }]
-            end
-            let(:s) do
-              [
-                { 'field' => 'dueAt', 'direction' => 'desc' },
-                { 'field' => 'account', 'direction' => 'desc' },
-              ]
-            end
-            let(:search_params) { { q: 'AEL', s:, f: } }
+          context 'without a query string' do
+            let(:q) { nil }
 
-            run_test!
+            context 'where status is PAID' do
+              let(:f) do
+                [{ 'field' => 'status', 'value' => 'PAID' }]
+              end
+              let(:s) do
+                [
+                  { 'field' => 'dueAt', 'direction' => 'desc' },
+                  { 'field' => 'account', 'direction' => 'desc' },
+                ]
+              end
+              let(:search_params) { { q:, s:, f: } }
+
+              run_test!
+            end
+          end
+
+          context 'with a query string' do
+            let(:q) { 'AEL' }
+
+            context 'where status is PAID' do
+              let(:f) do
+                [{ 'field' => 'status', 'value' => 'PAID' }]
+              end
+              let(:s) do
+                [
+                  { 'field' => 'dueAt', 'direction' => 'desc' },
+                  { 'field' => 'account', 'direction' => 'desc' },
+                ]
+              end
+              let(:search_params) { { q:, s:, f: } }
+
+              run_test!
+            end
           end
         end
       end
