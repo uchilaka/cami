@@ -14,11 +14,15 @@ class InvoicesController < ApplicationController
 
   # GET /invoices or /invoices.json
   def index
-    @invoices = policy_scope(Invoice)
+    @query = policy_scope(Invoice).ransack(search_predicates)
+    @query.sorts = @search_query.sorters if @search_query.sorters.any?
+    @invoices = @query.result(distinct: true)
   end
 
   def search
-    @invoices = policy_scope(Invoice)
+    @query = policy_scope(Invoice).ransack(search_predicates)
+    @query.sorts = @search_query.sorters if @search_query.sorters.any?
+    @invoices = @query.result(distinct: true)
   end
 
   # GET /invoices/1 or /invoices/1.json
@@ -34,7 +38,7 @@ class InvoicesController < ApplicationController
 
   # POST /invoices or /invoices.json
   def create
-    @invoice = Invoice.new(invoice_params).ransack(search_predicates)
+    @invoice = Invoice.new(invoice_params)
 
     respond_to do |format|
       if @invoice.save
@@ -73,9 +77,7 @@ class InvoicesController < ApplicationController
   private
 
   def search_predicates
-    @search_query ||= InvoiceSearchQuery.new(params[:q])
-    @search_query.extend(f: params[:f]) if params[:f].present?
-    @search_query.extend(s: params[:s]) if params[:s].present?
+    @search_query ||= InvoiceSearchQuery.new(params[:q], params:)
     @search_query.predicates
   end
 

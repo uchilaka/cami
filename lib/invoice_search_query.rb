@@ -5,7 +5,7 @@ class InvoiceSearchQuery
 
   def initialize(query_string = nil, params: {})
     @query_string = query_string
-    @params = params.with_indifferent_access
+    @params = params
     @filters ||= {}
     @sorters ||= []
     @predicates ||= {}
@@ -13,7 +13,7 @@ class InvoiceSearchQuery
   end
 
   def extend(params)
-    @params = @params.merge(params).with_indifferent_access
+    @params = @params.merge(params)
     rebuild
   end
 
@@ -41,7 +41,7 @@ class InvoiceSearchQuery
   end
 
   def compose_filters
-    param_filters = @params[:f] || []
+    param_filters = @params['f'] || []
     return if param_filters.blank?
     return unless param_filters.is_a?(Array)
 
@@ -51,7 +51,7 @@ class InvoiceSearchQuery
   end
 
   def compose_sorters
-    param_sorters = @params[:s] || []
+    param_sorters = @params['s'] || []
     return if param_sorters.blank?
     return unless param_sorters.is_a?(Array)
 
