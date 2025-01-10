@@ -16,14 +16,14 @@ class InvoicesController < ApplicationController
 
   # GET /invoices or /invoices.json
   def index
-    @query = policy_scope(Invoice).ransack(search_predicates)
-    @query.sorts = @search_query.sorters if @search_query.sorters.any?
+    @query = policy_scope(Invoice).ransack(search_query.predicates)
+    @query.sorts = search_query.sorters if search_query.sorters.any?
     @invoices = @query.result(distinct: true)
   end
 
   def search
-    @query = policy_scope(Invoice).ransack(search_predicates)
-    @query.sorts = @search_query.sorters if @search_query.sorters.any?
+    @query = policy_scope(Invoice).ransack(search_query.predicates)
+    @query.sorts = search_query.sorters if search_query.sorters.any?
     @invoices = @query.result(distinct: true)
   end
 
@@ -78,9 +78,8 @@ class InvoicesController < ApplicationController
 
   private
 
-  def search_predicates
+  def search_query
     @search_query ||= InvoiceSearchQuery.new(params[:q], params:)
-    @search_query.predicates
   end
 
   # Use callbacks to share common setup or constraints between actions.

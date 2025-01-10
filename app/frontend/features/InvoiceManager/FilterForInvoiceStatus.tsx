@@ -1,32 +1,38 @@
-import React, { ChangeEventHandler, useEffect, useRef, useState } from 'react'
+import React, { ChangeEventHandler, FC, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { Dropdown } from 'flowbite'
 
 import FilterDropdown from './FilterDropdown'
 import { useInvoiceContext } from './InvoiceProvider'
+import { Invoice } from './types'
 
-const filterOptions = [
-  ['Draft', 'DRAFT'],
-  ['Sent', 'SENT'],
-  ['Paid', 'PAID'],
-  ['Partially paid', 'PARTIALLY_PAID'],
-  ['Canceled', 'CANCELLED'],
-].map(([label, value]) => [value, label])
+const filterOptions: [Invoice['status'], string][] = [
+  ['DRAFT', 'Draft'],
+  ['SENT', 'Sent'],
+  ['PAID', 'Paid'],
+  ['PARTIALLY_PAID', 'Partially paid'],
+  ['CANCELLED', 'Cancelled'],
+]
 
-const FilterForInvoiceStatus = ({ disabled }: { disabled?: boolean }) => {
+interface FilterForInvoiceStatusProps {
+  defaultValue?: Invoice['status']
+  disabled?: boolean
+}
+
+const FilterForInvoiceStatus: FC<FilterForInvoiceStatusProps> = ({ defaultValue, disabled }) => {
   const triggerClassNames = clsx(
     'inline-flex items-center text-gray-500 border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600',
     !disabled && 'bg-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700',
     disabled && 'bg-gray-200 hover:cursor-not-allowed',
   )
-  const [selectedFilter, setSelectedFilter] = useState('SENT')
+  const [selectedFilter, setSelectedFilter] = useState(defaultValue ?? 'SENT')
   const { updateSearchParams } = useInvoiceContext()
   const optionsLabelHash = Object.fromEntries(filterOptions)
   const targetRef = useRef(null)
   const controlRef = useRef(null)
 
   const onChange: ChangeEventHandler<HTMLInputElement> = ({ target }) => {
-    setSelectedFilter(target.value)
+    setSelectedFilter(target.value as Invoice['status'])
     updateSearchParams({ f: { status: target.value } })
   }
 
@@ -53,7 +59,7 @@ const FilterForInvoiceStatus = ({ disabled }: { disabled?: boolean }) => {
   }, [targetRef, controlRef])
 
   useEffect(() => {
-    updateSearchParams({ f: { status: selectedFilter } })
+    if (defaultValue) updateSearchParams({ f: { status: selectedFilter } })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

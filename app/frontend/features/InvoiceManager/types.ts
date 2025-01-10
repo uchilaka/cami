@@ -16,7 +16,7 @@ export interface Invoice {
   dueAt: Date
   updatedAt: Date
   number: string
-  status: 'PAID' | 'OVERDUE' | 'SENT'
+  status: 'PAID' | 'OVERDUE' | 'SENT' | 'CANCELLED' | 'DRAFT' | 'PARTIALLY_PAID'
   amount: InvoiceAmount
   paidAt?: Date
   // eslint-disable-next-line no-use-before-define
