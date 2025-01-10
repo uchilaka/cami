@@ -181,12 +181,12 @@ items:
       email_address: cody@kilback-heidenreich.example
     primary_recipients:
       - billing_info:
-          business_name: Robin
+          business_name: Indigo Logistics
           name:
             given_name: Alexis
             surname: Indigo
             full_name: Avery
-          email_address: laree@murphy.test
+          email_address: logistics@indigo.test
     amount:
       currency_code: USD
       value: "12.00"
