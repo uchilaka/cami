@@ -27,7 +27,7 @@ class InvoiceSearchQuery
   private
 
   def compose_predicates
-    return if compose_filters.blank?
+    return predicates if compose_filters.blank?
 
     @predicates = filters.each_with_object({}) do |(field, value), predicates|
       case field
@@ -40,38 +40,56 @@ class InvoiceSearchQuery
   end
 
   def compose_filters
-    param_filters = @params['f'] || []
-    return if param_filters.blank?
+    return filters if filter_params.blank?
 
     @filters =
-      if param_filters.is_a?(Hash)
-        param_filters
-      elsif param_filters.is_a?(Array)
-        param_filters.each_with_object({}) do |filter, hash|
+      if filter_params.is_a?(Hash)
+        filter_params
+      elsif filter_params.is_a?(Array)
+        filter_params.each_with_object({}) do |filter, hash|
           hash[filter['field']] = filter['value']
         end
       else
-        {}
+        filters
       end
   end
 
   def compose_sorters
-    param_sorters = @params['s'] || []
-    return if param_sorters.blank?
+    return sorters if sort_params.blank?
 
     @sorters =
-      if param_sorters.is_a?(Array)
-        param_sorters.each_with_object([]) do |sorter, clauses|
+      if sort_params.is_a?(Array)
+        sort_params.each_with_object([]) do |sorter, clauses|
           field, direction = sorter.values_at 'field', 'direction'
           clauses << compose_sorter_clause(field:, direction:)
         end
-      elsif param_sorters.is_a?(Hash)
-        param_sorters.each_with_object([]) do |(field, direction), clauses|
+      elsif sort_params.is_a?(Hash)
+        sort_params.each_with_object([]) do |(field, direction), clauses|
           clauses << compose_sorter_clause(field:, direction:)
         end
       else
-        []
+        sorters
       end
+  end
+
+  def filter_params
+    extract_search_params('f')
+  end
+
+  def sort_params
+    extract_search_params('s', [])
+  end
+
+  def extract_search_params(key, default_value = {})
+    if params[key].present?
+      begin
+        {}.merge(params[key] || {})
+      rescue => _e
+        params[key].to_a
+      end
+    else
+      default_value
+    end
   end
 
   def compose_sorter_clause(field:, direction: 'asc')

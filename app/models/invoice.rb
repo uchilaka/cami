@@ -172,6 +172,6 @@ class Invoice < ApplicationRecord
   end
 
   def self.ransackable_associations(_auth_object = nil)
-    %w[invoiceable]
+    %w[invoiceable action_rich_text]
   end
 end

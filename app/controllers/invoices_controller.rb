@@ -79,12 +79,16 @@ class InvoicesController < ApplicationController
   private
 
   def search_query
-    @search_query ||= InvoiceSearchQuery.new(params[:q], params:)
+    @search_query ||= InvoiceSearchQuery.new(invoice_search_params[:q], params: invoice_search_params)
   end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_invoice
     @invoice = policy_scope(Invoice).find(params[:id])
+  end
+
+  def invoice_search_params
+    params.permit(:q, f: {}, s: {})
   end
 
   # Only allow a list of trusted parameters through.
