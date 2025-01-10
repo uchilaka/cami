@@ -1,4 +1,4 @@
-import { InvoiceSearchProps } from './api'
+import { InvoiceSearchProps } from './types'
 
 /**
  * @deprecated Perhaps too much ad-hoc complexity. The goal is to implement an abstraction for Ransack search (instead).

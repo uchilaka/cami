@@ -13,8 +13,7 @@ import React, {
 import merge from 'lodash.merge'
 import { LoadInvoiceEventDetail, nsEventName } from '@/utils'
 import { useInvoiceSearchQuery } from './hooks/useInvoiceSearchQuery'
-import { InvoiceSearchProps } from './api'
-import { Invoice } from './types'
+import { Invoice, InvoiceSearchProps } from './types'
 
 interface InvoiceContextProps {
   listenForInvoiceLoadEvents: () => AbortController

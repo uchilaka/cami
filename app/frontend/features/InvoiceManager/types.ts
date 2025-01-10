@@ -26,3 +26,15 @@ export interface Invoice {
   itemActionBtnClasses?: string
   paymentVendorURL: string
 }
+
+type SortKey = keyof Pick<Invoice, 'account' | 'status' | 'dueAt' | 'paidAt' | 'amount'> | 'account.email' | 'account.displayName'
+type FilterKey = 'status' | 'invoiceNumber' | 'account.displayName' | 'account.email'
+
+export interface InvoiceSearchProps {
+  // Sorting
+  s: Partial<Record<SortKey, 'asc' | 'desc' | null>>
+  // Filtering
+  f: Partial<Record<FilterKey, string>>
+  // (Full-text search) query string
+  q: string
+}

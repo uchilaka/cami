@@ -1,4 +1,4 @@
-import { InvoiceSearchProps } from '@/features/InvoiceManager/api'
+import { InvoiceSearchProps } from '@/features/InvoiceManager/types'
 import { composeQueryParams } from '@/features/InvoiceManager/utils'
 
 describe('InvoiceManager utils', () => {
