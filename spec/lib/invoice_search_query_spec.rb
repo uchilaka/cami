@@ -16,9 +16,19 @@ RSpec.describe InvoiceSearchQuery do
       }.with_indifferent_access
     end
 
-    it 'returns a filter hash' do
-      expect(subject.predicates).to match(status_eq: 'PAID')
-      expect(subject.sorters).to include('due_at desc')
+    it { expect(subject.predicates).to match(status_eq: 'PAID') }
+    it { expect(subject.sorters).to include('due_at desc') }
+  end
+
+  context 'filtering by status and sort by descending due date (hash inputs)' do
+    let(:params) do
+      {
+        'f' => { 'status' => 'PAID' },
+        's' => { 'dueAt' => 'desc' }
+      }.with_indifferent_access
     end
+
+    it { expect(subject.predicates).to match(status_eq: 'PAID') }
+    it { expect(subject.sorters).to include('due_at desc') }
   end
 end

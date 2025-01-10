@@ -42,26 +42,44 @@ class InvoiceSearchQuery
   def compose_filters
     param_filters = @params['f'] || []
     return if param_filters.blank?
-    return unless param_filters.is_a?(Array)
 
-    @filters = param_filters.each_with_object({}) do |filter, hash|
-      hash[filter['field']] = filter['value']
-    end
+    @filters =
+      if param_filters.is_a?(Hash)
+        param_filters
+      elsif param_filters.is_a?(Array)
+        param_filters.each_with_object({}) do |filter, hash|
+          hash[filter['field']] = filter['value']
+        end
+      else
+        {}
+      end
   end
 
   def compose_sorters
     param_sorters = @params['s'] || []
     return if param_sorters.blank?
-    return unless param_sorters.is_a?(Array)
 
-    @sorters = param_sorters.each_with_object([]) do |sorter, clauses|
-      clauses <<
-        case sorter['field']
-        when 'dueAt'
-          "due_at #{sorter['direction']}".strip
-        else
-          "#{sorter['field'].parameterize} #{sorter['direction']}".strip
+    @sorters =
+      if param_sorters.is_a?(Array)
+        param_sorters.each_with_object([]) do |sorter, clauses|
+          field, direction = sorter.values_at 'field', 'direction'
+          clauses << compose_sorter_clause(field:, direction:)
         end
+      elsif param_sorters.is_a?(Hash)
+        param_sorters.each_with_object([]) do |(field, direction), clauses|
+          clauses << compose_sorter_clause(field:, direction:)
+        end
+      else
+        []
+      end
+  end
+
+  def compose_sorter_clause(field:, direction: 'asc')
+    case field
+    when 'dueAt'
+      "due_at #{direction}".strip
+    else
+      "#{field.parameterize} #{direction}".strip
     end
   end
 end
