@@ -13,7 +13,7 @@ RSpec.describe InvoiceSearchQuery do
       {
         'f' => [{ 'field' => 'status', 'value' => 'PAID' }],
         's' => [{ 'field' => 'dueAt', 'direction' => 'desc' }]
-      }
+      }.with_indifferent_access
     end
 
     it 'returns a filter hash' do

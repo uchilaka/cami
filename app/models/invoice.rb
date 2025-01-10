@@ -165,4 +165,13 @@ class Invoice < ApplicationRecord
   def overdue?
     past_due? && (Time.zone.now.to_date - due_at.to_date).to_i > 30
   end
+
+  # Class methods
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[amount_cents created_at due_amount_cents due_at invoice_number]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[invoiceable]
+  end
 end

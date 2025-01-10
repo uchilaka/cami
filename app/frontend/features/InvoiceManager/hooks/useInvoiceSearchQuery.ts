@@ -5,11 +5,14 @@ import { useState } from 'react'
 
 export const useInvoiceSearchQuery = (props?: Partial<InvoiceSearchProps>) => {
   const [invoices, setInvoices] = useState<Invoice[]>([])
+  const queryKey = ['invoiceSearch']
 
   const query = useQuery({
-    queryKey: ['invoiceSearch'],
-    queryFn: async () => {
-      const data = await findInvoices(props)
+    queryKey,
+    queryFn: async ({ signal }) => {
+      if (!props) return []
+
+      const data = await findInvoices(props, { signal })
       setInvoices(data)
       return data
     },

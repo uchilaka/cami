@@ -18,9 +18,8 @@ class InvoiceSearchQuery
   end
 
   def build
-    compose_filters
-    compose_sorters
     compose_predicates
+    compose_sorters
   end
 
   alias rebuild build
@@ -28,7 +27,7 @@ class InvoiceSearchQuery
   private
 
   def compose_predicates
-    return if filters.blank?
+    return if compose_filters.blank?
 
     @predicates = filters.each_with_object({}) do |(field, value), predicates|
       case field
