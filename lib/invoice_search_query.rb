@@ -84,7 +84,7 @@ class InvoiceSearchQuery
     if params[key].present?
       begin
         {}.merge(params[key] || {})
-      rescue => _e
+      rescue TypeError => _e
         params[key].to_a
       end
     else
