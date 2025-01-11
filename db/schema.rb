@@ -121,7 +121,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_27_072422) do
     t.string "vendor_recurring_group_id"
     t.string "invoice_number"
     t.string "payment_vendor"
-    t.enum "status", default: "draft", null: false, enum_type: "invoice_status"
+    t.enum "status", default: "draft", enum_type: "invoice_status"
     t.datetime "issued_at", precision: nil
     t.datetime "updated_accounts_at", precision: nil
     t.datetime "due_at", precision: nil

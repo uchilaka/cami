@@ -24,7 +24,7 @@ class CreateInvoices < ActiveRecord::Migration[7.2]
       t.string :vendor_recurring_group_id
       t.string :invoice_number
       t.string :payment_vendor
-      t.enum :status, default: :draft, null: false, enum_type: :invoice_status
+      t.enum :status, default: :draft, enum_type: :invoice_status
       t.timestamp :issued_at
       # t.timestamp :viewed_by_recipient_at # TODO Figure out queries of paper_trail data instead for this
       t.timestamp :updated_accounts_at

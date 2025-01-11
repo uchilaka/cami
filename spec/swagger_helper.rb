@@ -97,6 +97,58 @@ RSpec.configure do |config|
               paymentVendorURL: { type: :string },
             },
             required: %i[id account contacts status invoiceNumber currencyCode createdAt dueAt amount dueAmount]
+          },
+          invoice_search_params: {
+            type: :object,
+            properties: {
+              q: { type: :string, nullable: true },
+              mode: { type: :string, nullable: true },
+              f: {
+                type: :object,
+                nullable: true,
+                properties: {
+                  field: { type: :string },
+                  value: { type: :string }
+                }
+              },
+              s: {
+                type: :object,
+                nullable: true,
+                properties: {
+                  field: { type: :string },
+                  direction: { type: :string }
+                }
+              }
+            }
+          },
+          invoice_search_params_with_array_mode: {
+            type: :object,
+            properties: {
+              q: { type: :string, nullable: true },
+              mode: { type: :string, nullable: true },
+              f: {
+                type: :array,
+                nullable: true,
+                items: {
+                  type: :object,
+                  properties: {
+                    field: { type: :string },
+                    value: { type: :string }
+                  }
+                }
+              },
+              s: {
+                type: :array,
+                nullable: true,
+                items: {
+                  type: :object,
+                  properties: {
+                    field: { type: :string },
+                    direction: { type: :string }
+                  }
+                }
+              }
+            }
           }
         }
       }

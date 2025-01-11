@@ -33,8 +33,10 @@ class InvoiceSearchQuery
       case field
       when 'dueAt'
         predicates[:due_at_gteq] = value
+      when 'status'
+        predicates[:status_eq] = value.downcase
       else
-        predicates[:"#{field}_eq"] = value
+        predicates[:"#{field}_cont"] = value
       end
     end
   end

@@ -47,59 +47,9 @@ RSpec.describe 'Invoices API', type: :request, invoice_data: true do
         produces 'application/json'
 
         parameter name: :search_params, in: :body, schema: {
-          anyOf: [
-            {
-              type: :object,
-              properties: {
-                q: { type: :string, nullable: true },
-                mode: { type: :string, nullable: true },
-                f: {
-                  type: :array,
-                  nullable: true,
-                  items: {
-                    type: :object,
-                    properties: {
-                      field: { type: :string },
-                      value: { type: :string }
-                    }
-                  }
-                },
-                s: {
-                  type: :array,
-                  nullable: true,
-                  items: {
-                    type: :object,
-                    properties: {
-                      field: { type: :string },
-                      direction: { type: :string }
-                    }
-                  }
-                }
-              }
-            },
-            {
-              type: :object,
-              properties: {
-                q: { type: :string, nullable: true },
-                mode: { type: :string, nullable: true },
-                f: {
-                  type: :object,
-                  nullable: true,
-                  properties: {
-                    field: { type: :string },
-                    value: { type: :string }
-                  }
-                },
-                s: {
-                  type: :object,
-                  nullable: true,
-                  properties: {
-                    field: { type: :string },
-                    direction: { type: :string }
-                  }
-                }
-              }
-            }
+          oneOf: [
+            { '$ref': '#/components/schemas/invoice_search_params' },
+            { '$ref': '#/components/schemas/invoice_search_params_with_array_mode' }
           ]
         }
 
