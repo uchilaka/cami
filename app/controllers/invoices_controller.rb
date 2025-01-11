@@ -101,11 +101,11 @@ class InvoicesController < ApplicationController
   end
 
   def invoice_search_hash_params
-    params.permit(:q, f: {}, s: {})
+    params.permit(:q, :mode, f: {}, s: {})
   end
 
   def invoice_search_array_params
-    params.permit(:q, f: %i[field value], s: %i[field direction])
+    params.permit(:q, :mode, f: %i[field value], s: %i[field direction])
   end
 
   # Only allow a list of trusted parameters through.
