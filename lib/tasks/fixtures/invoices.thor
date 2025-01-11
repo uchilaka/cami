@@ -89,7 +89,7 @@ module Fixtures
         accounts = invoice.metadata['accounts']
         next if accounts.none?
 
-        UpsertInvoiceRecordsWorkflow.call(invoice:)
+        UpsertInvoiceRecordsWorkflow.call(invoice:, options: { link_accounts: true })
       end
     end
 
