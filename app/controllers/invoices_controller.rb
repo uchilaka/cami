@@ -105,7 +105,7 @@ class InvoicesController < ApplicationController
   end
 
   def invoice_search_array_params
-    params.permit(:q, f: [], s: [])
+    params.permit(:q, f: %i[field value], s: %i[field direction])
   end
 
   # Only allow a list of trusted parameters through.
