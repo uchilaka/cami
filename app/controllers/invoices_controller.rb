@@ -22,16 +22,9 @@ class InvoicesController < ApplicationController
   end
 
   def search
-    shared_context = Ransack::Context.for(Invoice)
-    @query = Invoice.ransack(search_query.predicates, context: shared_context)
+    @query = Invoice.ransack(search_query.predicates)
     @query.sorts = search_query.sorters if search_query.sorters.any?
-    shared_conditions = [@query].map { |search| Ransack::Visitor.new.accept(search.base) }
-    @invoices =
-      if shared_conditions.any?
-        policy_scope(Invoice)
-      else
-        policy_scope(Invoice).where(shared_conditions.reduce(&:and))
-      end
+    @invoices = policy_scope(@query.result(distinct: true))
   end
 
   # GET /invoices/1 or /invoices/1.json

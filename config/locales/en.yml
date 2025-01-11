@@ -97,6 +97,7 @@ en:
       errors:
         generic: "An error occurred while creating the invoice account"
         already_exists: "A matching invoice account already exists"
+        multiple_matching_accounts: "Multiple matching accounts were found"
     import_user_profile:
       errors:
         generic: "An error occurred while updating the user profile"

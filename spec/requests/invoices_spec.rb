@@ -70,9 +70,13 @@ RSpec.describe 'Invoices API', type: :request, invoice_data: true do
                   { 'field' => 'account', 'direction' => 'desc' },
                 ]
               end
-              let(:search_params) { { q:, s:, f: } }
+              let(:search_params) { { mode: 'array', q:, s:, f: } }
 
-              run_test!
+              run_test! do |response|
+                expect(response.body).not_to be_nil
+                data = JSON.parse(response.body)
+                expect(data.size).to eq(1)
+              end
             end
           end
 
@@ -89,9 +93,13 @@ RSpec.describe 'Invoices API', type: :request, invoice_data: true do
                   { 'field' => 'account', 'direction' => 'desc' },
                 ]
               end
-              let(:search_params) { { q:, s:, f: } }
+              let(:search_params) { { mode: 'array', q:, s:, f: } }
 
-              run_test!
+              run_test! do |response|
+                expect(response.body).not_to be_nil
+                data = JSON.parse(response.body)
+                expect(data.size).to eq(1)
+              end
             end
           end
         end

@@ -1,4 +1,38 @@
 items:
+  - id: INV2-9E3C-DPSK-3H9Q-4VA6
+    status: SENT
+    detail:
+      currency_code: USD
+      note: Thank you for your business! Looking forward to collaborating with you as your Startup begins it's journey \
+      invoice_number: 2025-INV0056
+      invoice_date: "2025-01-10"
+      payment_term:
+        due_date: "2025-01-10"
+      viewed_by_recipient: false
+      group_draft: false
+      metadata:
+        create_time: "2025-01-10T10:23:26Z"
+    invoicer:
+      email_address: filiberto@funk.test
+    primary_recipients:
+      - billing_info:
+          business_name: Indigo Logistics
+          email_address: logistics@indigo.test
+    amount:
+      currency_code: USD
+      value: "200.00"
+    due_amount:
+      currency_code: USD
+      value: "0.00"
+    payments:
+      paid_amount:
+        currency_code: USD
+        value: "200.00"
+    links:
+      - href: https://api.paypal.com/v2/invoicing/invoices/INV2-9E3C-DPSK-3H9Q-4VA6
+        rel: self
+        method: GET
+    unilateral: false
   - id: INV2-9E3C-DPSK-2H9Y-4VA6
     status: PAID
     detail:
@@ -16,12 +50,12 @@ items:
       email_address: filiberto@funk.test
     primary_recipients:
       - billing_info:
-          business_name: Parker
+          business_name: Indigo Logistics
           name:
-            given_name: Dylan
-            surname: Azariah
-            full_name: Onyx
-          email_address: rossie@beer-friesen.example
+            given_name: Alexis
+            surname: Indigo
+            full_name: Avery
+          email_address: logistics@indigo.test
     amount:
       currency_code: USD
       value: "200.00"
@@ -54,12 +88,12 @@ items:
       email_address: lashawna_parisian@moore.test
     primary_recipients:
       - billing_info:
-          business_name: Sawyer
+          business_name: Indigo Logistics
           name:
-            given_name: Armani
-            surname: Sawyer
-            full_name: Briar
-          email_address: logan@becker.example
+            given_name: Alexis
+            surname: Indigo
+            full_name: Avery
+          email_address: logistics@indigo.test
     amount:
       currency_code: USD
       value: "17.20"
@@ -363,7 +397,7 @@ items:
       email_address: wes_vonrueden@jacobi-rice.example
     primary_recipients:
       - billing_info:
-          email_address: phil_gusikowski@kessler.example
+          email_address: logistics@indigo.test
     amount:
       currency_code: USD
       value: "12.00"
@@ -396,7 +430,7 @@ items:
       email_address: shaunta.price@heidenreich-ryan.example
     primary_recipients:
       - billing_info:
-          email_address: guillermo@lowe.test
+          email_address: logistics@indigo.test
     amount:
       currency_code: USD
       value: "364.00"
