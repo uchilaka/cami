@@ -95,7 +95,17 @@ class InvoicesController < ApplicationController
   end
 
   def invoice_search_params
+    return invoice_search_array_params if params[:mode] == 'array'
+
+    invoice_search_hash_params
+  end
+
+  def invoice_search_hash_params
     params.permit(:q, f: {}, s: {})
+  end
+
+  def invoice_search_array_params
+    params.permit(:q, f: [], s: [])
   end
 
   # Only allow a list of trusted parameters through.

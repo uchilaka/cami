@@ -81,6 +81,7 @@ class InvoiceSearchQuery
   end
 
   def extract_search_params(key, default_value = {})
+    # TODO: Filter params here based on whether we're trying for an array or a hash
     if params[key].present?
       begin
         {}.merge(params[key] || {})
