@@ -27,7 +27,7 @@ RSpec.describe InvoiceSearchQuery do
       described_class.new(qs, params: filtered_params)
     end
 
-    it { expect(subject.predicates).to match(status_eq: 'PAID') }
+    it { expect(subject.predicates).to match(status_eq: 'paid') }
     it { expect(subject.sorters).to include('due_at desc') }
   end
 
@@ -39,7 +39,7 @@ RSpec.describe InvoiceSearchQuery do
       }
     end
 
-    it { expect(subject.predicates).to match(status_eq: 'PAID') }
+    it { expect(subject.predicates).to match(status_eq: 'paid') }
     it { expect(subject.sorters).to include('due_at desc') }
   end
 end
