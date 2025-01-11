@@ -3,7 +3,7 @@
 class UpsertInvoiceRecordsWorkflow
   include Interactor
   include InteractorTimer
-  include InteractorErrorHandling
+  include InteractorInvoiceProcessing
 
   def call
     invoice = context.invoice
@@ -16,19 +16,13 @@ class UpsertInvoiceRecordsWorkflow
     Account.transaction do
       Rails.logger.info("Found accounts for #{invoice.id}", accounts:)
       accounts.each do |invoice_account|
-        account_result = ImportAccountWorkflow.call(invoice:, invoice_account:)
+        account_result =
+          ImportAccountWorkflow.call(invoice:, invoice_account:, options: context.metadata[:options])
 
         unless account_result.success?
           context.errors += account_result.errors
           next
         end
-
-        new_account = account_result.account
-
-        Rails.logger.info(
-          "Created account #{new_account.id} from invoice #{invoice.id}",
-          account: new_account
-        )
       end
       invoice.update(updated_accounts_at: Time.zone.now)
     end

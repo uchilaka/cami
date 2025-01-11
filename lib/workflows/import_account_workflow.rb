@@ -15,10 +15,14 @@ class ImportAccountWorkflow
       if link_accounts?
         if context.accounts.one?
           account = context.accounts.first
-          account.add_role(:customer, invoice)
-          # Link the matching account to the invoice
-          if invoice.invoiceable.blank? && invoice.update(invoiceable: account)
-            Rails.logger.info("Linked account #{account.id} to invoice #{invoice.id}", account:)
+          if account.is_a?(Account)
+            account.add_role(:customer, invoice)
+            # Link the matching account to the invoice (if not already linked)
+            if invoice.invoiceable.blank? && invoice.update(invoiceable: account)
+              Rails.logger.info("Linked account #{account.id} to invoice #{invoice.id}", account:)
+            end
+          else
+            context.fail!(message: I18n.t('workflows.import_account.errors.unsupported_record_type'))
           end
         else
           context.fail!(message: I18n.t('workflows.import_account.errors.multiple_matching_accounts'))

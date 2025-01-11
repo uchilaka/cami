@@ -24,7 +24,7 @@ Fabricator(:account) do
   transient             :users
 
   display_name          { Faker::Company.name }
-  # users                 { [Fabricate(:user)] }
+  email                 { Faker::Internet.email }
   slug                  { SecureRandom.alphanumeric(4).downcase }
   tax_id                { Faker::Company.ein }
   type                  'Account'

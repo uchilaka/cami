@@ -38,6 +38,8 @@ Fabricator(:invoice) do
   payments               { [] }
   links                  { [] }
   payment_vendor         'paypal'
+  # TODO: lookup what data ends up here from PayPal - this is intended as
+  #   the contact info for user/vendor who generated the invoice
   invoicer               { { 'email' => Faker::Internet.email } }
   type                   'Invoice'
   updated_accounts_at    '2024-11-11 01:29:44'
