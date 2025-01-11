@@ -20,7 +20,7 @@
 #  paid_at                   :datetime
 #  payment_vendor            :string
 #  payments                  :jsonb
-#  status                    :integer
+#  status                    :enum             default("draft"), not null
 #  type                      :string           default("Invoice")
 #  updated_accounts_at       :datetime
 #  created_at                :datetime         not null
