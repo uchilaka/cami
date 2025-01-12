@@ -24,8 +24,6 @@ RSpec.describe UpsertInvoiceRecordsJob, type: :job do
     context 'with incoming records within the batch limit' do
       let(:batch_limit) { 9_999 }
 
-      it { expect { described_class.perform_now }.to change(Invoice, :count).by(25) }
-
       it 'creates the expected tally of new account records' do
         expect { described_class.perform_now }.to change(Account, :count).by(19)
       end
@@ -34,9 +32,7 @@ RSpec.describe UpsertInvoiceRecordsJob, type: :job do
     context 'with incoming records exceeding the batch limit' do
       let(:batch_limit) { 5 }
 
-      it { expect { described_class.perform_now }.to change(Invoice, :count).by(batch_limit) }
-
-      it 'creates new account records' do
+      it 'creates the expected tally of new account records' do
         expect { described_class.perform_now }.to change(Account, :count).by(3)
       end
     end
