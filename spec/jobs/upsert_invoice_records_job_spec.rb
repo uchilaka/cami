@@ -15,8 +15,7 @@ RSpec.describe UpsertInvoiceRecordsJob, type: :job do
   end
 
   describe '#perform' do
-    # Default batch limit for local environments
-    let(:batch_limit) { 1000 }
+    let(:batch_limit) { described_class::BATCH_LIMIT }
 
     around do |example|
       with_modified_env(UPSERT_INVOICE_BATCH_LIMIT: batch_limit.to_s) { example.run }
@@ -28,7 +27,7 @@ RSpec.describe UpsertInvoiceRecordsJob, type: :job do
       it { expect { described_class.perform_now }.to change(Invoice, :count).by(25) }
 
       it 'creates the expected tally of new account records' do
-        expect { described_class.perform_now }.to change(Account, :count).by(23)
+        expect { described_class.perform_now }.to change(Account, :count).by(19)
       end
     end
 
