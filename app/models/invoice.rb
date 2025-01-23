@@ -153,7 +153,7 @@ class Invoice < ApplicationRecord
 
   # Class methods
   def self.ransackable_attributes(_auth_object = nil)
-    %w[amount_cents created_at due_amount_cents due_at invoice_number]
+    %w[amount_cents created_at due_amount_cents due_at invoice_number status]
   end
 
   def self.ransackable_associations(_auth_object = nil)
