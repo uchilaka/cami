@@ -12,6 +12,7 @@ class CreateInvoices < ActiveRecord::Migration[7.2]
                   cancelled
                   payment_pending
                   marked_as_paid
+                  partially_paid
                   paid
                   marked_as_refunded
                   partially_refunded
