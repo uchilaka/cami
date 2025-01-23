@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import debounce from 'lodash.debounce'
 import MagnifyingGlassIcon from './MagnifyingGlassIcon'
 import SpinnerIcon from './SpinnerIcon'
+import { useInvoiceContext } from '../InvoiceProvider'
 
 type RunSearchFn = (ev: React.ChangeEvent<HTMLInputElement>) => void
 
@@ -15,9 +16,15 @@ const InvoiceSearchInput = () => {
    */
   const liveSearchEnabled = false
 
+  const { updateSearchParams } = useInvoiceContext()
+
   const handleChange = debounce<RunSearchFn>(({ target }) => {
     setUserIsTyping(false)
-    console.debug(`Searching for invoices with: ${target.value}`)
+    const q = target.value
+    if (q.length >= 3) {
+      console.debug(`Searching for invoices with: ${target.value}`)
+      updateSearchParams({ q })
+    }
   }, 1000)
 
   return (

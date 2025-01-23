@@ -39,6 +39,9 @@ class InvoiceSearchQuery
         predicates[:"#{field}_cont"] = value
       end
     end
+
+    # FIXME: Exception: ArgumentError: Polymorphic associations do not support computing the class.
+    # @predicates[:invoiceable_display_name_or_invoiceable_email_cont] = query_param if query_param.present?
   end
 
   def compose_filters
@@ -72,6 +75,10 @@ class InvoiceSearchQuery
       else
         sorters
       end
+  end
+
+  def query_param
+    params.permit(:q)[:q]
   end
 
   def filter_params
