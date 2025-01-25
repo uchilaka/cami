@@ -6,7 +6,8 @@ import FilterDropdown from './FilterDropdown'
 import { useInvoiceContext } from './InvoiceProvider'
 import { Invoice } from './types'
 
-const filterOptions: [Invoice['status'], string][] = [
+const filterOptions: [Invoice['status'] | '', string][] = [
+  ['', '(Filter by Status)'],
   ['DRAFT', 'Draft'],
   ['SENT', 'Sent'],
   ['PAID', 'Paid'],
@@ -15,7 +16,7 @@ const filterOptions: [Invoice['status'], string][] = [
 ]
 
 interface FilterForInvoiceStatusProps {
-  defaultValue?: Invoice['status']
+  defaultValue?: Invoice['status'] | ''
   disabled?: boolean
 }
 

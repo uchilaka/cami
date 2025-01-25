@@ -24,7 +24,7 @@ class InvoicesController < ApplicationController
   def search
     @query = Invoice.ransack(search_query.predicates)
     @query.sorts = search_query.sorters if search_query.sorters.any?
-    @invoices = policy_scope(@query.result(distinct: true))
+    @invoices = policy_scope(@query.result(distinct: true)).reverse_order
   end
 
   # GET /invoices/1 or /invoices/1.json

@@ -64,28 +64,23 @@ export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
     return invoiceLoader
   }
 
-  const updateSearchParams = useCallback(
-    ({ s, f, q }: Partial<InvoiceSearchProps>) => {
-      setSearchParams({
-        s: merge(searchParams.s, s),
-        f: merge(searchParams.f, f),
-        q: q ?? searchParams.q,
-      })
-    },
-    [searchParams],
-  )
+  const updateSearchParams = ({ s, f, q }: Partial<InvoiceSearchProps>) => {
+    const latestSearchParams = {
+      s: merge(searchParams.s, s),
+      f: merge(searchParams.f, f),
+      q: q ?? searchParams.q,
+    }
+    console.debug(`Updating search params:`, { ...latestSearchParams })
+    setSearchParams(latestSearchParams)
+  }
 
   useEffect(() => {
     if (invoiceId || !!searchParams.q || !!searchParams.s || !!searchParams.f) {
+      console.debug(`Reloading invoices with search params:`, { ...searchParams })
       reload()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [invoiceId, searchParams])
-
-  useEffect(() => {
-    console.debug(`Updated search params:`, { ...searchParams })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams])
 
   return (
     <InvoiceContext.Provider
