@@ -127,6 +127,9 @@ group :development do
   # Use console on exceptions pages https://github.com/rails/web-console
   gem 'web-console'
 
+  # Ruby on Rails Live Reload https://github.com/railsjazz/rails_live_reload
+  gem 'rails_live_reload'
+
   # Annotates Rails Models, routes, fixtures, and others based on the database schema.
   gem 'annotate'
 

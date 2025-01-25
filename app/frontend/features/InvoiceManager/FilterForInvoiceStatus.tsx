@@ -59,9 +59,9 @@ const FilterForInvoiceStatus: FC<FilterForInvoiceStatusProps> = ({ defaultValue,
   }, [targetRef, controlRef])
 
   useEffect(() => {
-    if (defaultValue) updateSearchParams({ f: { status: selectedFilter } })
+    if (selectedFilter) updateSearchParams({ f: { status: selectedFilter } })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [selectedFilter])
 
   return (
     <div className="list-filter">

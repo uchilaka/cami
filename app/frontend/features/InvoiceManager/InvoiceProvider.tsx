@@ -76,7 +76,9 @@ export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
   )
 
   useEffect(() => {
-    if (invoiceId || !!searchParams.q || !!searchParams.s || !!searchParams.f) reload()
+    if (invoiceId || !!searchParams.q || !!searchParams.s || !!searchParams.f) {
+      reload()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [invoiceId, searchParams])
 
