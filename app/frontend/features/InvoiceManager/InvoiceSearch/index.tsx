@@ -11,9 +11,13 @@ import ThAccount from '../ThAccount'
 import InvoiceSearchInput from './InvoiceSearchInput'
 import InvoicingVendorPicker from '../InvoicingVendorPicker'
 import { VendorType } from '../types'
+import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
 
 const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
   const { invoices } = useInvoiceContext()
+  const { isEnabled } = useFeatureFlagsContext()
+  const isInvoiceStatusFilterEnabled = isEnabled('invoice_filtering_by_status')
+  const isInvoiceDueDateFilterEnabled = isEnabled('invoice_filtering_by_due_date')
 
   console.debug({ invoices })
 
@@ -26,8 +30,8 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
       <InvoicingVendorPicker onChange={vendorSelectionHandler} />
       <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 p-4 dark:bg-gray-900">
         <div className="flex flex-row space-x-4">
-          <FilterForInvoiceStatus defaultValue="" />
-          <FilterForInvoiceDueDate />
+          <FilterForInvoiceStatus defaultValue="" disabled={!isInvoiceStatusFilterEnabled} />
+          <FilterForInvoiceDueDate defaultValue="" disabled={!isInvoiceDueDateFilterEnabled} />
         </div>
         <InvoiceSearchInput />
       </div>
