@@ -27,21 +27,30 @@ class InvoiceSearchQuery
   private
 
   def compose_predicates
-    return predicates if compose_filters.blank?
-
-    @predicates = filters.each_with_object({}) do |(field, value), predicates|
-      case field
-      when 'dueAt'
-        predicates[:due_at_gteq] = value
-      when 'status'
-        predicates[:status_eq] = value.downcase
+    @predicates =
+      if compose_filters.present?
+        filters.each_with_object({}) do |(field, value), predicates|
+          case field
+          when 'dueAt'
+            predicates[:due_at_gteq] = value
+          when 'status'
+            predicates[:status_eq] = value.downcase
+          else
+            predicates[:"#{field}_cont"] = value
+          end
+        end
       else
-        predicates[:"#{field}_cont"] = value
+        {}
       end
-    end
-
+    # return predicates unless query_param.present?
+    #
     # FIXME: Exception: ArgumentError: Polymorphic associations do not support computing the class.
-    # @predicates[:invoiceable_display_name_or_invoiceable_email_cont] = query_param if query_param.present?
+    # or_predicates_for_account = %w[
+    #   invoiceable_of_Account_type_display_name
+    #   invoiceable_of_Account_type_email
+    # ]
+    # compound_cont_predicate = "#{or_predicates_for_account.join('_or_')}_cont"
+    # @predicates[compound_cont_predicate] = query_param
   end
 
   def compose_filters

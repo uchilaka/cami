@@ -126,6 +126,11 @@ class Account < ApplicationRecord
     members << user
   end
 
+  # Class methods
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[display_name email tax_id]
+  end
+
   private
 
   def format_tax_id
