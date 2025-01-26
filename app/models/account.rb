@@ -132,6 +132,10 @@ class Account < ApplicationRecord
     %w[display_name email tax_id]
   end
 
+  def self.ransackable_associations(_auth_object = nil)
+    %w[invoices members rich_text_readme roles]
+  end
+
   private
 
   def format_tax_id

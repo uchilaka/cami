@@ -41,6 +41,48 @@ RSpec.describe 'Invoices API', type: :request, invoice_data: true do
     end
 
     path '/invoices/search.json' do
+      shared_examples 'invoice search with a query string' do |q, expected_count|
+        context 'where status is PAID' do
+          let(:f) do
+            [{ 'field' => 'status', 'value' => 'PAID' }]
+          end
+          let(:s) do
+            [
+              { 'field' => 'dueAt', 'direction' => 'desc' },
+              { 'field' => 'account', 'direction' => 'desc' },
+            ]
+          end
+          let(:search_params) { { mode: 'array', q:, s:, f: } }
+
+          run_test! do |response|
+            expect(response.body).not_to be_nil
+            data = JSON.parse(response.body)
+            expect(data.size).to eq(expected_count)
+          end
+        end
+      end
+
+      shared_examples 'invoice search without a query string' do |q, expected_count|
+        context 'where status is PAID' do
+          let(:f) do
+            [{ 'field' => 'status', 'value' => 'PAID' }]
+          end
+          let(:s) do
+            [
+              { 'field' => 'dueAt', 'direction' => 'desc' },
+              { 'field' => 'account', 'direction' => 'desc' },
+            ]
+          end
+          let(:search_params) { { mode: 'array', q:, s:, f: } }
+
+          run_test! do |response|
+            expect(response.body).not_to be_nil
+            data = JSON.parse(response.body)
+            expect(data.size).to eq(expected_count)
+          end
+        end
+      end
+
       post 'Retrieves all invoices' do
         tags 'Invoices'
         consumes 'application/json'
@@ -57,50 +99,14 @@ RSpec.describe 'Invoices API', type: :request, invoice_data: true do
           schema type: :array,
                  items: { '$ref' => '#/components/schemas/invoice' }
 
-          context 'without a query string' do
-            let(:q) { nil }
+          it_should_behave_like 'invoice search with a query string', 'logistics', 1
+          it_should_behave_like 'invoice search without a query string', nil, 1
 
-            context 'where status is PAID' do
-              let(:f) do
-                [{ 'field' => 'status', 'value' => 'PAID' }]
-              end
-              let(:s) do
-                [
-                  { 'field' => 'dueAt', 'direction' => 'desc' },
-                  { 'field' => 'account', 'direction' => 'desc' },
-                ]
-              end
-              let(:search_params) { { mode: 'array', q:, s:, f: } }
+          context 'with an admin account' do
+            before { user.add_role :admin }
 
-              run_test! do |response|
-                expect(response.body).not_to be_nil
-                data = JSON.parse(response.body)
-                expect(data.size).to eq(1)
-              end
-            end
-          end
-
-          context 'with a query string' do
-            let(:q) { 'AEL' }
-
-            context 'where status is PAID' do
-              let(:f) do
-                [{ 'field' => 'status', 'value' => 'PAID' }]
-              end
-              let(:s) do
-                [
-                  { 'field' => 'dueAt', 'direction' => 'desc' },
-                  { 'field' => 'account', 'direction' => 'desc' },
-                ]
-              end
-              let(:search_params) { { mode: 'array', q:, s:, f: } }
-
-              run_test! do |response|
-                expect(response.body).not_to be_nil
-                data = JSON.parse(response.body)
-                expect(data.size).to eq(1)
-              end
-            end
+            it_should_behave_like 'invoice search with a query string', 'logistics', 1
+            it_should_behave_like 'invoice search without a query string', nil, 1
           end
         end
       end

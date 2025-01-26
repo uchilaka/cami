@@ -42,15 +42,16 @@ class InvoiceSearchQuery
       else
         {}
       end
-    # return predicates unless query_param.present?
-    #
-    # FIXME: Exception: ArgumentError: Polymorphic associations do not support computing the class.
-    # or_predicates_for_account = %w[
-    #   invoiceable_of_Account_type_display_name
-    #   invoiceable_of_Account_type_email
-    # ]
-    # compound_cont_predicate = "#{or_predicates_for_account.join('_or_')}_cont"
-    # @predicates[compound_cont_predicate] = query_param
+    return predicates unless query_param.present?
+
+    compound_cont_predicate =
+      Invoice.fuzzy_search_predicate_key(
+        'display_name', 'email',
+        model_name: :invoiceable,
+        association: 'Account',
+        polymorphic: true
+      )
+    @predicates[compound_cont_predicate] = query_param
   end
 
   def compose_filters

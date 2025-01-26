@@ -81,7 +81,10 @@ RSpec.configure do |config|
             type: :object,
             properties: {
               id: { type: :string },
-              account: { '$ref' => '#/components/schemas/account' },
+              account: {
+                '$ref' => '#/components/schemas/account',
+                nullable: true
+              },
               contacts: {
                 type: :array,
                 items: { '$ref' => '#/components/schemas/contact' }

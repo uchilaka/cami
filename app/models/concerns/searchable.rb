@@ -11,9 +11,9 @@ module Searchable
     def fuzzy_search_predicate_key(*fields, association: nil, model_name: nil, polymorphic: false)
       fields_clause =
         if polymorphic.present?
-          raise ArgumentError, "Searching polymorphic associations on #{self.class.name} requires a model_name" \
+          raise ArgumentError, "Searching polymorphic associations on #{name} requires a model_name" \
             unless model_name.present?
-          raise ArgumentError, "Searching polymorphic associations on #{self.class.name} requires the association" \
+          raise ArgumentError, "Searching polymorphic associations on #{name} requires the association" \
             unless association.present?
 
           fields.sort.map do |field|
