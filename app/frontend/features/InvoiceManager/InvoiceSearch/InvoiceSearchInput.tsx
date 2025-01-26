@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import clsx from 'clsx'
 import debounce from 'lodash.debounce'
 import MagnifyingGlassIcon from './MagnifyingGlassIcon'
 import SpinnerIcon from './SpinnerIcon'
@@ -26,6 +25,9 @@ const InvoiceSearchInput = () => {
     if (q.length >= 3) {
       console.debug(`Searching for invoices with: ${target.value}`)
       updateSearchParams({ q })
+    } else {
+      console.debug('Resetting search params')
+      updateSearchParams({ q: '' })
     }
   }, 1000)
 
