@@ -188,4 +188,79 @@ RSpec.describe Invoice, type: :model do
       it { expect(subject.overdue?).to be false }
     end
   end
+
+  describe '.fuzzy_search_predicate_key' do
+    let(:fields) { %w[invoice_number status] }
+
+    it do
+      expect(described_class.fuzzy_search_predicate_key(*fields)).to \
+        eq 'invoice_number_or_status_cont'
+    end
+
+    context 'with 1 field' do
+      let(:fields) { %w[invoice_number] }
+
+      context 'when an association is provided' do
+        let(:association) { 'Account' }
+
+        context 'and polymorphic is true' do
+          let(:model_name) { :invoiceable }
+
+          subject do
+            described_class.fuzzy_search_predicate_key(*fields, model_name:, association:, polymorphic: true)
+          end
+
+          it do
+            expect(subject).to \
+              eq 'invoiceable_of_Account_type_invoice_number_cont'
+          end
+        end
+      end
+
+      context 'when association is provided' do
+        let(:association) { 'Account' }
+        let(:fields) { %w[display_name] }
+
+        subject do
+          described_class.fuzzy_search_predicate_key(*fields, association:)
+        end
+
+        it { expect(subject).to eq 'accounts_display_name_cont' }
+      end
+    end
+
+    context 'with several fields' do
+      let(:fields) { %w[display_name email] }
+
+      context 'when association is provided' do
+        let(:association) { 'Account' }
+
+        context 'and polymorphic is true' do
+          let(:model_name) { :invoiceable }
+
+          subject do
+            described_class.fuzzy_search_predicate_key(*fields, association:, model_name:, polymorphic: true)
+          end
+
+          it do
+            expect(subject).to \
+              eq 'invoiceable_of_Account_type_display_name_or_invoiceable_of_Account_type_email_cont'
+          end
+        end
+      end
+
+      context 'when association is provided' do
+        let(:association) { 'Account' }
+
+        subject do
+          described_class.fuzzy_search_predicate_key(*fields, association:)
+        end
+
+        it do
+          expect(subject).to \
+            eq 'accounts_display_name_or_accounts_email_cont'
+        end
+      end
+    end
+  end
 end

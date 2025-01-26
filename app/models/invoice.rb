@@ -38,6 +38,7 @@ class Invoice < ApplicationRecord
   resourcify
 
   include AASM
+  include Searchable
 
   has_rich_text :notes
 
