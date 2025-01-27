@@ -22,7 +22,7 @@ const InvoiceSearchInput = () => {
   const handleChange = debounce<RunSearchFn>(({ target }) => {
     setUserIsTyping(false)
     const q = target.value
-    if (q.length >= 3) {
+    if (q.length >= 1) {
       console.debug(`Searching for invoices with: ${target.value}`)
       updateSearchParams({ q })
     } else {

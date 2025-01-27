@@ -12,9 +12,10 @@ import InvoiceSearchInput from './InvoiceSearchInput'
 import InvoicingVendorPicker from '../InvoicingVendorPicker'
 import { VendorType } from '../types'
 import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
+import LoadingAnimation from '@/components/LoadingAnimation'
 
 const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
-  const { invoices } = useInvoiceContext()
+  const { loading, invoices } = useInvoiceContext()
   const { isEnabled } = useFeatureFlagsContext()
   const isInvoiceStatusFilterEnabled = isEnabled('invoice_filtering_by_status')
   const isInvoiceDueDateFilterEnabled = isEnabled('invoice_filtering_by_due_date')
@@ -36,39 +37,43 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
         <InvoiceSearchInput />
       </div>
 
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-            <th scope="col" className="p-4">
-              <div className="flex items-center">
-                <input
-                  id="checkbox-all-search"
-                  type="checkbox"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <label htmlFor="checkbox-all-search" className="sr-only">
-                  checkbox
-                </label>
-              </div>
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Invoice #
-            </th>
-            <ThAccount />
-            <ThDueDate />
-            <ThStatus />
-            <ThAmount />
-            <th scope="col" className="px-6 py-3 flex justify-end">
-              <div className="flex justify-end">Action</div>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {invoices.map((invoice) => (
-            <InvoiceListItem key={`row--${invoice.id}`} invoice={invoice} />
-          ))}
-        </tbody>
-      </table>
+      {loading ? (
+        <LoadingAnimation variant="text" />
+      ) : (
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" className="p-4">
+                <div className="flex items-center">
+                  <input
+                    id="checkbox-all-search"
+                    type="checkbox"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label htmlFor="checkbox-all-search" className="sr-only">
+                    checkbox
+                  </label>
+                </div>
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Invoice #
+              </th>
+              <ThAccount />
+              <ThDueDate />
+              <ThStatus />
+              <ThAmount />
+              <th scope="col" className="px-6 py-3 flex justify-end">
+                <div className="flex justify-end">Action</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {invoices.map((invoice) => (
+              <InvoiceListItem key={`row--${invoice.id}`} invoice={invoice} />
+            ))}
+          </tbody>
+        </table>
+      )}
     </>
   )
 }
