@@ -71,6 +71,13 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
             {invoices.map((invoice) => (
               <InvoiceListItem key={`row--${invoice.id}`} invoice={invoice} />
             ))}
+            {invoices.length === 0 && (
+              <tr>
+                <td colSpan={6} className="p-6 text-center text-lg text-gray-400 dark:text-gray-200">
+                  No invoices found
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       )}

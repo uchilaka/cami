@@ -24,6 +24,10 @@ class InvoicesController < ApplicationController
   def search
     @query = Invoice.ransack(search_query.predicates)
     @query.sorts = search_query.sorters if search_query.sorters.any?
+    # TODO: Break search query into:
+    #   - search against invoice records (OR)
+    #   - search against account association (OR)
+    #   - search within user policy scope (AND)
     @invoices = policy_scope(@query.result(distinct: true)).reverse_order
   end
 
