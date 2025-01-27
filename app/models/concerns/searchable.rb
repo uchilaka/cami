@@ -8,7 +8,7 @@ module Searchable
   end
 
   module ClassMethods
-    def fuzzy_search_predicate_key(*fields, association: nil, model_name: nil, polymorphic: false)
+    def fuzzy_search_predicate_key(*fields, association: nil, model_name: nil, polymorphic: false, matcher: 'cont')
       fields_clause =
         if polymorphic.present?
           raise ArgumentError, "Searching polymorphic associations on #{name} requires a model_name" \
@@ -30,7 +30,9 @@ module Searchable
         else
           fields.sort
         end
-      "#{fields_clause.join('_or_')}_cont"
+      return fields_clause.join('_or_') unless matcher.present?
+
+      "#{fields_clause.join('_or_')}_#{matcher}"
     end
   end
 end

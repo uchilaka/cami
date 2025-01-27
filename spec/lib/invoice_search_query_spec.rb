@@ -12,6 +12,46 @@ RSpec.describe InvoiceSearchQuery do
     described_class.new(qs, params: filtered_params)
   end
 
+  shared_examples 'search by query string' do |qs, expected_predicates|
+    let(:params) do
+      { 'q' => qs }
+    end
+
+    subject do
+      filtered_params =
+        ActionController::Parameters.new(params).permit(:q, :mode, f: {}, s: {})
+      described_class.new(qs, params: filtered_params)
+    end
+
+    context 'without other parameters' do
+      it { expect(subject.predicates).to match(expected_predicates) }
+    end
+
+    context 'with blankish values of other parameters' do
+      let(:params) do
+        {
+          'q' => qs,
+          'f' => {},
+          's' => {}
+        }
+      end
+
+      it { expect(subject.predicates).to match(expected_predicates) }
+    end
+
+    context 'with sorting' do
+      let(:params) do
+        {
+          'q' => qs,
+          's' => { 'dueAt' => 'desc' }
+        }
+      end
+
+      it { expect(subject.predicates).to match(expected_predicates) }
+      it { expect(subject.sorters).to include('due_at desc') }
+    end
+  end
+
   shared_examples 'search filtering by status and sorting by due date (with array of hashes inputs)' do |qs, status, expected_predicates|
     let(:params) do
       {
@@ -59,16 +99,21 @@ RSpec.describe InvoiceSearchQuery do
   end
 
   context 'with query string' do
+    it_should_behave_like 'search by query string',
+                          'logistics',
+                          {
+                            'invoice_number_or_invoiceable_of_Account_type_display_name_or_invoiceable_of_Account_type_email_cont' => 'logistics'
+                          }
     it_should_behave_like 'search filtering by status and sorting by due date (with array of hashes inputs)',
                           'logistics', 'PAID',
                           {
-                            'invoiceable_of_Account_type_display_name_or_invoiceable_of_Account_type_email_cont' => 'logistics',
+                            'invoice_number_or_invoiceable_of_Account_type_display_name_or_invoiceable_of_Account_type_email_cont' => 'logistics',
                             :status_eq => 'paid'
                           }
     it_should_behave_like 'search filtering by status and sorting by due date',
                           'logistics', 'SENT',
                           {
-                            'invoiceable_of_Account_type_display_name_or_invoiceable_of_Account_type_email_cont' => 'logistics',
+                            'invoice_number_or_invoiceable_of_Account_type_display_name_or_invoiceable_of_Account_type_email_cont' => 'logistics',
                             :status_eq => 'sent'
                           }
   end

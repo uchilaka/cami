@@ -44,14 +44,19 @@ class InvoiceSearchQuery
       end
     return predicates unless query_param.present?
 
-    compound_cont_predicate =
+    account_search_predicate =
       Invoice.fuzzy_search_predicate_key(
         'display_name', 'email',
         model_name: :invoiceable,
         association: 'Account',
-        polymorphic: true
+        polymorphic: true,
+        matcher: nil
       )
-    @predicates[compound_cont_predicate] = query_param
+    invoice_search_predicate =
+      Invoice.fuzzy_search_predicate_key('invoice_number', matcher: nil)
+    compound_cont_predicate =
+      [invoice_search_predicate, account_search_predicate].join('_or_')
+    @predicates["#{compound_cont_predicate}_cont"] = query_param
   end
 
   def compose_filters
