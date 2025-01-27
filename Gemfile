@@ -107,6 +107,8 @@ group :development, :test do
   gem 'open3'
   gem 'rspec-wait'
   gem 'rubocop'
+
+  # Catch unsafe migrations in development https://github.com/ankane/strong_migrations
   gem 'strong_migrations'
 
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
