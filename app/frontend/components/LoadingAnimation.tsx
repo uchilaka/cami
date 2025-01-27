@@ -31,12 +31,12 @@ export function InlineLoadingAnimation() {
 export function SectionLoadingAnimation() {
   return (
     <div role="status" className="w-full animate-pulse">
-      <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-1/2 xs:max-w-[320px] mb-4"></div>
-      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-4/5 xs:max-w-[360px] mb-2.5"></div>
-      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-2/3 mb-2.5"></div>
-      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-3/4 xs:max-w-[330px] mb-2.5"></div>
-      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-5/6 xs:max-w-[300px] mb-2.5"></div>
-      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-7/8 xs:max-w-[360px]"></div>
+      <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-full max-w-lg xs:max-w-[320px] mb-4"></div>
+      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-full max-w-3xl xs:max-w-[360px] mb-2.5"></div>
+      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-full max-w-4xl mb-2.5"></div>
+      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-full max-w-2xl xs:max-w-[330px] mb-2.5"></div>
+      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-full max-w-xl xs:max-w-[300px] mb-2.5"></div>
+      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-full max-w-3xl xs:max-w-[360px]"></div>
       <span className="sr-only">Loading...</span>
     </div>
   )
