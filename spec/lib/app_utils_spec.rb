@@ -287,8 +287,6 @@ RSpec.describe AppUtils, utility: true, skip_in_ci: true do
   end
 
   describe '.ruby_version' do
-    it 'returns the current ruby version' do
-      expect(described_class.ruby_version).to eq('3.2.2')
-    end
+    it { expect(described_class.ruby_version).to eq('3.2.2') }
   end
 end
