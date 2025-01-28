@@ -21,27 +21,11 @@
         <div>
           <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Resources</h2>
           <ul class="text-gray-600 dark:text-gray-400">
-            <li class="mb-4">
-              <%= link_to 'Flowbite Icons', 'https://flowbite.com/icons/', class: 'hover:underline', target: '_blank' %>
-            </li>
-            <li class="mb-4">
-              <%= link_to 'FontAwesome Icons', 'https://fontawesome.com/search', class: 'hover:underline', target: '_blank' %>
-            </li>
-            <li class="mb-4">
-              <%= link_to 'Mongoid Docs (v8.1)', 'https://www.mongodb.com/docs/mongoid/8.1/', class: 'hover:underline', target: '_blank' %>
-            </li>
-            <li class="mb-4">
-              <%= link_to 'Flowbite Integration Guide',
-                          'https://flowbite.com/docs/getting-started/rails/',
-                          class: 'hover:underline',
-                          target: '_blank' %>
-            </li>
-            <li class="mb-4">
-              <a href="https://flowbite.com/docs/getting-started/introduction/" class="hover:underline" target="_blank">Component Library</a>
-            </li>
-            <li class="mb-4">
-              <a href="https://developer.paypal.com/tools/sandbox/" class="hover:underline" target="_blank">PayPal sandbox testing guide</a>
-            </li>
+            <% footer_resource_links.each do |label, url| %>
+              <li class="mb-4">
+                <%= link_to label, url, class: 'hover:underline', target: '_blank' %>
+              </li>
+            <% end %>
           </ul>
         </div>
         <div>

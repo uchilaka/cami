@@ -1,6 +1,6 @@
-# Scaffolding
+# CAMI > Scaffolding
 
-- [Scaffolding](#scaffolding)
+- [CAMI \> Scaffolding](#cami--scaffolding)
   - [Accounts](#accounts)
     - [Scaffolding output (dry-run)](#scaffolding-output-dry-run)
   - [Invoices](#invoices)

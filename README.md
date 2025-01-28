@@ -141,9 +141,12 @@ System dependencies are defined in the following configuration files:
 
 #### `LAN_SUBNET_MASK`
 
-This configuration is intended to give us a way to allow certain app management features based on the virtual network location of our teams.
+This configuration is intended to give us a way to allow certain app management features
+based on the virtual network location of our teams.
 
-Specifically, this `ENV` variable is an override to configure access to the app's [web console](https://github.com/rails/web-console) (also see [the docs](https://github.com/rails/web-console?tab=readme-ov-file#configweb_consolepermissions), as well as `VirtualOfficeManager#web_console_permissions`).
+Specifically, this `ENV` variable is an override to configure access to the app's
+[web console](https://github.com/rails/web-console)
+(also see [the docs](https://github.com/rails/web-console?tab=readme-ov-file#configweb_consolepermissions), as well as `VirtualOfficeManager#web_console_permissions`).
 
 The built-in configuration option is to set the following in the corresponding [custom credential file](https://guides.rubyonrails.org/security.html#custom-credentials):
 
@@ -165,12 +168,15 @@ web_console:
 > - `asdf plugin add nodejs`
 > New to `asdf`? [here's a primer to get started](https://asdf-vm.com/guide/getting-started.html).
 
-Review the `.env.example` file to ensure the environment variables are set. You can control which variables are made available in each environment while working locally using the following files:
+Review the `.env.example` file to ensure the environment variables are set. You can
+control which variables are made available in each environment while working locally
+using the following files:
 
 - `.env.local`
 - `.env.test`
 
-The `.envrc` (see `.envrc.example`) file should be included for compatibility with other features like `docker compose` and simply sources the `.env.local` file.
+The `.envrc` (see `.envrc.example`) file should be included for compatibility with
+other features like `docker compose` and simply sources the `.env.local` file.
 
 ### 2. Install dependencies
 

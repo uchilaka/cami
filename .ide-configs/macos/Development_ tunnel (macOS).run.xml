@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Development: proxy tunnel (macOS)" type="ShConfigurationType">
+  <configuration default="false" name="Development: tunnel (macOS)" type="ShConfigurationType">
     <option name="SCRIPT_TEXT" value="source .env.local &amp;&amp; ngrok start --all --config=config/ngrok.yml" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />

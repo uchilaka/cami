@@ -3,6 +3,10 @@
 module AccountsHelper
   include UsersHelper
 
+  def account_search_enabled?
+    Flipper.enabled?(:feat__account_search, current_user)
+  end
+
   def account_filtering_enabled?
     Flipper.enabled?(:feat__account_filtering, current_user)
   end

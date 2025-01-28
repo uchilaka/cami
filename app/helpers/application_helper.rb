@@ -28,4 +28,8 @@ module ApplicationHelper
     Rails.application.config.application_short_name ||
       Rails.application.class.module_parent_name
   end
+
+  def crm_org_id
+    ENV.fetch('CRM_ORG_ID')
+  end
 end

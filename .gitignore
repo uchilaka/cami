@@ -43,7 +43,7 @@
 /spec/fixtures/pii/
 
 # Ignore proxy server config file (will be processed by initializer)
-/config/ngrok.yml
+/config/ngrok*.yml
 
 # Ignore master key for decrypting credentials and more.
 /config/credentials/*.key

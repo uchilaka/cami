@@ -1,4 +1,5 @@
 export * from '../../features/AccountManager/api'
+export * from '@/features/InvoiceManager/api/findInvoices'
 export * from '@/features/InvoiceManager/api/getInvoices'
 
 export const getFeatureFlags = async () => {
