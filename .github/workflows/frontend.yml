@@ -1,4 +1,4 @@
-name: Frontend test suite
+name: Frontend CI
 
 on:
   pull_request:
@@ -6,10 +6,13 @@ on:
 env:
   CI: true
   RAILS_ENV: test
+  RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+  PORT: 3000
   PROJECT_ROOT: .
 
 jobs:
   build:
+    name: Build & test
     runs-on: ubuntu-latest
     strategy:
       matrix:

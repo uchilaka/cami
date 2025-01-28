@@ -1,11 +1,11 @@
-name: Full-stack test suite
+name: Full-stack CI
 
 on:
   pull_request:
 
 jobs:
   build:
-    name: CI test suite
+    name: Bundle, assets build & RSpec
     runs-on: ubuntu-latest
     strategy:
       matrix:
