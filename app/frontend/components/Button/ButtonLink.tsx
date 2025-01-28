@@ -1,5 +1,5 @@
 import React, { AnchorHTMLAttributes, FC } from 'react'
-import { ButtonBaseProps, ButtonLoader } from './Button'
+import { ButtonBaseProps, ButtonLoader } from '.'
 import useButtonClassNames from '@/utils/hooks/useButtonClassNames'
 import clsx from 'clsx'
 

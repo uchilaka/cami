@@ -1,7 +1,7 @@
 import React from 'react'
 import { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
-import SimpleButton from './Button'
+import SimpleButton from '.'
 import SimpleButtonLink from './ButtonLink'
 
 import { Default as ButtonSizes } from './ButtonSizes.stories'
