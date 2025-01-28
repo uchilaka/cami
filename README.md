@@ -23,6 +23,7 @@
   - [Running Storybook](#running-storybook)
     - [Publishing the latest Storybook](#publishing-the-latest-storybook)
     - [The Storybook Firebase project](#the-storybook-firebase-project)
+    - [A note on Storybook auto-migrations](#a-note-on-storybook-auto-migrations)
   - [Database management](#database-management)
     - [Resetting the databases](#resetting-the-databases)
   - [How to run the test suite](#how-to-run-the-test-suite)
@@ -265,6 +266,19 @@ yarn sb:publish
 ### The Storybook Firebase project
 
 <https://console.firebase.google.com/project/larcity-ui-docs/overview>
+
+### A note on Storybook auto-migrations
+
+```shell
+│   If you'd like to run the migrations again, you can do so by running 'npx storybook automigrate'                                 │
+│                                                                                                                                   │
+│   The automigrations try to migrate common patterns in your project, but might not contain everything needed to migrate to the    │
+│   latest version of Storybook.                                                                                                    │
+│                                                                                                                                   │
+│   Please check the changelog and migration guide for manual migrations and more information:                                      │
+│   https://storybook.js.org/docs/migration-guide                                                                                   │
+│   And reach out on Discord if you need help: https://discord.gg/storybook  
+```
 
 ## Database management
 
