@@ -127,6 +127,9 @@ RSpec.configure do |config|
   # Sample phone numbers
   config.include_context 'for phone number testing', real_world_data: true
 
+  # Sample invoices
+  config.include_context 'for invoice testing', invoice_data: true
+
   config.before(:suite) do
     if config.use_transactional_fixtures?
       raise(<<-MSG)
@@ -142,33 +145,29 @@ RSpec.configure do |config|
     end
     DatabaseCleaner.clean_with(:truncation)
 
-    # # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example
-    # DatabaseCleaner.clean_with(:truncation)
-    #
-    # DatabaseCleaner.strategy = :transaction
-    #
-    # Load seeds
     Rails.application.load_seed
 
     # Sidekiq setup
     Sidekiq::Testing.fake!
   end
 
-  # config.around(:each) do |example|
-  #   DatabaseCleaner.cleaning { example.run }
-  #
-  #   # Clean up all test double state
-  #   RSpec::Mocks.teardown
-  # end
-
   # Review example of RSpec with Capybara configuration:
   # https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-with-capybara-example
   config.before(:each) do
+    # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example
     DatabaseCleaner.strategy = :transaction
   end
 
   config.before(:each) do
     DatabaseCleaner.start
+  end
+
+  config.around(:each) do |example|
+    # Conditionally load invoice sample data
+    load_sample_invoice_dataset if example.metadata[:invoice_data]
+
+    # Run example
+    example.run
   end
 
   config.append_after(:each) do

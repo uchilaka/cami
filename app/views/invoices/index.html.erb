@@ -7,7 +7,7 @@
 
   <div class="flex justify-between items-center mb-6">
     <h1 class="font-bold text-4xl">Invoices</h1>
-    <%= link_to "New invoice", new_invoice_path, class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium" %>
+    <%= link_to "New invoice", new_invoice_path, class: primary_btn_classes %>
   </div>
 
   <% if Flipper.enabled?(:feat__invoice_search) %>

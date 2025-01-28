@@ -23,7 +23,7 @@ const InvoiceDueDate: FC<InvoiceDueDateProps> = ({ invoiceId, value }) => {
     const control = controlRef.current
     const tooltip = tooltipRef.current
 
-    new Tooltip(tooltip, control, { placement: 'left', triggerType: 'hover' }, { id: dueDateDetailId })
+    new Tooltip(tooltip, control, { placement: 'left', triggerType: 'hover' }, { id: dueDateDetailId, override: true })
   }, [tooltipRef, controlRef, dueDateDetailId, value])
 
   return (

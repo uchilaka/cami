@@ -1,11 +1,11 @@
-name: RSpec
+name: Full-stack CI
 
 on:
   pull_request:
 
 jobs:
   build:
-    name: CI test suite
+    name: Bundle, assets build & RSpec
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -25,6 +25,7 @@ jobs:
       APP_DATABASE_USER: ${{ secrets.APP_DATABASE_USER }}
       APP_DATABASE_PASSWORD: ${{ secrets.APP_DATABASE_PASSWORD }}
       APP_DATABASE_PORT: 5432
+      CRM_ORG_ID: 727989379
     services:
       postgres:
         # https://hub.docker.com/_/postgres
@@ -35,7 +36,7 @@ jobs:
           POSTGRES_PASSWORD: ${{env.APP_DATABASE_PASSWORD}}
           #POSTGRES_HOST_AUTH_METHOD: trust # IMPORTANT allows all connections without a password - experimental only!
         ports:
-         - '5432:5432'
+          - '5432:5432'
         options: >- # Options for the service, in this case we want to make sure that the Postgres container passes a health check
           --health-cmd pg_isready
           --health-interval 15s
@@ -46,11 +47,14 @@ jobs:
         ports:
           - '16079:6379'
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Ruby 3.2.2
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2.2
+          ruby-version: ${{ matrix.ruby-version }}
+
+      - name: Check ruby version
+        run: ruby -v
 
       - uses: actions/cache@v4
         with:
@@ -106,7 +110,11 @@ jobs:
         run: |
           bundle exec rake vite:build_all
 
-      - name: Build and run tests
+      - name: RSpec
         run: |
           # Run all specs except those with the option skip_in_ci: true
           bundle exec rspec --tag ~skip_in_ci:true
+
+      - name: Frontend tests
+        run: |
+          yarn test

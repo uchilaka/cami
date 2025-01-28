@@ -7,6 +7,8 @@ ruby '3.2.2'
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.2', '>= 7.2.0'
 
+gem 'active_record_extended'
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
 
@@ -90,32 +92,45 @@ gem 'bumbler'
 # Rationale: setup "staging" environments to be identical to production, distinguished by their domain name.
 gem 'sib-api-v3-sdk', groups: %i[production]
 
+gem 'active_model_serializers'
+
+# OpenAPI (formerly named Swagger) tooling for Rails APIs https://github.com/rswag/rswag
+gem 'rswag-api'
+gem 'rswag-ui'
+
 group :development, :test do
-  gem 'active_model_serializers'
   gem 'capybara'
   gem 'capybara_accessibility_audit'
+  gem 'climate_control'
   gem 'fabrication'
   gem 'faker'
   gem 'open3'
   gem 'rspec-wait'
   gem 'rubocop'
+
+  # Catch unsafe migrations in development https://github.com/ankane/strong_migrations
   gem 'strong_migrations'
 
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw windows], require: 'debug/prelude'
 
-  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
+  # Static analysis for security vulnerabilities https://brakemanscanner.org/
   gem 'brakeman', require: false
 
-  # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
+  # Omakase Ruby styling https://github.com/rails/rubocop-rails-omakase/
   gem 'rubocop-rails-omakase', require: false
 
   gem 'rspec-rails', '~> 7.0.0'
+
+  gem 'rswag-specs'
 end
 
 group :development do
-  # Use console on exceptions pages [https://github.com/rails/web-console]
+  # Use console on exceptions pages https://github.com/rails/web-console
   gem 'web-console'
+
+  # Ruby on Rails Live Reload https://github.com/railsjazz/rails_live_reload
+  gem 'rails_live_reload'
 
   # Annotates Rails Models, routes, fixtures, and others based on the database schema.
   gem 'annotate'
@@ -137,14 +152,12 @@ group :test do
   gem 'shoulda-matchers'
 
   # Selenium is a browser automation tool for automated
-  #   testing of webapps and more [https://www.selenium.dev/documentation/en/]
+  #   testing of webapps and more https://www.selenium.dev/documentation/en/
   gem 'selenium-webdriver'
 
   gem 'database_cleaner-active_record'
 
   # gem 'database_cleaner-redis'
-
-  gem 'climate_control'
 end
 
 # Track changes to your models https://github.com/paper-trail-gem/paper_trail
@@ -180,20 +193,30 @@ gem 'ruby-vips', '~> 2.1', '>= 2.1.4'
 # Use Vite in Rails for JS https://github.com/ElMassimo/vite_ruby
 gem 'vite_rails', '~> 3.0', '>= 3.0.17'
 
-# Simple, efficient background processing for Ruby [https://github.com/sidekiq/sidekiq/wiki/Getting-Started]
+# Pin a minimum version of the stringio gem (spaghetti change while troubleshooting Sidekiq on WSL2)
+gem 'stringio', '>= 3.1.2'
+
+# Simple, efficient background processing for Ruby https://github.com/sidekiq/sidekiq/wiki/Getting-Started
 gem 'sidekiq', '~> 7.3'
 
-# Scheduler/Cron for Sidekiq jobs [https://github.com/sidekiq-cron/sidekiq-cron?tab=readme-ov-file#adding-cron-job]
+# Scheduler/Cron for Sidekiq jobs https://github.com/sidekiq-cron/sidekiq-cron?tab=readme-ov-file#adding-cron-job
 gem 'sidekiq-cron'
 
 # Process manager for applications with multiple components
 gem 'foreman'
 
-# Rake tasks to migrate data alongside schema changes [https://github.com/ilyakatz/data-migrate]
+# Rake tasks to migrate data alongside schema changes https://github.com/ilyakatz/data-migrate
 gem 'data_migrate', '~> 9', '>= 9.3.0'
 
 # Simple interactor implementation
 gem 'interactor', '~> 3.1'
 
-# Money gem integration with Rails: https://github.com/RubyMoney/money-rails
+# Money gem integration with Rails https://github.com/RubyMoney/money-rails
 gem 'money-rails', '~> 1.15'
+
+# Object-based searching for Active Record https://github.com/activerecord-hackery/ransack
+gem 'ransack', '~> 4.2'
+
+# # API client for Zoho CRM https://github.com/zoho/zohocrm-ruby-sdk-7.0
+# TODO: Encounters error installing mysql2 (pivoting away from pulling in this dependency)
+# gem 'ZOHOCRMSDK7_0'

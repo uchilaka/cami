@@ -1,21 +1,35 @@
-import React, { useState, useRef, useEffect, ChangeEventHandler } from 'react'
+import React, { useState, useRef, useEffect, ChangeEventHandler, FC } from 'react'
+import clsx from 'clsx'
 import { Dropdown } from 'flowbite'
 
 import FilterDropdown from './FilterDropdown'
 
 const filterOptions = [
-  ['Past due 7 days', 'past_due_7_days'],
-  ['Past due 30 days', 'past_due_30_days'],
-  ['Past due later', 'past_due_later_than_30_days'],
-  ['Due today', 'due_today'],
-  ['Due this week', 'due_this_week'],
-  ['Due this month', 'due_this_month'],
-  ['Due next month', 'due_next_month'],
-  ['Due later', 'due_later_than_next_month'],
-].map(([label, value]) => [value, label])
+  ['', '(Filter by Due Date)'],
+  ['past_due_7_days', 'Past due 7 days'],
+  ['past_due_30_days', 'Past due 30 days'],
+  ['past_due_later_than_30_days', 'Past due later'],
+  ['due_today', 'Due today'],
+  ['due_this_week', 'Due this week'],
+  ['due_this_month', 'Due this month'],
+  ['due_next_month', 'Due next month'],
+  ['due_later_than_next_month', 'Due later'],
+]
 
-const FilterForInvoiceDueDate = () => {
-  const [selectedFilter, setSelectedFilter] = useState('past_due_30_days')
+type DueDateFilterOption = (typeof filterOptions)[number][0]
+
+interface FilterForInvoiceDueDateProps {
+  defaultValue: DueDateFilterOption
+  disabled: boolean
+}
+
+const FilterForInvoiceDueDate: FC<Partial<FilterForInvoiceDueDateProps>> = ({ defaultValue, disabled }) => {
+  const triggerClassNames = clsx(
+    'inline-flex items-center text-gray-500 border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600',
+    !disabled && 'bg-white hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700',
+    disabled && 'bg-gray-200 hover:cursor-not-allowed',
+  )
+  const [selectedFilter, setSelectedFilter] = useState(defaultValue ?? '')
   const optionsLabelHash = Object.fromEntries(filterOptions)
   const targetRef = useRef(null)
   const controlRef = useRef(null)
@@ -52,11 +66,12 @@ const FilterForInvoiceDueDate = () => {
         ref={controlRef}
         id="dueDateDropdownRadioButton"
         data-dropdown-toggle="dueDateDropdownRadio"
-        className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+        className={triggerClassNames}
         type="button"
+        disabled={disabled}
       >
         <i className="mr-2.5 fa-sharp fa-solid fa-filter"></i>
-        {optionsLabelHash[selectedFilter] ?? 'Due date'}
+        {optionsLabelHash[selectedFilter] ?? 'Due Date'}
         <svg className="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
           <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
         </svg>

@@ -1345,7 +1345,9 @@ __metadata:
     "@testing-library/react": "npm:~15.0"
     "@testing-library/react-hooks": "npm:~8.0"
     "@types/jest": "npm:^29.5.12"
+    "@types/lodash.debounce": "npm:^4.0.9"
     "@types/lodash.find": "npm:^4.6.9"
+    "@types/lodash.merge": "npm:^4"
     "@types/lodash.omit": "npm:^4.5.9"
     "@types/lodash.uniqby": "npm:^4.7.9"
     "@types/node": "npm:^20.12.7"
@@ -1373,7 +1375,9 @@ __metadata:
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
     lint-staged: "npm:^15.2.10"
+    lodash.debounce: "npm:^4.0.8"
     lodash.find: "npm:^4.6.0"
+    lodash.merge: "npm:^4.6.2"
     lodash.omit: "npm:^4.5.0"
     lodash.uniqby: "npm:^4.7.0"
     msw: "npm:^2.6.2"
@@ -2663,12 +2667,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.debounce@npm:^4.0.9":
+  version: 4.0.9
+  resolution: "@types/lodash.debounce@npm:4.0.9"
+  dependencies:
+    "@types/lodash": "npm:*"
+  checksum: 10c0/9fbb24e5e52616faf60ba5c82d8c6517f4b86fc6e9ab353b4c56c0760f63d9bf53af3f2d8f6c37efa48090359fb96dba1087d497758511f6c40677002191d042
+  languageName: node
+  linkType: hard
+
 "@types/lodash.find@npm:^4.6.9":
   version: 4.6.9
   resolution: "@types/lodash.find@npm:4.6.9"
   dependencies:
     "@types/lodash": "npm:*"
   checksum: 10c0/d3bc7e160e00b192b62c8e1a38934fadf18fa4a90349db319abcca4395cfbc33cba439ca024e286a915dccd0c135515477fdf02fae05ec0320a35efb305ffb81
+  languageName: node
+  linkType: hard
+
+"@types/lodash.merge@npm:^4":
+  version: 4.6.9
+  resolution: "@types/lodash.merge@npm:4.6.9"
+  dependencies:
+    "@types/lodash": "npm:*"
+  checksum: 10c0/2e2ccacdceb2e23343a514e8c24540fc4e1f1ffd616b645eb72ec685da9389d99a2544f04d61921e46a6768f8cc0fe5f58d4f7edaba9bc50552f0ca7df905e83
   languageName: node
   linkType: hard
 
@@ -7301,6 +7323,13 @@ __metadata:
   version: 4.4.0
   resolution: "lodash.castarray@npm:4.4.0"
   checksum: 10c0/0bf523ad1596a5bf17869ba047235b4453eee927005013ae152345e2b291b81a02e7f2b7c38f876a1d16f73c34aa3c3241e965193e5b31595035bc8f330c4358
+  languageName: node
+  linkType: hard
+
+"lodash.debounce@npm:^4.0.8":
+  version: 4.0.8
+  resolution: "lodash.debounce@npm:4.0.8"
+  checksum: 10c0/762998a63e095412b6099b8290903e0a8ddcb353ac6e2e0f2d7e7d03abd4275fe3c689d88960eb90b0dde4f177554d51a690f22a343932ecbc50a5d111849987
   languageName: node
   linkType: hard
 

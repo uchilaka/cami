@@ -9,17 +9,21 @@ export default function ThAccount() {
   const tooltipRef = useRef<HTMLDivElement>(null)
   const labelText = 'Account'
   const { isEnabled } = useFeatureFlagsContext()
-  const { filterParams, setFilterParams } = useInvoiceContext()
-  const filteringByAccount = filterParams?.field === 'account'
-  const filteringDesc = filteringByAccount && filterParams.direction === 'desc'
+  const { searchParams, updateSearchParams } = useInvoiceContext()
+  const sortDirection = searchParams?.s?.account
+  const sortingApplied = !!sortDirection
+  const sortingDesc = sortDirection === 'desc'
 
+  /**
+   * TODO: Should this be mergeSortFilter?
+   */
   const toggleSortFilter = useCallback(() => {
-    if (filteringByAccount && filteringDesc) {
-      setFilterParams({ field: 'account', direction: 'asc' })
+    if (sortingApplied && sortingDesc) {
+      updateSearchParams({ s: { account: 'asc' } })
     } else {
-      setFilterParams({ field: 'account', direction: 'desc' })
+      updateSearchParams({ s: { account: 'desc' } })
     }
-  }, [filteringByAccount, filteringDesc, setFilterParams])
+  }, [sortingApplied, sortingDesc, updateSearchParams])
 
   useEffect(() => {
     if (!controlRef.current || !tooltipRef.current) return
@@ -32,7 +36,7 @@ export default function ThAccount() {
 
   return (
     <th scope="col" className="px-6 py-3">
-      {isEnabled('sortable_invoice_index') ? (
+      {isEnabled('sortable_invoice_index', 'invoice_sortable_by_account') ? (
         <>
           <a
             ref={controlRef}
@@ -43,7 +47,11 @@ export default function ThAccount() {
           >
             {labelText}
             <i
-              className={clsx('fa-solid px-2', filteringDesc && 'fa-caret-down', filteringByAccount && !filteringDesc && 'fa-caret-up')}
+              className={clsx(
+                'fa-solid px-2',
+                sortingApplied && sortingDesc && 'fa-caret-down',
+                sortingApplied && !sortingDesc && 'fa-caret-up',
+              )}
             ></i>
           </a>
           <div

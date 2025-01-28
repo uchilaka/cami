@@ -14,6 +14,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_27_072422) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "invoice_status", ["draft", "sent", "scheduled", "unpaid", "cancelled", "payment_pending", "marked_as_paid", "partially_paid", "paid", "marked_as_refunded", "partially_refunded", "refunded"]
+
   create_table "accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "display_name"
     t.string "email"
@@ -117,7 +121,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_27_072422) do
     t.string "vendor_recurring_group_id"
     t.string "invoice_number"
     t.string "payment_vendor"
-    t.integer "status"
+    t.enum "status", default: "draft", enum_type: "invoice_status"
     t.datetime "issued_at", precision: nil
     t.datetime "updated_accounts_at", precision: nil
     t.datetime "due_at", precision: nil

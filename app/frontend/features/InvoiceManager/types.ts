@@ -16,12 +16,25 @@ export interface Invoice {
   dueAt: Date
   updatedAt: Date
   number: string
-  status: 'PAID' | 'OVERDUE' | 'SENT'
+  status: 'PAID' | 'OVERDUE' | 'SENT' | 'CANCELLED' | 'DRAFT' | 'PARTIALLY_PAID'
   amount: InvoiceAmount
+  paidAt?: Date
   // eslint-disable-next-line no-use-before-define
   account?: GenericAccount
   isRecurring?: boolean
   tooltipId?: string
   itemActionBtnClasses?: string
   paymentVendorURL: string
+}
+
+type SortKey = keyof Pick<Invoice, 'account' | 'status' | 'dueAt' | 'paidAt' | 'amount'> | 'account.email' | 'account.displayName'
+type FilterKey = 'status' | 'invoiceNumber' | 'account.displayName' | 'account.email'
+
+export interface InvoiceSearchProps {
+  // Sorting
+  s: Partial<Record<SortKey, 'asc' | 'desc' | null>>
+  // Filtering
+  f: Partial<Record<FilterKey, string>>
+  // (Full-text search) query string
+  q: string
 }

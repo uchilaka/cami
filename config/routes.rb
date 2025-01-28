@@ -5,7 +5,15 @@ require 'sidekiq/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
-  resources :invoices, except: %i[destroy]
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/api-docs'
+
+  resources :invoices, except: %i[destroy] do
+    collection do
+      post :search
+    end
+  end
+
   resources :accounts, except: %i[destroy] do
     resources :invoices, except: %i[destroy]
   end

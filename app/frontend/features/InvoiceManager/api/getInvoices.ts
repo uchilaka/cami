@@ -1,13 +1,9 @@
-import { Invoice } from '../types'
-
-export interface InvoiceSearchProps {
-  field: keyof Invoice
-  direction: 'asc' | 'desc'
-  q?: string
-}
+import { InvoiceSearchProps } from '../types'
+import { composeQueryParams } from '../utils'
 
 export const getInvoices = async (payload?: Partial<InvoiceSearchProps>) => {
-  const params = new URLSearchParams({ ...(payload ?? {}), format: 'json' })
+  console.debug(`Fetching invoices with payload:`, { ...payload })
+  const params = composeQueryParams(payload ?? {}, new URLSearchParams({ format: 'json' }))
   const result = await fetch(`/invoices?${params.toString()}`)
   const data = await result.json()
   return data
