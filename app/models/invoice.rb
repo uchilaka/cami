@@ -121,6 +121,15 @@ class Invoice < ApplicationRecord
     end
   end
 
+  def recurring_details_url
+    case payment_vendor
+    when 'paypal'
+      "#{PAYPAL_BASE_URL}/invoice/s/recurring/details/#{vendor_recurring_group_id}"
+    else
+      ''
+    end
+  end
+
   # @deprecated Use `amount_currency` or `due_amount_currency` instead
   def currency_code
     amount_currency

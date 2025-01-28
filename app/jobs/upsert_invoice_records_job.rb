@@ -18,6 +18,10 @@ class UpsertInvoiceRecordsJob < ApplicationJob
     end
   end
 
+  def recurring_invoice_url(url)
+    "https://www.paypal.com/invoice/s/recurring/details/#{url}"
+  end
+
   def batch_limit
     ENV.fetch('UPSERT_INVOICE_BATCH_LIMIT', BATCH_LIMIT).to_i
   end
