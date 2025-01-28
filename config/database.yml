@@ -87,6 +87,11 @@ test:
 #
 production:
   <<: *default
+  connect_timeout: 5
+  # See https://github.com/ankane/strong_migrations?tab=readme-ov-file#app-timeouts
+  variables:
+    statement_timeout: 15s
+    lock_timeout: 10s
   database: sails_production
   username: <%= ENV.fetch('APP_DATABASE_USER', 'postgres') %>
   password: <%= ENV.fetch("APP_DATABASE_PASSWORD", Rails.application.credentials.postgres&.password) %>

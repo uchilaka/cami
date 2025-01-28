@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 
 /**
  * Tailwind CSS Skeleton https://flowbite.com/docs/components/skeleton/
@@ -28,16 +28,65 @@ export function InlineLoadingAnimation() {
   )
 }
 
-export default function LoadingAnimation() {
+export function SectionLoadingAnimation() {
   return (
-    <div role="status" className="max-w-sm animate-pulse">
-      <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
-      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
-      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[330px] mb-2.5"></div>
-      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[300px] mb-2.5"></div>
-      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]"></div>
+    <div role="status" className="w-full animate-pulse">
+      <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-full max-w-lg xs:max-w-[320px] mb-4"></div>
+      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-full max-w-3xl xs:max-w-[360px] mb-2.5"></div>
+      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-full max-w-4xl mb-2.5"></div>
+      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-full max-w-2xl xs:max-w-[330px] mb-2.5"></div>
+      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-full max-w-xl xs:max-w-[300px] mb-2.5"></div>
+      <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-full max-w-3xl xs:max-w-[360px]"></div>
       <span className="sr-only">Loading...</span>
     </div>
   )
 }
+
+export function TextLoadingAnimation() {
+  return (
+    <div role="status" className="space-y-2.5 animate-pulse w-full">
+      <div className="flex items-center w-full max-w-5/6">
+        <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+        <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-24"></div>
+        <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-full"></div>
+      </div>
+      <div className="flex items-center w-full max-w-4xl">
+        <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-full"></div>
+        <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-full"></div>
+        <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-24"></div>
+      </div>
+      <div className="flex items-center w-full max-w-3xl">
+        <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-full"></div>
+        <div className="h-2.5 ms-2 bg-gray-200 rounded-full dark:bg-gray-700 w-80"></div>
+        <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-full"></div>
+      </div>
+      <div className="flex items-center w-full max-w-4xl">
+        <div className="h-2.5 ms-2 bg-gray-200 rounded-full dark:bg-gray-700 w-full"></div>
+        <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-full"></div>
+        <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-24"></div>
+      </div>
+      <div className="flex items-center w-full max-w-3xl">
+        <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-32"></div>
+        <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-24"></div>
+        <div className="h-2.5 ms-2 bg-gray-200 rounded-full dark:bg-gray-700 w-full"></div>
+      </div>
+      <div className="flex items-center w-full max-w-xl">
+        <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-full"></div>
+        <div className="h-2.5 ms-2 bg-gray-200 rounded-full dark:bg-gray-700 w-80"></div>
+        <div className="h-2.5 ms-2 bg-gray-300 rounded-full dark:bg-gray-600 w-full"></div>
+      </div>
+      <span className="sr-only">Loading...</span>
+    </div>
+  )
+}
+
+export const LoadingAnimation: FC<{ variant?: 'text' | 'video' | 'media' | 'section' }> = ({ variant = 'section' }) => {
+  return (
+    <>
+      {variant === 'section' && <SectionLoadingAnimation />}
+      {variant === 'text' && <TextLoadingAnimation />}
+    </>
+  )
+}
+
+export default LoadingAnimation

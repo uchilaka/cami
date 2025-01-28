@@ -8,7 +8,12 @@ Rails.application.routes.draw do
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
 
-  resources :invoices, except: %i[destroy]
+  resources :invoices, except: %i[destroy] do
+    collection do
+      post :search
+    end
+  end
+
   resources :accounts, except: %i[destroy] do
     resources :invoices, except: %i[destroy]
   end

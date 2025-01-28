@@ -104,6 +104,12 @@ module NavbarHelper
       { label: 'Features', path: '/admin/flipper', new_tab: true, admin: true, enabled: true },
       { label: 'Sidekiq', path: '/admin/sidekiq', new_tab: true, admin: true, enabled: true },
       { label: 'System Logs', url: system_log_url, admin: true, enabled: true },
+      {
+        label: 'Storybook',
+        url: storybook_url,
+        new_tab: true, admin: true,
+        enabled: Rails.env.development?
+      },
       # TODO: Update AppUtils to compose the application's URL based on whether
       #   the NGINX tunnel is running or not.
       {
@@ -117,11 +123,22 @@ module NavbarHelper
         url: paypal_developer_dashboard_url,
         admin: true,
         enabled: true
+      },
+      {
+        label: 'CRM Dashboard',
+        url: "https://crm.zoho.com/crm/org#{crm_org_id}/tab/Home/begin",
+        admin: true,
+        enabled: true
       }
     ].map { |item| build_menu_item(item) }.filter(&:enabled)
   end
 
   private
+
+  # @deprecated Refactor this method to fetch a configured resource link from the application credentials store instead
+  def storybook_url
+    'http://localhost:6006'
+  end
 
   # @deprecated Refactor this method to fetch a configured resource link from the application credentials store instead
   def test_inbox_url

@@ -20,7 +20,7 @@
 #  paid_at                   :datetime
 #  payment_vendor            :string
 #  payments                  :jsonb
-#  status                    :integer
+#  status                    :enum             default("draft")
 #  type                      :string           default("Invoice")
 #  updated_accounts_at       :datetime
 #  created_at                :datetime         not null
@@ -38,6 +38,7 @@ class Invoice < ApplicationRecord
   resourcify
 
   include AASM
+  include Searchable
 
   has_rich_text :notes
 
@@ -69,22 +70,7 @@ class Invoice < ApplicationRecord
 
   # Payment vendor documentation for invoice status:
   # https://developer.paypal.com/docs/api/invoicing/v2/#definition-invoice_status
-  enum :status, {
-    draft: 1,
-    sent: 10,
-    scheduled: 20,
-    unpaid: 30,
-    cancelled: 40,
-    payment_pending: 50,
-    partially_paid: 60,
-    marked_as_paid: 70,
-    paid: 80,
-    marked_as_refunded: 90,
-    partially_refunded: 100,
-    refunded: 110
-  }, scopes: true
-
-  aasm column: :status, enum: true, logger: Rails.logger do
+  aasm column: :status, logger: Rails.logger do
     state :draft, initial: true
     state :sent
     state :scheduled
@@ -164,5 +150,14 @@ class Invoice < ApplicationRecord
 
   def overdue?
     past_due? && (Time.zone.now.to_date - due_at.to_date).to_i > 30
+  end
+
+  # Class methods
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[amount_cents created_at due_amount_cents due_at invoice_number status]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[invoiceable action_rich_text]
   end
 end
