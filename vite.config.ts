@@ -20,5 +20,15 @@ export default defineConfig({
   resolve: {
     alias: viteAliasConfigFromFactory(),
   },
+  // build: {
+  //   rollupOptions: {
+  //     output: {
+  //       // See: https://rollupjs.org/configuration-options/#output-manualchunks
+  //       manualChunks: {
+  //         clsx: ['clsx'],
+  //       },
+  //     },
+  //   },
+  // },
 })
 /* eslint-enable no-undef */

@@ -13,6 +13,7 @@ import InvoicingVendorPicker from '../InvoicingVendorPicker'
 import { VendorType } from '../types'
 import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
 import LoadingAnimation from '@/components/LoadingAnimation'
+import ButtonLink from '@/components/Button/ButtonLink'
 
 const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
   const { loading, invoices } = useInvoiceContext()
@@ -28,6 +29,12 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
 
   return (
     <>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="font-bold text-4xl">Invoices</h1>
+        <ButtonLink variant="primary" href="/invoices/new">
+          New Invoice
+        </ButtonLink>
+      </div>
       <InvoicingVendorPicker onChange={vendorSelectionHandler} />
       <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 p-4 dark:bg-gray-900">
         <div className="flex flex-row space-x-4">
