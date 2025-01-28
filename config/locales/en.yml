@@ -66,6 +66,15 @@ en:
       invoices: "Invoices"
       sign_out: "Sign Out"
       registration: "Settings"
+    footer:
+      flowbite_icons: 'Flowbite Icons'
+      fontawesome_icons: 'FontAwesome Icons'
+      mongoid_docs: 'Mongoid Documentation (v8.1)'
+      flowbite_integration_guide: 'Flowbite Integration Guide'
+      component_library: 'Component Library'
+      paypal_sandbox_guide: 'PayPal Sandbox Testing Guide'
+      ruby_doc: 'Ruby Documentation'
+      zoho_crm_api_guide: 'Zoho CRM API Guide (v7)'
   models:
     account:
       errors:
@@ -88,6 +97,8 @@ en:
       errors:
         generic: "An error occurred while creating the invoice account"
         already_exists: "A matching invoice account already exists"
+        multiple_matching_accounts: "Multiple matching accounts were found"
+        unsupported_record_type: "Unsupported record matched for account (might be a user record)"
     import_user_profile:
       errors:
         generic: "An error occurred while updating the user profile"

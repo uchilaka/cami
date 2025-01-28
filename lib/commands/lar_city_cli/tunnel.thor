@@ -15,19 +15,22 @@ module LarCityCLI
         return
       end
 
-      config_file_template = config_file(name: 'ngrok.yml.erb')
-      return unless File.exist?(config_file_template)
+      # Process each NGROK config file template found in the config directory
+      Dir[Rails.root.join('config', 'ngrok*.yml.erb')].each do |config_file_template|
+        next unless File.exist?(config_file_template)
 
-      # Process an ERB config file if one is found
-      if config_file_exists?
-        say "ngrok config already exists at #{config_file}.", Color::YELLOW
-        return
+        file_name = File.basename(config_file_template, File.extname(config_file_template))
+        # Process an ERB config file if one is found
+        if config_file_exists?(name: file_name)
+          say "ngrok config already exists at #{config_file(name: file_name)}.", Color::YELLOW
+          next
+        end
+
+        puts 'Processing ngrok config ERB...'
+        yaml_config = ERB.new(File.read(config_file_template)).result
+        puts "Writing ngrok config to #{config_file(name: file_name)}"
+        File.write config_file(name: file_name), yaml_config unless dry_run?
       end
-
-      puts 'Processing ngrok config ERB...'
-      yaml_config = ERB.new(File.read(config_file_template)).result
-      puts "Writing ngrok config to #{config_file}"
-      File.write config_file, yaml_config unless dry_run?
     end
 
     desc 'open_all', 'Open ngrok tunnels for the project'
@@ -87,8 +90,8 @@ module LarCityCLI
       Rails.root.join('config', name).to_s
     end
 
-    def config_file_exists?
-      File.exist?(config_file)
+    def config_file_exists?(name: 'ngrok.yml')
+      File.exist?(config_file(name:))
     end
 
     def auth_token_nil?

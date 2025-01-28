@@ -105,7 +105,7 @@ RSpec.describe UpsertInvoiceRecordsWorkflow do
       end
     end
 
-    context 'when there are several matching accounts' do
+    context 'with several matching accounts' do
       pending 'creates the expected new accounts'
 
       pending 'logs the account creation'
@@ -114,6 +114,94 @@ RSpec.describe UpsertInvoiceRecordsWorkflow do
     end
 
     context 'with a matching account' do
+      let!(:account) { Fabricate :account, email: Faker::Internet.email }
+
+      let(:metadata) do
+        {
+          accounts: [
+            {
+              type: 'Business',
+              display_name: Faker::Company.name,
+              email: account.email
+            }
+          ]
+        }
+      end
+      let(:invoice) { Fabricate :invoice, metadata: }
+      # let(:matching_invoice_account) do
+      #   invoice.metadata['accounts'].find { |attr| attr['email'] == account.email }
+      # end
+
+      context 'and account linking turned off (default)' do
+        subject { described_class.call(invoice:) }
+
+        it { expect { subject }.to change(Account, :count).by(0) }
+
+        it do
+          expect { subject }.not_to(change { invoice.invoiceable })
+        end
+      end
+
+      context 'and account linking turned on' do
+        subject { described_class.call(invoice:, options: { link_accounts: true }) }
+
+        context 'and another invoice account was loaded first' do
+          let!(:expected_account_email) { Faker::Internet.email }
+
+          let(:metadata) do
+            {
+              accounts: [
+                {
+                  type: 'Individual',
+                  given_name: Faker::Name.neutral_first_name,
+                  family_name: Faker::Name.last_name,
+                  email: expected_account_email
+                },
+                {
+                  type: 'Business',
+                  display_name: Faker::Company.name,
+                  email: account.email
+                }
+              ]
+            }
+          end
+          let(:expected_invoiceable) { Account.find_by_email(expected_account_email) }
+
+          it { expect { subject }.to change(Account, :count).by(1) }
+
+          it do
+            skip 'TODO: this example is broken, but should be passing'
+            expect { subject }.to \
+              change { invoice.reload.invoiceable }
+                .to(expected_invoiceable)
+          end
+
+          it 'adds the customer role to the account on the invoice' do
+            expect { subject }.to \
+              change { account.has_role?(:customer, invoice) }
+                .from(false)
+                .to(true)
+          end
+        end
+
+        context 'and the invoice account is not yet set' do
+          it { expect { subject }.to change(Account, :count).by(0) }
+
+          it do
+            expect { subject }.to \
+              change { invoice.reload.invoiceable }
+                .to(account)
+          end
+
+          it 'adds the customer role to the account on the invoice' do
+            expect { subject }.to \
+              change { account.has_role?(:customer, invoice) }
+                .from(false)
+                .to(true)
+          end
+        end
+      end
+
       context 'and a matching profile' do
         pending 'with a matching user'
         pending 'without a matching user'

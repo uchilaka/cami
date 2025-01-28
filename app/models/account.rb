@@ -22,6 +22,7 @@ class Account < ApplicationRecord
   resourcify
 
   include AASM
+  include Searchable
 
   # There are security implications to consider when using deterministic encryption.
   # See https://guides.rubyonrails.org/active_record_encryption.html#deterministic-and-non-deterministic-encryption
@@ -124,6 +125,15 @@ class Account < ApplicationRecord
 
   def add_member(user)
     members << user
+  end
+
+  # Class methods
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[display_name email tax_id]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[invoices members rich_text_readme roles]
   end
 
   private

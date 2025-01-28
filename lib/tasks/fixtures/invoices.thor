@@ -7,6 +7,7 @@ module Fixtures
     attr_accessor :enqueued_records, :processed_records, :skipped_records, :error_records
 
     desc 'load', 'Load invoice fixtures'
+    option :overwrite, type: :boolean, desc: 'Overwrite existing records', default: false
     def load
       say 'Loading invoice fixtures...', Color::YELLOW
       fixtures_to_load =
@@ -35,10 +36,15 @@ module Fixtures
       @error_records = []
 
       @enqueued_records.each do |record|
-        if record_exists?(record)
-          @skipped_records << record
-          Rails.logger.warn("Skipping invoice record with ID #{record['id']} because it already exists", record:)
-          next
+        if (matching_record = record_exists?(record))
+          if overwrite?
+            Rails.logger.warn("Overwriting invoice record with ID #{record['id']}")
+            matching_record.destroy
+          else
+            @skipped_records << record
+            Rails.logger.warn("Skipping invoice record with ID #{record['id']} because it already exists", record:)
+            next
+          end
         end
 
         case vendor(record)
@@ -83,7 +89,7 @@ module Fixtures
         accounts = invoice.metadata['accounts']
         next if accounts.none?
 
-        UpsertInvoiceRecordsWorkflow.call(invoice:)
+        UpsertInvoiceRecordsWorkflow.call(invoice:, options: { link_accounts: true })
       end
     end
 
@@ -98,9 +104,24 @@ module Fixtures
 
     private
 
+    def overwrite?
+      options[:overwrite]
+    end
+
     def record_exists?(record)
-      Invoice.exists?(vendor_record_id: record['id']) ||
-        Invoice.exists?(invoice_number: record.dig('detail', 'invoice_number'))
+      if Invoice.exists?(vendor_record_id: record['id'])
+        return Invoice.find_by_vendor_record_id(record['id']) if overwrite?
+
+        return true
+      end
+
+      if Invoice.exists?(invoice_number: record.dig('detail', 'invoice_number'))
+        return Invoice.find_by_invoice_number(record.dig('detail', 'invoice_number')) if overwrite?
+
+        return true
+      end
+
+      false
     end
 
     def vendor(_record)
