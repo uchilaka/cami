@@ -1,5 +1,5 @@
 import React, { FC, InputHTMLAttributes, useRef, useState } from 'react'
-import Button from '../Button'
+import Button from '../Button/Button'
 import { FormInputProps } from '@/types'
 import { Field } from 'formik'
 import clsx from 'clsx'

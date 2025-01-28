@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
-import SimpleButton, { ButtonProps } from '.'
+import SimpleButton, { ButtonProps } from './Button'
 
 const ButtonSizes: FC<ButtonProps> = ({ variant, ...otherProps }) => {
   return (
