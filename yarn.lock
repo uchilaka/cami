@@ -1388,7 +1388,7 @@ __metadata:
     react: "npm:^18.2.0"
     react-cookie: "npm:^7.1.4"
     react-dom: "npm:^18.2.0"
-    react-phone-number-input: "npm:^3.4.9"
+    react-phone-number-input: "npm:^3.4.11"
     react-router-dom: "npm:^6.22.3"
     sass: "npm:^1.71.1"
     sass-migrator: "npm:^2.2.1"
@@ -7212,10 +7212,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"libphonenumber-js@npm:^1.11.12":
-  version: 1.11.14
-  resolution: "libphonenumber-js@npm:1.11.14"
-  checksum: 10c0/59fef763545eac4aa3cd81305adb4c23712a7d780434fd7384973a6a5b628daa61dbe093a5ce1fbf5fb73b98bbf2a4966d41e2f897c5d5c528c31456a8bf0f46
+"libphonenumber-js@npm:^1.11.17":
+  version: 1.11.18
+  resolution: "libphonenumber-js@npm:1.11.18"
+  checksum: 10c0/4877d2521426e4094cbf1991fd30778d3856e702acce655a767a1ba261d8e765901dc17944d627a7ee083992ee4c427007bf9d488207432b6b5dee982b849de4
   languageName: node
   linkType: hard
 
@@ -8696,19 +8696,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-phone-number-input@npm:^3.4.9":
-  version: 3.4.9
-  resolution: "react-phone-number-input@npm:3.4.9"
+"react-phone-number-input@npm:^3.4.11":
+  version: 3.4.11
+  resolution: "react-phone-number-input@npm:3.4.11"
   dependencies:
     classnames: "npm:^2.5.1"
     country-flag-icons: "npm:^1.5.11"
     input-format: "npm:^0.3.10"
-    libphonenumber-js: "npm:^1.11.12"
+    libphonenumber-js: "npm:^1.11.17"
     prop-types: "npm:^15.8.1"
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
-  checksum: 10c0/513a02daf858c8c23d9784453ea9fdd583c1b84dcd1055a1bf0f5a0d409c2d2696e982319698ef40915b9b81609bb7663d3df3a6869176553de046460b5f1e11
+  checksum: 10c0/7cc29a0928ad81eaadb9344c9272b530eb2a4cec73bc72a07bfa7d8fd8af58ba3351b1ef92e7380f9f38273fcaf930694a4be7ea2af4b913cd961ac09dd55a01
   languageName: node
   linkType: hard
 
