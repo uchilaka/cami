@@ -4,8 +4,6 @@ load File.join(Dir.pwd, 'lib', 'app_utils.rb')
 
 source 'https://rubygems.org'
 
-gem 'tool_version', '~> 0.1'
-
 ruby AppUtils.ruby_version
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
