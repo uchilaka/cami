@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "larcity-ui-docs"
+  },
+  "targets": {
+    "larcity-ui-docs": {
+      "hosting": {
+        "storybook": [
+          "larcity-cami-components"
+        ]
+      }
+    }
+  }
+}

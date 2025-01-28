@@ -101,9 +101,10 @@
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
     "sb": "yarn storybook",
-    "build-storybook": "storybook build",
-    "sb:build": "yarn build-storybook",
-    "sb:publish": "yarn build-storybook && yarn dlx chromatic --auto-accept-changes"
+    "sb:build": "storybook build",
+    "sb:test": "firebase emulators:start --only hosting:storybook",
+    "sb:preview": "firebase hosting:channel:deploy storybook-preview --only storybook --expires 72h",
+    "sb:publish": "firebase deploy --only hosting:storybook"
   },
   "lint-staged": {
     "*.rb": [

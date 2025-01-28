@@ -21,6 +21,8 @@
     - [6. Initialize the database](#6-initialize-the-database)
     - [7. Start up the app](#7-start-up-the-app)
   - [Running Storybook](#running-storybook)
+    - [Publishing the latest Storybook](#publishing-the-latest-storybook)
+    - [The Storybook Firebase project](#the-storybook-firebase-project)
   - [Database management](#database-management)
     - [Resetting the databases](#resetting-the-databases)
   - [How to run the test suite](#how-to-run-the-test-suite)
@@ -248,6 +250,21 @@ To review component stories, run:
 ```shell
 yarn storybook
 ```
+
+### Publishing the latest Storybook
+
+> Review [the docs for multisite projects](https://firebase.google.com/docs/hosting/multisites).
+
+- The Site ID is: `larcity-cami-components`
+- The Storybook URL is: <https://larcity-cami-components.web.app>
+
+```shell
+yarn sb:publish
+```
+
+### The Storybook Firebase project
+
+<https://console.firebase.google.com/project/larcity-ui-docs/overview>
 
 ## Database management
 

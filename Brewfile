@@ -14,6 +14,7 @@ brew 'asdf'
 brew 'coreutils'
 brew 'git-crypt'
 brew 'yq'
+brew 'firebase-cli'
 
 # install only on specified OS
 brew 'tree' if OS.mac?
@@ -23,7 +24,7 @@ brew 'foreman' if OS.mac?
 # FYI: Brew cask only works on macOS
 if File.exist?('/usr/local/bin/docker')
   puts 'Found Docker installed 🥳 - skipping docker installation'
-else
-  cask 'docker' if OS.mac?
+elsif OS.mac?
+  cask 'docker'
 end
 cask 'ngrok' if OS.mac?
