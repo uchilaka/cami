@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'fileutils'
+require 'tool_version'
 
 class AppUtils
   class << self
@@ -59,6 +60,18 @@ class AppUtils
       default_value = Rails.env.development? ? 'yes' : 'no'
 
       yes?(ENV.fetch('ENV_DEBUG_ASSETS', default_value))
+    end
+
+    def ruby_version(file_path = nil)
+      file_path ||= "#{Dir.pwd}/.tool-versions"
+      raise 'Error: .tool-versions file not found' unless File.exist?(file_path)
+
+      File.foreach(file_path) do |line|
+        match = line.match(/ruby\s+([\d.]+)/)
+        return (match[1]).to_s.strip if match
+      end
+
+      raise 'No ruby version found in .tool-versions'
     end
   end
 end

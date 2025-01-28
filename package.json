@@ -100,7 +100,10 @@
     "test": "jest",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "sb": "yarn storybook",
+    "build-storybook": "storybook build",
+    "sb:build": "yarn build-storybook",
+    "sb:publish": "yarn build-storybook && yarn dlx chromatic --auto-accept-changes"
   },
   "lint-staged": {
     "*.rb": [
