@@ -110,7 +110,11 @@ jobs:
         run: |
           bundle exec rake vite:build_all
 
-      - name: Build and run tests
+      - name: RSpec
         run: |
           # Run all specs except those with the option skip_in_ci: true
           bundle exec rspec --tag ~skip_in_ci:true
+
+      - name: Frontend tests
+        run: |
+          yarn test
