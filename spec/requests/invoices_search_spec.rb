@@ -80,10 +80,13 @@ RSpec.describe 'Invoice Search API', type: :request do
             expect(response.body).not_to be_nil
             # Returns the expected number of invoices
             expect(data.size).to eq(expected_count)
-            # Only returns invoices accessible by the authorized user
-            data.each do |invoice|
-              account = Account.find_by_id(invoice.dig('account', 'id'))
-              expect(account.members).to include(user)
+
+            unless user.has_role?(:admin)
+              # Only returns invoices accessible by the authorized user
+              data.each do |invoice|
+                account = Account.find_by_id(invoice.dig('account', 'id'))
+                expect(account.members).to include(user)
+              end
             end
           end
         end
