@@ -52,7 +52,7 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 gem 'bootsnap', require: false
 
 # Use Tailwind CSS for stylesheets [https://tailwindcss.com/docs/guides/ruby-on-rails]
-gem 'tailwindcss-rails', '~> 3.0'
+gem 'tailwindcss-rails', '~> 3.3'
 
 # Integrate Dart Sass with the asset pipeline in Rails [https://github.com/rails/dartsass-rails]
 gem 'dartsass-rails', '~> 0.5'
