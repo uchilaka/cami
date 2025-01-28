@@ -71,6 +71,7 @@ export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
       q: q ?? searchParams.q,
     }
     console.debug(`Updating search params:`, { ...latestSearchParams })
+    console.warn(`Check query params (deprecate?):`, { ...queryParams })
     setSearchParams(latestSearchParams)
   }
 
