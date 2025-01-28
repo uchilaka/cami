@@ -6,6 +6,22 @@ module LarCityCLI
   class Devkit < Base
     namespace :'lx-cli:devkit'
 
+    desc 'swaggerize', 'Generate Swagger JSON file(s)'
+    def swaggerize
+      cmd = 'bundle exec rails rswag'
+      if verbose?
+        puts <<~CMD
+          Executing#{dry_run? ? ' (dry-run)' : ''}: #{cmd}
+        CMD
+      end
+
+      return if dry_run?
+
+      ClimateControl.modify RAILS_ENV: 'test' do
+        system(cmd)
+      end
+    end
+
     desc 'logs', 'Show the logs for the project'
     def logs
       raise UnsupportedOSError, 'Unsupported OS' unless mac?
