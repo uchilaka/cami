@@ -1,4 +1,4 @@
-name: RSpec
+name: Full-stack test suite
 
 on:
   pull_request:
@@ -35,7 +35,7 @@ jobs:
           POSTGRES_PASSWORD: ${{env.APP_DATABASE_PASSWORD}}
           #POSTGRES_HOST_AUTH_METHOD: trust # IMPORTANT allows all connections without a password - experimental only!
         ports:
-         - '5432:5432'
+          - '5432:5432'
         options: >- # Options for the service, in this case we want to make sure that the Postgres container passes a health check
           --health-cmd pg_isready
           --health-interval 15s
@@ -46,11 +46,14 @@ jobs:
         ports:
           - '16079:6379'
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Ruby 3.2.2
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2.2
+          ruby-version: .ruby-version
+
+      - name: Check ruby version
+        run: ruby -v
 
       - uses: actions/cache@v4
         with:
