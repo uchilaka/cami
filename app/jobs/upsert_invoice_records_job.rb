@@ -14,7 +14,7 @@ class UpsertInvoiceRecordsJob < ApplicationJob
       .each do |invoice|
       next if invoice.metadata['accounts']&.none?
 
-      UpsertInvoiceRecordsWorkflow.call(invoice:)
+      UpsertInvoiceRecordsWorkflow.call(invoice:, metadata: { options: { link_accounts: true } })
     end
   end
 
