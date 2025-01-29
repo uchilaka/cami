@@ -20,6 +20,8 @@ const InvoiceContextMenu = () => {
     }
   })
 
+  if (numberOfSelectedInvoices < 1) return <></>
+
   return (
     <div className="max-w-screen-xl px-4 py-3 mx-auto">
       <div className="flex items-center">
