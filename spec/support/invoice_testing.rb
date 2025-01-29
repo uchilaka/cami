@@ -21,6 +21,6 @@ RSpec.shared_context 'for invoice testing', shared_context: :metadata do
     # Batch create all invoice records
     _results = Invoice.create!(sample_invoice_dataset)
     # Upsert all account records
-    UpsertInvoiceRecordsJob.perform_now
+    Sidekiq::Testing.inline! { UpsertInvoiceRecordsJob.perform_async }
   end
 end
