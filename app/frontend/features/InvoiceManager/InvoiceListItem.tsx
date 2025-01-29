@@ -1,4 +1,4 @@
-import React, { FC, ReactEventHandler } from 'react'
+import React, { FC, ReactEventHandler, useRef, useEffect } from 'react'
 import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
 import { Invoice } from './types'
 import FilterableBadge from './InvoiceBadge/FilterableBadge'
@@ -16,6 +16,17 @@ interface InvoiceItemProps {
 const InvoiceListItem: FC<InvoiceItemProps> = ({ invoice, loading, selected, onToggleSelect }) => {
   const { isEnabled } = useFeatureFlagsContext()
   const { account, vendorRecordId, status, dueAt } = invoice
+  const selectCheckboxRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (selectCheckboxRef.current) {
+      console.debug(`Updating checked state for invoice: ${invoice.id}: ${!!selected}`)
+      selectCheckboxRef.current.checked = !!selected
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected])
+
+  console.debug({ id: invoice.id, selected })
 
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -23,6 +34,7 @@ const InvoiceListItem: FC<InvoiceItemProps> = ({ invoice, loading, selected, onT
         <div className="flex items-center">
           <input
             id={`invoice-select-checkbox--${invoice.id}`}
+            ref={selectCheckboxRef}
             type="checkbox"
             className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             data-invoice-id={invoice.id}

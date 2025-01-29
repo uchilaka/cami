@@ -1,4 +1,4 @@
-import React, { FC, ComponentProps } from 'react'
+import React, { FC, ComponentProps, useEffect, useState } from 'react'
 import FilterForInvoiceStatus from '../FilterForInvoiceStatus'
 import FilterForInvoiceDueDate from '../FilterForInvoiceDueDate'
 import withAllTheProviders from '@/components/withAllTheProviders'
@@ -17,7 +17,8 @@ import ButtonLink from '@/components/Button/ButtonLink'
 import { emitInvoiceSelectedEvent } from '@/utils/events'
 
 const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
-  const { loading, invoices, toggleInvoiceSelections, selectedInvoicesMap } = useInvoiceContext()
+  const [selectedMap, setSelectedMap] = useState<Record<string, boolean>>({})
+  const { loading, invoices, toggleInvoiceSelections } = useInvoiceContext()
   const { isEnabled } = useFeatureFlagsContext()
   const isInvoiceStatusFilterEnabled = isEnabled('invoice_filtering_by_status')
   const isInvoiceDueDateFilterEnabled = isEnabled('invoice_filtering_by_due_date')
@@ -35,10 +36,13 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
     if (invoiceId) {
       const result = await toggleInvoiceSelections(invoiceId)
       console.debug('Invoice selection result:', { ...result })
+      setSelectedMap(result)
       emitInvoiceSelectedEvent(result, ev.target)
       return result
     }
   }
+
+  console.debug('Invoice selection change detected @InvoiceSearch:', { ...selectedMap })
 
   return (
     <>
@@ -96,7 +100,7 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
                 invoice={invoice}
                 onToggleSelect={onInvoiceSelectionChange}
                 loading={loading}
-                selected={!!selectedInvoicesMap[invoice.id]}
+                selected={selectedMap[invoice.id]}
               />
             ))}
             {invoices.length === 0 && (
