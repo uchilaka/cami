@@ -23,6 +23,7 @@ const router = createBrowserRouter([
       { path: 'services/setup', element: <SetupWizard /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'invoices', element: <InvoiceSearch /> },
+      { path: 'home', element: <LandingPage /> },
     ],
   },
   {
