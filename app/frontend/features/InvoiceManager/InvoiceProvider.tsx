@@ -20,6 +20,7 @@ interface InvoiceContextProps {
   setInvoiceId: Dispatch<SetStateAction<string | undefined>>
   setSearchParams: Dispatch<SetStateAction<Partial<InvoiceSearchProps>>>
   updateSearchParams: (newParams: Partial<InvoiceSearchProps>) => void
+  toggleInvoiceSelections: (...invoiceIds: string[]) => Promise<Record<string, boolean>>
   reload: () => Promise<void>
   searchParams?: Partial<InvoiceSearchProps>
   loading?: boolean
@@ -37,6 +38,7 @@ export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [invoiceId, setInvoiceId] = useState<string>()
   const [loading, setLoading] = useState<boolean>()
   const { invoices, query } = useInvoiceSearchQuery(merge(queryParams, searchParams))
+  const [selectedInvoiceMap, setSelectedInvoiceMap] = useState<Record<string, boolean>>({})
 
   const reload = useCallback(async () => {
     console.debug(`Loading invoices:`, { query })
@@ -75,6 +77,16 @@ export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setSearchParams(latestSearchParams)
   }
 
+  const toggleInvoiceSelections = async (...invoiceIds: string[]) => {
+    console.debug(`Toggling selection for invoice IDs:`, { invoiceIds })
+    const updatedInvoiceSelectionMap = invoiceIds.reduce((selectedInvoiceIds, invoiceId) => {
+      selectedInvoiceIds[invoiceId] = !selectedInvoiceIds[invoiceId]
+      return selectedInvoiceIds
+    }, selectedInvoiceMap)
+    setSelectedInvoiceMap(updatedInvoiceSelectionMap)
+    return updatedInvoiceSelectionMap
+  }
+
   useEffect(() => {
     if (invoiceId || !!searchParams.q || !!searchParams.s || !!searchParams.f) {
       console.debug(`Reloading invoices with search params:`, { ...searchParams })
@@ -94,6 +106,7 @@ export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setInvoiceId,
         setSearchParams,
         updateSearchParams,
+        toggleInvoiceSelections,
       }}
     >
       {children}

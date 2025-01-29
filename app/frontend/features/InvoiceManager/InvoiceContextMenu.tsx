@@ -29,6 +29,7 @@ const InvoiceContextMenu = () => {
               </svg>
             }
             position="first"
+            badgeCount={0}
           >
             Link Account
           </GroupActionButton>
@@ -59,6 +60,7 @@ const InvoiceContextMenu = () => {
               </svg>
             }
             position="last"
+            badgeCount={0}
           >
             Archive
           </GroupActionButton>

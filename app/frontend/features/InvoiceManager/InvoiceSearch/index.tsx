@@ -16,7 +16,7 @@ import LoadingAnimation from '@/components/LoadingAnimation'
 import ButtonLink from '@/components/Button/ButtonLink'
 
 const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
-  const { loading, invoices } = useInvoiceContext()
+  const { loading, invoices, toggleInvoiceSelections } = useInvoiceContext()
   const { isEnabled } = useFeatureFlagsContext()
   const isInvoiceStatusFilterEnabled = isEnabled('invoice_filtering_by_status')
   const isInvoiceDueDateFilterEnabled = isEnabled('invoice_filtering_by_due_date')
@@ -25,6 +25,17 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
 
   const vendorSelectionHandler = (vendor: VendorType) => {
     console.debug(`Vendor changed @InvoiceSearch: ${vendor}`)
+  }
+
+  const onInvoiceSelectionChange = async (ev: React.ChangeEvent<HTMLInputElement>) => {
+    const { invoiceId } = ev.currentTarget.dataset
+    const { checked } = ev.currentTarget
+    console.debug(`Invoice selection changed: ${invoiceId} => ${checked}`)
+    if (invoiceId) {
+      const result = await toggleInvoiceSelections(invoiceId)
+      console.debug('Invoice selection result:', result)
+      return result
+    }
   }
 
   return (
@@ -76,7 +87,7 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
           </thead>
           <tbody>
             {invoices.map((invoice) => (
-              <InvoiceListItem key={`row--${invoice.id}`} invoice={invoice} />
+              <InvoiceListItem key={`row--${invoice.id}`} invoice={invoice} onToggleSelect={onInvoiceSelectionChange} />
             ))}
             {invoices.length === 0 && (
               <tr>
