@@ -16,7 +16,7 @@ const router = createBrowserRouter([
         path: 'invoices',
         element: <InvoiceContextMenu />,
       },
-      { path: '', element: <></> },
+      { path: '*', element: <></> },
     ],
   },
   {

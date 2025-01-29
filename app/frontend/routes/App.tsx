@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import Root from '@/components/Root'
 
-const Dashboard = lazy(() => import('@/views/Dashboard'))
+const Dashboard = lazy(() => import('@/features/Dashboard'))
 const InvoiceSearch = lazy(() => import('@/features/InvoiceManager/InvoiceSearch'))
 const AboutUs = lazy(() => import('@/routes/AboutUs'))
 const LandingPage = lazy(() => import('@/routes/LandingPage'))

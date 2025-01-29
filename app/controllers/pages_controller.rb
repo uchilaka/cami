@@ -1,13 +1,9 @@
 # frozen_string_literal: true
 
 class PagesController < ApplicationController
-  skip_before_action :authenticate_user!, only: :home
+  skip_before_action :authenticate_user!, only: :app
 
-  load_console :home, :dashboard
+  load_console :app
 
   def app; end
-
-  def dashboard; end
-
-  def home; end
 end
