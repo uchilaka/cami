@@ -33,7 +33,7 @@ export const useInvoiceContext = () => useContext(InvoiceContext)
 
 export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [searchParams, setSearchParams] = useState<Partial<InvoiceSearchProps>>({})
-  const [queryParams] = useState<Partial<InvoiceSearchProps>>({})
+  const [queryParams] = useState<Partial<InvoiceSearchProps>>({ s: { dueAt: 'asc' } })
   const [invoiceId, setInvoiceId] = useState<string>()
   const [loading, setLoading] = useState<boolean>()
   const { invoices, query } = useInvoiceSearchQuery(merge(queryParams, searchParams))
@@ -71,6 +71,7 @@ export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
       q: q ?? searchParams.q,
     }
     console.debug(`Updating search params:`, { ...latestSearchParams })
+    console.warn(`Check query params (deprecate?):`, { ...queryParams })
     setSearchParams(latestSearchParams)
   }
 
