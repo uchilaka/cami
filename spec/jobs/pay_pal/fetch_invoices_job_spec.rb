@@ -30,7 +30,7 @@ module PayPal
       end
 
       it 'fetches invoices' do
-        expect { described_class.perform_now }.to change { Invoice.count }.by(48)
+        expect { described_class.perform_async }.to change { Invoice.count }.by(48)
       end
     end
 
@@ -58,7 +58,7 @@ module PayPal
           raise Faraday::UnauthorizedError, 'Unauthorized'
         end
 
-        described_class.perform_now
+        described_class.perform_async
         expect(Rails.logger).to have_received(:error).with(/failed/, { message: 'Unauthorized' })
       end
     end

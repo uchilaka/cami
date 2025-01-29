@@ -40,7 +40,7 @@ jobs:
         options: >- # Options for the service, in this case we want to make sure that the Postgres container passes a health check
           --health-cmd pg_isready
           --health-interval 15s
-          --health-timeout 5s
+          --health-timeout 10s
           --health-retries 3
       redis:
         image: redis:7
