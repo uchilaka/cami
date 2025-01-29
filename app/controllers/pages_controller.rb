@@ -5,7 +5,9 @@ class PagesController < ApplicationController
 
   load_console :home, :dashboard
 
-  def home; end
+  def app; end
 
   def dashboard; end
+
+  def home; end
 end
