@@ -43,8 +43,6 @@ Rails.application.routes.draw do
 
   # get 'pages/services'
 
-  match 'app/about', to: 'pages#app', via: :get
-  match 'app/home', to: 'pages#app', via: :get
   match 'app/*path', to: 'pages#app', via: :get
 
   root to: 'pages#app'
