@@ -105,12 +105,21 @@ export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const toggleInvoiceSelections = async (...invoiceIds: string[]) => {
     console.debug(`Toggling selection for invoice IDs:`, { invoiceIds })
-    const updatedInvoiceSelectionMap = invoiceIds.reduce((selectedInvoiceIds, invoiceId) => {
-      selectedInvoiceIds[invoiceId] = !selectedInvoiceIds[invoiceId]
-      return selectedInvoiceIds
-    }, selectedInvoicesMap)
-    setSelectedInvoicesMap(updatedInvoiceSelectionMap)
-    return updatedInvoiceSelectionMap
+    if (invoiceIds[0] === 'all' && invoices.length > 0) {
+      const allMap = invoices.reduce((selectedInvoiceIds, invoice) => {
+        selectedInvoiceIds[invoice.id] = !selectedInvoicesMap[invoice.id]
+        return selectedInvoiceIds
+      }, selectedInvoicesMap)
+      setSelectedInvoicesMap(allMap)
+      return allMap
+    } else {
+      const updatedInvoiceSelectionMap = invoiceIds.reduce((selectedInvoiceIds, invoiceId) => {
+        selectedInvoiceIds[invoiceId] = !selectedInvoiceIds[invoiceId]
+        return selectedInvoiceIds
+      }, selectedInvoicesMap)
+      setSelectedInvoicesMap(updatedInvoiceSelectionMap)
+      return selectedInvoicesMap
+    }
   }
 
   useEffect(() => {

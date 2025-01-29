@@ -17,7 +17,7 @@ import ButtonLink from '@/components/Button/ButtonLink'
 import { emitInvoiceSelectedEvent } from '@/utils/events'
 
 const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
-  const { loading, invoices, toggleInvoiceSelections } = useInvoiceContext()
+  const { loading, invoices, toggleInvoiceSelections, selectedInvoicesMap } = useInvoiceContext()
   const { isEnabled } = useFeatureFlagsContext()
   const isInvoiceStatusFilterEnabled = isEnabled('invoice_filtering_by_status')
   const isInvoiceDueDateFilterEnabled = isEnabled('invoice_filtering_by_due_date')
@@ -69,6 +69,8 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
                     id="checkbox-all-search"
                     type="checkbox"
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    data-invoice-id="all"
+                    onChange={onInvoiceSelectionChange}
                   />
                   <label htmlFor="checkbox-all-search" className="sr-only">
                     checkbox
@@ -89,7 +91,13 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
           </thead>
           <tbody>
             {invoices.map((invoice) => (
-              <InvoiceListItem key={`row--${invoice.id}`} invoice={invoice} onToggleSelect={onInvoiceSelectionChange} />
+              <InvoiceListItem
+                key={`row--${invoice.id}`}
+                invoice={invoice}
+                onToggleSelect={onInvoiceSelectionChange}
+                loading={loading}
+                selected={!!selectedInvoicesMap[invoice.id]}
+              />
             ))}
             {invoices.length === 0 && (
               <tr>
