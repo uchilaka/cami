@@ -1,9 +1,25 @@
-import React from 'react'
-import { withInvoiceProvider } from './InvoiceProvider'
+import React, { useEffect } from 'react'
+import { useInvoiceContext, withInvoiceProvider } from './InvoiceProvider'
 import withAllTheProviders from '@/components/withAllTheProviders'
 import GroupActionButton from '@/components/Button/GroupActionButton'
 
 const InvoiceContextMenu = () => {
+  const [numberOfSelectedInvoices, setNumberOfSelectedInvoices] = React.useState(0)
+  const { listenForInvoiceSelectionEvents } = useInvoiceContext()
+
+  const invoiceSelectionHandler = (selectionMap: Record<string, boolean>) => {
+    console.debug('Selected invoices changed:', { ...selectionMap })
+    setNumberOfSelectedInvoices(Object.values(selectionMap).filter((val) => val === true).length)
+  }
+
+  useEffect(() => {
+    const controller = listenForInvoiceSelectionEvents(invoiceSelectionHandler)
+
+    return () => {
+      controller.abort()
+    }
+  })
+
   return (
     <div className="max-w-screen-xl px-4 py-3 mx-auto">
       <div className="flex items-center">
@@ -29,7 +45,7 @@ const InvoiceContextMenu = () => {
               </svg>
             }
             position="first"
-            badgeCount={0}
+            badgeCount={numberOfSelectedInvoices}
           >
             Link Account
           </GroupActionButton>
@@ -60,7 +76,7 @@ const InvoiceContextMenu = () => {
               </svg>
             }
             position="last"
-            badgeCount={0}
+            badgeCount={numberOfSelectedInvoices}
           >
             Archive
           </GroupActionButton>

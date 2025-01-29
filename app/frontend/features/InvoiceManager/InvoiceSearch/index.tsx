@@ -14,6 +14,7 @@ import { VendorType } from '../types'
 import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
 import LoadingAnimation from '@/components/LoadingAnimation'
 import ButtonLink from '@/components/Button/ButtonLink'
+import { emitInvoiceSelectedEvent } from '@/utils/events'
 
 const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
   const { loading, invoices, toggleInvoiceSelections } = useInvoiceContext()
@@ -33,7 +34,8 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
     console.debug(`Invoice selection changed: ${invoiceId} => ${checked}`)
     if (invoiceId) {
       const result = await toggleInvoiceSelections(invoiceId)
-      console.debug('Invoice selection result:', result)
+      console.debug('Invoice selection result:', { ...result })
+      emitInvoiceSelectedEvent(result, ev.target)
       return result
     }
   }

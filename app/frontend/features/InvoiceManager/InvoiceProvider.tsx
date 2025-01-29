@@ -15,13 +15,18 @@ import { LoadInvoiceEventDetail, nsEventName } from '@/utils'
 import { useInvoiceSearchQuery } from './hooks/useInvoiceSearchQuery'
 import { Invoice, InvoiceSearchProps } from './types'
 
+type InvoiceSelectionEventCallback = (selections: Record<string, boolean>) => void
+
 interface InvoiceContextProps {
   listenForInvoiceLoadEvents: () => AbortController
+  listenForInvoiceSelectionEvents: (callback?: InvoiceSelectionEventCallback) => AbortController
   setInvoiceId: Dispatch<SetStateAction<string | undefined>>
+  selectedInvoicesMap: Record<string, boolean>
   setSearchParams: Dispatch<SetStateAction<Partial<InvoiceSearchProps>>>
   updateSearchParams: (newParams: Partial<InvoiceSearchProps>) => void
   toggleInvoiceSelections: (...invoiceIds: string[]) => Promise<Record<string, boolean>>
   reload: () => Promise<void>
+  numberOfSelectedInvoices?: number
   searchParams?: Partial<InvoiceSearchProps>
   loading?: boolean
   invoice?: Invoice | null
@@ -38,7 +43,7 @@ export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [invoiceId, setInvoiceId] = useState<string>()
   const [loading, setLoading] = useState<boolean>()
   const { invoices, query } = useInvoiceSearchQuery(merge(queryParams, searchParams))
-  const [selectedInvoiceMap, setSelectedInvoiceMap] = useState<Record<string, boolean>>({})
+  const [selectedInvoicesMap, setSelectedInvoicesMap] = useState<Record<string, boolean>>({})
 
   const reload = useCallback(async () => {
     console.debug(`Loading invoices:`, { query })
@@ -66,6 +71,27 @@ export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
     return invoiceLoader
   }
 
+  const listenForInvoiceSelectionEvents = (callback?: InvoiceSelectionEventCallback) => {
+    const invoiceSelectionListener = new AbortController()
+    document.addEventListener(
+      nsEventName('invoice:selected'),
+      (ev) => {
+        const { target, detail } = ev as CustomEvent<{ selectionMap: Record<string, boolean> }>
+        console.debug(`Received invoice selection event:`, { target, detail })
+        setSelectedInvoicesMap(detail.selectionMap)
+        if (callback) {
+          console.debug(`Invoking callback with invoice selection map:`, { ...detail.selectionMap })
+          callback(detail.selectionMap)
+        }
+      },
+      /**
+       * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options
+       */
+      { capture: true, passive: true, signal: invoiceSelectionListener.signal },
+    )
+    return invoiceSelectionListener
+  }
+
   const updateSearchParams = ({ s, f, q }: Partial<InvoiceSearchProps>) => {
     const latestSearchParams = {
       s: merge(searchParams.s, s),
@@ -82,8 +108,8 @@ export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const updatedInvoiceSelectionMap = invoiceIds.reduce((selectedInvoiceIds, invoiceId) => {
       selectedInvoiceIds[invoiceId] = !selectedInvoiceIds[invoiceId]
       return selectedInvoiceIds
-    }, selectedInvoiceMap)
-    setSelectedInvoiceMap(updatedInvoiceSelectionMap)
+    }, selectedInvoicesMap)
+    setSelectedInvoicesMap(updatedInvoiceSelectionMap)
     return updatedInvoiceSelectionMap
   }
 
@@ -103,6 +129,8 @@ export const InvoiceProvider: FC<{ children: ReactNode }> = ({ children }) => {
         loading,
         reload,
         listenForInvoiceLoadEvents,
+        listenForInvoiceSelectionEvents,
+        selectedInvoicesMap,
         setInvoiceId,
         setSearchParams,
         updateSearchParams,
