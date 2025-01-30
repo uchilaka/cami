@@ -15,8 +15,10 @@ const InvoiceContextMenu = () => {
   }
 
   const invoiceSelectionHandler = (selectionMap: Record<string, boolean>) => {
+    const mapFromState = store.getState().selectedInvoicesMap
     console.debug('Selected invoices changed:', { ...selectionMap })
-    setNumberOfSelectedInvoices(calcNumberOfSelectedInvoices(selectionMap))
+    console.debug('Invoices map from store matches selection event?', mapFromState === selectionMap)
+    setNumberOfSelectedInvoices(calcNumberOfSelectedInvoices(mapFromState))
   }
 
   useEffect(() => {
@@ -27,11 +29,7 @@ const InvoiceContextMenu = () => {
     }
   })
 
-  useEffect(() => {
-    setNumberOfSelectedInvoices(calcNumberOfSelectedInvoices(selectedInvoicesMap))
-  }, [selectedInvoicesMap])
-
-  useEffect(() => store.subscribe((state) => [state.invoicesMap, state.selectedInvoicesMap], console.warn, { fireImmediately: true }), [])
+  useEffect(() => store.subscribe((state) => [state.invoicesMap, state.selectedInvoicesMap], console.warn, { fireImmediately: true }))
 
   console.debug({ invoicesMap, selectedInvoicesMap })
 

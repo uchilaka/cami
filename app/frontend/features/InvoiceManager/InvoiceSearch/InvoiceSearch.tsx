@@ -19,12 +19,11 @@ import { useAppStateContext } from '@/utils/store/AppStateProvider'
 
 const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
   const { store } = useAppStateContext()
-  const [selectedMap, setSelectedMap] = useState<Record<string, boolean>>({})
-  const { loading, invoices, toggleInvoiceSelections } = useInvoiceContext()
+  const { loading, invoices } = useInvoiceContext()
   const { isEnabled } = useFeatureFlagsContext()
   const isInvoiceStatusFilterEnabled = isEnabled('invoice_filtering_by_status')
   const isInvoiceDueDateFilterEnabled = isEnabled('invoice_filtering_by_due_date')
-  const { invoicesMap, setInvoices, handleInvoiceSelectionChange } = store.getState()
+  const { invoicesMap, selectedInvoicesMap: selectedMap, setInvoices, handleInvoiceSelectionChange } = store.getState()
 
   console.debug({ invoices, invoicesMap })
 
@@ -32,22 +31,16 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
     console.debug(`Vendor changed @InvoiceSearch: ${vendor}`)
   }
 
-  const onInvoiceSelectionChange = async (ev: React.ChangeEvent<HTMLInputElement>) => {
-    const { invoiceId } = ev.currentTarget.dataset
-    const { checked } = ev.currentTarget
-    console.debug(`Invoice selection changed: ${invoiceId} => ${checked}`)
-    if (invoiceId) {
-      const result = await toggleInvoiceSelections(invoiceId)
-      console.debug('Invoice selection result:', { ...result })
-      setSelectedMap(result)
-      emitInvoiceSelectedEvent(result, ev.target)
-      return result
-    }
-  }
-
-  console.debug('Invoice selection change detected @InvoiceSearch:', { ...selectedMap })
-
-  useEffect(() => store.subscribe((state) => [state.invoicesMap, state.selectedInvoicesMap], console.warn, { fireImmediately: true }), [])
+  useEffect(() =>
+    store.subscribe(
+      (state) => {
+        emitInvoiceSelectedEvent(state.selectedInvoicesMap)
+        return [state.invoicesMap, state.selectedInvoicesMap]
+      },
+      console.warn,
+      { fireImmediately: true },
+    ),
+  )
 
   useEffect(() => {
     if (invoices.length > 0) {

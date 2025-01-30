@@ -2,6 +2,7 @@ import { ChangeEvent } from 'react'
 import { Invoice } from '@/features/InvoiceManager/types'
 import { StateCreator } from 'zustand'
 import { reduceInvoiceListToMap } from '../utils'
+import { emitInvoiceSelectedEvent } from '@/utils/events'
 /**
  * See slice pattern: https://github.com/pmndrs/zustand/blob/main/docs/guides/slices-pattern.md
  */
@@ -34,7 +35,7 @@ export const createInvoiceSlice: StateCreator<InvoiceSlice> = (set, _get) => ({
   handleInvoiceSelectionChange: (ev: ChangeEvent<HTMLInputElement>) =>
     set((slice) => {
       console.warn('>> Invoice slice is about to be updated <<', { ...slice })
-      const { selectedInvoicesMap, ...otherStuff } = slice
+      const { selectedInvoicesMap: currentMap, ...otherStuff } = slice
       const { invoiceId } = ev.currentTarget.dataset
       const { checked } = ev.currentTarget
       // TODO: Support toggling all available invoices
@@ -42,7 +43,7 @@ export const createInvoiceSlice: StateCreator<InvoiceSlice> = (set, _get) => ({
         return {
           ...otherStuff,
           selectedInvoicesMap: {
-            ...selectedInvoicesMap,
+            ...currentMap,
             [invoiceId]: checked,
           },
         }
