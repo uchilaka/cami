@@ -17,9 +17,7 @@ module LarCity
       @most_privileged_role, role_params = ordered_role_entries.find do |(role, _role_tuple)|
         resource.has_role?(role)
       end
-      if most_privileged_role.blank?
-        @most_privileged_role, role_params = ordered_role_entries.find { |(role, _role_tuple)| role == :user }
-      end
+      @most_privileged_role, role_params = ordered_role_entries.find { |(role, _role_tuple)| role == :user } if most_privileged_role.blank?
 
       [@most_privileged_role, role_params]
     end

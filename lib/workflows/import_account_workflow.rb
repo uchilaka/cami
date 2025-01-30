@@ -18,9 +18,7 @@ class ImportAccountWorkflow
           if account.is_a?(Account)
             account.add_role(:customer, invoice)
             # Link the matching account to the invoice (if not already linked)
-            if invoice.invoiceable.blank? && invoice.update(invoiceable: account)
-              Rails.logger.info("Linked account #{account.id} to invoice #{invoice.id}", account:)
-            end
+            Rails.logger.info("Linked account #{account.id} to invoice #{invoice.id}", account:) if invoice.invoiceable.blank? && invoice.update(invoiceable: account)
           else
             context.fail!(message: I18n.t('workflows.import_account.errors.unsupported_record_type'))
           end

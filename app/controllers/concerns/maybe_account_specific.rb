@@ -16,11 +16,11 @@ module MaybeAccountSpecific
       ERROR
     end
 
-    unless base.send(:authorized_actions).is_a?(HashWithIndifferentAccess)
-      raise StandardError, <<~ERROR
-        #{name} must initialize @authorized_actions class instance variable as a HashWithIndifferentAccess
-      ERROR
-    end
+    return if base.send(:authorized_actions).is_a?(HashWithIndifferentAccess)
+
+    raise StandardError, <<~ERROR
+      #{name} must initialize @authorized_actions class instance variable as a HashWithIndifferentAccess
+    ERROR
   end
 
   module ClassMethods
