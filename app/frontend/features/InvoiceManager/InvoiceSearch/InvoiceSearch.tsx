@@ -15,15 +15,18 @@ import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
 import LoadingAnimation from '@/components/LoadingAnimation'
 import ButtonLink from '@/components/Button/ButtonLink'
 import { emitInvoiceSelectedEvent } from '@/utils/events'
+import { useAppStateContext } from '@/utils/store/AppStateProvider'
 
 const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
+  const { store } = useAppStateContext()
   const [selectedMap, setSelectedMap] = useState<Record<string, boolean>>({})
   const { loading, invoices, toggleInvoiceSelections } = useInvoiceContext()
   const { isEnabled } = useFeatureFlagsContext()
   const isInvoiceStatusFilterEnabled = isEnabled('invoice_filtering_by_status')
   const isInvoiceDueDateFilterEnabled = isEnabled('invoice_filtering_by_due_date')
+  const { invoicesMap, handleInvoiceSelectionChange } = store.getState()
 
-  console.debug({ invoices })
+  console.debug({ invoices, invoicesMap })
 
   const vendorSelectionHandler = (vendor: VendorType) => {
     console.debug(`Vendor changed @InvoiceSearch: ${vendor}`)
@@ -43,6 +46,8 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
   }
 
   console.debug('Invoice selection change detected @InvoiceSearch:', { ...selectedMap })
+
+  useEffect(() => store.subscribe((state) => [state.invoicesMap, state.selectedInvoicesMap], console.warn, { fireImmediately: true }), [])
 
   return (
     <>
@@ -74,7 +79,7 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
                     type="checkbox"
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     data-invoice-id="all"
-                    onChange={onInvoiceSelectionChange}
+                    onChange={handleInvoiceSelectionChange}
                   />
                   <label htmlFor="checkbox-all-search" className="sr-only">
                     checkbox
@@ -98,7 +103,7 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
               <InvoiceListItem
                 key={`row--${invoice.id}`}
                 invoice={invoice}
-                onToggleSelect={onInvoiceSelectionChange}
+                onToggleSelect={handleInvoiceSelectionChange}
                 loading={loading}
                 selected={selectedMap[invoice.id]}
               />

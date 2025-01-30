@@ -6,7 +6,7 @@ import { AppGlobalProps } from '@/utils'
 import AppStateProvider from '@/utils/store/AppStateProvider'
 
 const Dashboard = lazy(() => import('@/features/Dashboard'))
-const InvoiceSearch = lazy(() => import('@/features/InvoiceManager/InvoiceSearch'))
+const InvoiceSearch = lazy(() => import('@/features/InvoiceManager/InvoiceSearch/InvoiceSearch'))
 const AboutUs = lazy(() => import('@/routes/AboutUs'))
 const LandingPage = lazy(() => import('@/routes/LandingPage'))
 const SetupWizard = lazy(() => import('@/routes/SetupWizard'))

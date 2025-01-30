@@ -12,12 +12,12 @@ export interface InvoiceSlice {
   handleInvoiceSelectionChange: (ev: ChangeEvent<HTMLInputElement>) => void
 }
 
-export const createInvoiceSlice: StateCreator<InvoiceSlice> = (set) => ({
+export const createInvoiceSlice: StateCreator<InvoiceSlice> = (set, _get) => ({
   invoicesMap: {},
   selectedInvoicesMap: {},
   setInvoices: (invoices: Invoice[]) =>
     set((slice) => {
-      const dataMap = invoices.reduce(
+      const invoicesMap = invoices.reduce(
         (acc, invoice) => {
           acc[invoice.id] = invoice
           return acc
@@ -26,19 +26,20 @@ export const createInvoiceSlice: StateCreator<InvoiceSlice> = (set) => ({
       )
       return {
         ...slice,
-        invoicesMap: dataMap,
+        invoicesMap,
       }
     }),
-  setInvoicesMap: (dataMap: Record<string, Invoice>) =>
+  setInvoicesMap: (invoicesMap: Record<string, Invoice>) =>
     set((slice) => {
       return {
         ...slice,
-        invoicesMap: dataMap,
+        invoicesMap,
       }
     }),
   handleInvoiceSelectionChange: (ev: ChangeEvent<HTMLInputElement>) =>
     set((slice) => {
-      const { selectedInvoicesMap: selectedMap } = slice
+      console.warn('>> Invoice slice is about to be updated <<', { ...slice })
+      const { selectedInvoicesMap } = slice
       const { invoiceId } = ev.currentTarget.dataset
       const { checked } = ev.currentTarget
       // TODO: Support toggling all available invoices
@@ -46,7 +47,7 @@ export const createInvoiceSlice: StateCreator<InvoiceSlice> = (set) => ({
         return {
           ...slice,
           selectedInvoicesMap: {
-            ...selectedMap,
+            ...selectedInvoicesMap,
             [invoiceId]: checked,
           },
         }

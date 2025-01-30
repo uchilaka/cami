@@ -1,8 +1,9 @@
 import React, { createContext, FC } from 'react'
 import { StoreApi } from 'zustand'
 import { AppStore } from '.'
+import { AppGlobalProps } from '../types'
 
-const AppStateContext = createContext<{ store: StoreApi<AppStore> }>(null!)
+const AppStateContext = createContext<{ store: AppGlobalProps['appStore'] }>(null!)
 
 export const useAppStateContext = () => React.useContext(AppStateContext)
 
