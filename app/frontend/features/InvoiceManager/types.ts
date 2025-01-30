@@ -1,3 +1,4 @@
+import { AppGlobalProps } from '@/utils'
 import { GenericAccount } from '@/utils/api/GenericAccount'
 
 export type VendorType = 'paypal' | 'hubspot' | 'stripe'

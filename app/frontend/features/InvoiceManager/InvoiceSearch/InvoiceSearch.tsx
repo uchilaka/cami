@@ -24,7 +24,7 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
   const { isEnabled } = useFeatureFlagsContext()
   const isInvoiceStatusFilterEnabled = isEnabled('invoice_filtering_by_status')
   const isInvoiceDueDateFilterEnabled = isEnabled('invoice_filtering_by_due_date')
-  const { invoicesMap, handleInvoiceSelectionChange } = store.getState()
+  const { invoicesMap, setInvoices, handleInvoiceSelectionChange } = store.getState()
 
   console.debug({ invoices, invoicesMap })
 
@@ -48,6 +48,11 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
   console.debug('Invoice selection change detected @InvoiceSearch:', { ...selectedMap })
 
   useEffect(() => store.subscribe((state) => [state.invoicesMap, state.selectedInvoicesMap], console.warn, { fireImmediately: true }), [])
+
+  useEffect(() => {
+    if (invoices.length > 0) setInvoices(invoices)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [invoices])
 
   return (
     <>

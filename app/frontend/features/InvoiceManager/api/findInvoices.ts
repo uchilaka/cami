@@ -1,7 +1,8 @@
-import { useAppStoreWithDevtools as useStore } from '@/utils/store'
+// import { useAppStoreWithDevtools as useStore } from '@/utils/store'
 import { InvoiceSearchProps, InvoicesLoaderFn } from '../types'
 
 export const findInvoices: InvoicesLoaderFn = async (payload: Partial<InvoiceSearchProps>, { signal } = {}) => {
+  // const { setInvoices } = useStore.getState()
   console.debug(`Finding invoices with payload:`, { ...payload })
   const result = await fetch('/invoices/search.json', {
     method: 'POST',
@@ -12,7 +13,7 @@ export const findInvoices: InvoicesLoaderFn = async (payload: Partial<InvoiceSea
     signal,
   })
   const data = await result.json()
-  useStore.getState().setInvoices(data)
+  // setInvoices(data)
   return data
 }
 

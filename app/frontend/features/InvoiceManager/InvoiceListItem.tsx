@@ -20,13 +20,13 @@ const InvoiceListItem: FC<InvoiceItemProps> = ({ invoice, loading, selected, onT
 
   useEffect(() => {
     if (selectCheckboxRef.current) {
-      console.debug(`Updating checked state for invoice: ${invoice.id}: ${!!selected}`)
+      // console.debug(`Updating checked state for invoice: ${invoice.id}: ${!!selected}`)
       selectCheckboxRef.current.checked = !!selected
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected])
 
-  console.debug({ id: invoice.id, selected })
+  // console.debug({ id: invoice.id, selected })
 
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">

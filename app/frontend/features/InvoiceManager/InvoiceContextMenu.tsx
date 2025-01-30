@@ -2,10 +2,13 @@ import React, { useEffect } from 'react'
 import { useInvoiceContext, withInvoiceProvider } from './InvoiceProvider'
 import withAllTheProviders from '@/components/withAllTheProviders'
 import GroupActionButton from '@/components/Button/GroupActionButton'
+import { useAppStateContext } from '@/utils/store/AppStateProvider'
 
 const InvoiceContextMenu = () => {
+  const { store } = useAppStateContext()
   const [numberOfSelectedInvoices, setNumberOfSelectedInvoices] = React.useState(0)
   const { listenForInvoiceSelectionEvents } = useInvoiceContext()
+  const { invoicesMap } = store.getState()
 
   const invoiceSelectionHandler = (selectionMap: Record<string, boolean>) => {
     console.debug('Selected invoices changed:', { ...selectionMap })
@@ -19,6 +22,10 @@ const InvoiceContextMenu = () => {
       controller.abort()
     }
   })
+
+  useEffect(() => store.subscribe((state) => [state.invoicesMap, state.selectedInvoicesMap], console.warn, { fireImmediately: true }), [])
+
+  console.debug({ invoicesMap })
 
   if (numberOfSelectedInvoices < 1) return <></>
 

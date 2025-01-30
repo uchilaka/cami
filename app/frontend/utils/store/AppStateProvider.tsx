@@ -1,6 +1,4 @@
-import React, { createContext, FC } from 'react'
-import { StoreApi } from 'zustand'
-import { AppStore } from '.'
+import React, { createContext, FC, useEffect } from 'react'
 import { AppGlobalProps } from '../types'
 
 const AppStateContext = createContext<{ store: AppGlobalProps['appStore'] }>(null!)
@@ -8,11 +6,13 @@ const AppStateContext = createContext<{ store: AppGlobalProps['appStore'] }>(nul
 export const useAppStateContext = () => React.useContext(AppStateContext)
 
 interface AppStateProviderProps {
-  store: StoreApi<AppStore>
+  store: AppGlobalProps['appStore']
   children: React.ReactNode
 }
 
 const AppStateProvider: FC<AppStateProviderProps> = ({ store, children }) => {
+  useEffect(() => store.subscribe((state) => [state.invoicesMap], console.debug, { fireImmediately: true }), [])
+
   return <AppStateContext.Provider value={{ store }}>{children}</AppStateContext.Provider>
 }
 
