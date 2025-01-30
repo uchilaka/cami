@@ -17,10 +17,13 @@ export const createInvoiceSlice: StateCreator<InvoiceSlice> = (set, _get) => ({
   selectedInvoicesMap: {},
   setInvoices: (invoices: Invoice[]) =>
     set((slice) => {
-      const invoicesMap = invoices.reduce((acc, invoice) => {
-        acc[invoice.id] = invoice
-        return acc
-      }, slice.invoicesMap)
+      const invoicesMap = invoices.reduce(
+        (dataMap, invoice) => ({
+          ...dataMap,
+          [invoice.id]: invoice,
+        }),
+        slice.invoicesMap,
+      )
       return {
         ...slice,
         invoicesMap,

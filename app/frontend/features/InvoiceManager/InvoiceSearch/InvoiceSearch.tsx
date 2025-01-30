@@ -50,7 +50,9 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
   useEffect(() => store.subscribe((state) => [state.invoicesMap, state.selectedInvoicesMap], console.warn, { fireImmediately: true }), [])
 
   useEffect(() => {
-    if (invoices.length > 0) setInvoices(invoices)
+    if (invoices.length > 0) {
+      setInvoices(invoices)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [invoices])
 

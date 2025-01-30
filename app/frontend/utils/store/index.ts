@@ -3,7 +3,7 @@ import { devtools, subscribeWithSelector } from 'zustand/middleware'
 // See https://github.com/pmndrs/zustand?tab=readme-ov-file#selecting-multiple-state-slices
 // import { useShallow } from 'zustand/react/shallow'
 
-import { createInvoiceSlice, InvoiceSlice } from './invoiceSlice'
+import { createInvoiceSlice, InvoiceSlice } from '@/features/InvoiceManager/store/invoiceSlice'
 
 export type AppStore = InvoiceSlice
 
