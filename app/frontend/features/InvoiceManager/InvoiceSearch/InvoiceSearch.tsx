@@ -18,12 +18,12 @@ import { emitInvoiceSelectedEvent } from '@/utils/events'
 import { useAppStateContext } from '@/utils/store/AppStateProvider'
 
 const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
-  const { store } = useAppStateContext()
+  let { store } = useAppStateContext()
+  let { invoicesMap, selectedInvoicesMap: selectedMap, setInvoices, handleInvoiceSelectionChange } = store.getState()
   const { loading, invoices } = useInvoiceContext()
   const { isEnabled } = useFeatureFlagsContext()
   const isInvoiceStatusFilterEnabled = isEnabled('invoice_filtering_by_status')
   const isInvoiceDueDateFilterEnabled = isEnabled('invoice_filtering_by_due_date')
-  const { invoicesMap, selectedInvoicesMap: selectedMap, setInvoices, handleInvoiceSelectionChange } = store.getState()
 
   console.debug({ invoices, invoicesMap })
 
