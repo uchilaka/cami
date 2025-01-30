@@ -1,25 +1,25 @@
 # frozen_string_literal: true
 
-require_relative 'boot'
+require_relative "boot"
 
-require 'rails'
+require "rails"
 # Pick the frameworks you want:
-require 'active_model/railtie'
-require 'active_job/railtie'
-require 'active_record/railtie'
-require 'active_storage/engine'
-require 'action_controller/railtie'
-require 'action_mailer/railtie'
+require "active_model/railtie"
+require "active_job/railtie"
+require "active_record/railtie"
+require "active_storage/engine"
+require "action_controller/railtie"
+require "action_mailer/railtie"
 # require "action_mailbox/engine"
-require 'action_text/engine'
-require 'action_view/railtie'
-require 'action_cable/engine'
+require "action_text/engine"
+require "action_view/railtie"
+require "action_cable/engine"
 # require "rails/test_unit/railtie"
-require 'active_support/core_ext/integer/time'
-require_relative '../lib/virtual_office_manager'
-require_relative '../lib/app_utils'
-require_relative '../lib/log_utils'
-require_relative '../lib/custom_exceptions_app_wrapper'
+require "active_support/core_ext/integer/time"
+require_relative "../lib/virtual_office_manager"
+require_relative "../lib/app_utils"
+require_relative "../lib/log_utils"
+require_relative "../lib/custom_exceptions_app_wrapper"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -28,8 +28,8 @@ Bundler.require(*Rails.groups)
 module Cami
   class Application < Rails::Application
     # config.application_name = Rails.application.class.module_parent_name
-    config.application_name = 'Customer Account Management & Invoicing'
-    config.application_short_name = 'CAMI'
+    config.application_name = "Customer Account Management & Invoicing"
+    config.application_short_name = "CAMI"
 
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
@@ -40,7 +40,7 @@ module Cami
 
     config.active_storage.variant_processor = :vips
 
-    config.time_zone = 'Eastern Time (US & Canada)'
+    config.time_zone = "Eastern Time (US & Canada)"
 
     # Setting the Active Job backend: https://guides.rubyonrails.org/active_job_basics.html#setting-the-backend
     config.active_job.queue_adapter = :sidekiq

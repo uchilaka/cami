@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # 20241111040052_create_identity_provider_profiles.rb
 class CreateIdentityProviderProfiles < ActiveRecord::Migration[7.2]
   def change
