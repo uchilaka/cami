@@ -8,11 +8,15 @@ const InvoiceContextMenu = () => {
   const { store } = useAppStateContext()
   const [numberOfSelectedInvoices, setNumberOfSelectedInvoices] = React.useState(0)
   const { listenForInvoiceSelectionEvents } = useInvoiceContext()
-  const { invoicesMap } = store.getState()
+  const { invoicesMap, selectedInvoicesMap } = store.getState()
+
+  const calcNumberOfSelectedInvoices = (selectionMap: Record<string, boolean>) => {
+    return Object.values(selectionMap).filter((val) => val === true).length
+  }
 
   const invoiceSelectionHandler = (selectionMap: Record<string, boolean>) => {
     console.debug('Selected invoices changed:', { ...selectionMap })
-    setNumberOfSelectedInvoices(Object.values(selectionMap).filter((val) => val === true).length)
+    setNumberOfSelectedInvoices(calcNumberOfSelectedInvoices(selectionMap))
   }
 
   useEffect(() => {
@@ -23,9 +27,13 @@ const InvoiceContextMenu = () => {
     }
   })
 
+  useEffect(() => {
+    setNumberOfSelectedInvoices(calcNumberOfSelectedInvoices(selectedInvoicesMap))
+  }, [selectedInvoicesMap])
+
   useEffect(() => store.subscribe((state) => [state.invoicesMap, state.selectedInvoicesMap], console.warn, { fireImmediately: true }), [])
 
-  console.debug({ invoicesMap })
+  console.debug({ invoicesMap, selectedInvoicesMap })
 
   if (numberOfSelectedInvoices < 1) return <></>
 
