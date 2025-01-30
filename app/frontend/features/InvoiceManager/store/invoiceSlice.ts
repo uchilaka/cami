@@ -2,7 +2,6 @@ import { ChangeEvent } from 'react'
 import { Invoice } from '@/features/InvoiceManager/types'
 import { StateCreator } from 'zustand'
 import { reduceInvoiceListToMap } from '../utils'
-import { emitInvoiceSelectedEvent } from '@/utils/events'
 /**
  * See slice pattern: https://github.com/pmndrs/zustand/blob/main/docs/guides/slices-pattern.md
  */

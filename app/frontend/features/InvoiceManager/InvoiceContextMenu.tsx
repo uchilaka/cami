@@ -31,7 +31,7 @@ const InvoiceContextMenu = () => {
 
   useEffect(() => store.subscribe((state) => [state.invoicesMap, state.selectedInvoicesMap], console.warn, { fireImmediately: true }))
 
-  console.debug({ invoicesMap, selectedInvoicesMap })
+  console.debug('Invoice selection map:', { ...selectedInvoicesMap })
 
   if (numberOfSelectedInvoices < 1) return <></>
 

@@ -43,11 +43,11 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
   )
 
   useEffect(() => {
-    if (invoices.length > 0) {
-      setInvoices(invoices)
-    }
+    if (invoices.length > 0) setInvoices(invoices)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [invoices])
+
+  console.debug('Selected invoices map @InvoiceSearch:', { ...selectedMap })
 
   return (
     <>
