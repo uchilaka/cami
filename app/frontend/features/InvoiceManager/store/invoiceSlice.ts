@@ -1,6 +1,7 @@
 import { ChangeEvent } from 'react'
 import { Invoice } from '@/features/InvoiceManager/types'
 import { StateCreator } from 'zustand'
+import { reduceInvoiceListToMap } from '../utils'
 /**
  * See slice pattern: https://github.com/pmndrs/zustand/blob/main/docs/guides/slices-pattern.md
  */
@@ -16,19 +17,13 @@ export const createInvoiceSlice: StateCreator<InvoiceSlice> = (set, _get) => ({
   invoicesMap: {},
   selectedInvoicesMap: {},
   setInvoices: (invoices: Invoice[]) =>
-    set((slice) => {
-      const invoicesMap = invoices.reduce(
-        (dataMap, invoice) => ({
-          ...dataMap,
-          [invoice.id]: invoice,
-        }),
-        slice.invoicesMap,
-      )
-      return {
+    set(
+      (slice) => ({
         ...slice,
-        invoicesMap,
-      }
-    }, true),
+        invoicesMap: reduceInvoiceListToMap(invoices, slice.invoicesMap),
+      }),
+      true,
+    ),
   setInvoicesMap: (invoicesMap: Record<string, Invoice>) =>
     set((slice) => {
       return {
