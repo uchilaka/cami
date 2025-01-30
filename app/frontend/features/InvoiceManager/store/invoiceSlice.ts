@@ -35,17 +35,35 @@ export const createInvoiceSlice: StateCreator<InvoiceSlice> = (set, _get) => ({
   handleInvoiceSelectionChange: (ev: ChangeEvent<HTMLInputElement>) =>
     set((slice) => {
       console.warn('>> Invoice slice is about to be updated <<', { ...slice })
-      const { selectedInvoicesMap: currentMap, ...otherStuff } = slice
+      const { invoicesMap, selectedInvoicesMap: currentMap, ...otherStuff } = slice
       const { invoiceId } = ev.currentTarget.dataset
       const { checked } = ev.currentTarget
       // TODO: Support toggling all available invoices
       if (invoiceId) {
-        return {
-          ...otherStuff,
-          selectedInvoicesMap: {
-            ...currentMap,
-            [invoiceId]: checked,
-          },
+        switch (invoiceId) {
+          case 'all':
+            return {
+              ...otherStuff,
+              selectedInvoicesMap: {
+                ...currentMap,
+                ...Object.entries(invoicesMap).reduce(
+                  (latestMap, [id, _invoice]) => ({
+                    ...latestMap,
+                    [id]: checked,
+                  }),
+                  {},
+                ),
+              },
+            }
+
+          default:
+            return {
+              ...otherStuff,
+              selectedInvoicesMap: {
+                ...currentMap,
+                [invoiceId]: checked,
+              },
+            }
         }
       }
       return slice
