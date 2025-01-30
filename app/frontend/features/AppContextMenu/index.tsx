@@ -1,34 +1,26 @@
-import React, { lazy } from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { AppGlobalProps } from '@/utils'
+import AppStateProvider from '@/utils/store/AppStateProvider'
+import React, { FC, lazy } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 const AccountContextMenu = lazy(() => import('@/features/AccountManager/AccountContextMenu'))
 const InvoiceContextMenu = lazy(() => import('@/features/InvoiceManager/InvoiceContextMenu'))
 
-const router = createBrowserRouter([
-  {
-    path: '/accounts',
-    element: <AccountContextMenu />,
-  },
-  {
-    path: '/app',
-    children: [
-      {
-        path: 'invoices',
-        element: <InvoiceContextMenu />,
-      },
-      { path: '*', element: <></> },
-    ],
-  },
-  {
-    path: '*',
-    element: <></>,
-  },
-])
-
-const AppContextMenu = () => {
+const AppContextMenu: FC<AppGlobalProps> = ({ appStore }) => {
   return (
     <React.StrictMode>
-      <RouterProvider router={router} />
+      <AppStateProvider store={appStore}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/accounts" element={<AccountContextMenu />} />
+            <Route path="/app">
+              <Route path="invoices" element={<InvoiceContextMenu />} />
+              <Route path="*" element={<></>} />
+            </Route>
+            <Route path="*" element={<></>} />
+          </Routes>
+        </BrowserRouter>
+      </AppStateProvider>
     </React.StrictMode>
   )
 }

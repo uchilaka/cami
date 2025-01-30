@@ -38,3 +38,9 @@ export interface InvoiceSearchProps {
   // (Full-text search) query string
   q: string
 }
+
+interface FindInvoiceOptions {
+  signal: AbortSignal
+}
+
+export type InvoicesLoaderFn = (params: Partial<InvoiceSearchProps>, options?: Partial<FindInvoiceOptions>) => Promise<Invoice[]>

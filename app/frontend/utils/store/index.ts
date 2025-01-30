@@ -1,22 +1,11 @@
-import { ChangeEvent } from 'react'
-import { create } from 'zustand'
+import { create, createStore } from 'zustand'
 import { devtools } from 'zustand/middleware'
 // See https://github.com/pmndrs/zustand?tab=readme-ov-file#selecting-multiple-state-slices
 // import { useShallow } from 'zustand/react/shallow'
-import { Invoice } from '@/features/InvoiceManager/types'
-import { createInvoiceSlice } from './invoiceSlice'
 
-/**
- * See slice pattern: https://github.com/pmndrs/zustand/blob/main/docs/guides/slices-pattern.md
- */
-interface InvoiceSlice {
-  invoicesMap: Record<string, Invoice>
-  selectedInvoicesMap: Record<string, boolean>
-  setInvoicesMap: (invoiceMap: Record<string, Invoice>) => void
-  handleInvoiceSelectionChange: (ev: ChangeEvent<HTMLInputElement>) => void
-}
+import { createInvoiceSlice, InvoiceSlice } from './invoiceSlice'
 
-type AppStore = InvoiceSlice
+export type AppStore = InvoiceSlice
 
 /**
  * Global state store for the application.
@@ -35,3 +24,13 @@ export const useAppStoreWithDevtools = create(
     { store: 'CAMI' },
   ),
 )
+
+export const createAppStoreWithDevtools = () =>
+  createStore(
+    devtools<AppStore>(
+      (...slices) => ({
+        ...createInvoiceSlice(...slices),
+      }),
+      { store: 'CAMI' },
+    ),
+  )

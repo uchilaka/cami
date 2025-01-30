@@ -1,4 +1,7 @@
-import { BusinessAccount, IndividualAccount, Invoice } from './api/types'
+import { Invoice } from '@/features/InvoiceManager/types'
+import { BusinessAccount, IndividualAccount } from './api/types'
+import { StoreApi } from 'zustand'
+import { AppStore } from '@/utils/store'
 
 /**
  * Event detail types should support state composition i.e. if we
@@ -19,4 +22,8 @@ export type LoadedAccountEventDetail = {
 
 export type LoadedInvoiceEventDetail = {
   invoice: Invoice
+}
+
+export interface AppGlobalProps {
+  appStore: StoreApi<AppStore>
 }

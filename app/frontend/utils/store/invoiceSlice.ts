@@ -7,6 +7,7 @@ import { StateCreator } from 'zustand'
 export interface InvoiceSlice {
   invoicesMap: Record<string, Invoice>
   selectedInvoicesMap: Record<string, boolean>
+  setInvoices: (invoices: Invoice[]) => void
   setInvoicesMap: (invoiceMap: Record<string, Invoice>) => void
   handleInvoiceSelectionChange: (ev: ChangeEvent<HTMLInputElement>) => void
 }
@@ -14,6 +15,20 @@ export interface InvoiceSlice {
 export const createInvoiceSlice: StateCreator<InvoiceSlice> = (set) => ({
   invoicesMap: {},
   selectedInvoicesMap: {},
+  setInvoices: (invoices: Invoice[]) =>
+    set((slice) => {
+      const dataMap = invoices.reduce(
+        (acc, invoice) => {
+          acc[invoice.id] = invoice
+          return acc
+        },
+        {} as Record<string, Invoice>,
+      )
+      return {
+        ...slice,
+        invoicesMap: dataMap,
+      }
+    }),
   setInvoicesMap: (dataMap: Record<string, Invoice>) =>
     set((slice) => {
       return {
