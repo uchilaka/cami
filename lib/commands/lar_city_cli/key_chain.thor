@@ -8,11 +8,11 @@ module LarCityCLI
   class KeyChain < Base
     class_option :environment,
                  type: :string,
-                 aliases: '-e',
+                 aliases: %w[-e --env],
                  desc: 'Environment',
                  required: false
 
-    namespace :'lx-cli:secrets'
+    namespace :'lx-cli:keys'
 
     desc 'edit', 'Manage the secrets in the environment credentials file'
     option :editor,

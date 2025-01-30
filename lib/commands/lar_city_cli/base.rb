@@ -22,7 +22,7 @@ module LarCityCLI
                  default: false
     class_option :dry_run,
                  type: :boolean,
-                 aliases: '-d',
+                 aliases: %w[-d --pretend --preview],
                  desc: 'Dry run',
                  default: false
 
