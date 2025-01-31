@@ -2,5 +2,5 @@
 
 # Intentionally skips the tunnel service, as it is only needed
 # when testing features like SSO or payment integrations
-docker compose up app-store redis-store mailhog -d &&\
+docker compose --profile full-stack up -d &&\
   docker compose logs --follow
