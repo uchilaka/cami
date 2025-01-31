@@ -46,14 +46,14 @@ module LarCityCLI
 
     # Check OS with Ruby: https://gist.github.com/havenwood/4161944
     def mac?
-      friendly_os_name? == :macos
+      friendly_os_name == :macos
     end
 
     def linux?
-      friendly_os_name? == :linux
+      friendly_os_name == :linux
     end
 
-    def friendly_os_name?
+    def friendly_os_name
       case RbConfig::CONFIG['host_os']
       when /linux/
         :linux
