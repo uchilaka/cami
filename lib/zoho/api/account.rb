@@ -3,6 +3,7 @@
 module Zoho
   module API
     class Account < Model
+      # About class (instance) variables: https://www.ruby-lang.org/en/documentation/faq/8/
       @@resource_url ||= nil
 
       class << self
@@ -25,11 +26,13 @@ module Zoho
         end
 
         def resource_url(auth: true)
-          @@resource_url ||=
-            unless @@resource_url.present?
+          @@resource_url =
+            if !auth || @@resource_url.blank?
               response = connection(auth:).get('/oauth/serverinfo')
               data = response.body || {}
               @@resource_url = data.dig('locations', 'us')
+            else
+              @@resource_url
             end
         end
 

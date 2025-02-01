@@ -9,6 +9,10 @@ module Zoho
         it 'returns the expected accounts URL' do
           expect(described_class.resource_url).to eq('https://accounts.zoho.com')
         end
+
+        it 'is idempotent' do
+          expect(described_class.resource_url).to eq(described_class.resource_url)
+        end
       end
 
       describe '#base_url' do
