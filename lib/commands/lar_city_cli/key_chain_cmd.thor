@@ -1,29 +1,24 @@
 # frozen_string_literal: true
 
 require 'fileutils'
-require_relative 'base'
+require_relative 'base_cmd'
 
 module LarCityCLI
   # Manage credentials for the rails app
-  class KeyChain < Base
-    class_option :environment,
-                 type: :string,
-                 aliases: '-e',
-                 desc: 'Environment',
-                 required: false
-
+  class KeyChainCmd < BaseCmd
     namespace :'lx-cli:secrets'
 
     desc 'edit', 'Manage the secrets in the environment credentials file'
     option :editor,
            type: :string,
-           aliases: '-a',
+           aliases: '--ide',
            desc: 'Editor to use',
            default: 'rubymine --wait',
+           enum: %w[nano code rubymine],
            required: true
     def edit
       executable = Rails.root.join('bin', 'rails')
-      command_to_run = "EDITOR=\"#{editor}\" bundle exec #{executable} credentials:edit --environment=#{environment}"
+      command_to_run = "EDITOR=\"#{editor} --wait\" bundle exec #{executable} credentials:edit --environment=#{environment}"
 
       say("Will execute#{dry_run? ? ' (Dry-run)' : ''}: #{command_to_run}", Color::YELLOW) if verbose? || dry_run?
 
@@ -148,13 +143,26 @@ module LarCityCLI
     end
 
     def editor
-      return @editor if @editor.present?
+      @editor ||= detected_editor || selected_or_default_editor
+    end
 
-      @editor = ENV.fetch('EDITOR', options[:editor])
-      @editor ||= 'rubymine --wait' if rubymine?
-      @editor ||= 'code --wait' if vscode?
+    def detected_editor
+      @detected_editor ||=
+        if rubymine?
+          'rubymine'
+        else
+          vscode? ? 'code' : nil
+        end
+    end
 
-      @editor ||= 'nano --wait'
+    def selected_or_default_editor
+      input_editor = ENV.fetch('EDITOR', options[:editor])
+      case input_editor
+      when 'code', 'rubymine'
+        input_editor
+      else
+        'nano'
+      end
     end
   end
 end

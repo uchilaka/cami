@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative 'base'
+require_relative 'base_cmd'
 require 'fileutils'
 
 module LarCityCLI
-  class Datakit < Base
+  class DatakitCmd < BaseCmd
     namespace :'lx-cli:datakit'
 
     desc 'sanitize', 'Sanitize a data file'

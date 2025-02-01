@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require_relative 'base'
+require_relative 'base_cmd'
 require 'open3'
 
 module LarCityCLI
   # Manage NGROK tunnels for dev testing of the app and rails API
-  class Tunnel < Base
+  class TunnelCmd < BaseCmd
     namespace :'lx-cli:tunnel'
 
     desc 'init', 'Initialize ngrok config for the project'
