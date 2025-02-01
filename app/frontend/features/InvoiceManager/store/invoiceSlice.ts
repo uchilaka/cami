@@ -11,6 +11,7 @@ export interface InvoiceSlice {
   setInvoices: (invoices: Invoice[]) => void
   setInvoicesMap: (invoiceMap: Record<string, Invoice>) => void
   handleInvoiceSelectionChange: (ev: ChangeEvent<HTMLInputElement>) => void
+  setInvoiceSelectionInMap: (invoiceId: string, checked: boolean) => void
 }
 
 export const createInvoiceSlice: StateCreator<InvoiceSlice> = (set, _get) => ({
@@ -31,6 +32,16 @@ export const createInvoiceSlice: StateCreator<InvoiceSlice> = (set, _get) => ({
         invoicesMap,
       }
     }, true),
+  setInvoiceSelectionInMap: (invoiceId: string, checked: boolean) =>
+    set((slice) => {
+      return {
+        ...slice,
+        selectedInvoicesMap: {
+          ...slice.selectedInvoicesMap,
+          [invoiceId]: checked,
+        },
+      }
+    }),
   handleInvoiceSelectionChange: (ev: ChangeEvent<HTMLInputElement>) =>
     set((slice) => {
       console.warn('>> Invoice slice is about to be updated <<', { ...slice })

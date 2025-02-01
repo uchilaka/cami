@@ -1,4 +1,4 @@
-import React, { FC, ReactEventHandler, useRef, useEffect } from 'react'
+import React, { FC, ReactEventHandler, useEffect, useState } from 'react'
 import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
 import { Invoice } from './types'
 import FilterableBadge from './InvoiceBadge/FilterableBadge'
@@ -13,20 +13,24 @@ interface InvoiceItemProps {
   selected?: boolean
 }
 
-const InvoiceListItem: FC<InvoiceItemProps> = ({ invoice, loading, selected, onToggleSelect }) => {
+const InvoiceListItem: FC<InvoiceItemProps> = ({ invoice, loading, selected: defaultSelected, onToggleSelect }) => {
   const { isEnabled } = useFeatureFlagsContext()
+  const [selected, setSelected] = useState<boolean>(defaultSelected ?? false)
   const { account, vendorRecordId, status, dueAt } = invoice
-  const selectCheckboxRef = useRef<HTMLInputElement>(null)
+
+  const handleSelectionChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    ev.persist()
+    setSelected(ev.currentTarget.checked)
+    onToggleSelect(ev)
+  }
 
   useEffect(() => {
-    if (selectCheckboxRef.current) {
-      // console.debug(`Updating checked state for invoice: ${invoice.id}: ${!!selected}`)
-      selectCheckboxRef.current.checked = !!selected
+    if (invoice?.id && defaultSelected !== selected) {
+      console.debug(`InvoiceListItem ${invoice.id} received change to defaultSelected:`, defaultSelected)
+      setSelected(defaultSelected ?? false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected])
-
-  // console.debug({ id: invoice.id, selected })
+  }, [defaultSelected])
 
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -34,13 +38,14 @@ const InvoiceListItem: FC<InvoiceItemProps> = ({ invoice, loading, selected, onT
         <div className="flex items-center">
           <input
             id={`invoice-select-checkbox--${invoice.id}`}
-            ref={selectCheckboxRef}
             type="checkbox"
+            name="selected_invoices[]"
+            value={invoice.id}
             className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             data-invoice-id={invoice.id}
-            onChange={onToggleSelect}
+            onChange={handleSelectionChange}
             disabled={!!loading}
-            defaultChecked={selected}
+            checked={selected}
           />
           <label htmlFor="checkbox-table-search-1" className="sr-only">
             checkbox

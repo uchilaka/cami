@@ -19,7 +19,8 @@ import { useAppStateContext } from '@/utils/store/AppStateProvider'
 
 const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
   let { store } = useAppStateContext()
-  let { invoicesMap, selectedInvoicesMap: selectedMap, setInvoices, handleInvoiceSelectionChange } = store.getState()
+  let { invoicesMap, selectedInvoicesMap: initialSelectedMap, setInvoices, handleInvoiceSelectionChange } = store.getState()
+  const [selectedMap, setSelectedMap] = useState(initialSelectedMap)
   const { loading, invoices } = useInvoiceContext()
   const { isEnabled } = useFeatureFlagsContext()
   const isInvoiceStatusFilterEnabled = isEnabled('invoice_filtering_by_status')
@@ -33,9 +34,10 @@ const InvoiceSearch: FC<ComponentProps<'div'>> = () => {
 
   useEffect(() =>
     store.subscribe(
-      (state) => {
-        emitInvoiceSelectedEvent(state.selectedInvoicesMap)
-        return [state.invoicesMap, state.selectedInvoicesMap]
+      ({ selectedInvoicesMap: latestSelectedMap }) => {
+        emitInvoiceSelectedEvent(latestSelectedMap)
+        setSelectedMap(latestSelectedMap)
+        return latestSelectedMap
       },
       console.warn,
       { fireImmediately: true },
