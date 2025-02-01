@@ -4,18 +4,20 @@
 #
 # Table name: accounts
 #
-#  id           :uuid             not null, primary key
-#  display_name :string
-#  email        :string
-#  metadata     :jsonb
-#  phone        :jsonb
-#  readme       :text
-#  slug         :string
-#  status       :integer
-#  type         :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  tax_id       :string
+#  id            :uuid             not null, primary key
+#  display_name  :string
+#  email         :string
+#  metadata      :jsonb
+#  phone         :jsonb
+#  readme        :text
+#  slug          :string
+#  status        :integer
+#  type          :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  remote_crm_id :string
+#  tax_id        :string
+#
 require 'phonelib'
 
 Fabricator(:account) do

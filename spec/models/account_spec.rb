@@ -4,18 +4,19 @@
 #
 # Table name: accounts
 #
-#  id           :uuid             not null, primary key
-#  display_name :string
-#  email        :string
-#  metadata     :jsonb
-#  phone        :jsonb
-#  readme       :text
-#  slug         :string
-#  status       :integer
-#  type         :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  tax_id       :string
+#  id            :uuid             not null, primary key
+#  display_name  :string
+#  email         :string
+#  metadata      :jsonb
+#  phone         :jsonb
+#  readme        :text
+#  slug          :string
+#  status        :integer
+#  type          :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  remote_crm_id :string
+#  tax_id        :string
 #
 require 'rails_helper'
 
@@ -42,6 +43,34 @@ RSpec.describe Account, type: :model do
 
   it_should_behave_like 'adding a role on an invoice is supported', :customer
   it_should_behave_like 'adding a role on an invoice is supported', :contact
+
+  describe '#remote_crm_id' do
+    context 'when blank' do
+      subject { Fabricate :account, remote_crm_id: '' }
+
+      it { expect(subject).to be_valid }
+    end
+
+    context 'with several blank records' do
+      let!(:account) { Fabricate :account, remote_crm_id: '' }
+
+      subject { Fabricate.build :account, remote_crm_id: '' }
+
+      it { expect(subject).to be_valid }
+    end
+
+    context 'when present in the database (case insensitive)' do
+      let!(:account) { Fabricate :account, remote_crm_id: 'ZohoCRM.123456789' }
+
+      subject { Fabricate.build :account, remote_crm_id: 'zohocrm.123456789' }
+
+      it { expect(subject).to be_invalid }
+
+      it 'fails validation on save' do
+        expect { subject.save! }.to raise_error ActiveRecord::RecordInvalid
+      end
+    end
+  end
 
   describe '#tax_id' do
     context 'when blank' do

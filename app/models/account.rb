@@ -4,18 +4,19 @@
 #
 # Table name: accounts
 #
-#  id           :uuid             not null, primary key
-#  display_name :string
-#  email        :string
-#  metadata     :jsonb
-#  phone        :jsonb
-#  readme       :text
-#  slug         :string
-#  status       :integer
-#  type         :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  tax_id       :string
+#  id            :uuid             not null, primary key
+#  display_name  :string
+#  email         :string
+#  metadata      :jsonb
+#  phone         :jsonb
+#  readme        :text
+#  slug          :string
+#  status        :integer
+#  type          :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  remote_crm_id :string
+#  tax_id        :string
 #
 class Account < ApplicationRecord
   rolify
@@ -39,6 +40,8 @@ class Account < ApplicationRecord
   validates :type, presence: true, inclusion: { in: %w[Account Business Individual Government Nonprofit] }
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
   validates :tax_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
+  # Intended to store the ZohoCRM SOID
+  validates :remote_crm_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
 
   has_many :invoices, as: :invoiceable, dependent: :nullify
   # TODO: This generates the following console error:

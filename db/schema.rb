@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_27_072422) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_01_135657) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,6 +30,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_27_072422) do
     t.jsonb "metadata", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "remote_crm_id"
   end
 
   create_table "accounts_roles", id: false, force: :cascade do |t|
