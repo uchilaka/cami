@@ -17,3 +17,9 @@ shared:
         <<: *default_options
         tags:
           - :obfuscate
+    zoho:
+      name: zoho
+      options:
+        <<: *default_options
+        tags:
+          - :obfuscate

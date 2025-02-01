@@ -3,36 +3,23 @@
 module Zoho
   module API
     class Model
-      @@connection ||= nil
-
       class << self
-        def resource_url
+        def resource_url(args = {})
           raise NotImplementedError
         end
 
-        def connection(_auth: false)
-          @@connection ||=
-            unless @@connection.present?
-              Faraday.new(
-                url: base_url,
-                headers: {
-                  Accept: 'application/json'
-                }
-              ) do |builder|
-                # if _auth
-                #   builder.request :authorization, :basic,
-                #                   Zoho::Credentials.client_id,
-                #                   Zoho::Credentials.client_secret
-                # end
-                # builder.request :json
-                builder.response :json
-                builder.response :logger if Rails.env.development?
-                builder.response :raise_error, include_request: true
-              end
-            end
+        def connection(auth: false, access_token: nil)
+          url = base_url(auth:)
+          Faraday.new(url:) do |builder|
+            builder.request :authorization, 'Zoho-oauthtoken', access_token if access_token.present?
+            builder.request :json
+            builder.response :json
+            builder.response :logger if Rails.env.development?
+            builder.response :raise_error, include_request: true
+          end
         end
 
-        def base_url
+        def base_url(_args = {})
           'https://www.zohoapis.com'
         end
       end
