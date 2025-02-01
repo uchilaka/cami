@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../../commands/lar_city_cli/base_cmd'
+
 module Fixtures
   class Users < LarCityCLI::BaseCmd
     desc 'load', 'Load application users'
