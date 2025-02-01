@@ -3,7 +3,7 @@
 require_relative '../../commands/lar_city_cli/base'
 
 module Fixtures
-  class Accounts < LarCityCLI::Base
+  class Accounts < LarCityCLI::BaseCmd
     desc 'load', 'Load account fixtures'
     def load
       say 'Loading account fixtures...', Color::YELLOW

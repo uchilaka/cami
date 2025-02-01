@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Fixtures
-  class Users < LarCityCLI::Base
+  class Users < LarCityCLI::BaseCmd
     desc 'load', 'Load application users'
     def load
       say 'Loading users...', Color::YELLOW

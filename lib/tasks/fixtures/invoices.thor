@@ -3,7 +3,7 @@
 require_relative '../../commands/lar_city_cli/base'
 
 module Fixtures
-  class Invoices < LarCityCLI::Base
+  class Invoices < LarCityCLI::BaseCmd
     attr_accessor :enqueued_records, :processed_records, :skipped_records, :error_records
 
     desc 'load', 'Load invoice fixtures'

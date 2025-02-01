@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require 'fileutils'
-require_relative 'base'
+require_relative 'base_cmd'
 
 module LarCityCLI
   # Manage credentials for the rails app
-  class KeyChain < Base
+  class KeyChainCmd < BaseCmd
     class_option :environment,
                  type: :string,
                  aliases: %w[-e --env],

@@ -14,7 +14,7 @@ require 'rbconfig'
 module LarCityCLI
   class UnsupportedOSError < StandardError; end
 
-  class Base < Thor
+  class BaseCmd < Thor
     class_option :verbose,
                  type: :boolean,
                  aliases: '-v',

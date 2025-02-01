@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative 'base'
+require_relative 'base_cmd'
 
 module LarCityCLI
-  class Devkit < Base
+  class DevkitCmd < BaseCmd
     namespace :'lx-cli:devkit'
 
     desc 'swaggerize', 'Generate Swagger JSON file(s)'
