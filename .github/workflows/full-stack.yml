@@ -25,7 +25,7 @@ jobs:
       APP_DATABASE_USER: ${{ secrets.APP_DATABASE_USER }}
       APP_DATABASE_PASSWORD: ${{ secrets.APP_DATABASE_PASSWORD }}
       APP_DATABASE_PORT: 5432
-      CRM_ORG_ID: 727989379
+      CRM_ORG_ID: 877691058
     services:
       postgres:
         # https://hub.docker.com/_/postgres
