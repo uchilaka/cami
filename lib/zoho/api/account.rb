@@ -14,7 +14,7 @@ module Zoho
             data: [
               Zoho::AccountSerializer.new(record).serializable_hash
             ],
-            duplicate_check_fields: %w[Email Mobile],
+            duplicate_check_fields: %w[Email Phone],
             trigger: ['workflow']
           }
           response = connection(access_token:).post(resource_uri, payload)

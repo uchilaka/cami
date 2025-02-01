@@ -3,9 +3,9 @@
 module Zoho
   class AccountSerializer < AdhocSerializer
     def attributes
-      @attributes = { Email: email, Account_Name: company_name }
-      @attributes[(has_mobile_number? ? 'Mobile' : 'Phone').to_sym] = phone_number
-      @attributes
+      @attributes = { Email: email, Account_Name: company_name, Phone: phone_number }
+      # @attributes[(has_mobile_number? ? 'Mobile' : 'Phone').to_sym] = phone_number
+      # @attributes
     end
 
     def email
