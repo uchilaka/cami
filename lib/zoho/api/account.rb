@@ -21,12 +21,6 @@ module Zoho
           response.body
         end
 
-        private
-
-        def module_name
-          name.to_s.split('::').last.pluralize.capitalize
-        end
-
         def resource_url(auth: true)
           @@resource_url =
             if !auth || @@resource_url.blank?
@@ -42,6 +36,12 @@ module Zoho
           return 'https://accounts.zoho.com' if auth
 
           super
+        end
+
+        private
+
+        def module_name
+          name.to_s.split('::').last.pluralize.capitalize
         end
       end
     end

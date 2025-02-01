@@ -41,15 +41,15 @@ module Zoho
         # VCR configuration
         let(:cassette) { vcr_cassettes[:zoho] }
         # Comment out this declaration if you're working on updating cassettes
-        # let(:cassette_options) do
-        #   cassette[:options]
-        #     .deep_merge(
-        #       match_requests_on: %i[method uri],
-        #       record: :none
-        #     )
-        # end
+        let(:cassette_options) do
+          cassette[:options]
+            .deep_merge(
+              match_requests_on: %i[method uri],
+              record: :none
+            )
+        end
         # Un-comment this line if you're working on updating cassettes
-        let(:cassette_options) { cassette[:options] }
+        # let(:cassette_options) { cassette[:options] }
 
         around do |example|
           # Edit the cassette options for :zoho at config/vcr.yml
