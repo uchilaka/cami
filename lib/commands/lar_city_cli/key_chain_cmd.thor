@@ -12,7 +12,7 @@ module LarCityCLI
                  desc: 'Environment',
                  required: false
 
-    namespace :'lx-cli:keys'
+    namespace :'lx-cli:secrets'
 
     desc 'edit', 'Manage the secrets in the environment credentials file'
     option :editor,
