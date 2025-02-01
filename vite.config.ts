@@ -20,5 +20,9 @@ export default defineConfig({
   resolve: {
     alias: viteAliasConfigFromFactory(),
   },
+  // TODO: Research how to use optimizeDeps in a way that doesn't break the app
+  // optimizeDeps: {
+  //   exclude: ['react', 'react-dom', 'react-router-dom', 'clsx'],
+  // },
 })
 /* eslint-enable no-undef */
