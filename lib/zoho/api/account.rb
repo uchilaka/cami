@@ -21,6 +21,8 @@ module Zoho
           response.body
         end
 
+        private
+
         def module_name
           name.to_s.split('::').last.pluralize.capitalize
         end

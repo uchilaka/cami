@@ -19,10 +19,21 @@ module Zoho
         it { expect(described_class.base_url).to eq('https://www.zohoapis.com') }
       end
 
+      describe '#fields_list_url' do
+        let(:org_id) { described_class.send(:org_id) }
+
+        it do
+          expect(described_class.fields_list_url).to \
+            eq("https://crm.zoho.com/crm/org#{org_id}/settings/api/modules/Accounts?step=FieldsList")
+        end
+      end
+
       describe '#upsert' do
         let(:phone_number) { Faker::PhoneNumber.cell_phone_in_e164 }
         let(:display_name) { Faker::Company.name }
         let(:email) { Faker::Internet.email }
+        let(:website) { Faker::Internet.url(host: 'larcity.dev') }
+        let(:metadata) { { website: } }
         let(:record) { Fabricate(:account, display_name:, email:, phone_number:) }
         let(:inserted_record) { subject.dig('data', 0) }
         let(:inserted_record_details) { inserted_record['details'] }
@@ -30,15 +41,15 @@ module Zoho
         # VCR configuration
         let(:cassette) { vcr_cassettes[:zoho] }
         # Comment out this declaration if you're working on updating cassettes
-        let(:cassette_options) do
-          cassette[:options]
-            .deep_merge(
-              match_requests_on: %i[method uri],
-              record: :none
-            )
-        end
+        # let(:cassette_options) do
+        #   cassette[:options]
+        #     .deep_merge(
+        #       match_requests_on: %i[method uri],
+        #       record: :none
+        #     )
+        # end
         # Un-comment this line if you're working on updating cassettes
-        # let(:cassette_options) { cassette[:options] }
+        let(:cassette_options) { cassette[:options] }
 
         around do |example|
           # Edit the cassette options for :zoho at config/vcr.yml
@@ -68,6 +79,7 @@ module Zoho
           context 'and an existing record' do
             let(:phone_number) { '+2347129248348' }
             let(:display_name) { "Mae's Bakery Inc." }
+            let(:website) { 'https://maes-bakes.com' }
             let(:email) { 'maes-bakes@gmail.com' }
 
             # Un-comment this line if you're working on updating cassettes

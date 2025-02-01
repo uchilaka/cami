@@ -3,9 +3,17 @@
 module Zoho
   class AccountSerializer < AdhocSerializer
     def attributes
-      @attributes = { Email: email, Account_Name: company_name, Phone: phone_number }
-      # @attributes[(has_mobile_number? ? 'Mobile' : 'Phone').to_sym] = phone_number
-      # @attributes
+      @attributes ||=
+        if @attributes.blank?
+          attr = {
+            Email: email,
+            Account_Name: company_name,
+            Phone: phone_number,
+            Website: website
+          }
+          attr[:Mobile] = phone_number if has_mobile_number?
+          attr.compact
+        end
     end
 
     def email
@@ -22,6 +30,10 @@ module Zoho
 
     def phone_number_type
       object.phone.try(:[], 'number_type')
+    end
+
+    def website
+      object.metadata.try(:[], 'website')
     end
 
     def serializable_hash(_options = nil)

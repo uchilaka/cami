@@ -28,7 +28,7 @@ RSpec.describe Zoho::AccountSerializer do
         let(:phone_number) { phone_number }
 
         if expected_type == 'mobile'
-          it_should_behave_like 'an account serializable to the CRM', expected_type, %i[Email Account_Name Mobile]
+          it_should_behave_like 'an account serializable to the CRM', expected_type, %i[Email Account_Name Phone Mobile]
         else
           it_should_behave_like 'an account serializable to the CRM', expected_type, %i[Email Account_Name Phone]
         end

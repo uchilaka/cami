@@ -4,10 +4,6 @@ module Zoho
   module API
     class Model
       class << self
-        def resource_url(args = {})
-          raise NotImplementedError
-        end
-
         def connection(auth: false, access_token: nil)
           url = base_url(auth:)
           Faraday.new(url:) do |builder|
@@ -21,6 +17,24 @@ module Zoho
 
         def base_url(_args = {})
           'https://www.zohoapis.com'
+        end
+
+        def fields_list_url
+          "https://crm.zoho.com/crm/org#{org_id}/settings/api/modules/#{module_name}?step=FieldsList"
+        end
+
+        def resource_url(args = {})
+          raise NotImplementedError, "You must implement the #{name}.#{__method__} method"
+        end
+
+        protected
+
+        def module_name
+          raise NotImplementedError, "You must implement the #{name}.#{__method__} method"
+        end
+
+        def org_id
+          ENV.fetch('CRM_ORG_ID', Rails.application.credentials&.zoho&.org_id)
         end
       end
     end
