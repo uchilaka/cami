@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-require 'thor'
-require 'thor/shell/color'
+require_relative 'lar_city_cli/base_cmd'
 
-class HelloCmd < Thor
+class HelloCmd < LarCityCLI::BaseCmd
   namespace 'demo'
 
   def self.exit_on_failure?
@@ -18,6 +17,14 @@ class HelloCmd < Thor
          default: 'world',
          required: false
   def hello
-    say "👋🏽 Hello, #{options[:name]}!", :magenta
+    say "👋🏽 Hello, #{options[:name]}! #{detected_os_clause}", :magenta
+  end
+
+  no_commands do
+    def detected_os_clause
+      return '' if friendly_os_name == :unsupported
+
+      "You're running on #{human_friendly_os_names_map[friendly_os_name]} 💻"
+    end
   end
 end
