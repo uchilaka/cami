@@ -157,6 +157,20 @@ web_console:
   permissions: 
 ```
 
+#### `PII_FILTER_ALLOW_ACCESS_TOKENS` (default = `false`)
+
+> **BE CAREFUL NOT TO LEAK SENSITIVE INFORMATION INTO SOURCE CONTROL**. Cassettes are not encrypted and can be read by anyone with access to the repository. Ensure that you do not commit any sensitive information to the repository like access tokens for app integrations.
+
+This configuration is intended to give us a way to allow requests under tests to call through to real world API endpoints that require an access token.
+
+When using this configuration, you should start by ensuring that the `PII_FILTER_ALLOW_ACCESS_TOKENS` is set to `true` in your `.env.test` file.
+
+Next, ensure that you comment out any steps that would normally stub out the request to the API endpoint in your test suite.
+
+Finally, delete the `VCR` cassettes that would normally be used to stub out the request to the API endpoint.
+
+Optionally, you can check for the cassette configuration matching the endpoint you're working on in the `config/vcr.rb` file and set the `record` option to `:new_episodes` or `:all` to ensure that the cassette is updated with the new response.
+
 ## Running the app for the first time
 
 ### 1. Setup the environment

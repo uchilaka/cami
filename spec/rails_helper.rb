@@ -19,6 +19,7 @@ require 'database_cleaner/active_record'
 require 'sidekiq/testing'
 require 'devise/test/integration_helpers'
 require 'vcr'
+require_relative '../lib/zoho/credentials'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -44,16 +45,26 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 # VCR usage docs https://benoittgt.github.io/vcr
-VCR.configure do |c|
-  c.cassette_library_dir = 'spec/fixtures/cassettes'
-  c.hook_into :faraday
-  c.allow_http_connections_when_no_cassette = true
+VCR.configure do |vcr_config|
+  vcr_config.cassette_library_dir = 'spec/fixtures/cassettes'
+  vcr_config.hook_into :faraday
+  vcr_config.allow_http_connections_when_no_cassette = true
 
   # IMPORTANT: Enables automatic cassette naming based on tags
-  c.configure_rspec_metadata!
+  vcr_config.configure_rspec_metadata!
+
+  # Filter out Zoho credentials (applies to all examples)
+  # vcr_config.filter_sensitive_data('<ZOHO_CLIENT_ID>') { Zoho::Credentials.client_id }
+  # vcr_config.filter_sensitive_data('<ZOHO_CLIENT_SECRET>') { Zoho::Credentials.client_secret }
+  # Filter out Zoho credentials (applies only to examples tagged with :zoho_cassette)
+  vcr_config.define_cassette_placeholder('<ZOHO_CLIENT_ID>', :zoho_cassette) { Zoho::Credentials.client_id }
+  vcr_config.define_cassette_placeholder('<ZOHO_CLIENT_SECRET>', :zoho_cassette) { Zoho::Credentials.client_secret }
+  vcr_config.define_cassette_placeholder('<ZOHO_AUTHORIZATION_HEADER>', :zoho_cassette) do |interaction|
+    interaction.request.headers['Authorization'].try(:first)
+  end
 
   # Setup :before_record hook to intercept PII data and prevent it from leaking into the cassettes
-  c.before_record(:obfuscate) do |interaction, cassette|
+  vcr_config.before_record(:obfuscate) do |interaction, cassette|
     if interaction.response.body.present?
       if cassette.name.present? &&
         interaction.response.headers['content-type'].any? { |t| %r{application/json}.match?(t) }
@@ -71,7 +82,7 @@ VCR.configure do |c|
     end
   end
 
-  c.before_http_request do |req|
+  vcr_config.before_http_request do |req|
     Rails.logger.info "VCR: Request", { method: req.method, uri: req.uri, headers: req.headers }
   end
 end

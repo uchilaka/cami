@@ -16,68 +16,110 @@ module Zoho
       end
 
       describe '#upsert' do
+        let(:phone_number) { Faker::PhoneNumber.cell_phone_in_e164 }
         let(:display_name) { Faker::Company.name }
         let(:email) { Faker::Internet.email }
-        let(:record) { Fabricate(:account, display_name:, email:) }
+        let(:record) { Fabricate(:account, display_name:, email:, phone_number:) }
         let(:inserted_record) { subject.dig('data', 0) }
         let(:inserted_record_details) { inserted_record['details'] }
 
-        # How to use:
-        # ===========
-        # 1. Comment out the "Mock setup" section
-        # 2. To generate a new cassette:
-        #   - Uncomment the "VCR configuration" section
-        #   - Delete the existing cassette file (at spec/fixtures/cassettes/zoho/upsert_accounts.yml)
-        #   - Run the test
-        # 3. To run a live request:
-        #   - Comment out the "VCR configuration" section
-        #   - Run the test
-        # ===========
-
-        # Mock setup
-        let(:access_token) { 'test_access_token' }
-        let(:response_body) do
-          {
-            'data' => [
-              {
-                'code' => 'SUCCESS',
-                'details' => {
-                  'id' => SecureRandom.uuid
-                },
-                'message' => 'record added successfully',
-                'status' => 'success',
-                'action' => 'insert'
-              }
-            ]
-          }
-        end
-        let(:response) { double('response', body: response_body) }
-
-        before do
-          allow(AccessToken).to receive(:generate).and_return('access_token' => access_token)
-          allow(described_class).to receive(:connection).with(access_token:).and_return(double(post: response))
-        end
-        # End mock setup
-
         # VCR configuration
-        # let(:cassette) { vcr_cassettes[:zoho] }
-        #
-        # around do |example|
-        #   VCR.use_cassette('zoho/upsert_accounts', cassette[:options]) { example.run }
-        # end
+        let(:cassette) { vcr_cassettes[:zoho] }
+        # Comment out this line if you're working on updating cassettes
+        let(:cassette_options) do
+          cassette[:options]
+            .deep_merge(
+              match_requests_on: %i[method uri],
+              record: :none
+            )
+        end
+
+        around do |example|
+          # Edit the cassette options for :zoho at config/vcr.yml
+          VCR.use_cassette('zoho/upsert_accounts', cassette_options) { example.run }
+        end
         # End VCR configuration
 
         subject { described_class.upsert(record) }
 
-        it 'returns a hash with the upserted record' do
-          expect(subject).to be_a(Hash)
-          expect(subject.keys).to include('data')
-          expect(subject['data']).to be_a(Array)
-          expect(subject['data'].size).to eq(1)
-          expect(inserted_record['code']).to eq 'SUCCESS'
-          expect(inserted_record['action']).to eq 'insert'
-          expect(inserted_record['status']).to eq 'success'
-          expect(inserted_record_details['id']).to be_present
+        context 'with valid attributes' do
+          context 'and new record' do
+            # Un-comment this line if you're working on updating cassettes
+            # let(:cassette_options) { cassette[:options] }
+
+            it 'returns a hash with the upserted record' do
+              expect(subject).to be_a(Hash)
+              expect(subject.keys).to include('data')
+              expect(subject['data']).to be_a(Array)
+              expect(subject['data'].size).to eq(1)
+              expect(inserted_record['code']).to eq 'SUCCESS'
+              expect(inserted_record['action']).to eq 'insert'
+              expect(inserted_record['status']).to eq 'success'
+              expect(inserted_record_details['id']).to be_present
+            end
+          end
+
+          context 'and an existing record' do
+            let(:phone_number) { '+2347129248348' }
+            let(:display_name) { "Mae's Bakery Inc." }
+            let(:email) { 'maes-bakes@gmail.com' }
+
+            # Un-comment this line if you're working on updating cassettes
+            # let(:cassette_options) { cassette[:options] }
+
+            # How to use:
+            # ===========
+            # 1. Comment out the "Mock setup" section
+            # 2. To generate a new cassette:
+            #   - Uncomment the "VCR configuration" section
+            #   - Delete the existing cassette file (at spec/fixtures/cassettes/zoho/upsert_accounts.yml)
+            #   - Run the test
+            # 3. To run a live request:
+            #   - Comment out the "VCR configuration" section
+            #   - Run the test
+            # ===========
+
+            # Mock setup
+            # let(:access_token) { 'test_access_token' }
+            # let(:response_body) do
+            #   {
+            #     'data' => [
+            #       {
+            #         'code' => 'SUCCESS',
+            #         'details' => {
+            #           'id' => SecureRandom.uuid
+            #         },
+            #         'message' => 'record added successfully',
+            #         'status' => 'success',
+            #         'action' => 'insert'
+            #       }
+            #     ]
+            #   }
+            # end
+            # let(:response) { double('response', body: response_body) }
+            #
+            # before do
+            #   allow(AccessToken).to receive(:generate).and_return('access_token' => access_token)
+            #   allow(described_class).to receive(:connection).with(access_token:).and_return(double(post: response))
+            # end
+            # End mock setup
+
+            it 'returns a hash with the upserted record' do
+              expect(subject).to be_a(Hash)
+              expect(subject.keys).to include('data')
+              expect(subject['data']).to be_a(Array)
+              expect(subject['data'].size).to eq(1)
+              expect(inserted_record['code']).to eq 'SUCCESS'
+              expect(inserted_record['action']).to eq 'insert'
+              expect(inserted_record['status']).to eq 'success'
+              expect(inserted_record_details['id']).to be_present
+            end
+          end
+        end
+
+        context 'with invalid attributes' do
+          pending 'missing phone number'
+          pending 'missing email'
         end
       end
     end

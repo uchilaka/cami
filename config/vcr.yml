@@ -9,7 +9,7 @@ shared:
           - :uri
           - :body
         exclusive: false
-        record: :once
+        record: :once # :once, :new_episodes, :none
         allow_playback_repeats: true
     paypal:
       name: paypal.com
@@ -21,5 +21,7 @@ shared:
       name: zoho
       options:
         <<: *default_options
+        record: :new_episodes
         tags:
           - :obfuscate
+          - :zoho_cassette
