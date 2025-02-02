@@ -8,7 +8,7 @@ require_relative '../../lar_city_cli/tunnel_cmd'
 
 module LarCity
   module CLI
-    class IndexCmd < LarCityCLI::BaseCmd
+    class Entrypoint < LarCityCLI::BaseCmd
       namespace 'lx-cli'
 
       desc 'secrets [SUBCOMMAND]', 'Manage the secrets in the environment credentials file'
