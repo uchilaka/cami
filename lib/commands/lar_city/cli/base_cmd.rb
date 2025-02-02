@@ -55,7 +55,7 @@ module LarCity
         #   end
         #   wait_thread.value
         # end
-        system(cmd, out: $stdout, err: :out)
+        exit 0 if system(cmd, out: $stdout, err: :out)
       end
 
       def things(count)

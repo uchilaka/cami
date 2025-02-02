@@ -6,6 +6,10 @@ RSpec.describe LarCity::CLI::TunnelCmd, type: :thor do
   let(:tunnel_cmd) { described_class.new }
 
   describe '#init' do
+    before do
+      allow(tunnel_cmd).to receive(:run)
+    end
+
     context 'when in test environment' do
       it 'skips initialization' do
         expect(tunnel_cmd).to receive(:say).with('Skipping initialization of ngrok config in test environment.', anything)
@@ -20,7 +24,7 @@ RSpec.describe LarCity::CLI::TunnelCmd, type: :thor do
           allow(tunnel_cmd).to receive(:config_file_exists?).with(name: 'ngrok') { false }
           allow(File).to receive(:exist?).with(%r{\/config\/ngrok-via-docker.yml.erb$}).and_return(true)
           allow(File).to receive(:exist?).with(%r{\/config\/ngrok.yml.erb$}).and_return(true)
-          allow(File).to receive(:exist?).with(%r{\/config\/ngrok(.*)+.yml$}) { false }
+          allow(File).to receive(:exist?).with(%r{\/config\/ngrok(-via-docker)?.yml$}) { false }
           allow(ERB).to receive_message_chain(:new, :result).and_return('processed yaml content')
           allow(File).to receive(:write)
         end
@@ -62,7 +66,7 @@ RSpec.describe LarCity::CLI::TunnelCmd, type: :thor do
         allow(File).to receive(:exist?).with(%r{\/.ngrok2\/ngrok.yml$}).and_return(false)
         allow(File).to receive(:exist?).with(%r{\/config\/ngrok-via-docker.yml.erb$}).and_return(true)
         allow(File).to receive(:exist?).with(%r{\/config\/ngrok.yml.erb$}).and_return(true)
-        allow(File).to receive(:exist?).with(%r{\/config\/ngrok(.*)+.yml$}).and_return(true)
+        allow(File).to receive(:exist?).with(%r{\/config\/ngrok(-via-docker)?.yml$}) { false }
         allow(tunnel_cmd).to receive(:run)
       end
 
@@ -76,7 +80,7 @@ RSpec.describe LarCity::CLI::TunnelCmd, type: :thor do
 
       shared_examples 'ngrok starts with the expected command' do |expected_command|
         it do
-          tunnel_cmd.open_all
+          tunnel_cmd.invoke(:open_all, [], dry_run: true)
           expect(tunnel_cmd).to have_received(:run).with(expected_command)
         end
       end
@@ -87,7 +91,7 @@ RSpec.describe LarCity::CLI::TunnelCmd, type: :thor do
         end
 
         it do
-          tunnel_cmd.open_all
+          tunnel_cmd.invoke(:open_all, [], dry_run: true)
           expect(tunnel_cmd).to \
             have_received(:run).with(
               'ngrok start --all', "--config=#{Rails.root}/config/ngrok.yml"
