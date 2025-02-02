@@ -66,7 +66,7 @@ class AppUtils
 
     def live_reload_enabled?
       case friendly_os_name
-      when :windows
+      when :windows, :linux
         false
       else
         Rails.env.development? && yes?(ENV.fetch('RAILS_LIVE_RELOAD_ENABLED', 'yes'))
