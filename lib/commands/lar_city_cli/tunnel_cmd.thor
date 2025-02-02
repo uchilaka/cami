@@ -45,6 +45,9 @@ module LarCityCLI
         return
       end
 
+      # TODO: Make sure this works without issues on macOS
+      invoke :init, [], verbose: Rails.env.development?
+
       # TODO: Check for ngrok config file(s) and exit if they don't exist
       config_files = []
       app_config_file = File.join(project_root, 'config', 'ngrok.yml')

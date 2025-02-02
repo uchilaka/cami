@@ -30,6 +30,10 @@
     - [Managing application secrets](#managing-application-secrets)
     - [Testing emails](#testing-emails)
     - [Using NGROK](#using-ngrok)
+      - [Instructions on WSL2](#instructions-on-wsl2)
+      - [Update your NGROK token](#update-your-ngrok-token)
+      - [Run the tunnel script](#run-the-tunnel-script)
+      - [Instructions on macOS](#instructions-on-macos)
     - [Print key file](#print-key-file)
     - [Handling fixture files](#handling-fixture-files)
       - [Sanitizing an existing fixture file](#sanitizing-an-existing-fixture-file)
@@ -307,6 +311,53 @@ Your test inbox will be available at `http://localhost:8025`.
 
 ### Using NGROK
 
+> Be sure to follow [these instructions](https://ngrok.com/docs/getting-started/) to setup `ngrok` for your local environment.
+
+#### Instructions on WSL2
+
+> Ensure that your run your powershell terminal as an Administrator for the following steps.
+
+First, you want to make sure you've installed the `ngrok` command for Windows. The linked guide (above) will have updates steps but if you use the choco package manager, you can run the following command:
+
+```ps1
+choco install ngrok
+```
+
+Next, run the following command to setup the required execution policy to run `ps1` scripts:
+
+```ps1
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process
+```
+
+Next, ensure your powershell profile is setup. This is required for execution policies.
+
+> This powershell script is still in development
+
+```ps1
+# Edit your powershell profile config in VSCode
+code \\wsl$\Ubuntu-22.04\home\localadmin\repos\@larcity\cami\bin\init-profile.ps1
+
+# Initialize your powershell profile config
+powershell.exe -File \\wsl$\Ubuntu-22.04\home\localadmin\repos\@larcity\cami\bin\init-profile.ps1
+```
+
+#### Update your NGROK token
+
+On your development PC, ensure that you've set your auth token to the value from here: <https://dashboard.ngrok.com/get-started/your-authtoken>. To do so, run the following command from a powershell terminal:
+
+```ps1
+# See https://ngrok.com/docs/getting-started/#step-2-connect-your-account
+ngrok config add-authtoken ${NGROK_AUTH_TOKEN}
+```
+
+#### Run the tunnel script
+
+```ps1
+powershell.exe -File \\wsl$\Ubuntu-22.04\home\localadmin\repos\@larcity\cami\bin\tunnel.ps1
+```
+
+#### Instructions on macOS
+
 Follow these steps to setup `ngrok` for your local environment:
 
 - Ensure you have updated your `.envrc` file with the `NGROK_AUTH_TOKEN`. You can get this from KeePass
@@ -316,7 +367,13 @@ Follow these steps to setup `ngrok` for your local environment:
   ngrok config add-authtoken ${NGROK_AUTH_TOKEN}
   ```
 
-Then you can open a tunnel to your local environment by running:
+- Finally, generate your `config/ngrok.yml` file by running the following command:
+
+  ```shell
+  bin/thor lx-cli:tunnel:init
+  ```
+
+Now you can open a tunnel to your local environment by running:
 
 ```shell
 thor lx-cli:tunnel:open_all
