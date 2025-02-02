@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 require 'fileutils'
+require_relative '../app/concerns/operating_system_detectable'
 
 class AppUtils
+  extend OperatingSystemDetectable
+
   class << self
     def configure_real_smtp?
       send_emails? && !letter_opener_enabled? && !mailhog_enabled?
@@ -59,6 +62,15 @@ class AppUtils
       default_value = Rails.env.development? ? 'yes' : 'no'
 
       yes?(ENV.fetch('ENV_DEBUG_ASSETS', default_value))
+    end
+
+    def live_reload_enabled?
+      case friendly_os_name
+      when :windows, :linux
+        false
+      else
+        Rails.env.development? && yes?(ENV.fetch('RAILS_LIVE_RELOAD_ENABLED', 'yes'))
+      end
     end
   end
 end

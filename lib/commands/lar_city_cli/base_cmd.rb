@@ -4,7 +4,8 @@ require 'thor'
 require 'thor/shell/color'
 require 'awesome_print'
 require 'rbconfig'
-require_relative '../../lar_city/errors'
+require "#{Rails.root}/app/concerns/operating_system_detectable"
+# require_relative '../../../app/concerns/operating_system_detectable'
 
 # Conventions for command or task implementation classes:
 # - Use the namespace method to define a namespace for the Thor class.
@@ -14,6 +15,8 @@ require_relative '../../lar_city/errors'
 # - All text verbose output should be in Thor::Shell::Color::MAGENTA.
 module LarCityCLI
   class BaseCmd < Thor
+    include OperatingSystemDetectable
+
     class_option :dry_run,
                  type: :boolean,
                  aliases: %w[-d --pretend --preview],
@@ -36,6 +39,26 @@ module LarCityCLI
 
     protected
 
+    def run(*args)
+      cmd = args.join(' ')
+      if verbose? || dry_run?
+        msg = <<~CMD
+          Executing#{dry_run? ? ' (dry-run)' : ''}: #{cmd}
+        CMD
+        say(msg, dry_run? ? :magenta : :yellow)
+      end
+      return if dry_run?
+
+      # # Example: doing this with Open3
+      # Open3.popen2e(cmd) do |_stdin, stdout_stderr, wait_thread|
+      #   Thread.new do
+      #     stdout_stderr.each { |line| puts line }
+      #   end
+      #   wait_thread.value
+      # end
+      system(cmd, out: $stdout, err: :out)
+    end
+
     def things(count)
       'item'.pluralize(count)
     end
@@ -46,43 +69,6 @@ module LarCityCLI
 
     def dry_run?
       options[:dry_run]
-    end
-
-    # Check OS with Ruby: https://gist.github.com/havenwood/4161944
-    def mac?
-      friendly_os_name == :macos
-    end
-
-    def linux?
-      friendly_os_name == :linux
-    end
-
-    def friendly_os_name
-      case RbConfig::CONFIG['host_os']
-      when /linux/
-        :linux
-      when /darwin/
-        :macos
-      when /mswin|mingw32|windows/
-        :windows
-      when /solaris/
-        :solaris
-      when /bsd/
-        :bsd
-      else
-        :unsupported
-      end
-    end
-
-    def human_friendly_os_names_map
-      {
-        linux: 'Linux',
-        macos: 'macOS',
-        windows: 'Windows',
-        solaris: 'Solaris',
-        bsd: 'BSD',
-        unsupported: 'Unsupported'
-      }
     end
   end
 end
