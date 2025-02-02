@@ -21,6 +21,9 @@
     - [6. Initialize the database](#6-initialize-the-database)
     - [7. Start up the app](#7-start-up-the-app)
   - [Running Storybook](#running-storybook)
+    - [Publishing the latest Storybook](#publishing-the-latest-storybook)
+    - [The Storybook Firebase project](#the-storybook-firebase-project)
+    - [A note on Storybook auto-migrations](#a-note-on-storybook-auto-migrations)
   - [Database management](#database-management)
     - [Resetting the databases](#resetting-the-databases)
   - [How to run the test suite](#how-to-run-the-test-suite)
@@ -39,6 +42,7 @@
       - [How do I disable these "Missing type signature" errors?](#how-do-i-disable-these-missing-type-signature-errors)
   - [Integration Partners](#integration-partners)
     - [PayPal](#paypal)
+    - [Zoho](#zoho)
   - [Guides and References](#guides-and-references)
   - [Known issues](#known-issues)
     - [Deprecation notice for `fixture_path` in Rails 7.1](#deprecation-notice-for-fixture_path-in-rails-71)
@@ -249,6 +253,34 @@ To review component stories, run:
 yarn storybook
 ```
 
+### Publishing the latest Storybook
+
+> Review [the docs for multisite projects](https://firebase.google.com/docs/hosting/multisites).
+
+- The Site ID is: `larcity-cami-components`
+- The Storybook URL is: <https://larcity-cami-components.web.app>
+
+```shell
+yarn sb:publish
+```
+
+### The Storybook Firebase project
+
+<https://console.firebase.google.com/project/larcity-ui-docs/overview>
+
+### A note on Storybook auto-migrations
+
+```shell
+│   If you'd like to run the migrations again, you can do so by running 'npx storybook automigrate'                                 │
+│                                                                                                                                   │
+│   The automigrations try to migrate common patterns in your project, but might not contain everything needed to migrate to the    │
+│   latest version of Storybook.                                                                                                    │
+│                                                                                                                                   │
+│   Please check the changelog and migration guide for manual migrations and more information:                                      │
+│   https://storybook.js.org/docs/migration-guide                                                                                   │
+│   And reach out on Discord if you need help: https://discord.gg/storybook  
+```
+
 ## Database management
 
 ### Resetting the databases
@@ -369,6 +401,17 @@ yq -p json -o yaml ./path/to/fixture.json > ./path/to/fixture.yml
   - [Live](https://developer.paypal.com/dashboard/applications/live)
 - [Invoicing API](https://developer.paypal.com/docs/api/invoicing/v2/)
   - [Webhooks](https://developer.paypal.com/docs/invoicing/webhooks/)
+
+### Zoho
+
+> Links pending
+
+- CRM home
+- Developer portal
+- Model field specs
+  - Account
+  - Contact
+  - Deal
 
 ## Guides and References
 

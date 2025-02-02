@@ -8,10 +8,8 @@ import './main.scss'
 
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
-import Home from '@views/Home'
-import Dashboard from '@views/Dashboard'
+import App from '@/routes/App'
 import AccountSummaryModal from '@/features/AccountManager/AccountSummaryModal'
-import InvoiceSearch from '@/features/InvoiceManager/InvoiceSearch'
 
 function mountIfContainerIsLoaded(containerId: string, Component: any) {
   const domContainer = document.querySelector(`#${containerId}`)
@@ -26,8 +24,6 @@ function mountIfContainerIsLoaded(containerId: string, Component: any) {
  */
 document.addEventListener('turbo:load', () => {
   console.debug('DOM fully loaded and parsed')
-  mountIfContainerIsLoaded('home', Home)
-  mountIfContainerIsLoaded('dashboard', Dashboard)
+  mountIfContainerIsLoaded('app', App)
   mountIfContainerIsLoaded('account-summary-modal-container', AccountSummaryModal)
-  mountIfContainerIsLoaded('invoice-search', InvoiceSearch)
 })
