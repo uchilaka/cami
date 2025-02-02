@@ -42,6 +42,7 @@
       - [How do I disable these "Missing type signature" errors?](#how-do-i-disable-these-missing-type-signature-errors)
   - [Integration Partners](#integration-partners)
     - [PayPal](#paypal)
+    - [Zoho](#zoho)
   - [Guides and References](#guides-and-references)
   - [Known issues](#known-issues)
     - [Deprecation notice for `fixture_path` in Rails 7.1](#deprecation-notice-for-fixture_path-in-rails-71)
@@ -400,6 +401,17 @@ yq -p json -o yaml ./path/to/fixture.json > ./path/to/fixture.yml
   - [Live](https://developer.paypal.com/dashboard/applications/live)
 - [Invoicing API](https://developer.paypal.com/docs/api/invoicing/v2/)
   - [Webhooks](https://developer.paypal.com/docs/invoicing/webhooks/)
+
+### Zoho
+
+> Links pending
+
+- CRM home
+- Developer portal
+- Model field specs
+  - Account
+  - Contact
+  - Deal
 
 ## Guides and References
 
