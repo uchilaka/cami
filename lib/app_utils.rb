@@ -41,7 +41,7 @@ class AppUtils
     end
 
     def ping?(host)
-      result = system("ping -c 1 -W 3 #{host}", out: '/dev/null', err: '/dev/null')
+      result = system("ping -c 1 -W 1 #{host}", out: '/dev/null', err: '/dev/null')
       result.nil? ? false : result
     end
 
@@ -69,7 +69,8 @@ class AppUtils
       when :windows, :linux
         false
       else
-        Rails.env.development? && yes?(ENV.fetch('RAILS_LIVE_RELOAD_ENABLED', 'yes'))
+        Rails.env.development? &&
+          yes?(ENV.fetch('RAILS_LIVE_RELOAD_ENABLED', 'yes'))
       end
     end
   end
