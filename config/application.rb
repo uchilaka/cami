@@ -77,6 +77,8 @@ module Cami
     config.autoload_paths << "#{root}/lib/commands"
     config.autoload_paths << "#{root}/config/vcr"
 
+    # TODO: Make sure all the directories in the autoload_paths are present in the eager_load_paths
+
     config.assets.paths << "#{root}/vendor/assets"
 
     # Configure allowed hosts. See doc https://guides.rubyonrails.org/configuring.html#actiondispatch-hostauthorization
