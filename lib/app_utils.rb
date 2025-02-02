@@ -41,7 +41,7 @@ class AppUtils
     end
 
     def ping?(host)
-      result = system("ping -c 1 -t 3 -W 1 #{host}", out: '/dev/null', err: '/dev/null')
+      result = system("ping -c 1 -W 3 #{host}", out: '/dev/null', err: '/dev/null')
       result.nil? ? false : result
     end
 
