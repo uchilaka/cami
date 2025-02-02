@@ -4,6 +4,7 @@ require 'thor'
 require 'thor/shell/color'
 require 'awesome_print'
 require 'rbconfig'
+require_relative '../../lar_city/errors'
 
 # Conventions for command or task implementation classes:
 # - Use the namespace method to define a namespace for the Thor class.
@@ -12,8 +13,6 @@ require 'rbconfig'
 # - Use the say method to output text to the console.
 # - All text verbose output should be in Thor::Shell::Color::MAGENTA.
 module LarCityCLI
-  class UnsupportedOSError < StandardError; end
-
   class BaseCmd < Thor
     class_option :dry_run,
                  type: :boolean,

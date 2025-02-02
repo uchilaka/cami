@@ -5,7 +5,7 @@ require 'fileutils'
 
 module LarCityCLI
   class DatakitCmd < BaseCmd
-    namespace :'lx-cli:datakit'
+    namespace 'datakit'
 
     desc 'sanitize', 'Sanitize a data file'
     option :file,
@@ -14,7 +14,7 @@ module LarCityCLI
            aliases: '-f',
            required: true
     def sanitize
-      raise UnsupportedOSError, 'Unsupported OS' unless mac? || linux?
+      raise Errors::UnsupportedOSError, 'Unsupported OS' unless mac? || linux?
 
       input_file = options[:file]
       input_file = Rails.root.join(input_file) unless input_file.start_with?('/')

@@ -6,7 +6,7 @@ require 'open3'
 module LarCityCLI
   # Manage NGROK tunnels for dev testing of the app and rails API
   class TunnelCmd < BaseCmd
-    namespace :'lx-cli:tunnel'
+    namespace 'tunnel'
 
     desc 'init', 'Initialize ngrok config for the project'
     def init
