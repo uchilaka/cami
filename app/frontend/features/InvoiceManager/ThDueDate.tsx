@@ -28,7 +28,7 @@ export default function ThDueDate() {
     const control = controlRef.current
     const tooltip = tooltipRef.current
 
-    new Tooltip(tooltip, control, { placement: 'bottom', triggerType: 'hover' }, { id: 'tooltip--sort-by-due-date' })
+    new Tooltip(tooltip, control, { placement: 'bottom', triggerType: 'hover' }, { id: 'tooltip--sort-by-due-date', override: true })
   }, [controlRef, tooltipRef])
 
   return (

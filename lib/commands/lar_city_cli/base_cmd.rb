@@ -14,16 +14,21 @@ require 'rbconfig'
 module LarCityCLI
   class UnsupportedOSError < StandardError; end
 
-  class Base < Thor
+  class BaseCmd < Thor
+    class_option :dry_run,
+                 type: :boolean,
+                 aliases: %w[-d --pretend --preview],
+                 desc: 'Dry run',
+                 default: false
+    class_option :environment,
+                 type: :string,
+                 aliases: '--env',
+                 desc: 'Environment',
+                 required: false
     class_option :verbose,
                  type: :boolean,
                  aliases: '-v',
                  desc: 'Verbose output',
-                 default: false
-    class_option :dry_run,
-                 type: :boolean,
-                 aliases: '-d',
-                 desc: 'Dry run',
                  default: false
 
     def self.exit_on_failure?
@@ -46,14 +51,14 @@ module LarCityCLI
 
     # Check OS with Ruby: https://gist.github.com/havenwood/4161944
     def mac?
-      friendly_os_name? == :macos
+      friendly_os_name == :macos
     end
 
     def linux?
-      friendly_os_name? == :linux
+      friendly_os_name == :linux
     end
 
-    def friendly_os_name?
+    def friendly_os_name
       case RbConfig::CONFIG['host_os']
       when /linux/
         :linux
@@ -68,6 +73,17 @@ module LarCityCLI
       else
         :unsupported
       end
+    end
+
+    def human_friendly_os_names_map
+      {
+        linux: 'Linux',
+        macos: 'macOS',
+        windows: 'Windows',
+        solaris: 'Solaris',
+        bsd: 'BSD',
+        unsupported: 'Unsupported'
+      }
     end
   end
 end

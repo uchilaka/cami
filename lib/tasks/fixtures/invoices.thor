@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative '../../commands/lar_city_cli/base'
+require_relative '../../commands/lar_city_cli/base_cmd'
 
 module Fixtures
-  class Invoices < LarCityCLI::Base
+  class Invoices < LarCityCLI::BaseCmd
     attr_accessor :enqueued_records, :processed_records, :skipped_records, :error_records
 
     desc 'load', 'Load invoice fixtures'

@@ -2,7 +2,10 @@
 
 require 'awesome_print'
 
-class ApplicationJob < ActiveJob::Base
+# To setup as ActiveJob, see: https://github.com/sidekiq/sidekiq/wiki/Active-Job#active-job-setup
+class ApplicationJob
+  include Sidekiq::Job
+
   queue_as :default
 
   sidekiq_options retry: 3
