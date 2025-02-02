@@ -39,6 +39,26 @@ module LarCityCLI
 
     protected
 
+    def run(*args)
+      cmd = args.join(' ')
+      if verbose? || dry_run?
+        msg = <<~CMD
+          Executing#{dry_run? ? ' (dry-run)' : ''}: #{cmd}
+        CMD
+        say(msg, dry_run? ? :magenta : :yellow)
+      end
+      return if dry_run?
+
+      # # Example: doing this with Open3
+      # Open3.popen2e(cmd) do |_stdin, stdout_stderr, wait_thread|
+      #   Thread.new do
+      #     stdout_stderr.each { |line| puts line }
+      #   end
+      #   wait_thread.value
+      # end
+      system(cmd, out: $stdout, err: :out)
+    end
+
     def things(count)
       'item'.pluralize(count)
     end

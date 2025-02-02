@@ -12,6 +12,10 @@ module OperatingSystemDetectable
     friendly_os_name == :linux
   end
 
+  def windows?
+    friendly_os_name == :windows
+  end
+
   def human_friendly_os_name
     human_friendly_os_names_map[friendly_os_name]
   end
