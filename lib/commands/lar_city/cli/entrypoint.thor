@@ -3,8 +3,8 @@
 require_relative 'base_cmd'
 require_relative 'datakit_cmd'
 require_relative 'devkit_cmd'
-require_relative '../../lar_city_cli/secrets_cmd'
-require_relative '../../lar_city_cli/tunnel_cmd'
+require_relative 'secrets_cmd'
+require_relative 'tunnel_cmd'
 
 module LarCity
   module CLI
@@ -12,16 +12,16 @@ module LarCity
       namespace 'lx-cli'
 
       desc 'secrets [SUBCOMMAND]', 'Manage the secrets in the environment credentials file'
-      subcommand 'secrets', LarCityCLI::SecretsCmd
+      subcommand 'secrets', SecretsCmd
 
       desc 'devkit [SUBCOMMAND]', 'A few developer tools for the project'
-      subcommand 'devkit', LarCityCLI::DevkitCmd
+      subcommand 'devkit', DevkitCmd
 
       desc 'datakit [SUBCOMMAND]', 'A few tools for managing application data stores'
-      subcommand 'datakit', LarCityCLI::DatakitCmd
+      subcommand 'datakit', DatakitCmd
 
       desc 'tunnel [SUBCOMMAND]', 'Manage the dev proxy tunnel (for testing the app with a public URL)'
-      subcommand 'tunnel', LarCityCLI::TunnelCmd
+      subcommand 'tunnel', TunnelCmd
     end
   end
 end
