@@ -2,7 +2,7 @@
 
 require_relative 'base_cmd'
 
-module LarCityCLI
+module LarCity::CLI
   class DevkitCmd < BaseCmd
     namespace 'devkit'
 

@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require_relative '../../lar_city_cli/base_cmd'
-require_relative '../../lar_city_cli/datakit_cmd'
-require_relative '../../lar_city_cli/devkit_cmd'
+require_relative 'base_cmd'
+require_relative 'datakit_cmd'
+require_relative 'devkit_cmd'
 require_relative '../../lar_city_cli/secrets_cmd'
 require_relative '../../lar_city_cli/tunnel_cmd'
 
 module LarCity
   module CLI
-    class Entrypoint < LarCityCLI::BaseCmd
+    class Entrypoint < BaseCmd
       namespace 'lx-cli'
 
       desc 'secrets [SUBCOMMAND]', 'Manage the secrets in the environment credentials file'

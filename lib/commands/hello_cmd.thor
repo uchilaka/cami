@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'lar_city_cli/base_cmd'
+require_relative 'lar_city/cli/base_cmd'
 
-class HelloCmd < LarCityCLI::BaseCmd
+class HelloCmd < LarCity::CLI::BaseCmd
   namespace 'demo'
 
   def self.exit_on_failure?

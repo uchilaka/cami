@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
-require_relative 'base_cmd'
 require 'fileutils'
+require_relative 'base_cmd'
 
-module LarCityCLI
+module LarCity::CLI
   class DatakitCmd < BaseCmd
     namespace 'datakit'
 
+    # TODO: Add support for managing & processing target files in remote storage buckets (e.g. S3)
     desc 'sanitize', 'Sanitize a data file'
     option :file,
            desc: 'The file to sanitize',
