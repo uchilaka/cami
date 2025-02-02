@@ -2,7 +2,6 @@
 
 require 'rails_helper'
 
-# load Rails.root.join('lib', 'tasks', 'hello_cmd.thor')
 load_lib_script 'commands', 'hello_cmd', ext: 'thor'
 
 RSpec.describe HelloCmd, type: :thor do
