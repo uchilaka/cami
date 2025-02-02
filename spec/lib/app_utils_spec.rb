@@ -60,12 +60,30 @@ RSpec.describe AppUtils, utility: true, skip_in_ci: true do
   end
 
   describe '.ping?' do
-    it 'returns true if host is reachable' do
-      expect(described_class.ping?('google.com')).to eq(true)
+    before { allow(Kernel).to receive(:system) }
+
+    after { allow(Kernel).to receive(:system).and_call_original }
+
+    context 'when the host is reachable' do
+      before { allow(Kernel).to receive(:system).and_return(true) }
+
+      it do
+        expect(described_class.ping?('google.com')).to eq(true)
+        expect(Kernel).to \
+          have_received(:system)
+            .with('ping -c 1 -t 3 -W 1 google.com', out: '/dev/null', err: '/dev/null')
+      end
     end
 
-    it 'returns false if host is not reachable' do
-      expect(described_class.ping?('notarealhost')).to eq(false)
+    context 'when the host is not reachable' do
+      before { allow(Kernel).to receive(:system).and_return(false) }
+
+      it do
+        expect(described_class.ping?('notarealhost')).to eq(false)
+        expect(Kernel).to \
+          have_received(:system)
+            .with('ping -c 1 -t 3 -W 1 notarealhost', out: '/dev/null', err: '/dev/null')
+      end
     end
   end
 
@@ -303,35 +321,37 @@ RSpec.describe AppUtils, utility: true, skip_in_ci: true do
       end
 
       context 'and Rails.env.development? is true' do
-        before do
-          allow(Rails.env).to receive(:development?).and_return(true)
-        end
+        let(:mock_env) { 'development' }
 
-        after do
-          allow(Rails.env).to receive(:development?).and_call_original
-        end
+        # before do
+        #   allow(Rails.env).to receive(:development?).and_return(true)
+        # end
+        #
+        # after do
+        #   allow(Rails.env).to receive(:development?).and_call_original
+        # end
 
         it 'returns true if RAILS_LIVE_RELOAD_ENABLED is "yes"' do
-          with_modified_env(RAILS_LIVE_RELOAD_ENABLED: 'yes') do
+          with_modified_env(RAILS_LIVE_RELOAD_ENABLED: 'yes', RAILS_ENV: mock_env) do
             expect(described_class.live_reload_enabled?).to eq(true)
           end
         end
 
         it 'returns false if RAILS_LIVE_RELOAD_ENABLED is "no"' do
-          with_modified_env(RAILS_LIVE_RELOAD_ENABLED: 'no') do
+          with_modified_env(RAILS_LIVE_RELOAD_ENABLED: 'no', RAILS_ENV: mock_env) do
             expect(described_class.live_reload_enabled?).to eq(false)
           end
         end
       end
 
       context 'and Rails.env.development? is false' do
-        before do
-          allow(Rails.env).to receive(:development?).and_return(false)
-        end
-
-        after do
-          allow(Rails.env).to receive(:development?).and_call_original
-        end
+        # before do
+        #   allow(Rails.env).to receive(:development?).and_return(false)
+        # end
+        #
+        # after do
+        #   allow(Rails.env).to receive(:development?).and_call_original
+        # end
 
         it 'returns false' do
           expect(described_class.live_reload_enabled?).to eq(false)
