@@ -71,6 +71,7 @@ module Cami
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     config.eager_load_paths << "#{root}/lib"
+    config.eager_load_paths << "#{root}/app/concerns"
 
     # Autoload paths
     config.autoload_paths << "#{root}/lib/workflows"
@@ -78,6 +79,8 @@ module Cami
     config.autoload_paths << "#{root}/config/vcr"
 
     # TODO: Make sure all the directories in the autoload_paths are present in the eager_load_paths
+    diff = config.eager_load_paths - config.autoload_paths
+    diff.each { |path| config.eager_load_paths << path }
 
     config.assets.paths << "#{root}/vendor/assets"
 

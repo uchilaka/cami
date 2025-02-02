@@ -285,4 +285,58 @@ RSpec.describe AppUtils, utility: true, skip_in_ci: true do
       end
     end
   end
+
+  describe '.live_reload_enabled?' do
+    context 'when the operating system is Windows' do
+      before do
+        allow(AppUtils).to receive(:friendly_os_name).and_return(:windows)
+      end
+
+      it 'returns false' do
+        expect(described_class.live_reload_enabled?).to eq(false)
+      end
+    end
+
+    context 'when the operating system is not Windows' do
+      before do
+        allow(AppUtils).to receive(:friendly_os_name).and_return(:linux)
+      end
+
+      context 'and Rails.env.development? is true' do
+        before do
+          allow(Rails.env).to receive(:development?).and_return(true)
+        end
+
+        after do
+          allow(Rails.env).to receive(:development?).and_call_original
+        end
+
+        it 'returns true if RAILS_LIVE_RELOAD_ENABLED is "yes"' do
+          with_modified_env(RAILS_LIVE_RELOAD_ENABLED: 'yes') do
+            expect(described_class.live_reload_enabled?).to eq(true)
+          end
+        end
+
+        it 'returns false if RAILS_LIVE_RELOAD_ENABLED is "no"' do
+          with_modified_env(RAILS_LIVE_RELOAD_ENABLED: 'no') do
+            expect(described_class.live_reload_enabled?).to eq(false)
+          end
+        end
+      end
+
+      context 'and Rails.env.development? is false' do
+        before do
+          allow(Rails.env).to receive(:development?).and_return(false)
+        end
+
+        after do
+          allow(Rails.env).to receive(:development?).and_call_original
+        end
+
+        it 'returns false' do
+          expect(described_class.live_reload_enabled?).to eq(false)
+        end
+      end
+    end
+  end
 end
