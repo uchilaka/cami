@@ -13,6 +13,7 @@ if defined?(RailsLiveReload)
     # config.watch %r{app/helpers/.+\.rb}, reload: :always
     # config.watch %r{config/locales/.+\.yml}, reload: :always
 
-    config.enabled = Rails.env.development?
+    # TODO: Re-visit if/when this PR is merged: https://github.com/railsjazz/rails_live_reload/pull/42
+    config.enabled = AppUtils.live_reload_enabled?
   end
 end

@@ -45,6 +45,9 @@ module LarCityCLI
         return
       end
 
+      # TODO: Make sure this works without issues on macOS
+      invoke :init, [], verbose: Rails.env.development?
+
       # TODO: Check for ngrok config file(s) and exit if they don't exist
       config_files = []
       app_config_file = File.join(project_root, 'config', 'ngrok.yml')
@@ -66,22 +69,26 @@ module LarCityCLI
         exit 1
       end
 
-      cmd = "ngrok start --all --config=#{config_files.join(',')} "
+      if windows? || linux?
+        bottom_bar = "============================================================================"
+        os_banner = " OS DETECTED: #{human_friendly_os_name.upcase} "
+        top_bar_ends = "=" * ((bottom_bar.length - os_banner.length) / 2.0)
+        launch_msg = <<~MSG
 
-      if verbose?
-        puts <<~CMD
-          Executing#{dry_run? ? ' (dry-run)' : ''}: #{cmd}
-        CMD
+          #{top_bar_ends} OS DETECTED: #{human_friendly_os_name} #{top_bar_ends}
+          Your dev proxy tunnel is about to launch via a Docker container. 
+          
+          Visit your NGROK dashboard to view information on available endpoints: 
+          https://dashboard.ngrok.com/endpoints?sortBy=updatedAt&orderBy=desc
+          ============================================================================
+
+        MSG
+        say launch_msg, :yellow
+        run "docker compose up tunnel"
+      else
+        run "ngrok start --all",
+            "--config=#{config_files.join(',')}"
       end
-
-      # # Example: doing this with Open3
-      # Open3.popen2e(cmd) do |_stdin, stdout_stderr, wait_thread|
-      #   Thread.new do
-      #     stdout_stderr.each { |line| puts line }
-      #   end
-      #   wait_thread.value
-      # end
-      system(cmd, out: $stdout) unless dry_run?
     end
 
     private
@@ -101,22 +108,23 @@ module LarCityCLI
     def project_root
       return @project_root if @project_root
 
-      project_rel_path = File.expand_path('../../..', __dir__)
-      if has_realpath_cmd?
-        project_root = `realpath "#{project_rel_path}"`
-      elsif has_python_3?
-        project_root = `python3 -c "import os; print(os.path.realpath('#{project_rel_path}'))"`
-      else
-        puts 'realpath could not be found. Tunnel will not be opened.'
-        exit 1
-      end
-
-      if project_root.empty?
-        puts 'realpath could not be found. Tunnel will not be opened.'
-        exit 1
-      end
-
-      @project_root = project_root.strip!
+      # project_rel_path = File.expand_path('../../..', __dir__)
+      # if has_realpath_cmd?
+      #   project_root = `realpath "#{project_rel_path}"`
+      # elsif has_python_3?
+      #   project_root = `python3 -c "import os; print(os.path.realpath('#{project_rel_path}'))"`
+      # else
+      #   puts 'realpath could not be found. Tunnel will not be opened.'
+      #   exit 1
+      # end
+      #
+      # if project_root.empty?
+      #   puts 'realpath could not be found. Tunnel will not be opened.'
+      #   exit 1
+      # end
+      #
+      # @project_root = project_root.strip!
+      @project_root = Rails.root.to_s
 
       if verbose?
         puts <<~CMD

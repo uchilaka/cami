@@ -129,6 +129,12 @@ module NavbarHelper
         url: "https://crm.zoho.com/crm/org#{crm_org_id}/tab/Home/begin",
         admin: true,
         enabled: true
+      },
+      {
+        label: 'Proxy Endpoints',
+        url: 'https://dashboard.ngrok.com/endpoints?sortBy=updatedAt&orderBy=desc',
+        admin: true,
+        enabled: true
       }
     ].map { |item| build_menu_item(item) }.filter(&:enabled)
   end
