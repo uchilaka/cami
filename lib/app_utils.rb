@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 require 'fileutils'
-require_relative '../app/concerns/operating_system_detectable'
+
+# See https://stackoverflow.com/a/837593/3726759
+$LOAD_PATH.unshift(File.join(Dir.pwd, 'app'))
+
+require 'concerns/operating_system_detectable'
 
 class AppUtils
   extend OperatingSystemDetectable

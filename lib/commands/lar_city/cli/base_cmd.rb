@@ -3,7 +3,8 @@
 require 'thor'
 require 'thor/shell/color'
 require 'awesome_print'
-require "#{Rails.root}/app/concerns/operating_system_detectable"
+require 'rbconfig'
+require 'concerns/operating_system_detectable'
 
 # Conventions for command or task implementation classes:
 # - Use the namespace method to define a namespace for the Thor class.
@@ -42,8 +43,8 @@ module LarCity
         cmd = args.join(' ')
         if verbose? || dry_run?
           msg = <<~CMD
-          Executing#{dry_run? ? ' (dry-run)' : ''}: #{cmd}
-        CMD
+            Executing#{dry_run? ? ' (dry-run)' : ''}: #{cmd}
+          CMD
           say(msg, dry_run? ? :magenta : :yellow)
         end
         return if dry_run?
@@ -58,8 +59,8 @@ module LarCity
         exit 0 if system(cmd, out: $stdout, err: :out)
       end
 
-      def things(count)
-        'item'.pluralize(count)
+      def things(count, name: 'item')
+        name.pluralize(count)
       end
 
       def verbose?
