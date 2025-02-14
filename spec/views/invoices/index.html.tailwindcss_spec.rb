@@ -14,6 +14,10 @@ RSpec.describe 'invoices/index', type: :view do
     )
   end
 
+  shared_examples 'the expected invoice item' do |_selector, _match_string|
+    pending 'renders the expected invoice item'
+  end
+
   it 'renders a list of invoices' do
     render
     cell_selector = 'div>p'

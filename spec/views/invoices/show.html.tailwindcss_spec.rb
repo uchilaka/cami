@@ -9,6 +9,14 @@ RSpec.describe 'invoices/show', type: :view do
     assign(:invoice, invoice)
   end
 
+  pending 'A sent invoice should render the expected invoice item'
+  pending 'A scheduled invoice should render the expected invoice item'
+  pending 'A partially paid invoice should render the expected invoice item'
+  pending 'A paid invoice should render the expected invoice item'
+  pending 'A marked as paid invoice should render the expected invoice item'
+  pending 'An unpaid invoice should render the expected invoice item'
+  pending 'An overdue invoice should render the expected invoice item'
+
   it 'renders attributes in <p>' do
     render
     expect(rendered).to match(/Invoice #/)
