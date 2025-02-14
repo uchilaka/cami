@@ -116,7 +116,11 @@ module PayPal
         amount:,
         due_amount:,
         vendor_id:,
-        viewed_by_recipient:
+        viewed_by_recipient:,
+        response: {
+          body: object,
+          serialized_at: Time.zone.now.iso8601,
+        }
       }
     end
 
