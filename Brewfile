@@ -7,6 +7,7 @@ cask_args appdir: '~/Applications', require_sha: true
 
 # brew install
 brew 'tree'
+brew 'direnv'
 tap 'heroku/brew' || true
 brew 'heroku'
 brew 'ruby-build'

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative 'base'
+require_relative 'base_cmd'
 
-module LarCityCLI
-  class Devkit < Base
-    namespace :'lx-cli:devkit'
+module LarCity::CLI
+  class DevkitCmd < BaseCmd
+    namespace 'devkit'
 
     desc 'swaggerize', 'Generate Swagger JSON file(s)'
     def swaggerize
@@ -24,7 +24,7 @@ module LarCityCLI
 
     desc 'logs', 'Show the logs for the project'
     def logs
-      raise UnsupportedOSError, 'Unsupported OS' unless mac?
+      raise Errors::UnsupportedOSError, 'Unsupported OS' unless mac?
 
       cmd = "open --url #{log_stream_url}"
       if verbose?

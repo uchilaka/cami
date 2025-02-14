@@ -6,6 +6,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'SSL'
   inflect.acronym 'VAT'
   inflect.acronym 'PII'
+  inflect.acronym 'CLI'
 end
 
 Rails.autoloaders.main.inflector.inflect(

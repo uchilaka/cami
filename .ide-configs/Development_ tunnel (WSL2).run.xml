@@ -1,0 +1,19 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Development: tunnel (WSL2)" type="ShConfigurationType">
+    <option name="SCRIPT_TEXT" value="#!/usr/bin/env powershell Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unrestricted; ngrok start --all --config config/ngrok.yml" />
+    <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+    <option name="SCRIPT_PATH" value="$PROJECT_DIR$/bin/tunnel.ps1" />
+    <option name="SCRIPT_OPTIONS" value="--config=config/ngrok.yml" />
+    <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+    <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <option name="INDEPENDENT_INTERPRETER_PATH" value="false" />
+    <option name="INTERPRETER_PATH" value="C:/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe" />
+    <option name="INTERPRETER_OPTIONS" value="" />
+    <option name="EXECUTE_IN_TERMINAL" value="true" />
+    <option name="EXECUTE_SCRIPT_FILE" value="true" />
+    <envs />
+    <method v="2">
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="Load env (WSL2)" run_configuration_type="ShConfigurationType" />
+    </method>
+  </configuration>
+</component>
