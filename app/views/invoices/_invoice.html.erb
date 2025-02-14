@@ -1,7 +1,10 @@
 <div id="<%= dom_id invoice %>">
   <section class="flex justify-between items-center mb-6">
+    <!-- Invoice Number -->
     <h1 class="font-bold text-4xl">Invoice #<%= invoice.invoice_number %></h1>
-    <span class="<%= compose_class_names("me-2 px-2.5 py-0.5 rounded-sm text-2xl", {
+
+    <!-- Invoice Status Badge -->
+    <span id="invoice-status" class="<%= compose_class_names("me-2 px-2.5 py-0.5 rounded-sm text-2xl", {
       "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300": invoice.paid?,
       "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300": invoice.sent? && !invoice.past_due?,
       "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300": invoice.past_due?
@@ -16,13 +19,7 @@
     <% end %>
     <%= invoice.invoiceable&.id %>
   </p>
-
-
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Status:</strong>
-    <%= invoice.status %>
-  </p>
-
+  
   <p class="my-5">
     <strong class="block font-medium mb-1">Issued at:</strong>
     <%= invoice.issued_at %>
