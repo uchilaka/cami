@@ -64,6 +64,7 @@ class AppUtils
       yes?(ENV.fetch('ENV_DEBUG_ASSETS', default_value))
     end
 
+    # TODO: is this deprecated or refactored as implemented elsewhere?
     def live_reload_enabled?
       case friendly_os_name
       when :windows, :linux

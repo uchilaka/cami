@@ -294,6 +294,7 @@ RSpec.describe AppUtils, utility: true, skip_in_ci: true do
     end
   end
 
+  # TODO: Is this still passing?
   describe '.live_reload_enabled?' do
     context 'when the OS is Windows' do
       before do
