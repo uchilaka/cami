@@ -10,43 +10,45 @@ module MaybeAccountSpecific
     raise LarCity::MissingRequiredModule, "#{name} requires LarCity::CurrentAttributes" \
           unless base.include?(LarCity::CurrentAttributes)
 
-    unless base.respond_to?(:authorized_actions)
-      raise StandardError, <<~ERROR
-        #{name} must implement a class instance variable and accessor :authorized_actions
-      ERROR
-    end
-
-    unless base.send(:authorized_actions).is_a?(HashWithIndifferentAccess)
-      raise StandardError, <<~ERROR
-        #{name} must initialize @authorized_actions class instance variable as a HashWithIndifferentAccess
-      ERROR
-    end
+    # unless base.respond_to?(:authorized_actions)
+    #   raise StandardError, <<~ERROR
+    #     #{name} must implement a class instance variable and accessor :authorized_actions
+    #   ERROR
+    # end
+    #
+    # unless base.send(:authorized_actions).is_a?(HashWithIndifferentAccess)
+    #   raise StandardError, <<~ERROR
+    #     #{name} must initialize @authorized_actions class instance variable as a HashWithIndifferentAccess
+    #   ERROR
+    # end
   end
 
   module ClassMethods
     def load_account(actions, options = {})
-      if actions == :all
-        %i[index show new edit create update destroy].each { |action| authorized_actions[action] = options }
-      else
-        [*actions].flatten.each { |action| authorized_actions[action] = options }
+      supported_actions =
+        if actions == :all
+          %i[index show new edit create update destroy]
+        elsif actions.is_a?(Array)
+          [*actions].flatten
+        else
+          []
+        end
+
+      authorized_actions = supported_actions.each_with_object({}) do |action, actions_hash|
+        actions_hash[action] = options
       end
 
-      before_action :set_account, only: authorized_actions.keys.map(&:to_sym)
-    end
-
-    # Tracks the authorized actions and options for the controller
-    # as a class instance variable of type hash with indifferent access.
-    # More on class instance variables:
-    # https://www.ruby-lang.org/en/documentation/faq/8/#:~:text=What%20is%20a%20class%20instance%20variable%3F
-    def authorized_actions
-      @authorized_actions ||= {}.with_indifferent_access
+      # Configure the before_action to set the account for the authorized actions
+      before_action only: authorized_actions.keys.map(&:to_sym) do
+        set_account(authorized_actions:)
+      end
     end
   end
 
   attr_reader :account
 
-  def set_account
-    opts = action_options(self.class.authorized_actions[action_name], action_name:)
+  def set_account(authorized_actions: {})
+    opts = action_options(authorized_actions.with_indifferent_access[action_name], action_name:)
     param_key = (opts[:id_keys] || []).find { |key| params[key].present? }
     return if param_key.blank?
 

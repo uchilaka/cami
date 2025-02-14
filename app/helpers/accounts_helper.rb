@@ -16,6 +16,7 @@ module AccountsHelper
   end
 
   def model_actions(resource)
+    resource_name = resource.class.name.to_s || 'resource'
     {
       edit: {
         dom_id: SecureRandom.uuid,
@@ -29,10 +30,11 @@ module AccountsHelper
         label: 'Delete',
         url: account_url(resource, format: :json)
       },
+      # TODO: I think this should be back(?)
       show: {
         dom_id: SecureRandom.uuid,
         http_method: 'GET',
-        label: 'Back to accounts',
+        label: "Back to #{resource_name.pluralize}",
         url: accounts_url
       }
       # ,transactions_index: {

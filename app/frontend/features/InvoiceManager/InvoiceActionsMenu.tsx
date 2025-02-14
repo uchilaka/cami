@@ -10,6 +10,7 @@ const AT_OR_PAST_SENT_STATUSES: Invoice['status'][] = ['PAID', 'OVERDUE', 'SENT'
 
 const InvoiceActionsMenu: FC<ActionsMenuProps> = ({ invoice }) => {
   const { status, account, paymentVendorURL } = invoice
+  const showAction = invoice?.actions?.show
   const actionsMenuControlId = `actions-menu-control--${invoice.id}`
   const actionsMenuId = `actions-menu--${invoice.id}`
   const invoiceHasBeenSent = AT_OR_PAST_SENT_STATUSES.includes(status)
@@ -53,6 +54,16 @@ const InvoiceActionsMenu: FC<ActionsMenuProps> = ({ invoice }) => {
             </li>
           )}
           <li>
+            {showAction && (
+              <a
+                href={showAction.url}
+                target="_blank"
+                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                rel="noreferrer"
+              >
+                {showAction.label}
+              </a>
+            )}
             {/* TODO: Show a warning that the re-direct will go to PayPal; Explore implementing this behavior as automatic for external links */}
             <a
               href={paymentVendorURL ?? '#'}
