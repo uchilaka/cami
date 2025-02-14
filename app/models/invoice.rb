@@ -39,6 +39,9 @@ class Invoice < ApplicationRecord
 
   include AASM
   include Searchable
+  include Actionable
+
+  supported_actions :show, :back
 
   has_rich_text :notes
 
