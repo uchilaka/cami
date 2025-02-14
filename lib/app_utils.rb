@@ -8,7 +8,7 @@ $LOAD_PATH.unshift(File.join(Dir.pwd, 'app'))
 require 'concerns/operating_system_detectable'
 
 class AppUtils
-  extend OperatingSystemDetectable
+  include OperatingSystemDetectable
 
   class << self
     def configure_real_smtp?

@@ -3,7 +3,6 @@
 require 'thor'
 require 'thor/shell/color'
 require 'awesome_print'
-require 'rbconfig'
 require 'concerns/operating_system_detectable'
 
 # Conventions for command or task implementation classes:
@@ -15,8 +14,6 @@ require 'concerns/operating_system_detectable'
 module LarCity
   module CLI
     class BaseCmd < Thor
-      include OperatingSystemDetectable
-
       class_option :dry_run,
                    type: :boolean,
                    aliases: %w[-d --pretend --preview],
@@ -37,38 +34,40 @@ module LarCity
         true
       end
 
-      protected
+      no_commands do
+        include OperatingSystemDetectable
 
-      def run(*args)
-        cmd = args.join(' ')
-        if verbose? || dry_run?
-          msg = <<~CMD
-            Executing#{dry_run? ? ' (dry-run)' : ''}: #{cmd}
-          CMD
-          say(msg, dry_run? ? :magenta : :yellow)
+        def run(*args)
+          cmd = args.join(' ')
+          if verbose? || dry_run?
+            msg = <<~CMD
+              Executing#{dry_run? ? ' (dry-run)' : ''}: #{cmd}
+            CMD
+            say(msg, dry_run? ? :magenta : :yellow)
+          end
+          return if dry_run?
+
+          # # Example: doing this with Open3
+          # Open3.popen2e(cmd) do |_stdin, stdout_stderr, wait_thread|
+          #   Thread.new do
+          #     stdout_stderr.each { |line| puts line }
+          #   end
+          #   wait_thread.value
+          # end
+          exit 0 if system(cmd, out: $stdout, err: :out)
         end
-        return if dry_run?
 
-        # # Example: doing this with Open3
-        # Open3.popen2e(cmd) do |_stdin, stdout_stderr, wait_thread|
-        #   Thread.new do
-        #     stdout_stderr.each { |line| puts line }
-        #   end
-        #   wait_thread.value
-        # end
-        exit 0 if system(cmd, out: $stdout, err: :out)
-      end
+        def things(count, name: 'item')
+          name.pluralize(count)
+        end
 
-      def things(count, name: 'item')
-        name.pluralize(count)
-      end
+        def verbose?
+          options[:verbose]
+        end
 
-      def verbose?
-        options[:verbose]
-      end
-
-      def dry_run?
-        options[:dry_run]
+        def dry_run?
+          options[:dry_run]
+        end
       end
     end
   end
