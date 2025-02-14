@@ -16,10 +16,14 @@ require 'action_view/railtie'
 require 'action_cable/engine'
 # require "rails/test_unit/railtie"
 require 'active_support/core_ext/integer/time'
-require_relative '../lib/virtual_office_manager'
-require_relative '../lib/app_utils'
-require_relative '../lib/log_utils'
-require_relative '../lib/custom_exceptions_app_wrapper'
+
+# See https://stackoverflow.com/a/837593/3726759
+$LOAD_PATH.unshift(Dir.pwd)
+
+require 'lib/app_utils'
+require 'lib/virtual_office_manager'
+require 'lib/log_utils'
+require 'lib/custom_exceptions_app_wrapper'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

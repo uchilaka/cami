@@ -2,7 +2,7 @@
 
 def load_lib_script(*script_rel_path_parts, ext: 'rb')
   script_rel_path = script_rel_path_parts.compact.join('/')
-  load "#{Rails.root}/lib/#{script_rel_path}.#{ext}"
+  load "#{Dir.pwd}/lib/#{script_rel_path}.#{ext}"
 end
 
 def load_cli_script(script_name)

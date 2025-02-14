@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
 require 'fileutils'
-require_relative '../app/concerns/operating_system_detectable'
+
+# See https://stackoverflow.com/a/837593/3726759
+$LOAD_PATH.unshift(File.join(Dir.pwd, 'app'))
+
+require 'concerns/operating_system_detectable'
 
 class AppUtils
-  extend OperatingSystemDetectable
+  include OperatingSystemDetectable
 
   class << self
     def configure_real_smtp?
@@ -41,7 +45,7 @@ class AppUtils
     end
 
     def ping?(host)
-      result = system("ping -c 1 -t 3 -W 1 #{host}", out: '/dev/null', err: '/dev/null')
+      result = system("ping -c 1 -W 1 #{host}", out: '/dev/null', err: '/dev/null')
       result.nil? ? false : result
     end
 
@@ -64,12 +68,14 @@ class AppUtils
       yes?(ENV.fetch('ENV_DEBUG_ASSETS', default_value))
     end
 
+    # TODO: is this deprecated or refactored as implemented elsewhere?
     def live_reload_enabled?
       case friendly_os_name
       when :windows, :linux
         false
       else
-        Rails.env.development? && yes?(ENV.fetch('RAILS_LIVE_RELOAD_ENABLED', 'yes'))
+        Rails.env.development? &&
+          yes?(ENV.fetch('RAILS_LIVE_RELOAD_ENABLED', 'yes'))
       end
     end
   end

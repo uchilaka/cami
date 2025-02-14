@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative '../../commands/lar_city_cli/base_cmd'
+require_relative '../../commands/lar_city/cli/base_cmd'
 
 module Fixtures
-  class Accounts < LarCityCLI::BaseCmd
+  class Accounts < LarCity::CLI::BaseCmd
     desc 'load', 'Load account fixtures'
     def load
       say 'Loading account fixtures...', Color::YELLOW
