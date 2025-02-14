@@ -4,7 +4,16 @@ require 'rails_helper'
 
 RSpec.describe 'invoices/show', type: :view do
   let(:invoiceable) { Fabricate :account }
-  let(:invoice) { Fabricate(:invoice, invoiceable:, invoice_number: 'INV-04', amount: '9.99', due_amount: '7.99') }
+  let(:invoice) do
+    Fabricate(
+      :invoice,
+      invoiceable:,
+      invoice_number: 'INV-04',
+      amount: '9.99',
+      due_amount: '7.99',
+      status: 'partially_paid'
+    )
+  end
   before(:each) do
     assign(:invoice, invoice)
   end
@@ -19,10 +28,8 @@ RSpec.describe 'invoices/show', type: :view do
 
   it 'renders attributes in <p>' do
     render
-    expect(rendered).to match(/Invoice #/)
-    expect(rendered).to match(/INV-04/)
-    expect(rendered).to match(/Invoice #/)
-    expect(rendered).to match(/2/)
+    assert_select 'div>section>h1', text: 'Invoice #INV-04', count: 1
+    expect(rendered).to match(/PARTIALLY_PAID/)
     expect(rendered).to match(/9.99/)
     expect(rendered).to match(/7.99/)
   end
