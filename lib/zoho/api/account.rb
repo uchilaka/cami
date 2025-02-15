@@ -33,25 +33,6 @@ module Zoho
           super
         end
 
-        # protected
-        #
-        # def valid_http_host?(url_or_hostname)
-        #   hostname = URI.parse(url_or_hostname).host
-        #   allowed_hosts.include?(hostname)
-        # end
-        #
-        # private
-        #
-        # def allowed_hosts
-        #   @allowed_hosts ||=
-        #     Rails
-        #       .application
-        #       .config_for(:allowed_3rd_party_hosts)
-        #       .dig(:zoho, :by_region)
-        #       .entries
-        #       .map { |_r, host| host }
-        # end
-
         def module_name
           name.to_s.split('::').last.pluralize.capitalize
         end

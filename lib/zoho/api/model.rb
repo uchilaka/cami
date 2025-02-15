@@ -15,7 +15,7 @@ module Zoho
           end
         end
 
-        def base_url(_args = {})
+        def base_url(*)
           'https://www.zohoapis.com'
         end
 
@@ -57,7 +57,6 @@ module Zoho
               .entries
               .map { |_r, host| host }
         end
-
 
         def module_name
           raise NotImplementedError, "You must implement the #{name}.#{__method__} method"
