@@ -119,24 +119,34 @@ System dependencies are defined in the following configuration files:
     <tr>
         <th>Service</th>
         <th>Port</th>
+        <th>Essential</th>
     </tr>
 </thead>
 <tbody>
     <tr>
         <td>Rails</td>
         <td><code>16006</code></td>
-    </tr>
-    <tr>
-        <td>Redis</td>
-        <td><code>16079</code></td>
+        <td style="text-align: center">⭐️</td>
     </tr>
     <tr>
         <td>Postgres (app store)</td>
         <td><code>16032</code></td>
+        <td style="text-align: center">⭐️</td>
     </tr>
     <tr>
-        <td>MongoDB (invoicing score)</td>
-        <td><code>16017</code></td>
+        <td>Redis</td>
+        <td><code>16079</code></td>
+        <td style="text-align: center">⭐️</td>
+    </tr>
+    <tr>
+        <td>Redis Commander (admin)</td>
+        <td><code>16081</code></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Mailhog</td>
+        <td><code>8025</code></td>
+        <td></td>
     </tr>
 </table>
 
@@ -451,6 +461,10 @@ yq -p json -o yaml ./path/to/fixture.json > ./path/to/fixture.yml
   - [Live](https://developer.paypal.com/dashboard/applications/live)
 - [Invoicing API](https://developer.paypal.com/docs/api/invoicing/v2/)
   - [Webhooks](https://developer.paypal.com/docs/invoicing/webhooks/)
+
+### Zoho CRM
+
+_Pending_
 
 ## Guides and References
 

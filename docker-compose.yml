@@ -31,6 +31,21 @@ services:
     profiles:
       - batteries-included
 
+  # Alternative tool: https://github.com/qishibo/AnotherRedisDesktopManager
+  # Doc: https://hub.docker.com/r/rediscommander/redis-commander#:~:text=With%20docker%2Dcompose
+  redis-commander:
+    container_name: redis-commander.accounts.larcity
+    image: rediscommander/redis-commander
+    restart: unless-stopped
+    ports:
+      - '16081:8081'
+    entrypoint:
+      - REDIS_HOSTS=local:redis:6379
+    profiles:
+      - batteries-included
+    depends_on:
+      - redis-store
+
   redis-store:
     container_name: redis.accounts.larcity
     image: redis:7
