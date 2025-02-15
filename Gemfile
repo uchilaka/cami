@@ -9,7 +9,7 @@ source 'https://rubygems.org'
 ruby AppUtils.ruby_version
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.2', '= 7.2.2.1'
+gem 'rails', '~> 7.2', '>= 7.2.2.1'
 
 gem 'active_record_extended'
 
