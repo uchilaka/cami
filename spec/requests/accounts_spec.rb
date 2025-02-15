@@ -84,12 +84,12 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
           let(:data) { JSON.parse(response.body) }
           let(:expected_actions) do
             {
-              # 'back' => {
-              #   'domId' => anything,
-              #   'httpMethod' => 'GET',
-              #   'label' => 'Back to accounts',
-              #   'url' => account_url(account, locale: 'en')
-              # },
+              'back' => {
+                'domId' => anything,
+                'httpMethod' => 'GET',
+                'label' => 'Back to Accounts',
+                'url' => accounts_url(locale: 'en')
+              },
               'edit' => {
                 'domId' => anything,
                 'httpMethod' => 'GET',
@@ -124,6 +124,13 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
             get account_url(account, format: :json)
           end
 
+          shared_examples 'an actionable resource' do |action_key|
+            it "with the expected '#{action_key}' action hash" do
+              expect(data.dig('actions', action_key)).to \
+                match(hash_including(expected_actions[action_key]))
+            end
+          end
+
           it 'renders a successful response' do
             expect(response).to be_successful
           end
@@ -136,29 +143,15 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
             expect(data['id']).to eq(account.id.to_s)
           end
 
-          it 'returns a hash of actions' do
-            expect(data.dig('actions', 'edit')).to \
-              match(hash_including(expected_actions['edit']))
-
-            expect(data.dig('actions', 'delete')).to \
-              match(hash_including(expected_actions['delete']))
-
-            expect(data.dig('actions', 'show')).to \
-              match(hash_including(expected_actions['show']))
-
-            # expect(data.dig('actions', 'transactionsIndex')).to \
-            #   match(hash_including(expected_actions['transactionsIndex']))
-          end
+          it_should_behave_like 'an actionable resource', 'back'
+          it_should_behave_like 'an actionable resource', 'edit'
+          it_should_behave_like 'an actionable resource', 'delete'
+          it_should_behave_like 'an actionable resource', 'show'
 
           it 'returns the actions as a list', skip: 'not implemented ...yet. HYHTBOY? IYNYN 😜' do
-            expect(data.dig('actionsList', 0)).to \
-              match(hash_including(expected_actions['edit']))
-
-            expect(data.dig('actionsList', 1)).to \
-              match(hash_including(expected_actions['delete']))
-
-            expect(data.dig('actionsList', 2)).to \
-              match(hash_including(expected_actions['show']))
+            expect(data.dig('actionsList', 0)).to match(hash_including(expected_actions['edit']))
+            expect(data.dig('actionsList', 1)).to match(hash_including(expected_actions['delete']))
+            expect(data.dig('actionsList', 2)).to match(hash_including(expected_actions['show']))
           end
 
           it 'returns the account slug' do
