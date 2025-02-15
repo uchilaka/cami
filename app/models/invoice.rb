@@ -40,6 +40,7 @@ class Invoice < ApplicationRecord
   include AASM
   include Searchable
   include Actionable
+  include Renderable
 
   supported_actions :show
 
