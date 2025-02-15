@@ -70,9 +70,9 @@ module LarCity::CLI
       end
 
       if windows? || linux?
-        bottom_bar = "============================================================================"
+        bottom_bar = '============================================================================'
         os_banner = " OS DETECTED: #{human_friendly_os_name.upcase} "
-        top_bar_ends = "=" * ((bottom_bar.length - os_banner.length) / 2.0)
+        top_bar_ends = '=' * ((bottom_bar.length - os_banner.length) / 2.0)
         launch_msg = <<~MSG
 
           #{top_bar_ends} OS DETECTED: #{human_friendly_os_name} #{top_bar_ends}
@@ -84,9 +84,9 @@ module LarCity::CLI
 
         MSG
         say launch_msg, :yellow
-        run "docker compose up tunnel"
+        run 'docker compose up tunnel'
       else
-        run "ngrok start --all",
+        run 'ngrok start --all',
             "--config=#{config_files.join(',')}"
       end
     end
