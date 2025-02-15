@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-load Rails.root.join('lib/commands/lar_city_cli/tunnel_cmd.thor')
+require "#{Rails.root}/lib/commands/lar_city/cli/tunnel_cmd"
 
-LarCityCLI::TunnelCmd.new.invoke(:init, [], verbose: Rails.env.development?)
+LarCity::CLI::TunnelCmd.new.invoke(:init, [], verbose: Rails.env.development?)

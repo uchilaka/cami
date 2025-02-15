@@ -3,6 +3,16 @@ import { GenericAccount } from '@/utils/api/GenericAccount'
 
 export type VendorType = 'paypal' | 'hubspot' | 'stripe'
 
+type ActionKey = 'show' | 'back'
+
+// TODO: Refactor InvoiceAction and AccountAction to generic ResourceAction
+export interface InvoiceAction {
+  domId: string
+  httpMethod: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  label: string
+  url: string
+}
+
 interface InvoiceAmount {
   value: number
   formattedValue: string
@@ -26,6 +36,7 @@ export interface Invoice {
   tooltipId?: string
   itemActionBtnClasses?: string
   paymentVendorURL: string
+  actions: Record<ActionKey, InvoiceAction>
 }
 
 type SortKey = keyof Pick<Invoice, 'account' | 'status' | 'dueAt' | 'paidAt' | 'amount'> | 'account.email' | 'account.displayName'

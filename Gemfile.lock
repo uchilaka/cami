@@ -706,6 +706,7 @@ DEPENDENCIES
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
   open3
+  ostruct
   paper_trail (~> 15.2)
   pg (~> 1.1)
   phonelib

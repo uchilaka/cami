@@ -189,6 +189,44 @@ RSpec.describe Invoice, type: :model do
     end
   end
 
+  describe '#actions' do
+    context 'when invoice is unpaid' do
+      subject { Fabricate :invoice, status: :draft }
+
+      it 'includes the expected action hashes' do
+        expect(subject.actions).to \
+          match(
+            back: hash_including(
+              dom_id: anything,
+              http_method: 'GET',
+              label: 'Back to Invoices',
+              url: anything
+            ),
+            edit: hash_including(
+              dom_id: anything,
+              http_method: 'GET',
+              label: 'Edit',
+              url: anything
+            ),
+            show: hash_including(
+              dom_id: anything,
+              http_method: 'GET',
+              label: 'Invoice details',
+              url: anything
+            )
+          )
+      end
+
+      it { expect(subject.actions.dig(:back, :url)).to match(%r{/invoices\?locale=en$}) }
+      it { expect(subject.actions.dig(:edit, :url)).to match(%r{/invoices/#{subject.id}\?locale=en$}) }
+      it { expect(subject.actions.dig(:show, :url)).to match(%r{/invoices/#{subject.id}\?locale=en$}) }
+    end
+
+    pending 'when invoice is sent'
+    pending 'when invoice is paid'
+    pending 'when invoice is overdue'
+  end
+
   describe '.fuzzy_search_predicate_key' do
     let(:fields) { %w[invoice_number status] }
 

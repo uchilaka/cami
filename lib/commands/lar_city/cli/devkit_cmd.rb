@@ -2,9 +2,15 @@
 
 require_relative 'base_cmd'
 
+<<<<<<<< HEAD:lib/commands/lar_city/cli/devkit_cmd.thor
 module LarCityCLI
   class DevkitCmd < BaseCmd
     namespace :'lx-cli:devkit'
+========
+module LarCity::CLI
+  class DevkitCmd < BaseCmd
+    namespace 'devkit'
+>>>>>>>> refactor/templates_and_styling:lib/commands/lar_city/cli/devkit_cmd.rb
 
     desc 'swaggerize', 'Generate Swagger JSON file(s)'
     def swaggerize
@@ -24,7 +30,7 @@ module LarCityCLI
 
     desc 'logs', 'Show the logs for the project'
     def logs
-      raise UnsupportedOSError, 'Unsupported OS' unless mac?
+      raise Errors::UnsupportedOSError, 'Unsupported OS' unless mac?
 
       cmd = "open --url #{log_stream_url}"
       if verbose?

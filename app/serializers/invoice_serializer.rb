@@ -56,7 +56,8 @@ class InvoiceSerializer < ActiveModel::Serializer
              :amount,
              :due_amount,
              :links,
-             :notes
+             :notes,
+             :actions
 
   def id
     object.id.to_s
@@ -104,5 +105,9 @@ class InvoiceSerializer < ActiveModel::Serializer
 
   def notes
     ''
+  end
+
+  def actions
+    object.actions
   end
 end

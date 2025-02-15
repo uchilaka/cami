@@ -8,6 +8,8 @@
       "open": true,
       "execute": true,
       "recycle": true,
+      "dynamicTitle": false,
+      "envInherit": true,
       "commands": [
         "yarn install",
         "yarn storybook"

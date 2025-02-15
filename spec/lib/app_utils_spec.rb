@@ -60,12 +60,20 @@ RSpec.describe AppUtils, utility: true, skip_in_ci: true do
   end
 
   describe '.ping?' do
-    it 'returns true if host is reachable' do
-      expect(described_class.ping?('google.com')).to eq(true)
+    let(:hostname) { 'example.com' }
+
+    subject { described_class.ping?(hostname) }
+
+    context 'when the host is reachable' do
+      let(:hostname) { 'wikipedia.org' }
+
+      it { expect(subject).to eq true }
     end
 
-    it 'returns false if host is not reachable' do
-      expect(described_class.ping?('notarealhost')).to eq(false)
+    context 'when the host is not reachable' do
+      let(:hostname) { 'notarealhost' }
+
+      it { expect(subject).to eq false }
     end
   end
 
@@ -282,6 +290,75 @@ RSpec.describe AppUtils, utility: true, skip_in_ci: true do
             expect(described_class.send_emails?).to eq(true)
           end
         end
+      end
+    end
+  end
+
+  # TODO: Is this still passing?
+  describe '.live_reload_enabled?' do
+    context 'when the OS is Windows' do
+      before do
+        allow(AppUtils).to receive(:friendly_os_name).and_return(:windows)
+      end
+
+      it 'returns false' do
+        expect(described_class.live_reload_enabled?).to eq(false)
+      end
+    end
+
+    context 'when the OS is not Windows' do
+      before do
+        allow(AppUtils).to receive(:friendly_os_name).and_return(:unsupported)
+      end
+
+      context 'and Rails.env.development? is true' do
+        let(:mock_env) { 'development' }
+        let(:mock_env_var) { nil }
+
+        before do
+          allow(Rails.env).to receive(:development?).and_return(true)
+        end
+
+        after do
+          allow(Rails.env).to receive(:development?).and_call_original
+        end
+
+        around do |example|
+          with_modified_env(RAILS_LIVE_RELOAD_ENABLED: mock_env_var) do
+            example.run
+          end
+        end
+
+        context 'and the OS is Linux' do
+          before do
+            allow(AppUtils).to receive(:friendly_os_name).and_return(:linux)
+          end
+
+          it { expect(described_class.live_reload_enabled?).to be(false) }
+        end
+
+        context 'and the OS is macOS' do
+          before do
+            allow(AppUtils).to receive(:friendly_os_name).and_return(:macos)
+          end
+
+          context "and ENV['RAILS_LIVE_RELOAD_ENABLED'] is truthy" do
+            let(:mock_env_var) { 'yes' }
+
+            it { expect(described_class.live_reload_enabled?).to be(true) }
+          end
+
+          context "and ENV['RAILS_LIVE_RELOAD_ENABLED'] is falsy" do
+            let(:mock_env_var) { 'no' }
+
+            it { expect(described_class.live_reload_enabled?).to be(false) }
+          end
+        end
+
+      end
+
+      context 'and Rails.env.development? is false' do
+        it { expect(described_class.live_reload_enabled?).to eq(false) }
       end
     end
   end

@@ -100,6 +100,9 @@ gem 'active_model_serializers'
 gem 'rswag-api'
 gem 'rswag-ui'
 
+# See https://youtrack.jetbrains.com/issue/RUBY-32741/Ruby-Debugger-uninitialized-constant-ClassDebaseValueStringBuilder...#focus=Comments-27-9677540.0-0
+gem 'ostruct'
+
 group :development, :test do
   gem 'capybara'
   gem 'capybara_accessibility_audit'

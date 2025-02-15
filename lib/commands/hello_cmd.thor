@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'lar_city_cli/base_cmd'
+require 'commands/lar_city/cli/base_cmd'
 
-class HelloCmd < LarCityCLI::BaseCmd
+class HelloCmd < LarCity::CLI::BaseCmd
   namespace 'demo'
 
   def self.exit_on_failure?
@@ -22,6 +22,7 @@ class HelloCmd < LarCityCLI::BaseCmd
 
   no_commands do
     def detected_os_clause
+      friendly_os_name = AppUtils.friendly_os_name
       return '' if friendly_os_name == :unsupported
 
       "You're running on #{human_friendly_os_names_map[friendly_os_name]} 💻"
