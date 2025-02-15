@@ -84,20 +84,29 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
           let(:data) { JSON.parse(response.body) }
           let(:expected_actions) do
             {
+              'back' => {
+                'domId' => anything,
+                'httpMethod' => 'GET',
+                'label' => 'Back to Accounts',
+                'url' => accounts_url(locale: 'en')
+              },
               'edit' => {
+                'domId' => anything,
                 'httpMethod' => 'GET',
                 'label' => 'Edit',
-                'url' => account_url(account)
+                'url' => account_url(account, locale: 'en')
               },
               'delete' => {
+                'domId' => anything,
                 'httpMethod' => 'DELETE',
                 'label' => 'Delete',
-                'url' => account_url(account, format: :json)
+                'url' => account_url(account, format: :json, locale: 'en')
               },
               'show' => {
+                'domId' => anything,
                 'httpMethod' => 'GET',
-                'label' => 'Back to accounts',
-                'url' => accounts_url
+                'label' => 'Account details',
+                'url' => account_url(account, locale: 'en')
               }
               # ,'transactionsIndex' => {
               #   'httpMethod' => 'GET',
@@ -109,7 +118,22 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
 
           before do
             sign_in user
+            allow(VirtualOfficeManager).to \
+              receive(:default_url_options)
+                .and_return(host: 'www.example.com', locale: 'en')
             get account_url(account, format: :json)
+          end
+
+          shared_examples 'an actionable resource' do |action_key, list_index|
+            it "with the expected '#{action_key}' action hash" do
+              expect(data.dig('actions', action_key)).to \
+                match(hash_including(expected_actions[action_key]))
+            end
+
+            it "with the expected '#{action_key}' action hash at [#{list_index}] in the actions list" do
+              expect(data.dig('actionsList', list_index)).to \
+                match(hash_including(expected_actions[action_key]))
+            end
           end
 
           it 'renders a successful response' do
@@ -124,30 +148,10 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
             expect(data['id']).to eq(account.id.to_s)
           end
 
-          it 'returns a hash of actions' do
-            expect(data.dig('actions', 'edit')).to \
-              match(hash_including(expected_actions['edit']))
-
-            expect(data.dig('actions', 'delete')).to \
-              match(hash_including(expected_actions['delete']))
-
-            expect(data.dig('actions', 'show')).to \
-              match(hash_including(expected_actions['show']))
-
-            # expect(data.dig('actions', 'transactionsIndex')).to \
-            #   match(hash_including(expected_actions['transactionsIndex']))
-          end
-
-          it 'returns the actions as a list', skip: 'not implemented ...yet. HYHTBOY? IYNYN 😜' do
-            expect(data.dig('actionsList', 0)).to \
-              match(hash_including(expected_actions['edit']))
-
-            expect(data.dig('actionsList', 1)).to \
-              match(hash_including(expected_actions['delete']))
-
-            expect(data.dig('actionsList', 2)).to \
-              match(hash_including(expected_actions['show']))
-          end
+          it_should_behave_like 'an actionable resource', 'back', 0
+          it_should_behave_like 'an actionable resource', 'delete', 1
+          it_should_behave_like 'an actionable resource', 'edit', 2
+          it_should_behave_like 'an actionable resource', 'show', 3
 
           it 'returns the account slug' do
             expect(data['slug']).to eq(account.slug)

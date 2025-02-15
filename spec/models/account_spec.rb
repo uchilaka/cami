@@ -151,4 +151,43 @@ RSpec.describe Account, type: :model do
 
     pending 'can be accessed via "customer" role'
   end
+
+  describe '#actions' do
+    subject { Fabricate :account }
+
+    it 'includes the expected action hashes' do
+      expect(subject.actions).to \
+        match(
+          back: hash_including(
+            dom_id: anything,
+            http_method: 'GET',
+            label: 'Back to Accounts',
+            url: anything
+          ),
+          delete: hash_including(
+            dom_id: anything,
+            http_method: 'DELETE',
+            label: 'Delete',
+            url: anything
+          ),
+          edit: hash_including(
+            dom_id: anything,
+            http_method: 'GET',
+            label: 'Edit',
+            url: anything
+          ),
+          show: hash_including(
+            dom_id: anything,
+            http_method: 'GET',
+            label: 'Account details',
+            url: anything
+          )
+        )
+    end
+
+    it { expect(subject.actions.dig(:back, :url)).to match(%r{/accounts\?locale=en$}) }
+    it { expect(subject.actions.dig(:delete, :url)).to match(%r{/accounts/#{subject.id}.json\?locale=en$}) }
+    it { expect(subject.actions.dig(:edit, :url)).to match(%r{/accounts/#{subject.id}\?locale=en$}) }
+    it { expect(subject.actions.dig(:show, :url)).to match(%r{/accounts/#{subject.id}\?locale=en$}) }
+  end
 end

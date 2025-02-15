@@ -10,6 +10,7 @@ const AT_OR_PAST_SENT_STATUSES: Invoice['status'][] = ['PAID', 'OVERDUE', 'SENT'
 
 const InvoiceActionsMenu: FC<ActionsMenuProps> = ({ invoice }) => {
   const { status, account, paymentVendorURL } = invoice
+  const showAction = invoice?.actions?.show
   const actionsMenuControlId = `actions-menu-control--${invoice.id}`
   const actionsMenuId = `actions-menu--${invoice.id}`
   const invoiceHasBeenSent = AT_OR_PAST_SENT_STATUSES.includes(status)
@@ -43,34 +44,62 @@ const InvoiceActionsMenu: FC<ActionsMenuProps> = ({ invoice }) => {
         <i className="fa-solid fa-ellipsis-vertical"></i>
         <span className="sr-only">Actions</span>
       </button>
-      <div id={actionsMenuId} ref={menuRef} className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
+      <div
+        id={actionsMenuId}
+        ref={menuRef}
+        className="w-44 z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700"
+      >
         <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownLeftButton">
           {invoiceCanBeSent && (
             <li>
-              <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                <i className="fa-solid fa-paper-plane"></i> {sendInvoiceLabel}
+              <a
+                href="#"
+                className="flex justify-between items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              >
+                <span>{sendInvoiceLabel}</span>
+                <i className="fa-solid fa-paper-plane"></i>
               </a>
             </li>
           )}
           <li>
+            {showAction && (
+              <a
+                href={showAction.url}
+                target="_blank"
+                className="flex justify-between items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                rel="noreferrer"
+              >
+                <span>{showAction.label}</span>
+                <i className="fa fa-dollar-sign"></i>
+              </a>
+            )}
             {/* TODO: Show a warning that the re-direct will go to PayPal; Explore implementing this behavior as automatic for external links */}
             <a
               href={paymentVendorURL ?? '#'}
               target="_blank"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              className="flex justify-between items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
               rel="noreferrer"
             >
-              <i className="fa-brands fa-paypal"></i> {manageLabel}
+              <span>{manageLabel}</span>
+              <i className="fa-brands fa-paypal"></i>
             </a>
           </li>
           <li>
-            <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-              <i className="fa fa-link"></i> {linkAccountLabel}
+            <a
+              href="#"
+              className="flex justify-between items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+            >
+              <span>{linkAccountLabel}</span>
+              <i className="fa fa-link"></i>
             </a>
           </li>
           <li>
-            <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-              <i className="fa fa-copy"></i> New deal
+            <a
+              href="#"
+              className="flex justify-between items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+            >
+              <span>New deal</span>
+              <i className="fa fa-copy"></i>
             </a>
           </li>
         </ul>
