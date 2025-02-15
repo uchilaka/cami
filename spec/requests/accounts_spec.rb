@@ -84,20 +84,29 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
           let(:data) { JSON.parse(response.body) }
           let(:expected_actions) do
             {
+              # 'back' => {
+              #   'domId' => anything,
+              #   'httpMethod' => 'GET',
+              #   'label' => 'Back to accounts',
+              #   'url' => account_url(account, locale: 'en')
+              # },
               'edit' => {
+                'domId' => anything,
                 'httpMethod' => 'GET',
                 'label' => 'Edit',
-                'url' => account_url(account)
+                'url' => account_url(account, locale: 'en')
               },
               'delete' => {
+                'domId' => anything,
                 'httpMethod' => 'DELETE',
                 'label' => 'Delete',
-                'url' => account_url(account, format: :json)
+                'url' => account_url(account, format: :json, locale: 'en')
               },
               'show' => {
+                'domId' => anything,
                 'httpMethod' => 'GET',
-                'label' => 'Back to accounts',
-                'url' => accounts_url
+                'label' => 'Account details',
+                'url' => account_url(account, locale: 'en')
               }
               # ,'transactionsIndex' => {
               #   'httpMethod' => 'GET',
@@ -109,6 +118,9 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
 
           before do
             sign_in user
+            allow(VirtualOfficeManager).to \
+              receive(:default_url_options)
+                .and_return(host: 'www.example.com', locale: 'en')
             get account_url(account, format: :json)
           end
 
