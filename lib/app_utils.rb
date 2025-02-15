@@ -74,7 +74,7 @@ class AppUtils
 
       File.foreach(file_path) do |line|
         match = line.match(/ruby\s+([\d.]+)/)
-        return (match[1]).to_s.strip if match
+        return match[1].to_s.strip if match
       end
 
       raise 'No ruby version found in .tool-versions'
