@@ -20,15 +20,18 @@ module Zoho
         end
 
         def auth_endpoint_url
-          @auth_endpoint_url ||=
-            if @auth_endpoint_url.blank?
-              response = connection(auth: true).get('/oauth/serverinfo')
-              data = response.body || {}
-              url = data.dig('locations', 'us')
-              raise ::LarCity::Errors::Unknown3rdPartyHostError unless valid_http_host?(url)
+          @auth_endpoint_url ||= regional_oauth_endpoint_url
+        end
 
-              url
-            end
+        def regional_oauth_endpoint_url(region = 'us')
+          response = connection(auth: true).get('/oauth/serverinfo')
+          data = response.body || {}
+          url = data.dig('locations', region.to_s)
+          if valid_http_host?(url)
+            url
+          else
+            raise ::LarCity::Errors::Unknown3rdPartyHostError unless valid_http_host?(url)
+          end
         end
 
         def fields_list_url
