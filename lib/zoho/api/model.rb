@@ -24,6 +24,11 @@ module Zoho
         end
 
         def regional_oauth_endpoint_url(region = 'us')
+          unless allowed_regions.include?(region.to_sym)
+            exception = ::LarCity::Errors::Unknown3rdPartyHostError.new('Unsupported 3rd party service region')
+            raise exception
+          end
+
           response = connection(auth: true).get('/oauth/serverinfo')
           data = response.body || {}
           url = data.dig('locations', region.to_s)
@@ -51,12 +56,17 @@ module Zoho
 
         private
 
+        def allowed_regions
+          @allowed_regions ||=
+            AppUtils
+              .allowed_hosts_for(provider: :zoho)[:by_region]
+              .keys
+        end
+
         def allowed_hosts
           @allowed_hosts ||=
-            Rails
-              .application
-              .config_for(:allowed_3rd_party_hosts)
-              .dig(:zoho, :by_region)
+            AppUtils
+              .allowed_hosts_for(provider: :zoho)[:by_region]
               .entries
               .map { |_r, host| host }
         end

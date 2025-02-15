@@ -68,6 +68,12 @@ class AppUtils
       yes?(ENV.fetch('ENV_DEBUG_ASSETS', default_value))
     end
 
+    def allowed_hosts_for(provider:)
+      Rails
+        .application
+        .config_for(:allowed_3rd_party_hosts)[provider.to_sym] || {}
+    end
+
     def ruby_version(file_path = nil)
       file_path ||= "#{Dir.pwd}/.tool-versions"
       raise 'Error: .tool-versions file not found' unless File.exist?(file_path)
