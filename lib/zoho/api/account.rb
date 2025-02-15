@@ -4,7 +4,7 @@ module Zoho
   module API
     class Account < Model
       # About class (instance) variables: https://www.ruby-lang.org/en/documentation/faq/8/
-      @@resource_url ||= nil
+      @resource_url ||= nil
 
       class << self
         def upsert(record)
@@ -22,14 +22,9 @@ module Zoho
         end
 
         def resource_url(auth: true)
-          @@resource_url =
-            if !auth || @@resource_url.blank?
-              response = connection(auth:).get('/oauth/serverinfo')
-              data = response.body || {}
-              @@resource_url = data.dig('locations', 'us')
-            else
-              @@resource_url
-            end
+          return auth_endpoint_url if auth
+
+          base_url(auth:)
         end
 
         def base_url(auth: false)
@@ -38,7 +33,24 @@ module Zoho
           super
         end
 
-        private
+        # protected
+        #
+        # def valid_http_host?(url_or_hostname)
+        #   hostname = URI.parse(url_or_hostname).host
+        #   allowed_hosts.include?(hostname)
+        # end
+        #
+        # private
+        #
+        # def allowed_hosts
+        #   @allowed_hosts ||=
+        #     Rails
+        #       .application
+        #       .config_for(:allowed_3rd_party_hosts)
+        #       .dig(:zoho, :by_region)
+        #       .entries
+        #       .map { |_r, host| host }
+        # end
 
         def module_name
           name.to_s.split('::').last.pluralize.capitalize

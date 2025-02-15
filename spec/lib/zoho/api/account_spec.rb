@@ -5,13 +5,50 @@ require 'rails_helper'
 module Zoho
   module API
     RSpec.describe Account do
-      describe '#resource_url' do
-        it 'returns the expected accounts URL' do
-          expect(described_class.resource_url).to eq('https://accounts.zoho.com')
+      describe '#auth_endpoint_url' do
+        subject { described_class.auth_endpoint_url }
+
+        it 'returns the expected URL' do
+          expect(subject).to eq('https://accounts.zoho.com')
         end
 
         it 'is idempotent' do
-          expect(described_class.resource_url).to eq(described_class.resource_url)
+          expect(subject).to eq(described_class.auth_endpoint_url)
+        end
+      end
+
+      describe '#resource_url' do
+        let(:auth) { nil }
+
+        subject { described_class.resource_url }
+
+        it 'returns the expected accounts URL' do
+          expect(subject).to eq('https://accounts.zoho.com')
+        end
+
+        it 'is idempotent' do
+          expect(subject).to eq(described_class.resource_url)
+        end
+
+        context 'for auth requests' do
+          let(:auth) { true }
+
+          it 'returns the expected URL' do
+            expect(described_class.resource_url(auth:)).to eq('https://accounts.zoho.com')
+          end
+        end
+
+        context 'for non-auth requests' do
+          let(:auth) { false }
+
+          it 'returns the expected URL' do
+            expect(described_class.resource_url(auth:)).to eq('https://www.zohoapis.com')
+          end
+
+          it 'returns the expected URL right after an auth request' do
+            expect(described_class.resource_url(auth: true)).to eq('https://accounts.zoho.com')
+            expect(described_class.resource_url(auth: false)).to eq('https://www.zohoapis.com')
+          end
         end
       end
 

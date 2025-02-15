@@ -12,7 +12,7 @@ module LarCity
     class Unsupported < StandardError; end
     class MissingRequiredModule < StandardError; end
     class UnsupportedOSError < StandardError; end
-
+    class Unknown3rdPartyHostError < StandardError; end
 
     class IntegrationRequestFailed < StandardError
       attr_reader :status, :vendor
