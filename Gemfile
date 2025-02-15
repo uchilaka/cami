@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-load File.join(Dir.pwd, 'lib', 'app_utils.rb')
+$LOAD_PATH.unshift Dir.pwd
+
+require 'lib/app_utils'
 
 source 'https://rubygems.org'
 
