@@ -2,15 +2,9 @@
 
 require_relative 'base_cmd'
 
-<<<<<<<< HEAD:lib/commands/lar_city/cli/devkit_cmd.thor
-module LarCityCLI
-  class DevkitCmd < BaseCmd
-    namespace :'lx-cli:devkit'
-========
 module LarCity::CLI
   class DevkitCmd < BaseCmd
     namespace 'devkit'
->>>>>>>> refactor/templates_and_styling:lib/commands/lar_city/cli/devkit_cmd.rb
 
     desc 'swaggerize', 'Generate Swagger JSON file(s)'
     def swaggerize
