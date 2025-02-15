@@ -49,6 +49,22 @@ RSpec.describe Account, type: :model do
   it_should_behave_like 'adding a role on an invoice is supported', :customer
   it_should_behave_like 'adding a role on an invoice is supported', :contact
 
+  describe '#modal_dom_id' do
+    let(:account) { Fabricate :account }
+
+    subject { account.modal_dom_id }
+
+    it { expect(subject).to eq "#{account.model_name.singular}-modal|#{account.id}|" }
+
+    context 'with content_type' do
+      let(:content_type) { 'content' }
+
+      subject { account.modal_dom_id(content_type:) }
+
+      it { expect(subject).to eq "#{account.model_name.singular}--#{content_type}--modal|#{account.id}|" }
+    end
+  end
+
   describe '#remote_crm_id' do
     context 'when blank' do
       subject { Fabricate :account, remote_crm_id: '' }

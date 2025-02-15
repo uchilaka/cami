@@ -30,6 +30,7 @@ class Account < ApplicationRecord
   include AASM
   include Searchable
   include Actionable
+  include Renderable
 
   # There are security implications to consider when using deterministic encryption.
   # See https://guides.rubyonrails.org/active_record_encryption.html#deterministic-and-non-deterministic-encryption
