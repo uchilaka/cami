@@ -9,14 +9,19 @@ module Renderable
   end
 
   module ClassMethods
+    def modal_dom_id(resource:, content_type: nil)
+      return "#{resource.model_name.singular}--#{content_type}--modal|#{resource.id}|" unless content_type.blank?
+
+      "#{resource.model_name.singular}-modal|#{resource.id}|"
+    end
   end
 
   module InstanceMethods
-    def modal_dom_id(resource = nil, content_type: nil)
-      resource ||= self if self.class.ancestors.include?(ActiveRecord::Base)
-      return "#{resource.model_name.singular}--#{content_type}--modal|#{resource.id}|" if content_type.present?
+    def modal_dom_id(content_type: nil)
+      raise ArgumentError, 'Resource must be an ActiveRecord::Base object' \
+        unless self.class.ancestors.include?(ActiveRecord::Base)
 
-      "#{resource.model_name.singular}-modal|#{resource.id}|"
+      self.class.modal_dom_id(resource: self, content_type:)
     end
   end
 end
