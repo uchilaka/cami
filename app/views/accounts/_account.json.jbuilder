@@ -1,4 +1,7 @@
-json.extract! account, :id, :display_name, :slug, :status, :type, :tax_id, :email, :created_at, :updated_at
+# frozen_string_literal: true
+
+json.extract! account, :id, :display_name, :slug, :status, :type, :tax_id, :email,
+              :created_at, :updated_at, :actions
 
 json.readme do
   json.html account.readme.to_s
@@ -6,9 +9,9 @@ json.readme do
 end
 json.url account_url(account, format: :json)
 
-json.actions model_actions(account)
+# json.actions account.actions
 
-json.actions_list model_actions(account).entries do |action_key, action|
+json.actions_list account.actions.entries do |action_key, action|
   json.key action_key
   json.dom_id action[:dom_id]
   json.http_method action[:http_method]

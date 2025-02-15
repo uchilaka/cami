@@ -41,7 +41,7 @@ class Invoice < ApplicationRecord
   include Searchable
   include Actionable
 
-  supported_actions :show, :back
+  supported_actions :show
 
   has_rich_text :notes
 
@@ -162,6 +162,10 @@ class Invoice < ApplicationRecord
 
   def overdue?
     past_due? && (Time.zone.now.to_date - due_at.to_date).to_i > 30
+  end
+
+  def editable?
+    !(paid? || refunded?)
   end
 
   # Class methods

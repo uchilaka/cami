@@ -31,22 +31,4 @@ module InvoicesHelper
       %w[Canceled CANCELLED]
     ]
   end
-
-  def model_actions(resource)
-    resource_name = resource.class.name.to_s || 'resource'
-    {
-      show: {
-        dom_id: SecureRandom.uuid,
-        http_method: 'GET',
-        label: 'Details',
-        url: invoice_url(resource, format: :html)
-      },
-      back: {
-        dom_id: SecureRandom.uuid,
-        http_method: 'GET',
-        label: "Back to #{resource_name.pluralize}",
-        url: invoices_url
-      }
-    }
-  end
 end

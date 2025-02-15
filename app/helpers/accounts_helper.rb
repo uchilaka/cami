@@ -15,37 +15,6 @@ module AccountsHelper
     "#{resource.class.table_name.singularize}--#{content_type}-modal"
   end
 
-  def model_actions(resource)
-    resource_name = resource.class.name.to_s || 'resource'
-    {
-      edit: {
-        dom_id: SecureRandom.uuid,
-        http_method: 'GET',
-        label: 'Edit',
-        url: account_url(resource)
-      },
-      delete: {
-        dom_id: SecureRandom.uuid,
-        http_method: 'DELETE',
-        label: 'Delete',
-        url: account_url(resource, format: :json)
-      },
-      # TODO: I think this should be back(?)
-      show: {
-        dom_id: SecureRandom.uuid,
-        http_method: 'GET',
-        label: "Back to #{resource_name.pluralize}",
-        url: accounts_url
-      }
-      # ,transactions_index: {
-      #   dom_id: SecureRandom.uuid,
-      #   http_method: 'GET',
-      #   label: 'Transactions',
-      #   url: account_invoices_url(resource)
-      # },
-    }
-  end
-
   def segment_filter_options
     [
       ['Past due', 'past_due'],

@@ -6,7 +6,6 @@ module Actionable
   # require implementation of supported_actions method
   included do |base|
     extend ClassMethods
-    include Rails.application.routes.url_helpers
     include InstanceMethods
 
     raise StandardError, "#{base.name} must be descended from ActiveRecord::Base" \
@@ -33,43 +32,58 @@ module Actionable
   end
 
   module InstanceMethods
-    def resources_url(*args)
-      case self.class
-      when Invoice
-        invoices_url(args)
-      when Account
-        accounts_url(args)
-      else
-        raise StandardError, 'Unsupported resource'
-      end
+    include Rails.application.routes.url_helpers
+
+    def default_url_options
+      VirtualOfficeManager
+        .default_url_options
+        .merge(locale: I18n.locale)
+    end
+
+    def resources_url(*)
+      url_method_name = :"#{self.class.name.to_s.pluralize.underscore}_url"
+      send(url_method_name, *)
+      # case self.class
+      # when Invoice
+      #   invoices_url(args)
+      # when Account
+      #   accounts_url(args)
+      # else
+      #   raise StandardError, 'Unsupported resource'
+      # end
     end
 
     def resource_url(resource, args = {})
-      case self.class
-      when Invoice
-        invoice_url(resource, **args)
-      when Account
-        account_url(resource, **args)
-      else
-        raise StandardError, 'Unsupported resource'
-      end
+      url_method_name = :"#{resource.class.name.to_s.underscore}_url"
+      send(url_method_name, resource, **args)
+      # case resource
+      # when Invoice
+      #   invoice_url(resource, **args)
+      # when Account
+      #   account_url(resource, **args)
+      # else
+      #   raise StandardError, 'Unsupported resource'
+      # end
     end
 
-    def modal_actions(resource)
+    # TODO: Evaluate Pundit policy in determining :showable? in Actionable module
+    def readable?
+      supported_actions.include?(:show)
+    end
+
+    def editable?
+      supported_actions.include?(:edit)
+    end
+
+    # TODO: Evaluate Pundit policy in determining :destroyable? in Actionable module
+    def destroyable?
+      supported_actions.include?(:destroy)
+    end
+
+    def actions(resource = nil)
+      resource ||= self if self.class.ancestors.include? ActiveRecord::Base
       resource_name = resource.class.name.to_s || 'resource'
-      {
-        edit: {
-          dom_id: SecureRandom.uuid,
-          http_method: 'GET',
-          label: 'Edit',
-          url: resource_url(resource)
-        },
-        delete: {
-          dom_id: SecureRandom.uuid,
-          http_method: 'DELETE',
-          label: 'Delete',
-          url: resource_url(resource, format: :json)
-        },
+      @actions = {
         back: {
           dom_id: SecureRandom.uuid,
           http_method: 'GET',
@@ -77,6 +91,31 @@ module Actionable
           url: resources_url
         }
       }
+      if destroyable?
+        @actions[:delete] = {
+          dom_id: SecureRandom.uuid,
+          http_method: 'DELETE',
+          label: 'Delete',
+          url: resource_url(resource, format: :json)
+        }
+      end
+      if readable?
+        @actions[:show] = {
+          dom_id: SecureRandom.uuid,
+          http_method: 'GET',
+          label: "#{resource_name} details",
+          url: resource_url(resource)
+        }
+      end
+      if editable?
+        @actions[:edit] = {
+          dom_id: SecureRandom.uuid,
+          http_method: 'GET',
+          label: 'Edit',
+          url: resource_url(resource)
+        }
+      end
+      @actions
     end
   end
 end

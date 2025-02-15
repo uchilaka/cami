@@ -23,12 +23,15 @@ class Account < ApplicationRecord
 
   include AASM
   include Searchable
+  include Actionable
 
   # There are security implications to consider when using deterministic encryption.
   # See https://guides.rubyonrails.org/active_record_encryption.html#deterministic-and-non-deterministic-encryption
   encrypts :tax_id, deterministic: true
 
   has_rich_text :readme
+
+  supported_actions :show, :edit, :destroy
 
   attribute :type, :string, default: 'Account'
   attribute :slug, :string, default: -> { SecureRandom.alphanumeric(4).downcase }
