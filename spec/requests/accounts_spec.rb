@@ -124,9 +124,14 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
             get account_url(account, format: :json)
           end
 
-          shared_examples 'an actionable resource' do |action_key|
+          shared_examples 'an actionable resource' do |action_key, list_index|
             it "with the expected '#{action_key}' action hash" do
               expect(data.dig('actions', action_key)).to \
+                match(hash_including(expected_actions[action_key]))
+            end
+
+            it "with the expected '#{action_key}' action hash at [#{list_index}] in the actions list" do
+              expect(data.dig('actionsList', list_index)).to \
                 match(hash_including(expected_actions[action_key]))
             end
           end
@@ -143,16 +148,10 @@ RSpec.describe '/accounts', type: :request, real_world_data: true do
             expect(data['id']).to eq(account.id.to_s)
           end
 
-          it_should_behave_like 'an actionable resource', 'back'
-          it_should_behave_like 'an actionable resource', 'edit'
-          it_should_behave_like 'an actionable resource', 'delete'
-          it_should_behave_like 'an actionable resource', 'show'
-
-          it 'returns the actions as a list', skip: 'not implemented ...yet. HYHTBOY? IYNYN 😜' do
-            expect(data.dig('actionsList', 0)).to match(hash_including(expected_actions['edit']))
-            expect(data.dig('actionsList', 1)).to match(hash_including(expected_actions['delete']))
-            expect(data.dig('actionsList', 2)).to match(hash_including(expected_actions['show']))
-          end
+          it_should_behave_like 'an actionable resource', 'back', 0
+          it_should_behave_like 'an actionable resource', 'delete', 1
+          it_should_behave_like 'an actionable resource', 'edit', 2
+          it_should_behave_like 'an actionable resource', 'show', 3
 
           it 'returns the account slug' do
             expect(data['slug']).to eq(account.slug)

@@ -117,5 +117,14 @@ module Actionable
       end
       @actions
     end
+
+    def actions_as_list
+      actions
+        .entries
+        .sort_by { |k, _h| k }
+        .map do |key, action_hash|
+          { key:, **action_hash }
+        end
+    end
   end
 end
