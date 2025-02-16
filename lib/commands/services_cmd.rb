@@ -6,15 +6,15 @@ class ServicesCmd < LarCity::CLI::BaseCmd
   namespace 'services'
 
   class_option :profile,
-          desc: 'The docker compose profile to use',
-          type: :string,
-          aliases: %w[-p --profile],
-          default: 'essential'
+               desc: 'The docker compose profile to use',
+               type: :string,
+               aliases: %w[-p --profile],
+               default: 'essential'
 
   option :since,
-          desc: 'Show logs since timestamp',
-          type: :string,
-          default: '15m' # 15 minutes
+         desc: 'Show logs since timestamp',
+         type: :string,
+         default: '15m' # 15 minutes
 
   # Docs: https://docs.docker.com/reference/cli/docker/compose/logs/
   desc 'logs', "Start streaming the app's containerized services logs"
