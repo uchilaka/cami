@@ -19,6 +19,17 @@ module LarCity::CLI
     desc 'branch-review', 'Review the status of the project branches (in source control)'
     def branch_review
       say "Checking branch status for #{selected_branch}...", :yellow
+      check_pr_cmd = "gh pr list --head #{selected_branch} --json number -q '.[].number'"
+      if dry_run?
+        get_pr_number_cmd = <<~CMD
+          Executing#{dry_run? ? ' (dry-run)' : ''}: #{check_pr_cmd}
+        CMD
+        say(get_pr_number_cmd, :magenta)
+        return
+      end
+      output = `#{check_pr_cmd}`.strip
+      pr_number = output.to_i
+      say "PR number: #{pr_number}", :green
     rescue SystemExit, Interrupt => e
       say "\nTask interrupted.", :red
       exit(1) unless verbose?
