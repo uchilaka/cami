@@ -1,0 +1,6 @@
+#!/usr/bin/env zsh
+
+# Docs: https://minikube.sigs.k8s.io/docs/commands/start/
+# TODO: Lookup the following options: --apiserver-port, --apiserver-ips, --apiserver-name,
+#   --container-runtime, --delete-on-failure, --dry-run, --extra-config, --feature-gates
+minikube start --nodes 2 -p multinode-dev --driver=docker "$@"
