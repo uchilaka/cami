@@ -5,16 +5,17 @@ require 'commands/lar_city/cli/base_cmd'
 class ServicesCmd < LarCity::CLI::BaseCmd
   namespace 'services'
 
-  options :profile,
+  class_option :profile,
           desc: 'The docker compose profile to use',
           type: :string,
           aliases: %w[-p --profile],
           default: 'essential'
+
   desc 'start', 'Start the services'
   def start
     run <<~CMD
       docker compose #{profile_clause} up -d &&\
-      docker compose #{profile_clause} logs --follow
+        docker compose #{profile_clause} logs --follow
     CMD
   end
 
@@ -45,7 +46,7 @@ class ServicesCmd < LarCity::CLI::BaseCmd
     end
 
     def profile_clause
-      profile.presence ? "--profile #{profile}" : ""
+      profile.presence ? "--profile=#{profile}" : ""
     end
 
     def profile
