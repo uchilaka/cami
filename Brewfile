@@ -24,7 +24,10 @@ brew 'foreman' if OS.mac?
 # FYI: Brew cask only works on macOS
 if File.exist?('/usr/local/bin/docker')
   puts 'Found Docker installed 🥳 - skipping docker installation'
-else
-  cask 'docker' if OS.mac?
+elsif OS.mac?
+  cask 'docker'
 end
 cask 'ngrok' if OS.mac?
+
+# Required for building Ruby language server
+brew 'rust' if OS.mac? || OS.linux?
