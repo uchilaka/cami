@@ -16,8 +16,8 @@ module LarCity::CLI
            enum: %w[inline web],
            default: 'web',
            required: true
-    desc 'sc-status', 'Show the status of the project (in source control)'
-    def sc_status
+    desc 'branch-review', 'Review the status of the project branches (in source control)'
+    def branch_review
       say "Checking branch status for #{selected_branch}...", :yellow
     rescue SystemExit, Interrupt => e
       say "\nTask interrupted.", :red
