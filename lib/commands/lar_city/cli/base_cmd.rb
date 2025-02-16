@@ -59,6 +59,14 @@ module LarCity
           #   wait_thread.value
           # end
           exit 0 if system(cmd, out: $stdout, err: :out)
+        rescue SystemExit, Interrupt => e
+          say "\nTask interrupted.", :red
+          exit(1) unless verbose?
+          raise e
+        rescue StandardError => e
+          say "An error occurred: #{e.message}", :red
+          exit(1) unless verbose?
+          raise e
         end
 
         def things(count, name: 'item')

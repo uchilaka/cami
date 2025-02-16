@@ -1,0 +1,3 @@
+#!/usr/bin/env zsh
+
+gh pr list --head "$(git branch --show-current)" --json number -q '.[].number' | xargs -I {} gh pr view {} --web

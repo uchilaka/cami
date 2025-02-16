@@ -6,6 +6,29 @@ module LarCity::CLI
   class DevkitCmd < BaseCmd
     namespace 'devkit'
 
+    option :branch_name,
+           type: :string,
+           aliases: %w[-b --branch],
+           desc: 'The name of the branch to create'
+    option :output,
+           type: :string,
+           aliases: '-o',
+           enum: %w[inline web],
+           default: 'web',
+           required: true
+    desc 'sc-status', 'Show the status of the project (in source control)'
+    def sc_status
+      say "Checking branch status for #{selected_branch}...", :yellow
+    rescue SystemExit, Interrupt => e
+      say "\nTask interrupted.", :red
+      exit(1) unless verbose?
+      raise e
+    rescue StandardError => e
+      say "An error occurred: #{e.message}", :red
+      exit(1) unless verbose?
+      raise e
+    end
+
     desc 'swaggerize', 'Generate Swagger JSON file(s)'
     def swaggerize
       cmd = 'bundle exec rails rswag'
@@ -35,7 +58,60 @@ module LarCity::CLI
       system(cmd) unless dry_run?
     end
 
+    no_commands do
+      def branch_prompt(context_msg = nil)
+        context_msg ||= <<~PROMPT_MSG
+          Available branches:
+          ===================
+          #{branches.map { |i, b| "#{i + 1}. #{is_current_branch_phrase(b)}#{b}" }.join("\n")}
+        PROMPT_MSG
+        say context_msg
+        input = ask('Enter the number of the branch to review:').chomp
+        return current_branch_tuple.last if input.blank?
+
+        branch_indexes = branches.map(&:first).map(&:to_s)
+        raise ArgumentError, 'Invalid branch number' unless branch_indexes.include?(input)
+
+        # The user input is 1-based, but the array is 0-based
+        branches[input.to_i - 1].last
+      end
+
+      def branches
+        @branches ||=
+          if @branches.blank?
+            `git branch --list`.split("\n").map.with_index do |b, i|
+              [i, b.gsub('*', '').strip]
+            end
+          end
+      end
+
+      def is_current_branch_phrase(branch)
+        if branch == current_branch
+          '* '
+        else
+          ''
+        end
+      end
+    end
+
     private
+
+    def selected_branch
+      @selected_branch ||=
+        if @selected_branch.blank?
+          branch_name = options[:branch_name]
+          branch_name ||= branch_prompt
+          branch_name
+        end
+    end
+
+    def current_branch_tuple
+      @current_branch_tuple ||= branches.find { |_, b| b == current_branch }
+    end
+
+    def current_branch
+      @current_branch ||= `git rev-parse --abbrev-ref HEAD`.strip
+    end
 
     def log_stream_url
       team_id, source_id = Rails.application.credentials.betterstack.values_at :team_id, :source_id
