@@ -11,15 +11,15 @@
     },
     {
       "path": "./app/frontend/components/",
-      "name": "Components"
+      "name": "Frontend/Components"
     },
     {
       "path": "./app/frontend/features/",
-      "name": "Features"
+      "name": "Frontend/Features"
     },
     {
       "path": "./app/frontend/routes/",
-      "name": "Routes"
+      "name": "Fronend/Routes"
     },
     /**
       * Rendered at the route tree: /pages/...
@@ -45,11 +45,27 @@
     },
   ],
   "settings": {
-    "terminal.integrated.fontSize": 15,
+    "terminal.integrated.fontSize": 18,
     "window.zoomLevel": 0.125,
     "rubyLsp.rubyVersionManager": {
-      "identifier": "asdf"
-    }
+      "identifier": "asdf",
+    },
+    "rubyLsp.formatter": "auto",
+    "rubyLsp.rubyExecutablePath": "${userHome}/.rbenv/shims/rubocop",
+    "powershell.powerShellAdditionalExePaths": {
+      "pwshInWSL": "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[typescript]": {
+      "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+      },
+    },
+    "[typescriptreact]": {
+      "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+      },
+    },
   }
 }
 ```

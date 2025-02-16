@@ -5,22 +5,35 @@ require 'commands/lar_city/cli/base_cmd'
 class ServicesCmd < LarCity::CLI::BaseCmd
   namespace 'services'
 
-  options :profile,
-          desc: 'The docker compose profile to use',
-          type: :string,
-          aliases: %w[-p --profile],
-          default: 'essential'
-  desc 'start', 'Start the services'
+  class_option :profile,
+               desc: 'The docker compose profile to use',
+               type: :string,
+               aliases: %w[-p --profile],
+               default: 'essential'
+
+  option :since,
+         desc: 'Show logs since timestamp',
+         type: :string,
+         default: '15m' # 15 minutes
+
+  # Docs: https://docs.docker.com/reference/cli/docker/compose/logs/
+  desc 'logs', "Start streaming the app's containerized services logs"
+  def logs
+    run "docker compose #{profile_clause} logs --follow",
+        since_clause
+  end
+
+  desc 'start', "Start the app's containerized services"
   def start
     run <<~CMD
       docker compose #{profile_clause} up -d &&\
-      docker compose #{profile_clause} logs --follow
+        docker compose #{profile_clause} logs --follow
     CMD
   end
 
-  desc 'stop', 'Stop the services'
+  desc 'stop', "Stop the app's containerized services"
   def stop
-    raise NotImplementedError
+    run "docker compose #{profile_clause} stop"
   end
 
   desc 'teardown', 'Teardown the service artifacts (e.g., containers, volumes, networks)'
@@ -44,8 +57,12 @@ class ServicesCmd < LarCity::CLI::BaseCmd
       end
     end
 
+    def since_clause
+      options[:since].presence ? "--since=#{options[:since]}" : ""
+    end
+
     def profile_clause
-      profile.presence ? "--profile #{profile}" : ""
+      profile.presence ? "--profile=#{profile}" : ""
     end
 
     def profile

@@ -31,8 +31,8 @@
 - [ ] I have added tests to cover my changes.
 - [ ] All new and existing tests passed.
 
-## How to review 
+## How to review
 
 <!--- Provide context on how to review the changes. -->
 
-- [ ] Code looks chill? If you're seeing this line, then I (the code contributor) didn't read this section so ask me to update the criteria for reviewing my changes 🫣 
+- [ ] Code looks chill? If you're seeing this line, then I (the code contributor) didn't read this section so ask me to update the criteria for reviewing my changes 🫣
