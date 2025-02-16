@@ -1,0 +1,2 @@
+#!/usr/bin/env zsh
+minikube stop -p multinode-dev "$@"
