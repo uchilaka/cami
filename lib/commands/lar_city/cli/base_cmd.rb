@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# See https://stackoverflow.com/a/837593/3726759
+app_path = File.join(Dir.pwd, 'app')
+$LOAD_PATH.unshift(app_path) unless $LOAD_PATH.include?(app_path)
+
 require 'thor'
 require 'thor/shell/color'
 require 'awesome_print'

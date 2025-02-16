@@ -1,8 +1,0 @@
-#!/usr/bin/env zsh
-
-# Get the project root directory
-PROJECT_ROOT=$(git rev-parse --show-toplevel)
-
-docker compose --profile=batteries-included down &&\
-  rm -vRf "$PROJECT_ROOT/db/development/postgres" &&\
-    rm -vRf "$PROJECT_ROOT/db/development/redis"
