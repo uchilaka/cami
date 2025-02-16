@@ -29,7 +29,20 @@ module LarCity::CLI
       end
       output = `#{check_pr_cmd}`.strip
       pr_number = output.to_i
+
+      if pr_number.zero?
+        say "No PR found for branch #{selected_branch}.", :red
+        return
+      end
+
       say "PR number: #{pr_number}", :green
+
+      case options[:output]
+      when 'web'
+        run "gh pr view #{pr_number} --web", inline: true
+      else
+        run "gh pr view #{pr_number}", inline: true
+      end
     rescue SystemExit, Interrupt => e
       say "\nTask interrupted.", :red
       exit(1) unless verbose?
@@ -80,8 +93,8 @@ module LarCity::CLI
         input = ask('Enter the number of the branch to review:').chomp
         return current_branch_tuple.last if input.blank?
 
-        branch_indexes = branches.map(&:first).map(&:to_s)
-        raise ArgumentError, 'Invalid branch number' unless branch_indexes.include?(input)
+        branch_number = branches.map(&:first).map { |i| (i + 1).to_s }
+        raise ArgumentError, 'Invalid branch number' unless branch_number.include?(input)
 
         # The user input is 1-based, but the array is 0-based
         branches[input.to_i - 1].last
