@@ -32,6 +32,9 @@ module LarCity::CLI
 
       if pr_number.zero?
         say "No PR found for branch #{selected_branch}.", :red
+        # TODO: Refactor PR lookup into a reusable method and loop over
+        #   on any branches that fall into this block (pr_number == 0) then
+        #   prompt the user on whether they want to delete the branch or not
         return
       end
 
