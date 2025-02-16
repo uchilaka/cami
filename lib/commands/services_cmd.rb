@@ -11,7 +11,19 @@ class ServicesCmd < LarCity::CLI::BaseCmd
           aliases: %w[-p --profile],
           default: 'essential'
 
-  desc 'start', 'Start the services'
+  option :since,
+          desc: 'Show logs since timestamp',
+          type: :string,
+          default: '15m' # 15 minutes
+
+  # Docs: https://docs.docker.com/reference/cli/docker/compose/logs/
+  desc 'logs', "Start streaming the app's containerized services logs"
+  def logs
+    run "docker compose #{profile_clause} logs --follow",
+        since_clause
+  end
+
+  desc 'start', "Start the app's containerized services"
   def start
     run <<~CMD
       docker compose #{profile_clause} up -d &&\
@@ -19,9 +31,9 @@ class ServicesCmd < LarCity::CLI::BaseCmd
     CMD
   end
 
-  desc 'stop', 'Stop the services'
+  desc 'stop', "Stop the app's containerized services"
   def stop
-    raise NotImplementedError
+    run "docker compose #{profile_clause} stop"
   end
 
   desc 'teardown', 'Teardown the service artifacts (e.g., containers, volumes, networks)'
@@ -43,6 +55,10 @@ class ServicesCmd < LarCity::CLI::BaseCmd
       %w[redis postgres/downloads postgres/docker-entrypoint-initdb.d].map do |dir|
         Rails.root.join('db', Rails.env, dir)
       end
+    end
+
+    def since_clause
+      options[:since].presence ? "--since=#{options[:since]}" : ""
     end
 
     def profile_clause

@@ -228,7 +228,7 @@ bin/thor lx-cli:secrets:edit --environment development
 ### 5. Start up the application's services
 
 ```shell
-bin/start-docker
+.docker/bin/start
 ```
 
 ### 6. Initialize the database
