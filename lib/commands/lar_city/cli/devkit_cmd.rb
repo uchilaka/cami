@@ -6,6 +6,8 @@ module LarCity::CLI
   class DevkitCmd < BaseCmd
     namespace 'devkit'
 
+    attr_reader :reprompted
+
     option :branch_name,
            type: :string,
            aliases: %w[-b --branch],
@@ -18,25 +20,30 @@ module LarCity::CLI
            required: true
     desc 'peek', 'Check for branches with PRs available for review'
     def peek
-      say "Checking branch status for #{selected_branch}...", :yellow
-      check_pr_cmd = "gh pr list --head #{selected_branch} --json number -q '.[].number'"
-      if dry_run?
-        get_pr_number_cmd = <<~CMD
-          Executing#{dry_run? ? ' (dry-run)' : ''}: #{check_pr_cmd}
-        CMD
-        say(get_pr_number_cmd, :magenta)
-        return
+      until (pr_number = check_or_prompt_for_branch_to_review)
+        @reprompted = true
+        @selected_branch = branch_prompt('Check another branch?')
       end
-      output = `#{check_pr_cmd}`.strip
-      pr_number = output.to_i
 
-      if pr_number.zero?
-        say "No PR found for branch #{selected_branch}.", :red
-        # TODO: Refactor PR lookup into a reusable method and loop over
-        #   on any branches that fall into this block (pr_number == 0) then
-        #   prompt the user on whether they want to delete the branch or not
-        return
-      end
+      # say "Checking branch status for #{selected_branch}...", :yellow
+      # check_pr_cmd = "gh pr list --head #{selected_branch} --json number -q '.[].number'"
+      # if dry_run?
+      #   get_pr_number_cmd = <<~CMD
+      #     Executing#{dry_run? ? ' (dry-run)' : ''}: #{check_pr_cmd}
+      #   CMD
+      #   say(get_pr_number_cmd, :magenta)
+      #   return
+      # end
+      # output = `#{check_pr_cmd}`.strip
+      # pr_number = output.to_i
+      #
+      # if pr_number.zero?
+      #   say "No PR found for branch #{selected_branch}.", :red
+      #   # TODO: Refactor PR lookup into a reusable method and loop over
+      #   #   on any branches that fall into this block (pr_number == 0) then
+      #   #   prompt the user on whether they want to delete the branch or not
+      #   return
+      # end
 
       say "PR number: #{pr_number}", :green
 
@@ -86,6 +93,30 @@ module LarCity::CLI
     end
 
     no_commands do
+      def check_or_prompt_for_branch_to_review
+        say "Checking branch status for #{selected_branch}...", :yellow
+        check_pr_cmd = "gh pr list --head #{selected_branch} --json number -q '.[].number'"
+        if dry_run?
+          get_pr_number_cmd = <<~CMD
+            Executing#{dry_run? ? ' (dry-run)' : ''}: #{check_pr_cmd}
+          CMD
+          say(get_pr_number_cmd, :magenta)
+          return
+        end
+        output = `#{check_pr_cmd}`.strip
+        pr_number = output.to_i
+
+        if pr_number.zero?
+          say "No PR found for branch #{selected_branch}.", :red
+          # TODO: Refactor PR lookup into a reusable method and loop over
+          #   on any branches that fall into this block (pr_number == 0) then
+          #   prompt the user on whether they want to delete the branch or not
+          return
+        end
+
+        pr_number
+      end
+
       def branch_prompt(context_msg = nil)
         context_msg ||= <<~PROMPT_MSG
           Available branches:
@@ -118,6 +149,10 @@ module LarCity::CLI
         else
           ''
         end
+      end
+
+      def reprompted?
+        @reprompted
       end
     end
 
