@@ -40,13 +40,15 @@ module Actionable
         .merge(locale: I18n.locale)
     end
 
-    def resources_url(*)
+    def resources_url(args = {})
       url_method_name = :"#{self.class.name.to_s.pluralize.underscore}_url"
-      send(url_method_name, *)
+      args.merge!(protocol: :https) if AppUtils.use_secure_protocol?
+      send(url_method_name, **args)
     end
 
     def resource_url(resource, args = {})
       url_method_name = :"#{resource.class.name.to_s.underscore}_url"
+      args.merge!(protocol: :https) if AppUtils.use_secure_protocol?
       send(url_method_name, resource, **args)
     end
 
