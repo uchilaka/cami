@@ -3,6 +3,7 @@
   // Extension identifier format: ${publisher}.${name}. Example: vscode.csharp
   // List of extensions which should be recommended for users of this workspace.
   "recommendations": [
+    "esbenp.prettier-vscode",
     "bierner.markdown-emoji",
     "davidanson.vscode-markdownlint",
     "rubocop.vscode-rubocop",
