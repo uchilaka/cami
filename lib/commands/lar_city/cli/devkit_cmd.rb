@@ -16,8 +16,8 @@ module LarCity::CLI
            enum: %w[inline web],
            default: 'web',
            required: true
-    desc 'branch-review', 'Review the status of the project branches (in source control)'
-    def branch_review
+    desc 'peek', 'Check for branches with PRs available for review'
+    def peek
       say "Checking branch status for #{selected_branch}...", :yellow
       check_pr_cmd = "gh pr list --head #{selected_branch} --json number -q '.[].number'"
       if dry_run?
