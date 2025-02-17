@@ -24,6 +24,8 @@ module LarCity::CLI
     desc 'peek', 'Check for branches with PRs available for review'
     def peek
       if interactive?
+        say "Enter 'Ctrl + C' to quit at any time.", :cyan
+        puts
         until (pr_number = check_or_prompt_for_branch_to_review)
           @selected_branch = prompt_for_branch_selection('Check another branch?')
         end
@@ -104,10 +106,15 @@ module LarCity::CLI
 
       def prompt_to_delete_branch(branch)
         input = ask("⚠️ Delete the #{branch} branch (ONLY CONTINUE IF YOU'RE SURE)? (y/n)").chomp
-        return if input.casecmp('n').zero?
+
+        if input.casecmp('n').zero?
+          puts
+          return
+        end
 
         if %w[master main].include?(branch)
           say "Branch #{branch} wasn't deleted (should be protected).", :red
+          puts
           return
         end
 
