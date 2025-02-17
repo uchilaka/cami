@@ -24,6 +24,8 @@ module LarCity::CLI
     desc 'peek', 'Check for branches with PRs available for review'
     def peek
       if interactive?
+        say "Enter 'Ctrl + C' to quit at any time.", :cyan
+        puts
         until (pr_number = check_or_prompt_for_branch_to_review)
           @selected_branch = prompt_for_branch_selection('Check another branch?')
         end
@@ -93,7 +95,7 @@ module LarCity::CLI
         pr_number = output.to_i
 
         if pr_number.zero?
-          say "No PR found for branch #{selected_branch}.", :red
+          say "🙅🏾‍♂️ No PR found for branch #{selected_branch}.", :red
           puts
           prompt_to_delete_branch(selected_branch) if interactive?
           return
@@ -103,8 +105,18 @@ module LarCity::CLI
       end
 
       def prompt_to_delete_branch(branch)
-        input = ask("Delete the #{branch} branch? (y/n)").chomp
-        return if input.casecmp('n').zero?
+        input = ask("⚠️ Delete the #{branch} branch (ONLY CONTINUE IF YOU'RE SURE)? (y/n)").chomp
+
+        if input.casecmp('n').zero?
+          puts
+          return
+        end
+
+        if %w[master main].include?(branch)
+          say "Branch #{branch} wasn't deleted (should be protected).", :red
+          puts
+          return
+        end
 
         if run("git branch --delete #{selected_branch}", inline: true)
           say "Branch #{branch} deleted.", :green
@@ -124,7 +136,7 @@ module LarCity::CLI
           say context_msg || 'Select a branch:'
         end
         puts
-        input = ask('Enter the number of the branch to review:').chomp
+        input = ask('👉🏾 Enter the number of the branch to review:').chomp
         return current_branch_tuple.last if input.blank?
 
         branch_number = branches.map(&:first).map { |i| (i + 1).to_s }
