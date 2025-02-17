@@ -93,7 +93,7 @@ module LarCity::CLI
         pr_number = output.to_i
 
         if pr_number.zero?
-          say "No PR found for branch #{selected_branch}.", :red
+          say "🙅🏾‍♂️ No PR found for branch #{selected_branch}.", :red
           puts
           prompt_to_delete_branch(selected_branch) if interactive?
           return
@@ -103,8 +103,13 @@ module LarCity::CLI
       end
 
       def prompt_to_delete_branch(branch)
-        input = ask("Delete the #{branch} branch? (y/n)").chomp
+        input = ask("⚠️ Delete the #{branch} branch (ONLY CONTINUE IF YOU'RE SURE)? (y/n)").chomp
         return if input.casecmp('n').zero?
+
+        if %w[master main].include?(branch)
+          say "Branch #{branch} wasn't deleted (should be protected).", :red
+          return
+        end
 
         if run("git branch --delete #{selected_branch}", inline: true)
           say "Branch #{branch} deleted.", :green
@@ -124,7 +129,7 @@ module LarCity::CLI
           say context_msg || 'Select a branch:'
         end
         puts
-        input = ask('Enter the number of the branch to review:').chomp
+        input = ask('👉🏾 Enter the number of the branch to review:').chomp
         return current_branch_tuple.last if input.blank?
 
         branch_number = branches.map(&:first).map { |i| (i + 1).to_s }
