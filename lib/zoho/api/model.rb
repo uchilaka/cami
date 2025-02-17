@@ -32,7 +32,7 @@ module Zoho
           response = connection(auth: true).get('/oauth/serverinfo')
           data = response.body || {}
           url = data.dig('locations', region.to_s)
-          if valid_http_host?(url)
+          if %r{https://accounts\.zoho\.(eu|uk|com)}.match?(url)
             url
           else
             raise ::LarCity::Errors::Unknown3rdPartyHostError unless valid_http_host?(url)
