@@ -41,7 +41,7 @@ module LarCity
       no_commands do
         include OperatingSystemDetectable
 
-        def run(*args)
+        def run(*args, inline: false)
           cmd = args.join(' ')
           if verbose? || dry_run?
             msg = <<~CMD
@@ -58,7 +58,18 @@ module LarCity
           #   end
           #   wait_thread.value
           # end
-          exit 0 if system(cmd, out: $stdout, err: :out)
+          result = system(cmd, out: $stdout, err: :out)
+          return result if inline
+
+          exit 0 if result
+        rescue SystemExit, Interrupt => e
+          say "\nTask interrupted.", :red
+          exit(1) unless verbose?
+          raise e
+        rescue StandardError => e
+          say "An error occurred: #{e.message}", :red
+          exit(1) unless verbose?
+          raise e
         end
 
         def things(count, name: 'item')
