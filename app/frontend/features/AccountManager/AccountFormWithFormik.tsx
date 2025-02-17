@@ -5,7 +5,7 @@ import FormInput from '@/components/FloatingFormInput'
 import PhoneInput from '@/components/PhoneNumberInput/PhoneLibNumberInput'
 import { useAccountContext } from './AccountProvider'
 import TextareaInput from '@/components/TextareaInput'
-import Button from '@/components/Button'
+import Button, { ButtonLoader } from '@/components/Button'
 import { useMutation } from '@tanstack/react-query'
 import ButtonLink from '@/components/Button/ButtonLink'
 import { Form, withFormik, FormikComputedProps, useFormikContext } from 'formik'
@@ -23,6 +23,7 @@ import {
 import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
 import useCsrfToken from '@/utils/hooks/useCsrfToken'
 import clsx from 'clsx'
+import Alert from '@/components/Alert'
 
 export type ProfileFormData = {
   givenName: string
@@ -125,126 +126,138 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({
   }, [loadingAccount, loadedAccount, readOnly])
 
   return (
-    <Form className={formClassName} onSubmit={handleSubmit}>
-      <FormInput
-        id="displayName"
-        type="text"
-        label={values.type === 'Business' ? 'Company (Ex. Google)' : 'Display name'}
-        autoComplete="off"
-        name="displayName"
-        placeholder=" "
-        error={!!errors.displayName}
-        hint={errors.displayName}
-        onReset={handleReset}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        readOnly={loading || readOnly}
-        required
-      />
-
-      <div className="grid md:gap-6 md:grid-cols-2">
+    <>
+      {saved && (
+        <Alert variant="success">
+          <span className="font-medium">Done!</span> The account was saved successfully!
+        </Alert>
+      )}
+      <Form className={formClassName} onSubmit={handleSubmit}>
         <FormInput
-          id="email"
-          type="email"
-          label="Email address"
-          name="email"
+          id="displayName"
+          type="text"
+          label={values.type === 'Business' ? 'Company (Ex. Google)' : 'Display name'}
+          autoComplete="off"
+          name="displayName"
           placeholder=" "
-          error={!!errors.email}
-          hint={errors.email}
+          error={!!errors.displayName}
+          hint={errors.displayName}
+          onReset={handleReset}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          readOnly={loading || readOnly}
+          required
+        />
+
+        <div className="grid md:gap-6 md:grid-cols-2">
+          <FormInput
+            id="email"
+            type="email"
+            label="Email address"
+            name="email"
+            placeholder=" "
+            error={!!errors.email}
+            hint={errors.email}
+            onReset={handleReset}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            readOnly={loading || readOnly}
+          />
+          <PhoneInput
+            id="phone"
+            type="phone"
+            label="Phone number"
+            name="phone"
+            placeholder=" "
+            international
+            hint={errors.phone}
+            onReset={handleReset}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            readOnly={loading || loadingFeatureFlags || disablePhoneNumbers || readOnly}
+          />
+        </div>
+
+        {/**
+         * TODO: Detect if there is a (metadata) profile and offer
+         * to create one to save givenName and familyName
+         */}
+        {values.type === 'Individual' && (
+          <div className="grid md:gap-6 md:grid-cols-2">
+            <FormInput
+              type="text"
+              id="givenName"
+              name="givenName"
+              label="First name"
+              placeholder=" "
+              onReset={handleReset}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              readOnly={loading || readOnly}
+            />
+            <FormInput
+              type="text"
+              id="familyName"
+              name="familyName"
+              label="Last name"
+              placeholder=" "
+              onReset={handleReset}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              readOnly={loading || readOnly}
+            />
+          </div>
+        )}
+
+        {/* @TODO Figure out how to handle trix-content via react frontend */}
+        <TextareaInput
+          id="readme"
+          name="readme"
+          label="Description"
+          placeholder=" "
           onReset={handleReset}
           onChange={handleChange}
           onBlur={handleBlur}
           readOnly={loading || readOnly}
         />
-        <PhoneInput
-          id="phone"
-          type="phone"
-          label="Phone number"
-          name="phone"
-          placeholder=" "
-          international
-          hint={errors.phone}
-          onReset={handleReset}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          readOnly={loading || loadingFeatureFlags || disablePhoneNumbers || readOnly}
-        />
-      </div>
 
-      {/**
-       * TODO: Detect if there is a (metadata) profile and offer
-       * to create one to save givenName and familyName
-       */}
-      {values.type === 'Individual' && (
-        <div className="grid md:gap-6 md:grid-cols-2">
-          <FormInput
-            type="text"
-            id="givenName"
-            name="givenName"
-            label="First name"
-            placeholder=" "
-            onReset={handleReset}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            readOnly={loading || readOnly}
-          />
-          <FormInput
-            type="text"
-            id="familyName"
-            name="familyName"
-            label="Last name"
-            placeholder=" "
-            onReset={handleReset}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            readOnly={loading || readOnly}
-          />
+        <div className="flex justify-end items-center space-x-2">
+          {!readOnly && (
+            <>
+              <Button onClick={() => setReadOnly(true)}>Cancel</Button>
+              <Button disabled variant="caution">
+                Delete this account
+              </Button>
+              <Button
+                variant="primary"
+                type="submit"
+                loading={loading || isValidating}
+                disabled={loading || !isValid || isValidating || isSubmitting}
+              >
+                {isSubmitting ? <ButtonLoader>Saving...</ButtonLoader> : 'Save'}
+              </Button>
+            </>
+          )}
+          {readOnly && (
+            <>
+              {arrayHasItems(account?.invoices) ? (
+                <ButtonLink href={account?.actions.transactionsIndex.url}>Transactions</ButtonLink>
+              ) : (
+                <Button disabled>Transactions</Button>
+              )}
+              {account?.actions.showProfile ? (
+                <ButtonLink href={account.actions.showProfile.url}>Profile</ButtonLink>
+              ) : (
+                <>{isIndividualAccount(account) && <ButtonLink href={account.actions.profilesIndex.url}>Profiles</ButtonLink>}</>
+              )}
+              <Button variant="primary" onClick={() => setReadOnly(false)}>
+                Edit
+              </Button>
+            </>
+          )}
         </div>
-      )}
-
-      {/* @TODO Figure out how to handle trix-content via react frontend */}
-      <TextareaInput
-        id="readme"
-        name="readme"
-        label="Description"
-        placeholder=" "
-        onReset={handleReset}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        readOnly={loading || readOnly}
-      />
-
-      <div className="flex justify-end items-center space-x-2">
-        {!readOnly && (
-          <>
-            <Button onClick={() => setReadOnly(true)}>Cancel</Button>
-            <Button disabled variant="caution">
-              Delete this account
-            </Button>
-            <Button variant="primary" type="submit" disabled={loading || !isValid || isValidating || isSubmitting}>
-              Save
-            </Button>
-          </>
-        )}
-        {readOnly && (
-          <>
-            {arrayHasItems(account?.invoices) ? (
-              <ButtonLink href={account?.actions.transactionsIndex.url}>Transactions</ButtonLink>
-            ) : (
-              <Button disabled>Transactions</Button>
-            )}
-            {account?.actions.showProfile ? (
-              <ButtonLink href={account.actions.showProfile.url}>Profile</ButtonLink>
-            ) : (
-              <>{isIndividualAccount(account) && <ButtonLink href={account.actions.profilesIndex.url}>Profiles</ButtonLink>}</>
-            )}
-            <Button variant="primary" onClick={() => setReadOnly(false)}>
-              Edit
-            </Button>
-          </>
-        )}
-      </div>
-    </Form>
+      </Form>
+    </>
   )
 }
 
@@ -293,7 +306,7 @@ const AccountForm: FC<Omit<AccountFormProps, 'setReadOnly'>> = ({ compact, initi
         const { edit } = account.actions
         const { givenName, familyName, phone, ...rest } = values
         const payload = {
-          [account.type.toLowerCase()]: rest,
+          [account.type.toLowerCase()]: { phone, ...rest },
           profile: { givenName, familyName, phone },
         }
         return fetch(edit.url, {
