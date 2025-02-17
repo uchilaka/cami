@@ -43,27 +43,11 @@ module Actionable
     def resources_url(*)
       url_method_name = :"#{self.class.name.to_s.pluralize.underscore}_url"
       send(url_method_name, *)
-      # case self.class
-      # when Invoice
-      #   invoices_url(args)
-      # when Account
-      #   accounts_url(args)
-      # else
-      #   raise StandardError, 'Unsupported resource'
-      # end
     end
 
     def resource_url(resource, args = {})
       url_method_name = :"#{resource.class.name.to_s.underscore}_url"
       send(url_method_name, resource, **args)
-      # case resource
-      # when Invoice
-      #   invoice_url(resource, **args)
-      # when Account
-      #   account_url(resource, **args)
-      # else
-      #   raise StandardError, 'Unsupported resource'
-      # end
     end
 
     # TODO: Evaluate Pundit policy in determining :showable? in Actionable module
