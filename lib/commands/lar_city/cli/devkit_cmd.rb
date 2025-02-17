@@ -89,6 +89,7 @@ module LarCity::CLI
           return
         end
         output = `#{check_pr_cmd}`.strip
+        # TODO: Support "q" to quit (also show "Ctrl + C" to quit message)
         pr_number = output.to_i
 
         if pr_number.zero?
