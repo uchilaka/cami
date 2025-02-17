@@ -6,8 +6,11 @@ module LarCity::CLI
   class DevkitCmd < BaseCmd
     namespace 'devkit'
 
-    attr_reader :reprompted
-
+    option :interactive,
+           type: :boolean,
+           aliases: '-i',
+           desc: 'Run in interactive mode',
+           default: true
     option :branch_name,
            type: :string,
            aliases: %w[-b --branch],
@@ -20,11 +23,13 @@ module LarCity::CLI
            required: true
     desc 'peek', 'Check for branches with PRs available for review'
     def peek
-      until (pr_number = check_or_prompt_for_branch_to_review)
-        @reprompted = true
-        @selected_branch = prompt_for_branch_selection('Check another branch?')
+      if interactive?
+        until (pr_number = check_or_prompt_for_branch_to_review)
+          @selected_branch = prompt_for_branch_selection('Check another branch?')
+        end
+      else
+        pr_number = check_or_prompt_for_branch_to_review
       end
-
       say "PR number: #{pr_number}", :green
 
       case options[:output]
@@ -89,7 +94,7 @@ module LarCity::CLI
         if pr_number.zero?
           say "No PR found for branch #{selected_branch}.", :red
           puts
-          prompt_to_delete_branch(selected_branch)
+          prompt_to_delete_branch(selected_branch) if interactive?
           return
         end
 
@@ -102,6 +107,8 @@ module LarCity::CLI
 
         if run("git branch --delete #{selected_branch}", inline: true)
           say "Branch #{branch} deleted.", :green
+          @selected_branch = nil
+          @branches = nil
         else
           say "Branch #{branch} could not be deleted.", :red
         end
@@ -110,12 +117,12 @@ module LarCity::CLI
       end
 
       def prompt_for_branch_selection(context_msg = nil)
-        context_msg ||= <<~PROMPT_MSG
-          Available branches:
-          ===================
-          #{branches.map { |i, b| "#{i + 1}. #{is_current_branch_phrase(b)}#{b}" }.join("\n")}
-        PROMPT_MSG
-        say context_msg
+        if @branches.nil?
+          say output_available_branches(context_msg)
+        else
+          say context_msg || 'Select a branch:'
+        end
+        puts
         input = ask('Enter the number of the branch to review:').chomp
         return current_branch_tuple.last if input.blank?
 
@@ -124,6 +131,15 @@ module LarCity::CLI
 
         # The user input is 1-based, but the array is 0-based
         branches[input.to_i - 1].last
+      end
+
+      def output_available_branches(branch_list_hr)
+        branch_list_hr ||= "Available #{'branch'.pluralize(branches.size)}:"
+        <<~PROMPT_MSG
+          #{branch_list_hr}
+          #{'=' * branch_list_hr.size}
+          #{branches.map { |i, b| "#{i + 1}. #{is_current_branch_phrase(b)}#{b}" }.join("\n")}
+        PROMPT_MSG
       end
 
       def branches
@@ -142,13 +158,13 @@ module LarCity::CLI
           ''
         end
       end
-
-      def reprompted?
-        @reprompted
-      end
     end
 
     private
+
+    def interactive?
+      options[:interactive]
+    end
 
     def selected_branch
       @selected_branch ||=
