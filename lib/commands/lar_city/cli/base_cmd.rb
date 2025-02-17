@@ -58,7 +58,10 @@ module LarCity
           #   end
           #   wait_thread.value
           # end
-          exit 0 if system(cmd, out: $stdout, err: :out) && !inline
+          result = system(cmd, out: $stdout, err: :out)
+          return result if inline
+
+          exit 0 if result
         rescue SystemExit, Interrupt => e
           say "\nTask interrupted.", :red
           exit(1) unless verbose?
