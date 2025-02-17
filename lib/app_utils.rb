@@ -68,6 +68,24 @@ class AppUtils
       yes?(ENV.fetch('ENV_DEBUG_ASSETS', default_value))
     end
 
+    def allowed_hosts_for(provider:)
+      Rails
+        .application
+        .config_for(:allowed_3rd_party_hosts)[provider.to_sym] || {}
+    end
+
+    def ruby_version(file_path = nil)
+      file_path ||= "#{Dir.pwd}/.tool-versions"
+      raise 'Error: .tool-versions file not found' unless File.exist?(file_path)
+
+      File.foreach(file_path) do |line|
+        match = line.match(/ruby\s+([\d.]+)/)
+        return match[1].to_s.strip if match
+      end
+
+      raise 'No ruby version found in .tool-versions'
+    end
+
     # TODO: is this deprecated or refactored as implemented elsewhere?
     def live_reload_enabled?
       case friendly_os_name
