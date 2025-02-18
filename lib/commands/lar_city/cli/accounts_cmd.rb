@@ -34,6 +34,9 @@ module LarCity
         @query.sorts = @search_query.sorters if @search_query.sorters.any?
         accounts = @query.result(distinct: true)
         say "Found #{accounts.count} #{things(accounts.count, name: 'account')} that might be duplicates", :yellow
+        # TODO: Offer to merge accounts by setting the most recently updated
+        #   (should be the first in the list) as the "parent" account of
+        #   the duplicates
       end
 
       no_commands do
