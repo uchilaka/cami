@@ -9,8 +9,10 @@ export interface InvoiceSlice {
   invoicesMap: Record<string, Invoice>
   selectedInvoicesMap: Record<string, boolean>
   setInvoices: (invoices: Invoice[]) => void
+  // @deprecated Use setInvoices instead of setInvoicesMap
   setInvoicesMap: (invoiceMap: Record<string, Invoice>) => void
   handleInvoiceSelectionChange: (ev: ChangeEvent<HTMLInputElement>) => void
+  // @deprecated Use handleInvoiceSelectionChange instead of setInvoiceSelectionInMap
   setInvoiceSelectionInMap: (invoiceId: string, checked: boolean) => void
 }
 
