@@ -42,26 +42,32 @@ module LarCity
         include OperatingSystemDetectable
 
         def run(*args, inline: false)
-          cmd = args.join(' ')
-          if verbose? || dry_run?
-            msg = <<~CMD
-              Executing#{dry_run? ? ' (dry-run)' : ''}: #{cmd}
-            CMD
-            say(msg, dry_run? ? :magenta : :yellow)
+          with_interruption_rescue do
+            cmd = args.join(' ')
+            if verbose? || dry_run?
+              msg = <<~CMD
+                Executing#{dry_run? ? ' (dry-run)' : ''}: #{cmd}
+              CMD
+              say(msg, dry_run? ? :magenta : :yellow)
+            end
+            return if dry_run?
+
+            # # Example: doing this with Open3
+            # Open3.popen2e(cmd) do |_stdin, stdout_stderr, wait_thread|
+            #   Thread.new do
+            #     stdout_stderr.each { |line| puts line }
+            #   end
+            #   wait_thread.value
+            # end
+            result = system(cmd, out: $stdout, err: :out)
+            return result if inline
+
+            exit 0 if result
           end
-          return if dry_run?
+        end
 
-          # # Example: doing this with Open3
-          # Open3.popen2e(cmd) do |_stdin, stdout_stderr, wait_thread|
-          #   Thread.new do
-          #     stdout_stderr.each { |line| puts line }
-          #   end
-          #   wait_thread.value
-          # end
-          result = system(cmd, out: $stdout, err: :out)
-          return result if inline
-
-          exit 0 if result
+        def with_interruption_rescue(&block)
+          yield block
         rescue SystemExit, Interrupt => e
           say "\nTask interrupted.", :red
           exit(1) unless verbose?
