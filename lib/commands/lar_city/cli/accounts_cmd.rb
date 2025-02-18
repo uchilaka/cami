@@ -88,11 +88,13 @@ module LarCity
 
         def output_matched_accounts(limited: false)
           rows = limited ? accounts_as_rows.first(row_display_limit) : accounts_as_rows
-          ap rows if verbose?
-          puts ::Terminal::Table.new(
+          # TODO: Inspect the rows to see if the table is being built correctly
+          table = ::Terminal::Table.new(
             headings: ['#', 'Slug', 'Display Name', 'Email', 'Tax ID'],
             rows:
           )
+          puts table
+          ap(rows) if verbose?
           puts
         end
 
