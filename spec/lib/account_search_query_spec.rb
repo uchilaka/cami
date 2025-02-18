@@ -52,7 +52,8 @@ RSpec.describe AccountSearchQuery, type: :query do
           'q' => qs,
           's' => {
             'status' => 'asc',
-            'updatedAt' => 'desc' }
+            'updatedAt' => 'desc'
+          }
         }
       end
 
