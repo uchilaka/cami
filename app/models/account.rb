@@ -5,6 +5,7 @@
 # Table name: accounts
 #
 #  id                :uuid             not null, primary key
+#  discarded_at      :datetime
 #  display_name      :string
 #  email             :string
 #  metadata          :jsonb
@@ -19,6 +20,10 @@
 #  remote_crm_id     :string
 #  tax_id            :string
 #
+# Indexes
+#
+#  index_accounts_on_discarded_at  (discarded_at)
+#
 # Foreign Keys
 #
 #  fk_rails_...  (parent_account_id => accounts.id)
@@ -28,6 +33,7 @@ class Account < ApplicationRecord
   resourcify
 
   include AASM
+  include Discard::Model
   include Searchable
   include Actionable
   include Renderable
@@ -141,7 +147,7 @@ class Account < ApplicationRecord
 
   # Class methods
   def self.ransackable_attributes(_auth_object = nil)
-    %w[display_name email tax_id]
+    %w[display_name email slug tax_id]
   end
 
   def self.ransackable_associations(_auth_object = nil)

@@ -167,6 +167,8 @@ GEM
       devise
       globalid
     diff-lcs (1.6.0)
+    discard (1.4.0)
+      activerecord (>= 4.2, < 9.0)
     dotenv (3.1.7)
     drb (2.2.1)
     dry-auto_inject (1.1.0)
@@ -704,6 +706,7 @@ DEPENDENCIES
   devise
   devise-jwt (~> 0.11)
   devise-passwordless
+  discard (~> 1.4)
   dotenv
   fabrication
   faker
