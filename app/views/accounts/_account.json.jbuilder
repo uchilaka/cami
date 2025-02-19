@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-json.extract! account.serializable_hash, :id, :display_name, :slug, :status, :type, :tax_id, :email,
-              :created_at, :updated_at, :actions, :actions_list
+json.extract! account.serializable_hash, :id, :display_name, :slug, :email,
+              :status, :type, :tax_id, :email, :created_at, :updated_at, :actions,
+              :actions_list, :parent_id
 
 json.readme do
   json.html account.readme.to_s

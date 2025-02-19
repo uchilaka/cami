@@ -31,7 +31,8 @@
 class AccountSerializer < ActiveModel::Serializer
   attributes :id, :display_name, :slug, :email,
              :status, :type, :tax_id, :notes_as_html,
-             :created_at, :updated_at, :actions, :actions_list
+             :created_at, :updated_at, :actions,
+             :actions_list, :parent_id
 
   # Read more on rendering rich text content:
   # https://guides.rubyonrails.org/action_text_overview.html#rendering-rich-text-content
