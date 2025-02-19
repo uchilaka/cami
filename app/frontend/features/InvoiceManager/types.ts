@@ -1,3 +1,4 @@
+import { AppGlobalProps } from '@/utils'
 import { GenericAccount } from '@/utils/api/GenericAccount'
 
 export type VendorType = 'paypal' | 'hubspot' | 'stripe'
@@ -49,3 +50,9 @@ export interface InvoiceSearchProps {
   // (Full-text search) query string
   q: string
 }
+
+interface FindInvoiceOptions {
+  signal: AbortSignal
+}
+
+export type InvoicesLoaderFn = (params: Partial<InvoiceSearchProps>, options?: Partial<FindInvoiceOptions>) => Promise<Invoice[]>

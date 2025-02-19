@@ -1,12 +1,8 @@
-import { Invoice, InvoiceSearchProps } from '../types'
+import { useAppStoreWithDevtools as useStore } from '@/utils/store'
+import { InvoiceSearchProps, InvoicesLoaderFn } from '../types'
 
-interface FindInvoiceOptions {
-  signal: AbortSignal
-}
-
-type FindInvoiceFn = (payload: Partial<InvoiceSearchProps>, options?: Partial<FindInvoiceOptions>) => Promise<Invoice[]>
-
-export const findInvoices: FindInvoiceFn = async (payload: Partial<InvoiceSearchProps>, { signal } = {}) => {
+export const findInvoices: InvoicesLoaderFn = async (payload: Partial<InvoiceSearchProps>, { signal } = {}) => {
+  const { setInvoices } = useStore.getState()
   console.debug(`Finding invoices with payload:`, { ...payload })
   const result = await fetch('/invoices/search.json', {
     method: 'POST',
@@ -17,6 +13,7 @@ export const findInvoices: FindInvoiceFn = async (payload: Partial<InvoiceSearch
     signal,
   })
   const data = await result.json()
+  setInvoices(data)
   return data
 }
 

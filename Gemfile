@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
+$LOAD_PATH.unshift Dir.pwd
+
+require 'lib/app_utils'
+
 source 'https://rubygems.org'
 
-ruby '3.2.2'
+ruby AppUtils.ruby_version
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.2'
-
-gem 'active_record_extended'
+gem 'rails', '~> 7.2', '>= 7.2.2.1'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
@@ -26,6 +28,11 @@ gem 'flipper-ui', '~> 1.2'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
+
+gem 'active_record_extended'
+
+# ActiveRecord soft-deletes done right https://github.com/jhawthorn/discard?tab=readme-ov-file#discard-
+gem 'discard', '~> 1.4'
 
 # OO authorization for Rails [https://github.com/varvet/pundit]
 gem 'pundit', '~> 2.3'
@@ -100,6 +107,9 @@ gem 'rswag-ui'
 
 # See https://youtrack.jetbrains.com/issue/RUBY-32741/Ruby-Debugger-uninitialized-constant-ClassDebaseValueStringBuilder...#focus=Comments-27-9677540.0-0
 gem 'ostruct'
+
+# Simple, feature rich ascii table generation library https://github.com/tj/terminal-table
+gem 'terminal-table'
 
 group :development, :test do
   gem 'capybara'

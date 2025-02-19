@@ -25,3 +25,11 @@ export function emitAccountLoadedEvent(account: BusinessAccount | IndividualAcco
   })
   ;(source ?? document).dispatchEvent(event)
 }
+
+export function emitInvoiceSelectedEvent(selectionMap: Record<string, boolean>, source?: Element) {
+  console.debug(`Will fire selected event for invoice (sends selection map)`, { source, selectionMap })
+  const event = new CustomEvent(nsEventName('invoice:selected'), {
+    detail: { selectionMap },
+  })
+  ;(source ?? document).dispatchEvent(event)
+}

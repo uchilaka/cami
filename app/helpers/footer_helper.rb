@@ -24,6 +24,10 @@ module FooterHelper
         'https://flowbite.com/docs/getting-started/introduction/'
       ],
       [
+        t('shared.footer.wai_aria_guide'),
+        'https://w3c.github.io/aria'
+      ],
+      [
         t('shared.footer.paypal_sandbox_guide'),
         'https://developer.paypal.com/tools/sandbox/'
       ],

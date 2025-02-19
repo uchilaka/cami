@@ -4,26 +4,41 @@
 #
 # Table name: accounts
 #
-#  id           :uuid             not null, primary key
-#  display_name :string
-#  email        :string
-#  metadata     :jsonb
-#  phone        :jsonb
-#  readme       :text
-#  slug         :string
-#  status       :integer
-#  type         :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  tax_id       :string
+#  id            :uuid             not null, primary key
+#  discarded_at  :datetime
+#  display_name  :string
+#  email         :string
+#  metadata      :jsonb
+#  phone         :jsonb
+#  readme        :text
+#  slug          :string
+#  status        :integer
+#  type          :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  parent_id     :uuid
+#  remote_crm_id :string
+#  tax_id        :string
+#
+# Indexes
+#
+#  index_accounts_on_discarded_at  (discarded_at)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (parent_id => accounts.id)
 #
 class Account < ApplicationRecord
+  self.ignored_columns += ['parent_account_id']
+
   rolify
   resourcify
 
   include AASM
+  include Discard::Model
   include Searchable
   include Actionable
+  include Renderable
 
   # There are security implications to consider when using deterministic encryption.
   # See https://guides.rubyonrails.org/active_record_encryption.html#deterministic-and-non-deterministic-encryption
@@ -42,7 +57,12 @@ class Account < ApplicationRecord
   validates :type, presence: true, inclusion: { in: %w[Account Business Individual Government Nonprofit] }
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
   validates :tax_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
+  # Intended to store the ZohoCRM SOID
+  validates :remote_crm_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
 
+  # See https://guides.rubyonrails.org/association_basics.html#self-joins
+  belongs_to :parent, class_name: 'Account', optional: true
+  has_many :dupes, class_name: 'Account', foreign_key: 'parent_id'
   has_many :invoices, as: :invoiceable, dependent: :nullify
   # TODO: This generates the following console error:
   #   `warning: already initialized constant Account::HABTM_Roles`
@@ -132,7 +152,7 @@ class Account < ApplicationRecord
 
   # Class methods
   def self.ransackable_attributes(_auth_object = nil)
-    %w[display_name email tax_id]
+    %w[display_name email slug tax_id]
   end
 
   def self.ransackable_associations(_auth_object = nil)

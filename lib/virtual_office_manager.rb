@@ -7,15 +7,21 @@ require 'sidekiq/api'
 #   data from secure or encrypted sources.
 class VirtualOfficeManager
   class << self
-    def hostname
-      # TODO: Check if tunnel is available and use the NGROK hostname if so
-      #   otherwise, fallback to the configured hostname 👇🏾
-      ENV.fetch('HOSTNAME', Rails.application.credentials.hostname)
-    end
+    delegate :hostname,
+             :use_secure_protocol?,
+             :hostname_is_nginx_proxy?, to: AppUtils
 
-    def hostname_is_nginx_proxy?
-      /\.ngrok\.(dev|app)/.match?(hostname)
-    end
+    # # @deprecated use AppUtils.hostname instead
+    # def hostname
+    #   # TODO: Check if tunnel is available and use the NGROK hostname if so
+    #   #   otherwise, fallback to the configured hostname 👇🏾
+    #   ENV.fetch('HOSTNAME', Rails.application.credentials.hostname)
+    # end
+    #
+    # # @deprecated use AppUtils.hostname_is_nginx_proxy? instead
+    # def hostname_is_nginx_proxy?
+    #   /\.ngrok\.(dev|app)/.match?(hostname)
+    # end
 
     def job_queue_is_running?
       scheduled_set = Sidekiq::ScheduledSet.new
@@ -27,7 +33,7 @@ class VirtualOfficeManager
       # Only run this in the context of a job
       if !defined?(Rails::Server) && Flipper.enabled?(:feat__hostname_health_check)
         # TODO: Dynamically determine whether HTTPS or HTTP should be used for this check
-        protocol = hostname_is_nginx_proxy? ? 'https' : 'http'
+        protocol = use_secure_protocol? ? 'https' : 'http'
         health_endpoint = "#{protocol}://#{hostname}/up"
         return { host: hostname } if AppUtils.healthy?(health_endpoint)
       end

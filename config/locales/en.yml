@@ -74,6 +74,7 @@ en:
       component_library: 'Component Library'
       paypal_sandbox_guide: 'PayPal Sandbox Testing Guide'
       ruby_doc: 'Ruby Documentation'
+      wai_aria_guide: 'Accessibility Guide (WAI-ARIA)'
       zoho_crm_api_guide: 'Zoho CRM API Guide (v7)'
   models:
     account:

@@ -41,13 +41,11 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'pages/home'
-  get 'pages/dashboard'
   # get 'pages/services'
 
-  match 'app/*path', to: 'pages#home', via: :get
+  match 'app/*path', to: 'pages#app', via: :get
 
-  root to: 'pages#home'
+  root to: 'pages#app'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         ruby-version: [3.2.2]
-        node-version: [18.x, 20.x]
+        node-version: [20.x, 22.x]
     env:
       CI: true
       # TODO: Change to 16006 to match the port in the docker-compose.yml file

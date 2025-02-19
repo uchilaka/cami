@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_27_072422) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_19_150823) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,6 +30,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_27_072422) do
     t.jsonb "metadata", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "remote_crm_id"
+    t.datetime "discarded_at"
+    t.uuid "parent_id"
+    t.index ["discarded_at"], name: "index_accounts_on_discarded_at"
   end
 
   create_table "accounts_roles", id: false, force: :cascade do |t|
@@ -198,6 +202,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_27_072422) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "accounts", "accounts", column: "parent_id", validate: false
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "allowlisted_jwts", "users", on_delete: :cascade

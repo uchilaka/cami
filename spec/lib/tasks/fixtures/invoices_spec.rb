@@ -4,7 +4,7 @@ require 'rails_helper'
 
 load_lib_script 'tasks/fixtures/invoices', ext: 'thor'
 
-RSpec.describe Fixtures::Invoices do
+RSpec.describe Fixtures::Invoices, devtools: true do
   let!(:fixtures) do
     # rubocop:disable Lint/SymbolConversion
     {

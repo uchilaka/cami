@@ -85,7 +85,7 @@ Rails.application.configure do
   config.after_initialize do
     if !VirtualOfficeManager.job_queue_is_running? && defined?(Rails::Server)
       # Schedule an NGROK tunnel check to update the mailer default URL options
-      UpdateMailerDefaultURLOptionsJob.set(wait: 15.seconds).perform_async
+      UpdateDefaultURLOptionsJob.set(wait: 15.seconds).perform_async
     end
   end
 
