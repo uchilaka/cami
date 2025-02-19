@@ -6,7 +6,7 @@ require_relative 'base_cmd'
 module LarCity
   module CLI
     class AccountsCmd < BaseCmd
-      attr_reader :accounts
+      attr_reader :accounts, :primary_account
 
       namespace 'accounts'
 
@@ -39,20 +39,50 @@ module LarCity
           @accounts = @query.result(distinct: true)
           puts
           if accounts.any?
-            say "Found #{accounts.count} #{things(accounts.count, name: 'account')} that might be duplicates", :cyan
+            say "Found #{tally(accounts, 'account')} that might be duplicates", Colors::INFO
             puts
 
             if accounts.size > row_display_limit
-              say "Displaying the first #{row_display_limit} of #{accounts.size} accounts", :magenta
+              say "Displaying the first #{row_display_limit} of #{accounts.size} accounts", Colors::HIGHLIGHT
               puts
             end
 
+            output_matched_accounts(limited: accounts.size > row_display_limit)
             until (@primary_account = prompt_for_primary_account_selection)
               output_matched_accounts(limited: accounts.size > row_display_limit)
             end
+            raise StandardError, 'No primary account selected' if primary_account.blank?
+
             # TODO: Offer to merge accounts by setting the most recently updated
             #   (should be the first in the list) as the "parent" account of
             #   the duplicates
+            duplicate_ids = accounts.pluck(:id).reject { |id| id == primary_account.id }
+            duplicate_phrase = 'duplicate'.pluralize(duplicate_ids.length)
+            Account.transaction do
+              # Clear the primary_account_id of the primary account (if set)
+              if primary_account.parent.present?
+                cleanup_msg = "⏳ Ensuring account #{primary_account.slug} (primary) isn't marked as a duplicate account"
+                say cleanup_msg, Colors::INFO
+                primary_account.update!(parent_id: nil)
+                puts
+              end
+              # Unassign any accounts with the duplicates set as their parent
+              say '⏳ Un-assigning duplicate accounts as parents', Colors::INFO
+              _unassign_dupes_as_parents_result = Account.where(parent_id: duplicate_ids).update_all(parent_id: nil)
+              puts
+              # Make the primary account the parent of the duplicates
+              say "⏳ Assigning account #{primary_account.slug} as parent of #{duplicate_phrase}", Colors::INFO
+              result =
+                Account
+                  .where(id: duplicate_ids)
+                  .update_all(parent_id: primary_account.id)
+              if result
+                success_msg = "🎉 Successfully marked #{tally(duplicate_ids, 'account')} as #{duplicate_phrase}"
+                say success_msg, Colors::SUCCESS
+              end
+              # Rollback changes if in "pretend" mode
+              raise ActiveRecord::Rollback if dry_run?
+            end
           end
         end
       end
@@ -69,7 +99,12 @@ module LarCity
         def prompt_for_primary_account_selection
           raise StandardError, 'No accounts found' if accounts.blank?
 
-          input = ask('Enter the number to select the primary account: ').chomp
+          prompt_msg = <<~PROMPT
+            Select the account to mark as "primary" (\
+            #{range(accounts.first(row_display_limit))}, \
+            or press "Ctrl + C" to quit):
+          PROMPT
+          input = ask(prompt_msg, Colors::PROMPT).chomp
           available_row_numbers = accounts_as_rows.map(&:first).map(&:to_s)
           # Handle invalid input
           unless available_row_numbers.include?(input)
@@ -83,7 +118,7 @@ module LarCity
         end
 
         def prompt_for_query_string_search
-          @qs = ask('Enter a query string to search for accounts: ').chomp
+          @qs = ask('Enter a query string to search for accounts: ', Colors::PROMPT).chomp
         end
 
         def output_matched_accounts(limited: false)

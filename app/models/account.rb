@@ -4,21 +4,21 @@
 #
 # Table name: accounts
 #
-#  id                :uuid             not null, primary key
-#  discarded_at      :datetime
-#  display_name      :string
-#  email             :string
-#  metadata          :jsonb
-#  phone             :jsonb
-#  readme            :text
-#  slug              :string
-#  status            :integer
-#  type              :string
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  parent_account_id :uuid
-#  remote_crm_id     :string
-#  tax_id            :string
+#  id            :uuid             not null, primary key
+#  discarded_at  :datetime
+#  display_name  :string
+#  email         :string
+#  metadata      :jsonb
+#  phone         :jsonb
+#  readme        :text
+#  slug          :string
+#  status        :integer
+#  type          :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  parent_id     :uuid
+#  remote_crm_id :string
+#  tax_id        :string
 #
 # Indexes
 #
@@ -26,9 +26,11 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (parent_account_id => accounts.id)
+#  fk_rails_...  (parent_id => accounts.id)
 #
 class Account < ApplicationRecord
+  self.ignored_columns += ['parent_account_id']
+
   rolify
   resourcify
 
@@ -58,6 +60,9 @@ class Account < ApplicationRecord
   # Intended to store the ZohoCRM SOID
   validates :remote_crm_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
 
+  # See https://guides.rubyonrails.org/association_basics.html#self-joins
+  belongs_to :parent, class_name: 'Account', optional: true
+  has_many :dupes, class_name: 'Account', foreign_key: 'parent_id'
   has_many :invoices, as: :invoiceable, dependent: :nullify
   # TODO: This generates the following console error:
   #   `warning: already initialized constant Account::HABTM_Roles`

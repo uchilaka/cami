@@ -17,6 +17,14 @@ require 'concerns/operating_system_detectable'
 # - All text verbose output should be in Thor::Shell::Color::MAGENTA.
 module LarCity
   module CLI
+    module Colors
+      PROMPT = :cyan
+      INFO = :yellow
+      SUCCESS = :green
+      ERROR = :red
+      HIGHLIGHT = :magenta
+    end
+
     class BaseCmd < Thor
       class_option :dry_run,
                    type: :boolean,
@@ -78,8 +86,31 @@ module LarCity
           raise e
         end
 
+        protected
+
         def things(count, name: 'item')
           name.pluralize(count)
+        end
+
+        def tally(collection, name)
+          return unless is_enumerable?(collection)
+
+          count = collection.count
+          "#{count} #{things(count, name:)}"
+        end
+
+        def range(collection)
+          return unless is_enumerable?(collection)
+          return unless collection.any?
+
+          count = collection.count
+          return '[1]' if count == 1
+
+          "[1-#{count}]"
+        end
+
+        def is_enumerable?(collection)
+          collection.class.ancestors.include?(Enumerable)
         end
 
         def verbose?

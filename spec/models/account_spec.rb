@@ -4,21 +4,21 @@
 #
 # Table name: accounts
 #
-#  id                :uuid             not null, primary key
-#  discarded_at      :datetime
-#  display_name      :string
-#  email             :string
-#  metadata          :jsonb
-#  phone             :jsonb
-#  readme            :text
-#  slug              :string
-#  status            :integer
-#  type              :string
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  parent_account_id :uuid
-#  remote_crm_id     :string
-#  tax_id            :string
+#  id            :uuid             not null, primary key
+#  discarded_at  :datetime
+#  display_name  :string
+#  email         :string
+#  metadata      :jsonb
+#  phone         :jsonb
+#  readme        :text
+#  slug          :string
+#  status        :integer
+#  type          :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  parent_id     :uuid
+#  remote_crm_id :string
+#  tax_id        :string
 #
 # Indexes
 #
@@ -26,7 +26,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (parent_account_id => accounts.id)
+#  fk_rails_...  (parent_id => accounts.id)
 #
 require 'rails_helper'
 
@@ -244,5 +244,13 @@ RSpec.describe Account, type: :model do
     it { expect(subject.actions.dig(:delete, :url)).to match(%r{/accounts/#{subject.id}.json\?locale=en$}) }
     it { expect(subject.actions.dig(:edit, :url)).to match(%r{/accounts/#{subject.id}\?locale=en$}) }
     it { expect(subject.actions.dig(:show, :url)).to match(%r{/accounts/#{subject.id}\?locale=en$}) }
+  end
+
+  context 'with a parent account' do
+    let(:parent) { Fabricate :account }
+    let(:account) { Fabricate(:account, parent:) }
+
+    it { expect(account.parent).to eq parent }
+    it { expect(parent.dupes).to include(account) }
   end
 end
