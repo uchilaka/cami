@@ -34,6 +34,12 @@ class AccountSerializer < ActiveModel::Serializer
              :created_at, :updated_at, :actions,
              :actions_list, :parent_id
 
+  def phone
+    return nil unless object.phone.present?
+
+    object.phone['value']
+  end
+
   # Read more on rendering rich text content:
   # https://guides.rubyonrails.org/action_text_overview.html#rendering-rich-text-content
   def notes_as_html
