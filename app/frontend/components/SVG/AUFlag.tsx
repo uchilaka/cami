@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 
 import { CountryFlagProps } from './types'
+import ScalableVectorGraphic from './ScalableVectorGraphic'
 
 /**
  * The Australian flag (AU) in SVG.
@@ -9,18 +10,9 @@ import { CountryFlagProps } from './types'
  * @param param0
  * @returns
  */
-const AUFlag: FC<CountryFlagProps> = ({
-  size = 'md',
-  className = 'h-4 w-4 me-2',
-  fill = 'none',
-  viewBox = '0 0 20 15',
-  xmlns = 'http://www.w3.org/2000/svg',
-  ...props
-}) => {
-  const propsWithDefaults = { fill, viewBox }
-
+const AUFlag: FC<CountryFlagProps> = (props) => {
   return (
-    <svg {...props} {...propsWithDefaults} className={className} xmlns={xmlns}>
+    <ScalableVectorGraphic {...props}>
       <rect width="19.6" height="14" y=".5" fill="#fff" rx="2" />
       <mask id="a" style={{ maskType: 'luminance' }} width="20" height="15" x="0" y="0" maskUnits="userSpaceOnUse">
         <rect width="19.6" height="14" y=".5" fill="#fff" rx="2" />
@@ -62,7 +54,7 @@ const AUFlag: FC<CountryFlagProps> = ({
           <stop offset="1" stopColor="#FC0D1B" />
         </linearGradient>
       </defs>
-    </svg>
+    </ScalableVectorGraphic>
   )
 }
 

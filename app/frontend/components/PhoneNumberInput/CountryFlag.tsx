@@ -6,19 +6,17 @@ import AUFlag from '../SVG/AUFlag'
 import DEFlag from '../SVG/DEFlag'
 import FRFlag from '../SVG/FRFlag'
 import CountryCodeBadge from './CountryCodeBadge'
+import { CountryFlagProps } from '../SVG/types'
 
 const knownFlagsDictionary: Record<string, ReactNode> = {
-  US: <USFlag />,
-  UK: <UKFlag />,
-  AU: <AUFlag />,
-  DE: <DEFlag />,
-  FR: <FRFlag />,
+  US: <USFlag size="sm" className="mx-2" />,
+  UK: <UKFlag size="sm" className="mx-2" />,
+  AU: <AUFlag size="sm" className="mx-2" />,
+  DE: <DEFlag size="sm" className="mx-2" />,
+  FR: <FRFlag size="sm" className="mx-2" />,
 }
 
-// Generate a type from the keys of the dictionary.
-type KnownFlagKeys = keyof typeof knownFlagsDictionary
-
-const CountryFlag: FC<{ alpha2?: string | KnownFlagKeys }> = ({ alpha2 }) => {
+const CountryFlag: FC<CountryFlagProps> = ({ alpha2 }) => {
   return (
     <>
       {alpha2 && knownFlagsDictionary[alpha2]}

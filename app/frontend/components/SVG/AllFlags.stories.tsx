@@ -23,7 +23,7 @@ export const AllFlags: Story = {
       <USFlag />
       <UKFlag />
       <NGFlag />
-      <AUFlag width={40} height="auto" />
+      <AUFlag size="md" />
       <DEFlag />
       <FRFlag />
     </div>
@@ -32,4 +32,12 @@ export const AllFlags: Story = {
 
 export const Default: Story = {
   args: { alpha2: 'US' },
+  argTypes: {
+    size: {
+      options: ['xs', 'sm', 'md', 'lg', 'xl'],
+      control: {
+        type: 'radio',
+      },
+    },
+  },
 }
