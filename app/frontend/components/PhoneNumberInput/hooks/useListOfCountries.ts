@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 
+import { CountryCode } from 'libphonenumber-js'
+
 // See https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes/blob/master/slim-2/slim-2.json
-interface ISO3166Country {
+export interface ISO3166Country {
   id: string
   name: string
-  alpha2: string
+  alpha2: CountryCode
   dialCode: string
 }
 
