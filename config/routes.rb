@@ -61,7 +61,8 @@ Rails.application.routes.draw do
     resources :features, only: %i[index], defaults: { format: :json }
     resources :form_data, only: %i[] do
       collection do
-        get :countries
+        get :countries, defaults: { format: :json }
+        get :countries_map, defaults: { format: :json }
       end
     end
   end

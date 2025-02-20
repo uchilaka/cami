@@ -5,7 +5,17 @@ module API
     respond_to :json
 
     def countries
+      # TODO: Cache the result of /api/form_data/countries
       @countries ||= self.class.country_list.sort_by { |c| c[:name] }
+    end
+
+    def countries_map
+      # TODO: Cache the result of /api/form_data/countries_map
+      @countries_map = self.class.country_list.each_with_object({}) do |c, h|
+        h[c[:id]] = c.transform_keys { |k| k.to_s.camelize(:lower) }
+      end
+
+      render json: @countries_map
     end
 
     class << self

@@ -1,8 +1,26 @@
-import React from 'react'
+import React, { FC } from 'react'
 
-const AUFlag = () => {
+import { CountryFlagProps } from './types'
+
+/**
+ * The Australian flag (AU) in SVG.
+ *
+ * For a guide on scaling SVGs, see https://css-tricks.com/scale-svg/
+ * @param param0
+ * @returns
+ */
+const AUFlag: FC<CountryFlagProps> = ({
+  size = 'md',
+  className = 'h-4 w-4 me-2',
+  fill = 'none',
+  viewBox = '0 0 20 15',
+  xmlns = 'http://www.w3.org/2000/svg',
+  ...props
+}) => {
+  const propsWithDefaults = { fill, viewBox }
+
   return (
-    <svg className="h-4 w-4 me-2" fill="none" viewBox="0 0 20 15" xmlns="http://www.w3.org/2000/svg">
+    <svg {...props} {...propsWithDefaults} className={className} xmlns={xmlns}>
       <rect width="19.6" height="14" y=".5" fill="#fff" rx="2" />
       <mask id="a" style={{ maskType: 'luminance' }} width="20" height="15" x="0" y="0" maskUnits="userSpaceOnUse">
         <rect width="19.6" height="14" y=".5" fill="#fff" rx="2" />

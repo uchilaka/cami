@@ -9,7 +9,7 @@ const NGFlag = () => {
       </mask>
       <g mask="url(#a)">
         <path fill="#00833E" d="M13.067.5H19.6v14h-6.533z" />
-        <path fill="#fff" fillRule="evenodd" d="M0 14.5h6.533V.5H0v14z" clipRule="evenodd" />
+        <path fill="#00833E" fillRule="evenodd" d="M0 14.5h6.533V.5H0v14z" clipRule="evenodd" />
       </g>
     </svg>
   )
