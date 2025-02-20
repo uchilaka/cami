@@ -78,7 +78,7 @@ export const AccountForm: FC<AccountFormProps> = ({ compact, readOnly }) => {
     onSuccess: (_result) => setSaved(true),
   })
 
-  logger.debug({ account, loading })
+  logger.debug('AccountForm:', { account, loading })
 
   return (
     <Formik

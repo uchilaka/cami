@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, useCallback, useEffect, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
 import { Console } from 'node:console'
 import snakecaseKeys from 'snakecase-keys'
 import FormInput from '@/components/FloatingFormInput'
@@ -83,13 +83,12 @@ const composeFormValues = (account?: IndividualAccount | BusinessAccount | null,
      * https://api.rubyonrails.org/v8.0.0/classes/ActionText/RichText.html#method-i-to_plain_text
      */
     readme: account?.readme?.plaintext ?? '',
-    phone: (isBusinessAccount(account) ? account?.phone : '') ?? '',
+    phone: account?.phone ?? '',
     type: account?.type ?? initialType ?? 'Business',
     ...(isIndividualAccount(account)
       ? {
           givenName: account?.profile?.givenName ?? '',
           familyName: account?.profile?.familyName ?? '',
-          phone: account?.profile?.phone ?? '',
         }
       : {}),
   }
@@ -112,6 +111,8 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({
   const { loading: loadingAccount, account: loadedAccount } = useAccountContext()
   const disablePhoneNumbers = !isEnabled('editable_phone_numbers')
   const formClassName = clsx('mx-auto', { 'max-w-lg': !compact })
+
+  const phoneInputRef = useRef<HTMLInputElement>(null)
 
   logger.debug('AccountInnerForm:', { account, isReadOnly: readOnly, initialType, saved })
 
