@@ -227,6 +227,19 @@ RSpec.describe Invoice, type: :model do
     pending 'when invoice is overdue'
   end
 
+  describe '#modal_dom_id' do
+    it { expect(subject.modal_dom_id).to eq "#{subject.model_name.singular}-modal|#{subject.id}|" }
+
+    context 'with content_type' do
+      let(:content_type) { 'content' }
+
+      it do
+        expect(subject.modal_dom_id(content_type:)).to \
+          eq "#{subject.model_name.singular}--#{content_type}--modal|#{subject.id}|"
+      end
+    end
+  end
+
   describe '.fuzzy_search_predicate_key' do
     let(:fields) { %w[invoice_number status] }
 

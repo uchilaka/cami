@@ -1,4 +1,4 @@
-import { InvoiceSearchProps } from './types'
+import { Invoice, InvoiceSearchProps } from './types'
 
 /**
  * @deprecated Perhaps too much ad-hoc complexity. The goal is to implement an abstraction for Ransack search (instead).
@@ -32,4 +32,17 @@ export function composeQueryParams(searchProps: Partial<InvoiceSearchProps>, oth
     }
   }
   return params
+}
+
+export const reduceInvoiceListToMap: (invoices: Invoice[], mapOfInvoicesById?: Record<string, Invoice>) => Record<string, Invoice> = (
+  invoices,
+  mapById = {},
+) => {
+  return invoices.reduce(
+    (map, invoice) => ({
+      ...map,
+      [invoice.id]: invoice,
+    }),
+    mapById,
+  )
 }
