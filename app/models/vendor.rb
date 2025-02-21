@@ -1,0 +1,2 @@
+class Vendor < Account
+end
