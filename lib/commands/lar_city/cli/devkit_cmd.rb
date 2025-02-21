@@ -173,6 +173,100 @@ module LarCity::CLI
       end
     end
 
+    no_commands do
+      def check_or_prompt_for_branch_to_review
+        say "Checking branch status for #{selected_branch}...", :yellow
+        check_pr_cmd = "gh pr list --head #{selected_branch} --json number -q '.[].number'"
+        if dry_run?
+          get_pr_number_cmd = <<~CMD
+            Executing#{dry_run? ? ' (dry-run)' : ''}: #{check_pr_cmd}
+          CMD
+          say(get_pr_number_cmd, :magenta)
+          return
+        end
+        output = `#{check_pr_cmd}`.strip
+        # TODO: Support "q" to quit (also show "Ctrl + C" to quit message)
+        pr_number = output.to_i
+
+        if pr_number.zero?
+          say "🙅🏾‍♂️ No PR found for branch #{selected_branch}.", :red
+          puts
+          prompt_to_delete_branch(selected_branch) if interactive?
+          return
+        end
+
+        pr_number
+      end
+
+      def prompt_to_delete_branch(branch)
+        input = ask("⚠️ Delete the #{branch} branch (ONLY CONTINUE IF YOU'RE SURE)? (y/n)").chomp
+
+        if input.casecmp('n').zero?
+          puts
+          return
+        end
+
+        if %w[master main].include?(branch)
+          say "Branch #{branch} wasn't deleted (should be protected).", :red
+          puts
+          return
+        end
+
+        if run("git branch --delete #{selected_branch}", inline: true)
+          say "Branch #{branch} deleted.", :green
+          @selected_branch = nil
+          @branches = nil
+        else
+          say "Branch #{branch} could not be deleted.", :red
+        end
+
+        puts
+      end
+
+      def prompt_for_branch_selection(context_msg = nil)
+        if @branches.nil?
+          say output_available_branches(context_msg)
+        else
+          say context_msg || 'Select a branch:'
+        end
+        puts
+        input = ask('👉🏾 Enter the number of the branch to review:').chomp
+        return current_branch_tuple.last if input.blank?
+
+        branch_number = branches.map(&:first).map { |i| (i + 1).to_s }
+        raise ArgumentError, 'Invalid branch number' unless branch_number.include?(input)
+
+        # The user input is 1-based, but the array is 0-based
+        branches[input.to_i - 1].last
+      end
+
+      def output_available_branches(branch_list_hr)
+        branch_list_hr ||= "Available #{'branch'.pluralize(branches.size)}:"
+        <<~PROMPT_MSG
+          #{branch_list_hr}
+          #{'=' * branch_list_hr.size}
+          #{branches.map { |i, b| "#{i + 1}. #{is_current_branch_phrase(b)}#{b}" }.join("\n")}
+        PROMPT_MSG
+      end
+
+      def branches
+        @branches ||=
+          if @branches.blank?
+            `git branch --list`.split("\n").map.with_index do |b, i|
+              [i, b.gsub('*', '').strip]
+            end
+          end
+      end
+
+      def is_current_branch_phrase(branch)
+        if branch == current_branch
+          '* '
+        else
+          ''
+        end
+      end
+    end
+
     private
 
     def interactive?
