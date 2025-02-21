@@ -3,12 +3,11 @@
 module ApplicationHelper
   include StyleHelper
 
-  # @deprecated Use `modal_dom_id` implemented in `AccountsHelper` or other
-  #   more specific helpers instead.
   def modal_dom_id(resource, content_type: nil)
-    return "#{resource.model_name.singular}--#{content_type}--modal|#{resource.id}|" if content_type.present?
+    raise ArgumentError, "#{resource.class.name} MUST be Renderable" \
+      unless resource.respond_to?(:modal_dom_id)
 
-    "#{resource.model_name.singular}-modal|#{resource.id}|"
+    resource.modal_dom_id(content_type:)
   end
 
   def record_dom_id(resource, prefix: '')

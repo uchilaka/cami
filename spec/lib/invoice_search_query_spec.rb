@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe InvoiceSearchQuery do
+RSpec.describe InvoiceSearchQuery, type: :query do
   let(:qs) { nil }
   let(:params) { {} }
 
@@ -11,6 +11,13 @@ RSpec.describe InvoiceSearchQuery do
       ActionController::Parameters.new(params).permit(:q, :mode, f: {}, s: {})
     described_class.new(qs, params: filtered_params)
   end
+
+  it { expect(subject).to respond_to(:query_string) }
+  it { expect(subject).to respond_to(:params) }
+  it { expect(subject).to respond_to(:filters) }
+  it { expect(subject).to respond_to(:sorters) }
+  it { expect(subject).to respond_to(:predicates) }
+  it { expect(subject).to respond_to(:rebuild) }
 
   shared_examples 'search by query string' do |qs, expected_predicates|
     let(:params) do

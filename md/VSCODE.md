@@ -10,6 +10,10 @@
       "name": "Rails"
     },
     {
+      "path": "./app/views/",
+      "name": "Rails/Views"
+    },
+    {
       "path": "./app/frontend/components/",
       "name": "Frontend/Components"
     },
@@ -19,25 +23,15 @@
     },
     {
       "path": "./app/frontend/routes/",
-      "name": "Fronend/Routes"
-    },
-    /**
-      * Rendered at the route tree: /pages/...
-      * and require updates to the PagesController actions
-      * and a file in /app/views/pages/... with a corresponding
-      * DOM container target (by ID) to render the correct page
-      */
-    {
-      "path": "./app/frontend/views/",
-      "name": "Views"
+      "name": "Frontend/Routes"
     },
     {
       "path": "./app/frontend/entrypoints/",
-      "name": "Entrypoints"
+      "name": "Frontend/Entrypoints"
     },
     {
       "path": "./app/frontend/utils/",
-      "name": "Utils"
+      "name": "Frontend/Utils"
     },
     {
       "path": "./.storybook/",

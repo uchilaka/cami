@@ -17,6 +17,14 @@ require 'concerns/operating_system_detectable'
 # - All text verbose output should be in Thor::Shell::Color::MAGENTA.
 module LarCity
   module CLI
+    module Colors
+      PROMPT = :cyan
+      INFO = :yellow
+      SUCCESS = :green
+      ERROR = :red
+      HIGHLIGHT = :magenta
+    end
+
     class BaseCmd < Thor
       class_option :dry_run,
                    type: :boolean,
@@ -42,26 +50,32 @@ module LarCity
         include OperatingSystemDetectable
 
         def run(*args, inline: false)
-          cmd = args.join(' ')
-          if verbose? || dry_run?
-            msg = <<~CMD
-              Executing#{dry_run? ? ' (dry-run)' : ''}: #{cmd}
-            CMD
-            say(msg, dry_run? ? :magenta : :yellow)
+          with_interruption_rescue do
+            cmd = args.join(' ')
+            if verbose? || dry_run?
+              msg = <<~CMD
+                Executing#{dry_run? ? ' (dry-run)' : ''}: #{cmd}
+              CMD
+              say(msg, dry_run? ? :magenta : :yellow)
+            end
+            return if dry_run?
+
+            # # Example: doing this with Open3
+            # Open3.popen2e(cmd) do |_stdin, stdout_stderr, wait_thread|
+            #   Thread.new do
+            #     stdout_stderr.each { |line| puts line }
+            #   end
+            #   wait_thread.value
+            # end
+            result = system(cmd, out: $stdout, err: :out)
+            return result if inline
+
+            exit 0 if result
           end
-          return if dry_run?
+        end
 
-          # # Example: doing this with Open3
-          # Open3.popen2e(cmd) do |_stdin, stdout_stderr, wait_thread|
-          #   Thread.new do
-          #     stdout_stderr.each { |line| puts line }
-          #   end
-          #   wait_thread.value
-          # end
-          result = system(cmd, out: $stdout, err: :out)
-          return result if inline
-
-          exit 0 if result
+        def with_interruption_rescue(&block)
+          yield block
         rescue SystemExit, Interrupt => e
           say "\nTask interrupted.", :red
           exit(1) unless verbose?
@@ -72,8 +86,31 @@ module LarCity
           raise e
         end
 
+        protected
+
         def things(count, name: 'item')
           name.pluralize(count)
+        end
+
+        def tally(collection, name)
+          return unless is_enumerable?(collection)
+
+          count = collection.count
+          "#{count} #{things(count, name:)}"
+        end
+
+        def range(collection)
+          return unless is_enumerable?(collection)
+          return unless collection.any?
+
+          count = collection.count
+          return '[1]' if count == 1
+
+          "[1-#{count}]"
+        end
+
+        def is_enumerable?(collection)
+          collection.class.ancestors.include?(Enumerable)
         end
 
         def verbose?

@@ -19,8 +19,8 @@ upsert_invoice_records_job:
   source: schedule # default: dynamic
   queue: whenever
 
-update_mailer_default_url_options_job:
+update_default_url_options_job:
   cron: '*/5 6-22 * * *' # Every 5 minutes from 06:00 to 22:00 daily
-  class: 'UpdateMailerDefaultURLOptionsJob'
+  class: 'UpdateDefaultURLOptionsJob'
   source: schedule # default: dynamic
   queue: default
