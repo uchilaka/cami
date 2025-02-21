@@ -1,20 +1,18 @@
-name: Full-stack CI
+name: Frontend CI
 
 on:
   pull_request:
 
 jobs:
   build_and_test:
-    name: Bundle, assets build & RSpec tests
+    name: Build & Jest tests
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
         ruby-version: [3.2.2]
-        node-version: [22.x]
-        ci_node_total: [2]
-        ci_node_index: [0, 1]
+        node-version: [20.x, 22.x]
 
     env:
       CI: true
@@ -100,6 +98,12 @@ jobs:
       - name: Install Yarn dependencies
         run: yarn install --immutable
 
+      - name: Clobber assets & stylesheets
+        run: |
+          bundle exec rake dartsass:clobber
+          bundle exec rake tailwindcss:clobber
+          bundle exec rake assets:clobber
+
       - name: Build assets - stylesheets
         run: |
           bundle exec rake dartsass:build
@@ -109,13 +113,6 @@ jobs:
         run: |
           bundle exec rake vite:build_all
 
-      - name: RSpec tests
-        env:
-          KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC: ${{ secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC }}
-          KNAPSACK_PRO_CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
-          KNAPSACK_PRO_CI_NODE_INDEX: ${{ matrix.ci_node_index }}
-          KNAPSACK_PRO_LOG_LEVEL: info
-          # See https://docs.knapsackpro.com/ruby/rspec/
+      - name: Frontend tests
         run: |
-          # Run all specs except those with the option skip_in_ci: true
-          bundle exec rake "knapsack_pro:queue:rspec[--tag ~skip_in_ci:true]"
+          yarn test
