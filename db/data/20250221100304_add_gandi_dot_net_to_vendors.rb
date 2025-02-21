@@ -3,8 +3,8 @@
 class AddGandiDotNetToVendors < ActiveRecord::Migration[7.2]
   def up
     gandi = Vendor.new(
-      slug: 'gandi-dot-net',
-      display_name: 'Gandi.net',
+      slug: 'gandi',
+      display_name: 'Gandi US, Inc.',
       metadata: {
         website_url: 'https://gandi.net',
         support_url: 'https://helpdesk.gandi.net/hc/en-us/requests',
