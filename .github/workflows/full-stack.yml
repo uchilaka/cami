@@ -4,13 +4,18 @@ on:
   pull_request:
 
 jobs:
-  build:
+  build_and_test:
     name: Bundle, assets build & RSpec
     runs-on: ubuntu-latest
+
     strategy:
+      fail-fast: false
       matrix:
         ruby-version: [3.2.2]
         node-version: [20.x, 22.x]
+        ci_node_total: [2]
+        ci_node_index: [0, 1]
+
     env:
       CI: true
       # TODO: Change to 16006 to match the port in the docker-compose.yml file
@@ -113,7 +118,10 @@ jobs:
       - name: RSpec tests
         env:
           KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC: ${{ secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC }}
-        # See https://docs.knapsackpro.com/ruby/rspec/
+          KNAPSACK_PRO_CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
+          KNAPSACK_PRO_CI_NODE_INDEX: ${{ matrix.ci_node_index }}
+          KNAPSACK_PRO_LOG_LEVEL: info
+          # See https://docs.knapsackpro.com/ruby/rspec/
         run: |
           # Run all specs except those with the option skip_in_ci: true
           bundle exec rake "knapsack_pro:queue:rspec[--tag ~skip_in_ci:true]"
