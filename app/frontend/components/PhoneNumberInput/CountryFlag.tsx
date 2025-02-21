@@ -7,22 +7,22 @@ import DEFlag from '../SVG/DEFlag'
 import FRFlag from '../SVG/FRFlag'
 import CountryCodeBadge from './CountryCodeBadge'
 import { CountryFlagProps } from '../SVG/types'
+import { isKnownCountryFlag } from './types'
 
-const knownFlagsDictionary: Record<string, ReactNode> = {
-  US: <USFlag size="sm" className="mx-2" />,
-  UK: <UKFlag size="sm" className="mx-2" />,
-  AU: <AUFlag size="sm" className="mx-2" />,
-  DE: <DEFlag size="sm" className="mx-2" />,
-  FR: <FRFlag size="sm" className="mx-2" />,
-}
+const CountryFlag: FC<CountryFlagProps> = ({ alpha2, size = 'sm', className = 'mx-2', ...passThroughProps }) => {
+  if (isKnownCountryFlag(alpha2)) {
+    return (
+      <>
+        {alpha2 === 'US' && <USFlag {...passThroughProps} size={size} className={className} />}
+        {alpha2 === 'UK' && <UKFlag {...passThroughProps} size={size} className={className} />}
+        {alpha2 === 'AU' && <AUFlag {...passThroughProps} size={size} className={className} />}
+        {alpha2 === 'DE' && <DEFlag {...passThroughProps} size={size} className={className} />}
+        {alpha2 === 'FR' && <FRFlag {...passThroughProps} size={size} className={className} />}
+      </>
+    )
+  }
 
-const CountryFlag: FC<CountryFlagProps> = ({ alpha2 }) => {
-  return (
-    <>
-      {alpha2 && knownFlagsDictionary[alpha2]}
-      {alpha2 && !knownFlagsDictionary[alpha2] && <CountryCodeBadge code={alpha2} />}
-    </>
-  )
+  return <CountryCodeBadge code={alpha2} />
 }
 
 export default CountryFlag
