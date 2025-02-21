@@ -10,6 +10,7 @@ require_relative '../config/environment'
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'rspec/rails'
+require 'knapsack_pro'
 # require 'rspec/wait'
 require 'aasm/rspec'
 require 'pundit/rspec'
@@ -19,7 +20,10 @@ require 'database_cleaner/active_record'
 require 'sidekiq/testing'
 require 'devise/test/integration_helpers'
 require 'vcr'
-require_relative '../lib/zoho/credentials'
+require 'lib/zoho/credentials'
+
+# See https://docs.knapsackpro.com/knapsack_pro-ruby/guide/?rails=yes&test-runner=rspec&ci=github-actions#rspec
+KnapsackPro::Adapters::RSpecAdapter.bind
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
