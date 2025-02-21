@@ -11,6 +11,9 @@ class AddKnapsackProToVendors < ActiveRecord::Migration[7.2]
       metadata: {
         website_url: 'https://knapsackpro.com',
         support_url: 'https://knapsackpro.com/contact',
+        billing_url: 'https://knapsackpro.com/dashboard/billing',
+        # TODO: Implement a VendorResource model for records in
+        #   <vendor-instance>.dig(:metadata, :resources)
         resources: {
           cami: {
             name: 'CAMI Project @ Knapsack Pro',
@@ -19,13 +22,14 @@ class AddKnapsackProToVendors < ActiveRecord::Migration[7.2]
         }
       }
     )
-    knapsack_pro.save
-    if knapsack_pro.persisted?
-      puts "🪄 Created vendor: #{knapsack_pro.display_name} [#{knapsack_pro.slug}]"
-    else
-      puts "❌ Failed to create vendor: #{knapsack_pro.display_name} [#{knapsack_pro.slug}]"
-      ap knapsack_pro.errors.full_messages if knapsack_pro.errors.any?
-    end
+    knapsack_pro.save!
+    puts "🪄 Created vendor: #{knapsack_pro.display_name} [#{knapsack_pro.slug}]" if knapsack_pro.persisted?
+    # if knapsack_pro.persisted?
+    #   puts "🪄 Created vendor: #{knapsack_pro.display_name} [#{knapsack_pro.slug}]"
+    # else
+    #   puts "❌ Failed to create vendor: #{knapsack_pro.display_name} [#{knapsack_pro.slug}]"
+    #   ap knapsack_pro.errors.full_messages if knapsack_pro.errors.any?
+    # end
   end
 
   def down

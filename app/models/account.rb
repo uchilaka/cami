@@ -4,18 +4,29 @@
 #
 # Table name: accounts
 #
-#  id           :uuid             not null, primary key
-#  display_name :string
-#  email        :string
-#  metadata     :jsonb
-#  phone        :jsonb
-#  readme       :text
-#  slug         :string
-#  status       :integer
-#  type         :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  tax_id       :string
+#  id            :uuid             not null, primary key
+#  discarded_at  :datetime
+#  display_name  :string
+#  email         :string
+#  metadata      :jsonb
+#  phone         :jsonb
+#  readme        :text
+#  slug          :string
+#  status        :integer
+#  type          :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  parent_id     :uuid
+#  remote_crm_id :string
+#  tax_id        :string
+#
+# Indexes
+#
+#  index_accounts_on_discarded_at  (discarded_at)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (parent_id => accounts.id)
 #
 class Account < ApplicationRecord
   rolify
@@ -39,7 +50,7 @@ class Account < ApplicationRecord
 
   validates :display_name, presence: true
   validates :email, email: true, allow_nil: true
-  validates :type, presence: true, inclusion: { in: %w[Account Business Individual Government Nonprofit] }
+  validates :type, presence: true, inclusion: { in: %w[Account Business Individual Government Nonprofit Vendor] }
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
   validates :tax_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
 

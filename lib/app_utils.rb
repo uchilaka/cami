@@ -68,6 +68,14 @@ class AppUtils
       yes?(ENV.fetch('ENV_DEBUG_ASSETS', default_value))
     end
 
+    def log_level
+      if yes?(ENV.fetch('LOG_LEVEL_DEBUG', 'no'))
+        :debug
+      else
+        :info
+      end
+    end
+
     def allowed_hosts_for(provider:)
       Rails
         .application
