@@ -12,7 +12,7 @@ const CountryCode: FC<CountryCodeProps> = ({ country, size, className }) => {
   const passThruFlagProps = { size, className }
   return (
     <>
-      <CountryFlag {...passThruFlagProps} alpha2={country?.alpha2} /> <span>{country?.dialCode ?? '- -'}</span>
+      <CountryFlag {...passThruFlagProps} alpha2={country?.alpha2} /> <span>{country?.dialCode ?? '###'}</span>
     </>
   )
 }

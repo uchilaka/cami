@@ -38,7 +38,7 @@ const PhoneNumberComboInput = forwardRef<HTMLInputElement, PhoneNumberInputProps
     success: !!success,
   })
   const containerClassName = clsx(containerClassNames, 'flex items-center')
-  const labelClassName = clsx(labelClassNames, 'peer-placeholder-shown:left-24')
+  const labelClassName = clsx(labelClassNames, 'peer-placeholder-shown:left-28')
 
   const { logger } = useLogTransport()
   const { values, handleBlur, handleReset, handleChange, setFieldValue } = useFormikContext<Record<string, string>>()
