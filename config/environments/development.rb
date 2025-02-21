@@ -27,7 +27,7 @@ Rails.application.configure do
   config.rails_semantic_logger.processing = AppUtils.yes?(ENV.fetch('SEMANTIC_LOGGER_PROCESSING_ENABLED', 'no'))
   config.rails_semantic_logger.rendered   = AppUtils.yes?(ENV.fetch('SEMANTIC_LOGGER_RENDERED_ENABLED', 'no'))
   config.semantic_logger.backtrace_level = :info
-  config.log_level = :debug
+  config.log_level = AppUtils.log_level
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.

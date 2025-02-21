@@ -82,6 +82,14 @@ class AppUtils
       ENV.fetch('HOSTNAME', Rails.application.credentials.hostname)
     end
 
+    def log_level
+      if yes?(ENV.fetch('LOG_LEVEL_DEBUG', 'no'))
+        :debug
+      else
+        :info
+      end
+    end
+
     def allowed_hosts_for(provider:)
       Rails
         .application
