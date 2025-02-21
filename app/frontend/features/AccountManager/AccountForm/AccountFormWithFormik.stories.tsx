@@ -1,11 +1,10 @@
-import React, { FC, useEffect } from 'react'
+import React from 'react'
 import { Decorator, Meta, StoryObj } from '@storybook/react'
-import AccountForm, { AccountFormProps } from '../AccountFormWithFormik'
+import AccountForm from '../AccountFormWithFormik'
 import AccountProvider from '../AccountProvider'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import LogTransportProvider from '@/components/LogTransportProvider'
 import FeatureFlagsProvider from '@/components/FeatureFlagsProvider'
-import { emitLoadAccountEvent } from '@/utils/events'
 
 const queryClient = new QueryClient()
 

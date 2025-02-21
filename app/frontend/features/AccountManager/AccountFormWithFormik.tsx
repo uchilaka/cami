@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import { Console } from 'node:console'
 import snakecaseKeys from 'snakecase-keys'
 import FormInput from '@/components/FloatingFormInput'
@@ -12,14 +12,7 @@ import { Form, withFormik, FormikComputedProps, useFormikContext } from 'formik'
 import * as Yup from 'yup'
 import { UseMutationResult } from '@tanstack/react-query'
 import { Logger, useLogTransport } from '@/components/LogTransportProvider'
-import {
-  arrayHasItems,
-  BusinessAccount,
-  IndividualAccount,
-  isActionableAccount,
-  isBusinessAccount,
-  isIndividualAccount,
-} from '@/utils/api/types'
+import { arrayHasItems, BusinessAccount, IndividualAccount, isActionableAccount, isIndividualAccount } from '@/utils/api/types'
 import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
 import useCsrfToken from '@/utils/hooks/useCsrfToken'
 import clsx from 'clsx'
@@ -111,8 +104,6 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({
   const { loading: loadingAccount, account: loadedAccount } = useAccountContext()
   const disablePhoneNumbers = !isEnabled('editable_phone_numbers')
   const formClassName = clsx('mx-auto', { 'max-w-lg': !compact })
-
-  const phoneInputRef = useRef<HTMLInputElement>(null)
 
   logger.debug('AccountInnerForm:', { account, isReadOnly: readOnly, initialType, saved })
 

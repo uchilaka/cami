@@ -1,6 +1,6 @@
 import React from 'react'
 import { Decorator, Meta, StoryObj } from '@storybook/react'
-import AccountForm from '.'
+import AccountForm from './AccountForm'
 import AccountProvider from '../AccountProvider'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import LogTransportProvider from '@/components/LogTransportProvider'
