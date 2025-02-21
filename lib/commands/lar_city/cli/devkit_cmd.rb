@@ -139,8 +139,8 @@ module LarCity::CLI
         input = ask('👉🏾 Enter the number of the branch to review:').chomp
         return current_branch_tuple.last if input.blank?
 
-        available_branch_numbers = branches.map(&:first).map { |i| (i + 1).to_s }
-        raise ArgumentError, 'Invalid branch number' unless available_branch_numbers.include?(input)
+        branch_number = branches.map(&:first).map { |i| (i + 1).to_s }
+        raise ArgumentError, 'Invalid branch number' unless branch_number.include?(input)
 
         # The user input is 1-based, but the array is 0-based
         branches[input.to_i - 1].last
