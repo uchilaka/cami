@@ -110,6 +110,7 @@ group :development, :test do
   gem 'open3'
   gem 'rspec-wait'
   gem 'rubocop'
+  gem 'knapsack_pro'
 
   # Catch unsafe migrations in development https://github.com/ankane/strong_migrations
   gem 'strong_migrations'

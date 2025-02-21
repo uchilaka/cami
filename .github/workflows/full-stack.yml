@@ -110,10 +110,13 @@ jobs:
         run: |
           bundle exec rake vite:build_all
 
-      - name: RSpec
+      - name: RSpec tests
+        env:
+          KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC: ${{ secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC }}
+        # See https://docs.knapsackpro.com/ruby/rspec/
         run: |
           # Run all specs except those with the option skip_in_ci: true
-          bundle exec rspec --tag ~skip_in_ci:true
+          bundle exec rake "knapsack_pro:queue:rspec[--tag ~skip_in_ci:true]"
 
       - name: Frontend tests
         run: |
