@@ -2,18 +2,19 @@ import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import { UseMutationResult } from '@tanstack/react-query'
 import { Form, FormikComputedProps, useFormikContext } from 'formik'
 import clsx from 'clsx'
-import { Console } from 'node:console'
+
+import type { Console } from 'node:console'
 
 import { AccountFormData } from '../types'
 import { arrayHasItems, BusinessAccount, IndividualAccount, isIndividualAccount } from '@/utils/api/types'
 import { useFeatureFlagsContext } from '@/components/FeatureFlagsProvider'
-import { Logger, useLogTransport } from '@/components/LogTransportProvider'
+import { Logger } from '@/components/LogTransportProvider'
 import { useAccountContext } from '../AccountProvider'
 import Alert from '@/components/Alert'
 import FormInput from '@/components/FloatingFormInput'
 import TextareaInput from '@/components/TextareaInput'
 import Button, { ButtonLoader } from '@/components/Button'
-import PhoneInput from '@/components/PhoneNumberInput/PhoneLibNumberInput'
+import PhoneInput from '@/components/PhoneNumberInput/PhoneNumberComboInput'
 import ButtonLink from '@/components/Button/ButtonLink'
 
 export interface AccountFormProps {
@@ -70,6 +71,7 @@ const AccountInnerForm: FC<AccountInnerFormProps> = ({
     useFormikContext<AccountFormData>()
   const { loading: loadingFeatureFlags, isEnabled } = useFeatureFlagsContext()
   const { loading: loadingAccount, account: loadedAccount } = useAccountContext()
+  // TODO: Deprecate the feat__editable_phone_numbers flag
   const disablePhoneNumbers = !isEnabled('editable_phone_numbers')
   const formClassName = clsx('mx-auto', { 'max-w-lg': !compact })
 

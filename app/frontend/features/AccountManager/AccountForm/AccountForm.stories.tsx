@@ -30,6 +30,19 @@ const meta: Meta<typeof AccountForm> = {
   decorators: [accountDataDecorator, accountProviderDecorator],
   title: 'AccountManager/AccountForm',
   component: AccountForm,
+  argTypes: {
+    accountId: {
+      control: {
+        type: 'text',
+      },
+    },
+    initialType: {
+      options: ['Business', 'Individual'],
+      control: {
+        type: 'radio',
+      },
+    },
+  },
 }
 
 export default meta
@@ -46,7 +59,19 @@ export const Default: Story = {
  * is in read-only mode.
  */
 export const BusinessForm: Story = {
-  args: { initialType: 'Business', accountId: '4321', readOnly: true },
+  args: {
+    initialType: 'Business',
+    accountId: '4321',
+    readOnly: true,
+  },
+  render: (args) => {
+    return (
+      <>
+        <span>Some stuff</span>
+        <AccountForm {...args} />
+      </>
+    )
+  },
 }
 
 /**

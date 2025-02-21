@@ -22,7 +22,7 @@ const PhoneNumberComboInput = forwardRef<HTMLInputElement, PhoneNumberInputProps
   { id, type = 'tel', name, label, value, success, error, hint, readOnly, onChange, ...otherProps },
   ref,
 ) {
-  const [dropdownEl, setDropdownEl] = useState<Dropdown | null>(null)
+  const [_dropdownEl, setDropdownEl] = useState<Dropdown | null>(null)
   const [country, setCountry] = useState<ISO3166Country>()
   const countryControlRef = useRef<HTMLButtonElement>(null)
   const countryTargetRef = useRef<HTMLDivElement>(null)
@@ -38,7 +38,7 @@ const PhoneNumberComboInput = forwardRef<HTMLInputElement, PhoneNumberInputProps
     success: !!success,
   })
   const containerClassName = clsx(containerClassNames, 'flex items-center')
-  const labelClassName = clsx(labelClassNames, 'peer-placeholder-shown:left-20')
+  const labelClassName = clsx(labelClassNames, 'peer-placeholder-shown:left-24')
 
   const { logger } = useLogTransport()
   const { values, handleBlur, handleReset, handleChange, setFieldValue } = useFormikContext<Record<string, string>>()
@@ -87,10 +87,9 @@ const PhoneNumberComboInput = forwardRef<HTMLInputElement, PhoneNumberInputProps
   return (
     <div className={containerClassName}>
       <Button
-        size="lg"
         loading={loading}
         id={countryButtonId}
-        className="flex-shrink-0 inline-flex z-10 rounded-0 text-gray-900 border-0 border-b-2 border-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
+        className="text-base px-2 py-3 flex-shrink-0 inline-flex z-10 rounded-0 text-gray-900 border-0 border-b-2 border-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
         variant="transparent"
         ref={countryControlRef}
       >
