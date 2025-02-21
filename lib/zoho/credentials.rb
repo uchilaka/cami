@@ -16,7 +16,7 @@ module Zoho
       end
 
       def soid
-        crm_org_id = ENV.fetch('CRM_ORG_ID')
+        crm_org_id = ENV.fetch('CRM_ORG_ID', Rails.application.credentials&.zoho&.org_id)
         return nil unless crm_org_id.present?
 
         "ZohoCRM.#{crm_org_id}"

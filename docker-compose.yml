@@ -9,7 +9,7 @@ services:
       - '8025:8025'
     profiles:
       - batteries-included
-      - essential
+      - full-stack
 
   # Doc: https://ngrok.com/docs/using-ngrok-with/docker/#:~:text=Using%20ngrok%20with%20Docker%20Compose
   tunnel:
@@ -59,8 +59,9 @@ services:
       - --save 60 1
       - --loglevel warning
     profiles:
-      - essential
       - batteries-included
+      - essential
+      - full-stack
 
   app-store:
     container_name: db.accounts.larcity
@@ -80,6 +81,7 @@ services:
     profiles:
       - batteries-included
       - essential
+      - full-stack
 
 volumes:
   postgres_data:

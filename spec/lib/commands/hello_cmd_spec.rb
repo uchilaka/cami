@@ -4,7 +4,7 @@ require 'rails_helper'
 
 load_lib_script 'commands', 'hello_cmd', ext: 'thor'
 
-RSpec.describe HelloCmd, type: :thor, skip_in_ci: true do
+RSpec.describe HelloCmd, type: :thor, devtool: true, skip_in_ci: true do
   let(:command) { described_class.new }
 
   describe 'hello' do

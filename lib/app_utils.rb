@@ -15,6 +15,14 @@ class AppUtils
       send_emails? && !letter_opener_enabled? && !mailhog_enabled?
     end
 
+    def hostname_is_nginx_proxy?
+      /\.ngrok\.(dev|app)/.match?(hostname)
+    end
+
+    def use_secure_protocol?
+      Rails.env.production? || hostname_is_nginx_proxy?
+    end
+
     # LetterOpener should be enabled by default in the development environment
     def letter_opener_enabled?
       configured_value = Rails.application.credentials.letter_opener_enabled
@@ -66,6 +74,12 @@ class AppUtils
       default_value = Rails.env.development? ? 'yes' : 'no'
 
       yes?(ENV.fetch('ENV_DEBUG_ASSETS', default_value))
+    end
+
+    def hostname
+      # TODO: Check if tunnel is available and use the NGROK hostname if so
+      #   otherwise, fallback to the configured hostname 👇🏾
+      ENV.fetch('HOSTNAME', Rails.application.credentials.hostname)
     end
 
     def log_level

@@ -39,11 +39,11 @@ module NavbarHelper
       },
       {
         label: t('shared.navbar.dashboard'),
-        path: pages_dashboard_path
+        path: '/app/dashboard'
       },
       {
         label: t('shared.navbar.invoices'),
-        path: invoices_path
+        path: '/app/invoices'
       },
       {
         label: t('shared.navbar.accounts'),

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe LarCity::CLI::TunnelCmd, type: :thor, skip_in_ci: true do
+RSpec.describe LarCity::CLI::TunnelCmd, type: :thor, devtool: true, skip_in_ci: true do
   let(:tunnel_cmd) { described_class.new }
 
   describe '#init' do

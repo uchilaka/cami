@@ -51,10 +51,10 @@ Fabricator(:account) do
         'NG'
       end
     phone_number = Phonelib.parse(phone_input, country_alpha2)
-    {
-      full_e164: phone_number.full_e164,
-      country: phone_number.country
-    }
+    intersect_types = PhoneNumber.supported_types.intersection phone_number.types
+    number_type = intersect_types.any? ? intersect_types.first : phone_number.types.first
+    full_e164 = phone_number.full_e164
+    { country: phone_number.country, full_e164:, number_type: }
   end
 
   # TODO: Should not need to handle users transiently, since active record
