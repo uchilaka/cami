@@ -143,7 +143,7 @@ RSpec.configure do |config|
   config.include_context 'for phone number testing', real_world_data: true
 
   # Sample invoices
-  config.include_context 'for invoice testing', invoice_data: true
+  config.include_context 'for invoice testing', preload_invoice_data: true
 
   config.before(:suite) do
     if config.use_transactional_fixtures?
@@ -158,7 +158,12 @@ RSpec.configure do |config|
         uncommitted transaction data setup over the spec's database connection.
       MSG
     end
-    DatabaseCleaner.clean_with(:truncation)
+    # Ensure that truncation ONLY happens in rails test environment
+    if Rails.env.test?
+      DatabaseCleaner.clean_with(:truncation)
+    else
+      puts "️⚠️ RSpec is running in #{Rails.env} environment. Skipping database truncation. 🙅🏾‍♂️"
+    end
 
     Rails.application.load_seed
 
@@ -179,7 +184,7 @@ RSpec.configure do |config|
 
   config.around(:each) do |example|
     # Conditionally load invoice sample data
-    load_sample_invoice_dataset if example.metadata[:invoice_data]
+    load_sample_invoice_dataset if example.metadata[:preload_invoice_data]
 
     # Run example
     example.run

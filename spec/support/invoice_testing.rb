@@ -8,7 +8,11 @@ RSpec.shared_context 'for invoice testing', shared_context: :metadata do
   end
 
   def sample_invoice_items
-    sample_invoice_data['items']
+    sample_invoice_data['items'].map do |item|
+      item['id'] = random_invoice_vendor_record_id
+      item['detail']['invoice_number'] = random_invoice_number
+      item
+    end
   end
 
   def sample_invoice_dataset
@@ -17,6 +21,9 @@ RSpec.shared_context 'for invoice testing', shared_context: :metadata do
     end
   end
 
+  # @deprecated this causes problems once we turn on validation of invoice number.
+  #   Ideally, we should be using the invoice fabricators in each spec file or
+  #   making sure we have a valid invoice number when loading the sample data
   def load_sample_invoice_dataset
     # Batch create all invoice records
     _results = Invoice.create!(sample_invoice_dataset)
