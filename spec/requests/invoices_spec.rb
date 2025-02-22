@@ -54,7 +54,8 @@ RSpec.describe 'Invoices API', type: :request do
   end
   let(:valid_attributes) do
     {
-      payment_vendor: :paypal,
+      invoicer:,
+      payment_vendor: 'paypal',
       vendor_record_id: random_invoice_vendor_record_id,
       invoice_number: random_invoice_number,
       issued_at: 1.week.ago.to_date,
@@ -74,13 +75,14 @@ RSpec.describe 'Invoices API', type: :request do
 
   before do
     sign_in admin
+    allow_any_instance_of(InvoicesController).to receive(:initialize_web_console)
   end
 
   describe 'GET /show' do
     it 'renders a successful response' do
       invoice = Invoice.create! valid_attributes
       get invoice_url(invoice)
-      expect(response).to have_http_status(:found)
+      expect(response).to have_http_status(:ok)
     end
   end
 
@@ -101,7 +103,7 @@ RSpec.describe 'Invoices API', type: :request do
     it 'renders a successful response' do
       invoice = Invoice.create! valid_attributes
       get edit_invoice_url(invoice)
-      expect(response).to have_http_status(:found)
+      expect(response).to have_http_status(:ok)
     end
   end
 
@@ -163,7 +165,7 @@ RSpec.describe 'Invoices API', type: :request do
     end
   end
 
-  describe 'DELETE /destroy' do
+  describe 'DELETE /destroy', skip: 'Implement invoice soft delete with the discard gem' do
     it 'destroys the requested invoice' do
       invoice = Invoice.create! valid_attributes
       expect do

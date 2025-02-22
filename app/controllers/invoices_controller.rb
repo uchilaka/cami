@@ -111,13 +111,21 @@ class InvoicesController < ApplicationController
       .require(:invoice)
       .permit(
         :account_id,
+        :invoicer,
         :invoice_number,
+        :vendor_record_id,
+        :payment_vendor,
         :status,
         :issued_at,
         :due_at,
         :amount,
+        :amount_cents,
+        :amount_currency,
         :due_amount,
+        :due_amount_cents,
+        :due_amount_currency,
         :currency_code,
+        :metadata,
         :notes
       )
   end
