@@ -59,6 +59,12 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :features, only: %i[index], defaults: { format: :json }
+    resources :form_data, only: %i[] do
+      collection do
+        get :countries, defaults: { format: :json }
+        get :countries_map, defaults: { format: :json }
+      end
+    end
   end
 
   draw :flipper
