@@ -60,6 +60,7 @@ class Invoice < ApplicationRecord
   # TODO: Validate on update that the invoiceable is an Account or User
   belongs_to :invoiceable, polymorphic: true, optional: true
 
+  validates :invoice_number, presence: true, uniqueness: { case_sensitive: false }
   validates :payment_vendor,
             presence: true,
             inclusion: { in: %w[paypal] }

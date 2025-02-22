@@ -8,6 +8,7 @@ class ApplicationJob
 
   queue_as :default
 
+  # For Sidkiq error handing, see: https://github.com/sidekiq/sidekiq/wiki/Error-Handling
   sidekiq_options retry: 3
 
   # Automatically retry jobs that encountered a deadlock
