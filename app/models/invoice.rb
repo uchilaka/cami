@@ -60,6 +60,7 @@ class Invoice < ApplicationRecord
   # TODO: Validate on update that the invoiceable is an Account or User
   belongs_to :invoiceable, polymorphic: true, optional: true
 
+  validates :invoice_number, presence: true, uniqueness: { case_sensitive: false }
   validates :payment_vendor,
             presence: true,
             inclusion: { in: %w[paypal] }
@@ -70,7 +71,8 @@ class Invoice < ApplicationRecord
             allow_nil: true,
             inclusion: { in: Money::Currency.all.map(&:iso_code) }
   validates :amount_cents, presence: true
-  # validates :due_amount_cents, presence: true
+  # TODO: Validate that due_at is after issued_at
+  # TODO: Validate that due_amount_cents is less than or equal to amount_cents
 
   # Payment vendor documentation for invoice status:
   # https://developer.paypal.com/docs/api/invoicing/v2/#definition-invoice_status

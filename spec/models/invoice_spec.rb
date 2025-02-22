@@ -78,7 +78,14 @@ RSpec.describe Invoice, type: :model do
     end
 
     context 'after save' do
-      subject { described_class.new(amount: '14.50', payment_vendor: 'paypal') }
+      subject do
+        described_class
+          .new(
+            invoice_number: random_invoice_number,
+            amount: '14.50',
+            payment_vendor: 'paypal'
+          )
+      end
 
       it { expect(subject).to be_valid }
       it { expect(subject.amount_cents).to eq 1450 }

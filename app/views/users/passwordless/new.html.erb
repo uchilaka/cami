@@ -1,6 +1,6 @@
 <% content_for :centered_form_layout do %>
   <h3 class="mb-4">Log in</h3>
-  <p class="my-4">Enter email address and we'll send you a magic link to sign in.</p>
+  <p class="my-4"><%= t('devise.passwordless.magic_link_cta') %></p>
 
   <%= form_for(
         resource,

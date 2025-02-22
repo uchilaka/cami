@@ -5,11 +5,15 @@ require_relative 'datakit_cmd'
 require_relative 'devkit_cmd'
 require_relative 'secrets_cmd'
 require_relative 'tunnel_cmd'
+require_relative 'accounts_cmd'
 
 module LarCity
   module CLI
     class Entrypoint < BaseCmd
       namespace 'lx-cli'
+
+      desc 'accounts [SUBCOMMAND]', 'Manage accounts'
+      subcommand 'accounts', AccountsCmd
 
       desc 'secrets [SUBCOMMAND]', 'Manage the secrets in the environment credentials file'
       subcommand 'secrets', SecretsCmd

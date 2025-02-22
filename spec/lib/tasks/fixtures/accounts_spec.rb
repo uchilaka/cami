@@ -2,14 +2,16 @@
 
 require 'rails_helper'
 
-load_lib_script 'tasks/fixtures/accounts', ext: 'thor'
+# load_lib_script 'tasks/fixtures/accounts', ext: 'thor'
+
+load 'lib/tasks/fixtures/accounts.thor'
 
 RSpec.describe Fixtures::Accounts do
   let(:fixtures) do
     [
       { display_name: 'Acme Corp', slug: 'acme-corp', tax_id: '123-45-6789' },
       { display_name: 'Widget Co', slug: 'widget-co', tax_id: '987-65-4321' }
-    ]
+    ].map(&:stringify_keys)
   end
 
   before do
