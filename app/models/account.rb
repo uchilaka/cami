@@ -54,7 +54,7 @@ class Account < ApplicationRecord
 
   validates :display_name, presence: true
   validates :email, email: true, allow_nil: true
-  validates :type, presence: true, inclusion: { in: %w[Account Business Individual Government Nonprofit] }
+  validates :type, presence: true, inclusion: { in: %w[Account Business Individual Government Nonprofit Vendor] }
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
   validates :tax_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
   # Intended to store the ZohoCRM SOID

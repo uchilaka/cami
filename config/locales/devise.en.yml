@@ -60,6 +60,7 @@ en:
       send_paranoid_instructions: "If your account exists, you will receive an email with instructions for how to unlock it in a few minutes."
       unlocked: "Your account has been unlocked successfully. Please sign in to continue."
     passwordless:
+      magic_link_cta: "Got an account? You can get a 🪄 link to sign in."
       not_found_in_database: "Could not find a user for that email address"
       magic_link_sent: "A login link has been sent to your email address. Please follow the link to log in to your account."
       magic_link_sent_paranoid: "If your account exists, you will receive an email with a login link. Please follow the link to log in to your account."
