@@ -113,6 +113,7 @@ jobs:
       - name: RSpec tests
         env:
           KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC: ${{ secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC }}
+          # See https://docs.knapsackpro.com/ruby/queue-mode/#dynamic-split-vs-fixed-split
           KNAPSACK_PRO_FIXED_QUEUE_SPLIT: true
         # See https://docs.knapsackpro.com/ruby/rspec/
         run: |
