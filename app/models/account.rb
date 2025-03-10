@@ -29,6 +29,9 @@
 #  fk_rails_...  (parent_id => accounts.id)
 #
 class Account < ApplicationRecord
+  # TODO: This change was suggested before the application was ever deployed.
+  #   We should be able to delete this line - the database would have been
+  #   re-initialized several times since then prior to the first deployment.
   self.ignored_columns += ['parent_account_id']
 
   rolify

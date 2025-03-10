@@ -9,13 +9,7 @@ module PayPal
     PAGE_LIMIT = 10
 
     def perform(*_args)
-      @enqueued_records = []
-      @processed_records = []
-      # TODO: Implement a way to perform cherry-picked upserts for records that already exist
-      @skipped_records = []
-      @error_records = []
-      # TODO: Calculate the page number to start fetching from based on
-      #   the number of invoice records in the database
+      initialize_vars
       page = 1
       start_page = page
       next_link = fetch(page:)
@@ -64,6 +58,8 @@ module PayPal
       end
     rescue StandardError => e
       Rails.logger.error "#{self.class.name} failed", message: e.message
+    ensure
+      # TODO: If there are no errors reported, enqueue UpsertInvoiceRecordsJob
     end
 
     def fetch(page: 1)
@@ -79,6 +75,16 @@ module PayPal
 
       # Return next page link
       links.find { |link| link['rel'] == 'next' }
+    end
+
+    private
+
+    def initialize_vars
+      @enqueued_records = []
+      @processed_records = []
+      # TODO: Implement a way to perform cherry-picked upserts for records that already exist
+      @skipped_records = []
+      @error_records = []
     end
   end
 end
