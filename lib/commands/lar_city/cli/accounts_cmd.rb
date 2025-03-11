@@ -6,9 +6,16 @@ require_relative 'base_cmd'
 module LarCity
   module CLI
     class AccountsCmd < BaseCmd
-      attr_reader :accounts, :primary_account
+      attr_reader :accounts, :current_account, :primary_account
 
       namespace 'accounts'
+
+      option :id, type: :string, desc: 'The ID of the account to update'
+      option :slug, type: :string, desc: 'The slug of the account to update'
+      desc 'sync', 'Sync accounts with the CRM'
+      def sync
+        lookup_account
+      end
 
       option :query_string,
              desc: 'The query to search for',
@@ -88,6 +95,13 @@ module LarCity
       end
 
       no_commands do
+        def lookup_account
+          @current_account = lookup_by_id || lookup_by_slug
+          raise ArgumentError, 'No account found' if current_account.blank?
+
+          current_account
+        end
+
         def qs
           @qs ||= options[:query_string]
         end
@@ -145,6 +159,20 @@ module LarCity
                 [index + 1, account].flatten
               end
         end
+      end
+
+      private
+
+      def lookup_by_id
+        return unless options[:id].present?
+
+        Account.find_by(id: options[:id])
+      end
+
+      def lookup_by_slug
+        return unless options[:slug].present?
+
+        Account.find_by(slug: options[:slug])
       end
     end
   end

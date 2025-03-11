@@ -1,7 +1,6 @@
 import React from 'react'
-import { describe, test, it, expect } from '@jest/globals'
+import { describe, test, expect } from '@jest/globals'
 import { render, screen } from '@testing-library/react'
-// import { screen } from '@testing-library/dom'
 
 import AboutUs from '@/routes/AboutUs'
 

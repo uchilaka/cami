@@ -3,6 +3,11 @@ import { describe, it, xit, expect } from '@jest/globals'
 import find from 'lodash.find'
 import path from 'path'
 
+// Resolve "__dirname" and "__filename" in ES modules: https://iamwebwiz.medium.com/how-to-fix-dirname-is-not-defined-in-es-module-scope-34d94a86694d
+// import { fileURLToPath } from 'url'
+// const __filename = fileURLToPath(import.meta.url)
+// const __dirname = path.dirname(__filename)
+
 describe('aliasFactory', () => {
   const aliases = viteAliasConfigFromFactory()
 

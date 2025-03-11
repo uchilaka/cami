@@ -5,6 +5,7 @@ import FilterableBadge from './InvoiceBadge/FilterableBadge'
 import StaticBadge from './InvoiceBadge/StaticBadge'
 import InvoiceDueDate from './InvoiceDueDate'
 import InvoiceActionsMenu from './InvoiceActionsMenu'
+import InvoiceableInfo from './InvoiceableInfo'
 
 interface InvoiceItemProps {
   invoice: Invoice
@@ -63,10 +64,7 @@ const InvoiceListItem: FC<InvoiceItemProps> = ({ invoice, loading, selected: def
         </div>
       </th>
       <td className="px-6 py-4">
-        <div className="max-sm:flex max-sm:justify-start md:block items-center">
-          <h6 className="text-semibold">{account?.displayName}</h6>
-          {account?.email && <div className="max-sm:hidden">{account?.email}</div>}
-        </div>
+        <InvoiceableInfo invoice={invoice} />
       </td>
       <td className="px-6 py-4">
         <InvoiceDueDate invoiceId={invoice.id} value={dueAt} />
