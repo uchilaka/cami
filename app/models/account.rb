@@ -79,7 +79,9 @@ class Account < ApplicationRecord
   alias users members
 
   before_validation :format_tax_id, if: :tax_id_changed?
-  after_commit :push_to_crm, on: %i[create update], if: -> { crm_relevant_changes? }
+  after_commit :push_to_crm,
+               on: %i[create update],
+               if: -> { Flipper.enabled?(:feat__push_updates_to_crm) && crm_relevant_changes? }
 
   has_rich_text :readme
 

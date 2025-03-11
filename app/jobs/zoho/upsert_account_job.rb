@@ -7,7 +7,14 @@ module Zoho
     attr_accessor :account
 
     def perform(id)
-      Rails.logger.info 'Upserting Zoho account record for account', id:
+      @account = Account.find_by(id:)
+      if account.blank?
+        Rails.logger.error('Could not find account record', id:)
+        return
+      end
+
+      Rails.logger.info('Upserting Zoho account record', id:)
+      Zoho::API::Account.upsert(account)
     end
   end
 end

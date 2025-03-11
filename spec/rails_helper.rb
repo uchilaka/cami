@@ -176,9 +176,6 @@ RSpec.configure do |config|
   config.before(:each) do
     # Database cleaner setup: https://github.com/DatabaseCleaner/database_cleaner?tab=readme-ov-file#rspec-example
     DatabaseCleaner.strategy = :transaction
-
-    # Turn off pushing CRM-related changes for all examples (for now)
-    # allow_any_instance_of(Account).to receive(:crm_relevant_changes?).and_return(false)
   end
 
   config.before(:each) do
