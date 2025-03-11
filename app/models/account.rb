@@ -79,6 +79,7 @@ class Account < ApplicationRecord
   alias users members
 
   before_validation :format_tax_id, if: :tax_id_changed?
+  after_commit :push_to_crm, on: %i[create update], if: -> { crm_relevant_changes? }
 
   has_rich_text :readme
 
@@ -162,9 +163,19 @@ class Account < ApplicationRecord
     %w[invoices members rich_text_readme roles]
   end
 
+  protected
+
+  def crm_relevant_changes?
+    email_changed? || display_name_changed? || tax_id_changed? || phone_changed?
+  end
+
   private
 
   def format_tax_id
     self.tax_id = tax_id.upcase if tax_id.present?
+  end
+
+  def push_to_crm
+    Zoho::UpsertAccountJob.perform_async(id)
   end
 end
