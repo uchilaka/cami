@@ -14,7 +14,10 @@ module LarCity
       option :slug, type: :string, desc: 'The slug of the account to update'
       desc 'sync', 'Sync accounts with the CRM'
       def sync
-        lookup_account
+        with_interruption_rescue do
+          lookup_account
+          Zoho::API::Account.upsert(current_account, pretend: dry_run?)
+        end
       end
 
       option :query_string,
