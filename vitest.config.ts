@@ -15,6 +15,10 @@ export default defineConfig({
   test: {
     environment: 'jsdom', // or 'node'
     globals: true,
+    // https://vitest.dev/config/#coverage
+    coverage: {
+      include: ['app/frontend/**/*'],
+    },
   },
   resolve: {
     alias: {
