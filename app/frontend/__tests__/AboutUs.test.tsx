@@ -1,5 +1,5 @@
 import React from 'react'
-import { describe, test, expect } from '@jest/globals'
+import { describe, test, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 
 import AboutUs from '@/routes/AboutUs'
