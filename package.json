@@ -93,7 +93,7 @@
     "storybook": "^8.3.5",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5",
+    "typescript": "^5.8.2",
     "vite": "^5.0.0",
     "vite-plugin-full-reload": "^1.1.0",
     "vite-plugin-ruby": "^5.1.0",
