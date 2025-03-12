@@ -168,7 +168,7 @@ class Account < ApplicationRecord
   protected
 
   def crm_relevant_changes?
-    email_changed? || display_name_changed? || tax_id_changed? || phone_changed?
+    email_changed? || display_name_changed? || readme_changed? || tax_id_changed? || phone_changed?
   end
 
   private

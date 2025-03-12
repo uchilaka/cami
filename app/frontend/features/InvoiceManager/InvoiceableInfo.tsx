@@ -23,7 +23,7 @@ const InvoiceableInfo: FC<{ invoice: Invoice }> = ({ invoice }) => {
   }
 
   return (
-    <>
+    <div className="flex flex-col">
       {/* Slug tooltip */}
       <div
         id={slugTooltipId}
@@ -42,7 +42,7 @@ const InvoiceableInfo: FC<{ invoice: Invoice }> = ({ invoice }) => {
         {/* Email address */}
         {account?.email && <div className="max-sm:hidden">{account?.email}</div>}
       </div>
-    </>
+    </div>
   )
 }
 

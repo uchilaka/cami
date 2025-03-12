@@ -20,6 +20,10 @@ module FooterHelper
         'https://flowbite.com/docs/getting-started/rails/'
       ],
       [
+        t('shared.footer.tailwind_docs'),
+        'https://tailwindcss.com/docs'
+      ],
+      [
         t('shared.footer.component_library'),
         'https://flowbite.com/docs/getting-started/introduction/'
       ],

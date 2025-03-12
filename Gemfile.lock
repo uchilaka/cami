@@ -444,6 +444,8 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
+    reverse_markdown (3.0.0)
+      nokogiri
     rexml (3.4.1)
     rolify (6.0.1)
     rspec (3.13.0)
@@ -678,6 +680,7 @@ DEPENDENCIES
   logtail-rails
   money-rails (~> 1.15)
   name_of_person
+  nokogiri
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
   open3
@@ -692,6 +695,7 @@ DEPENDENCIES
   rails_live_reload
   rails_semantic_logger
   ransack (~> 4.2)
+  reverse_markdown
   rolify (~> 6.0)
   rspec-rails (~> 7.0.0)
   rspec-wait

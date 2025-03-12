@@ -4,12 +4,16 @@ module PayPal
   # TODO: Works in tandem with invoice update webhooks to fetch invoices
   #   and keep invoicing data in sync with PayPal
   class FetchInvoicesJob < AbstractJob
-    attr_accessor :skipped_records, :enqueued_records, :error_records
+    attr_accessor :skipped_records, :enqueued_records, :error_records, :fatal_error
 
     PAGE_LIMIT = 10
 
-    def perform(*_args)
+    def initialize
+      super
       initialize_vars
+    end
+
+    def perform(*_args)
       page = 1
       start_page = page
       next_link = fetch(page:)
@@ -57,9 +61,15 @@ module PayPal
         Rails.logger.error "Failed to save #{error_records.count} records"
       end
     rescue StandardError => e
+      @fatal_error = e
       Rails.logger.error "#{self.class.name} failed", message: e.message
     ensure
       # TODO: If there are no errors reported, enqueue UpsertInvoiceRecordsJob
+      if @error_records.blank? && @fatal_error.nil?
+        # TODO: Log processed records by ID
+        Rails.logger.info 'Enqueuing UpsertInvoiceRecordsJob'
+        UpsertInvoiceRecordsJob.perform_later
+      end
     end
 
     def fetch(page: 1)
