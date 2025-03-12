@@ -28,7 +28,7 @@ RSpec.describe 'invoices/edit', type: :view do
 
       assert_select 'input[name=?]', 'invoice[invoice_number]'
 
-      assert_select 'input[name=?]', 'invoice[status]'
+      assert_select 'select[name=?]', 'invoice[status]'
 
       assert_select 'input[name=?]', 'invoice[amount]'
 

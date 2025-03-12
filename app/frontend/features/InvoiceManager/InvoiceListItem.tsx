@@ -5,6 +5,8 @@ import FilterableBadge from './InvoiceBadge/FilterableBadge'
 import StaticBadge from './InvoiceBadge/StaticBadge'
 import InvoiceDueDate from './InvoiceDueDate'
 import InvoiceActionsMenu from './InvoiceActionsMenu'
+import InvoiceableInfo from './InvoiceableInfo'
+import InvoiceListItemLabel from './InvoiceListItemLabel'
 
 interface InvoiceItemProps {
   invoice: Invoice
@@ -16,7 +18,7 @@ interface InvoiceItemProps {
 const InvoiceListItem: FC<InvoiceItemProps> = ({ invoice, loading, selected: defaultSelected, onToggleSelect }) => {
   const { isEnabled } = useFeatureFlagsContext()
   const [selected, setSelected] = useState<boolean>(defaultSelected ?? false)
-  const { account, vendorRecordId, status, dueAt } = invoice
+  const { vendorRecordId, status, dueAt } = invoice
 
   const handleSelectionChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     ev.persist()
@@ -53,20 +55,10 @@ const InvoiceListItem: FC<InvoiceItemProps> = ({ invoice, loading, selected: def
         </div>
       </td>
       <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-        <div className="ps-3">
-          <div className="text-base font-semibold">{invoice.number || vendorRecordId}</div>
-          {isEnabled('filterable_billing_type_badge') ? (
-            <FilterableBadge invoice={invoice} />
-          ) : (
-            <StaticBadge isRecurring={invoice.isRecurring} />
-          )}
-        </div>
+        <InvoiceListItemLabel invoice={invoice} filterableBillingType={isEnabled('filterable_billing_type_badge')} />
       </th>
       <td className="px-6 py-4">
-        <div className="max-sm:flex max-sm:justify-start md:block items-center">
-          <h6 className="text-semibold">{account?.displayName}</h6>
-          {account?.email && <div className="max-sm:hidden">{account?.email}</div>}
-        </div>
+        <InvoiceableInfo invoice={invoice} />
       </td>
       <td className="px-6 py-4">
         <InvoiceDueDate invoiceId={invoice.id} value={dueAt} />

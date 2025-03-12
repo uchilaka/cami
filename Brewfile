@@ -28,3 +28,4 @@ else
   cask 'docker' if OS.mac?
 end
 cask 'ngrok' if OS.mac?
+cask 'pgadmin4' if OS.mac?

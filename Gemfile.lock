@@ -198,6 +198,7 @@ GEM
     faraday-net_http (3.4.0)
       net-http (>= 0.5.0)
     ffi (1.17.1-arm64-darwin)
+    ffi (1.17.1-x86_64-linux-gnu)
     flipper (1.3.2)
       concurrent-ruby (< 2)
     flipper-api (1.3.2)
@@ -220,6 +221,9 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     google-protobuf (4.29.3-arm64-darwin)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.29.3-x86_64-linux)
       bigdecimal
       rake (>= 13)
     hashie (5.0.0)
@@ -313,6 +317,8 @@ GEM
       net-protocol
     nio4r (2.7.4)
     nokogiri (1.18.3-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.18.3-x86_64-linux-gnu)
       racc (~> 1.4)
     oauth2 (2.0.9)
       faraday (>= 0.17.3, < 3.0)
@@ -438,6 +444,8 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
+    reverse_markdown (3.0.0)
+      nokogiri
     rexml (3.4.1)
     rolify (6.0.1)
     rspec (3.13.0)
@@ -521,6 +529,8 @@ GEM
       nokogiri (>= 1.12.0)
     sass-embedded (1.85.0-arm64-darwin)
       google-protobuf (~> 4.29)
+    sass-embedded (1.85.0-x86_64-linux-gnu)
+      google-protobuf (~> 4.29)
     sassc (2.4.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -572,6 +582,7 @@ GEM
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 3.0)
     tailwindcss-ruby (3.4.17-arm64-darwin)
+    tailwindcss-ruby (3.4.17-x86_64-linux)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
     thor (1.3.2)
@@ -630,6 +641,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-23
+  x86_64-linux
 
 DEPENDENCIES
   aasm (~> 5.5)
@@ -668,6 +680,7 @@ DEPENDENCIES
   logtail-rails
   money-rails (~> 1.15)
   name_of_person
+  nokogiri
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
   open3
@@ -682,6 +695,7 @@ DEPENDENCIES
   rails_live_reload
   rails_semantic_logger
   ransack (~> 4.2)
+  reverse_markdown
   rolify (~> 6.0)
   rspec-rails (~> 7.0.0)
   rspec-wait

@@ -8,19 +8,19 @@
 #  queue: yeet
 
 fetch_paypal_invoices_job:
-  cron: '0 18 * * 1-6' # At 18:00 from Monday to Saturday
+  cron: '45 5 * * 1-6' # At 05:45 from Monday to Saturday
   class: 'PayPal::FetchInvoicesJob'
   source: schedule # default: dynamic
   queue: yeet
 
 upsert_invoice_records_job:
-  cron: '*/15 5-22 * * 1-6' # Every 15 minutes from 05:00 to 22:00 from Monday to Saturday
+  cron: '*/15 6-20 * * 1-6' # Every 15 minutes from 06:00 to 21:00 from Monday to Saturday
   class: 'UpsertInvoiceRecordsJob'
   source: schedule # default: dynamic
   queue: whenever
 
 update_default_url_options_job:
-  cron: '*/5 6-22 * * *' # Every 5 minutes from 06:00 to 22:00 daily
+  cron: '*/5 6-21 * * *' # Every 5 minutes from 06:00 to 22:00 daily
   class: 'UpdateDefaultURLOptionsJob'
   source: schedule # default: dynamic
   queue: default

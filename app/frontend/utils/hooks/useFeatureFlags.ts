@@ -13,6 +13,7 @@ export type FEATURE_FLAGS =
   | 'invoice_filtering_by_amount'
   | 'invoice_sortable_by_account'
   | 'invoice_sortable_by_due_date'
+  | 'invoice_sortable_by_status'
   | 'invoice_bulk_actions'
   | 'invoice_search'
   | 'sortable_invoice_index'

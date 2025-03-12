@@ -4,18 +4,16 @@ module PayPal
   # TODO: Works in tandem with invoice update webhooks to fetch invoices
   #   and keep invoicing data in sync with PayPal
   class FetchInvoicesJob < AbstractJob
-    attr_accessor :skipped_records, :enqueued_records, :error_records
+    attr_accessor :skipped_records, :enqueued_records, :error_records, :fatal_error
 
     PAGE_LIMIT = 10
 
+    def initialize
+      super
+      initialize_vars
+    end
+
     def perform(*_args)
-      @enqueued_records = []
-      @processed_records = []
-      # TODO: Implement a way to perform cherry-picked upserts for records that already exist
-      @skipped_records = []
-      @error_records = []
-      # TODO: Calculate the page number to start fetching from based on
-      #   the number of invoice records in the database
       page = 1
       start_page = page
       next_link = fetch(page:)
@@ -63,7 +61,15 @@ module PayPal
         Rails.logger.error "Failed to save #{error_records.count} records"
       end
     rescue StandardError => e
+      @fatal_error = e
       Rails.logger.error "#{self.class.name} failed", message: e.message
+    ensure
+      # TODO: If there are no errors reported, enqueue UpsertInvoiceRecordsJob
+      if @error_records.blank? && @fatal_error.nil?
+        # TODO: Log processed records by ID
+        Rails.logger.info 'Enqueuing UpsertInvoiceRecordsJob'
+        UpsertInvoiceRecordsJob.perform_later
+      end
     end
 
     def fetch(page: 1)
@@ -79,6 +85,16 @@ module PayPal
 
       # Return next page link
       links.find { |link| link['rel'] == 'next' }
+    end
+
+    private
+
+    def initialize_vars
+      @enqueued_records = []
+      @processed_records = []
+      # TODO: Implement a way to perform cherry-picked upserts for records that already exist
+      @skipped_records = []
+      @error_records = []
     end
   end
 end
