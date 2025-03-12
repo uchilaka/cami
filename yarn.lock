@@ -1265,7 +1265,7 @@ __metadata:
     react-phone-number-input: "npm:^3.4.12"
     react-router-dom: "npm:^6.22.3"
     sass: "npm:^1.71.1"
-    sass-migrator: "npm:^2.2.1"
+    sass-migrator: "npm:^2.3.1"
     snakecase-keys: "npm:^8.0.1"
     storybook: "npm:^8.3.5"
     styled-components: "npm:^6.1.13"
@@ -8576,12 +8576,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass-migrator@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "sass-migrator@npm:2.2.1"
+"sass-migrator@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "sass-migrator@npm:2.3.1"
   bin:
     sass-migrator: sass-migrator.js
-  checksum: 10c0/fa3f244ff7106da1556685faf8ef18f8aee57670abc55e8aa92a0cccaca7836d6dc2799e5c69d06e250ecb35faede4d9a088cc883afa31a3e4e3fd737a6c330c
+  checksum: 10c0/8f270aef80b653b11edb8d6e1ef53d7460993b011889d62b833e6b35ec2200aa13a0af39b70a1d2cff287bee903f1e9d5369e4c919cdfe993263049687c3c061
   languageName: node
   linkType: hard
 
