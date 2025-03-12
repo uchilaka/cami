@@ -5,7 +5,7 @@ on:
 
 jobs:
   build_and_test:
-    name: Build & Jest tests
+    name: Build & Test
     runs-on: ubuntu-latest
 
     permissions:
