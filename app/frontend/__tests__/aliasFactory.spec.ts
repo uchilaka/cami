@@ -1,5 +1,5 @@
 import { viteAliasConfigFromFactory } from '@/utils/aliasFactory'
-import { describe, it, xit, expect } from '@jest/globals'
+import { describe, it, expect } from 'vitest'
 import find from 'lodash.find'
 import path from 'path'
 
@@ -14,7 +14,7 @@ describe('aliasFactory', () => {
     expect(find(aliases, matcher)).toBeDefined()
   })
 
-  xit('configures the @lib alias', () => {
+  it.skip('configures the @lib alias', () => {
     const matcher = {
       find: '@/lib',
       replacement: path.resolve(__dirname, '../../frontend/components/lib'),
@@ -30,7 +30,7 @@ describe('aliasFactory', () => {
     expect(find(aliases, matcher)).toBeDefined()
   })
 
-  xit('configures the @entrypoints alias', () => {
+  it.skip('configures the @entrypoints alias', () => {
     const matcher = {
       find: '@/entrypoints',
       replacement: path.resolve(__dirname, '../../frontend/entrypoints'),
