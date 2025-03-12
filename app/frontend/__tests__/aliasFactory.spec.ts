@@ -3,6 +3,14 @@ import { describe, it, expect } from 'vitest'
 import find from 'lodash.find'
 import path from 'path'
 
+/**
+ * The following code is needed to get the __dirname variable in ESM:
+ * https://iamwebwiz.medium.com/how-to-fix-dirname-is-not-defined-in-es-module-scope-34d94a86694d
+ */
+// import { fileURLToPath } from 'url'
+// const __filename = fileURLToPath(import.meta.url) // get the resolved path to the file
+// const __dirname = path.dirname(__filename) // get the name of the directory
+
 describe('aliasFactory', () => {
   const aliases = viteAliasConfigFromFactory()
 
