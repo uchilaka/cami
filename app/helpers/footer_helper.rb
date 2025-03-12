@@ -4,10 +4,6 @@ module FooterHelper
   def footer_resource_links
     [
       [
-        t('shared.footer.flowbite_icons'),
-        'https://flowbite.com/icons/'
-      ],
-      [
         t('shared.footer.fontawesome_icons'),
         'https://fontawesome.com/search'
       ],
@@ -16,16 +12,20 @@ module FooterHelper
         'https://www.mongodb.com/docs/mongoid/8.1/'
       ],
       [
+        t('shared.footer.flowbite_icons'),
+        'https://flowbite.com/icons/'
+      ],
+      [
         t('shared.footer.flowbite_integration_guide'),
         'https://flowbite.com/docs/getting-started/rails/'
       ],
       [
-        t('shared.footer.tailwind_docs'),
-        'https://tailwindcss.com/docs'
-      ],
-      [
         t('shared.footer.component_library'),
         'https://flowbite.com/docs/getting-started/introduction/'
+      ],
+      [
+        t('shared.footer.tailwind_docs'),
+        'https://tailwindcss.com/docs'
       ],
       [
         t('shared.footer.wai_aria_guide'),
