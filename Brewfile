@@ -30,3 +30,4 @@ elsif OS.mac?
   cask 'rancher'
 end
 cask 'ngrok' if OS.mac?
+cask 'keepassxc'

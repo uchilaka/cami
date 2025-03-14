@@ -30,6 +30,8 @@
 
 # Docker container files
 /db/development/
+!db/development/postgres/downloads/
+!db/development/postgres/docker-endpoint-initdb.d/
 !db/development/mongodb/docker-entrypoint-initdb.d/
 
 ###################################################################

@@ -94,7 +94,7 @@ If you're still on Yarn `1.x`, you will likely see an error related to that when
 
 To setup Yarn `4.x` for this project (this won't affect your `1.x` installation on your system), checkout [this guide](https://yarnpkg.com/getting-started/install).
 
-### 2. Install dependencies
+### 3. Install dependencies
 
 ```shell
 # Install system dependencies
@@ -109,11 +109,11 @@ bundle install
 yarn install
 ```
 
-### 3. Setup a GPG key for your Github account
+### 4. Setup a GPG key for your Github account
 
 Follow [this guide](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account). This will be needed by the application when it uses the `git-crypt` command to secure secret fixture files.
 
-### 4. Setup your application secrets
+### 5. Setup your application secrets
 
 Search for `development.yml.enc` to locate the entry in the KeePass store
 with the application's encrypted secrets files.
