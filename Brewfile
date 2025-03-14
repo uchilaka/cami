@@ -16,6 +16,7 @@ brew 'coreutils'
 brew 'git-crypt'
 brew 'yq'
 brew 'vips'
+brew 'postgresql@15'
 
 # install only on specified OS
 brew 'tree' if OS.mac?
