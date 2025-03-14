@@ -4,16 +4,12 @@
 
 - [Customer Account Management \& Invoicing ...Again](#customer-account-management--invoicing-again)
   - [This again?](#this-again)
-  - [Other guides](#other-guides)
   - [Ruby Version](#ruby-version)
   - [Service/Vendor dependencies](#servicevendor-dependencies)
   - [System Dependencies](#system-dependencies)
-  - [Configuration](#configuration)
-    - [Development service ports](#development-service-ports)
-    - [Environment variables](#environment-variables)
-      - [`LAN_SUBNET_MASK`](#lan_subnet_mask)
   - [Running the app for the first time](#running-the-app-for-the-first-time)
     - [1. Setup the environment](#1-setup-the-environment)
+    - [2. Check your Yarn version](#2-check-your-yarn-version)
     - [2. Install dependencies](#2-install-dependencies)
     - [3. Setup a GPG key for your Github account](#3-setup-a-gpg-key-for-your-github-account)
     - [4. Setup your application secrets](#4-setup-your-application-secrets)
@@ -46,42 +42,7 @@ Yep! Pivoting back to:
 - **1 database ORM** PostgreSQL for all the magical things out of the box i.e. active record, active storage, action mailbox
 - **A much simplified data model** with a focus on the core features of the app (no more profiles, STI account classes ...woof)
 
-Here are the scratch notes when exploring the `rails new` command:
-
-```shell
-# Install a required image library dependency via brew
-brew install vips
-
-# Setup rails 7
-gem install rails --version 7.2
-
-# Setup railsmdb
-gem install railsmdb --pre
-
-# Dry-run project setup (with MongoDB)
-railsmdb new cami --no-rc --skip-webpack-install --skip-javascript \
- --skip-test --skip-system-test \
- --template ~/Developer/rails-vite-tailwindcss-template/template.rb \
- --react --pretend
- 
-# Dry-run project setup (with PostgreSQL: supports ActiveStorage, 
-#   ActionMailbox & other ActiveRecord dependent features)
-#   We've included ActiveStorage for ActionText (WYSIWYG editing).
-#   Skipping ActionMailbox until we're ready for email automation.
-rails new cami --no-rc --skip-webpack-install --skip-javascript \
- --database postgresql --skip-test --skip-system-test \
- --active-storage --skip-action-mailbox \
- --template ~/Developer/rails-vite-tailwindcss-template/template.rb \
- --react --pretend
- 
-# Active storage overview: https://guides.rubyonrails.org/active_storage_overview.html
-# Action mailbox overview: https://guides.rubyonrails.org/action_mailbox_basics.html
-```
-
-## Other guides
-
-- [Modeling](./md/MODELING.md)
-- [Scaffolding](./md/SCAFFOLDING.md)
+For detailed setup notes, go [here](./md/SETUP_NOTES.md).
 
 ## Ruby Version
 
@@ -101,80 +62,6 @@ System dependencies are defined in the following configuration files:
 - `package.json`
   - `yarn.lock`
 
-## Configuration
-
-### Development service ports
-
-<table>
-<thead>
-    <tr>
-        <th>Service</th>
-        <th>Port</th>
-        <th>Essential</th>
-    </tr>
-</thead>
-<tbody>
-    <tr>
-        <td>Rails</td>
-        <td><code>16006</code></td>
-        <td style="text-align: center">⭐️</td>
-    </tr>
-    <tr>
-        <td>Postgres (app store)</td>
-        <td><code>16032</code></td>
-        <td style="text-align: center">⭐️</td>
-    </tr>
-    <tr>
-        <td>Redis</td>
-        <td><code>16079</code></td>
-        <td style="text-align: center">⭐️</td>
-    </tr>
-    <tr>
-        <td>Redis Commander (admin)</td>
-        <td><code>16081</code></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>Mailhog</td>
-        <td><code>8025</code></td>
-        <td></td>
-    </tr>
-</table>
-
-### Environment variables
-
-#### `LAN_SUBNET_MASK`
-
-This configuration is intended to give us a way to allow certain app management features
-based on the virtual network location of our teams.
-
-Specifically, this `ENV` variable is an override to configure access to the app's
-[web console](https://github.com/rails/web-console)
-(also see [the docs](https://github.com/rails/web-console?tab=readme-ov-file#configweb_consolepermissions), as well as `VirtualOfficeManager#web_console_permissions`).
-
-The built-in configuration option is to set the following in the corresponding [custom credential file](https://guides.rubyonrails.org/security.html#custom-credentials):
-
-> Tip: run `EDITOR=code bin/thor lx-cli:secrets:edit` in your development environment to edit the credentials file.
-
-```yaml
-web_console:
-  permissions: 
-```
-
-#### `PII_FILTER_ALLOW_ACCESS_TOKENS` (default = `false`)
-
-> **BE CAREFUL NOT TO LEAK SENSITIVE INFORMATION INTO SOURCE CONTROL**. Cassettes are not encrypted and can be read by anyone with access to the repository. Ensure that you do not commit any sensitive information to the repository like access tokens for app integrations.
-
-This configuration is intended to give us a way to allow requests under tests to call through to real world API endpoints that require an access token.
-
-When using this configuration, you should start by ensuring that the `PII_FILTER_ALLOW_ACCESS_TOKENS` is set to `true` in your `.env.test` file.
-
-Next, ensure that you comment out any steps that would normally stub out the request to the API endpoint in your test suite.
-
-Finally, delete the `VCR` cassettes that would normally be used to stub out the request to the API endpoint.
-
-Optionally, you can check for the cassette configuration matching the endpoint you're working on in the `config/vcr.rb` file and set the `record` option to `:new_episodes` or `:all` to ensure that the cassette is updated with the new response.
-
 ## Running the app for the first time
 
 ### 1. Setup the environment
@@ -182,8 +69,13 @@ Optionally, you can check for the cassette configuration matching the endpoint y
 > If you use [asdf](https://asdf-vm.com/guide/introduction.html), you will also need to setup the following plugins
 > and install their corresponding versions with the `asdf install` command:
 >
-> - `asdf plugin add ruby`
-> - `asdf plugin add nodejs`
+> ```shell
+> # Install Ruby version manager
+> asdf plugin add ruby
+> # Install NodeJS version manager
+> asdf plugin add nodejs
+> ```
+>
 > New to `asdf`? [here's a primer to get started](https://asdf-vm.com/guide/getting-started.html).
 
 Review the `.env.example` file to ensure the environment variables are set. You can
@@ -195,6 +87,12 @@ using the following files:
 
 The `.envrc` (see `.envrc.example`) file should be included for compatibility with
 other features like `docker compose` and simply sources the `.env.local` file.
+
+### 2. Check your Yarn version
+
+If you're still on Yarn `1.x`, you will likely see an error related to that when you start working with the app.
+
+To setup Yarn `4.x` for this project (this won't affect your `1.x` installation on your system), checkout [this guide](https://yarnpkg.com/getting-started/install).
 
 ### 2. Install dependencies
 
