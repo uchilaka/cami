@@ -1,4 +1,6 @@
-#If you need to have postgresql@15 first in your PATH
+# TODO: Write a command to manage a symlink to this file at $ZSH_CUSTOM/cami-postgresql-profile.zsh
+
+# If you need to have postgresql@15 first in your PATH
 export PATH="/usr/local/opt/postgresql@15/bin:$PATH"
 
 # For compilers to find postgresql@15
