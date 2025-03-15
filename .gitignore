@@ -67,7 +67,7 @@ node_modules
 /.env.local
 /.env*
 !/.env.example
-!.env.development
+#!.env.development
 #/*.code-workspace
 .tool-versions
 
