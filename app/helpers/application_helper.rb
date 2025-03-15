@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'lib/app_utils'
+
 module ApplicationHelper
   include StyleHelper
 
@@ -29,6 +31,6 @@ module ApplicationHelper
   end
 
   def crm_org_id
-    ENV.fetch('CRM_ORG_ID')
+    AppUtils.crm_org_id
   end
 end
