@@ -62,6 +62,22 @@ System dependencies are defined in the following configuration files:
 - `package.json`
   - `yarn.lock`
 
+## Pre-installation
+
+### Setup GPG key with your GitHub account 
+
+To export an existing GPG (public) key, run the following commands:
+
+```shell
+# Show existing GPG keys
+gpg --list-secret-keys --keyid-format=long
+
+# Substitute "ID" for your longform GPG key ID
+gpg --armor --export GPG key ID
+```
+
+Then follow [this guide](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account#adding-a-gpg-key) to add it to your GitHub account.
+
 ## Running the app for the first time
 
 ### 1. Setup the environment
