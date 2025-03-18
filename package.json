@@ -114,7 +114,7 @@
       "./bin/lint-ruby"
     ]
   },
-  "packageManager": "yarn@4.5.3",
+  "packageManager": "yarn@4.7.0",
   "eslintConfig": {
     "extends": [
       "plugin:storybook/recommended"

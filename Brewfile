@@ -13,18 +13,26 @@ brew 'heroku'
 brew 'ruby-build'
 brew 'asdf'
 brew 'coreutils'
+brew 'gnupg'
 brew 'git-crypt'
 brew 'yq'
+brew 'vips'
+brew 'postgresql@15'
 
 # install only on specified OS
-brew 'tree' if OS.mac?
-brew 'gnutls' if OS.mac?
-brew 'foreman' if OS.mac?
+if OS.mac?
+  brew 'tree'
+  brew 'gnutls'
+  brew 'foreman'
+  cask 'ngrok'
+  brew 'pinentry-mac'
+end
 
 # FYI: Brew cask only works on macOS
 if File.exist?('/usr/local/bin/docker')
   puts 'Found Docker installed 🥳 - skipping docker installation'
-else
-  cask 'docker' if OS.mac?
+elsif OS.mac?
+  puts 'Setting up Rancher Desktop (an open source Docker Desktop alternative)'
+  cask 'rancher'
 end
-cask 'ngrok' if OS.mac?
+cask 'keepassxc'

@@ -63,7 +63,7 @@ module LarCity
             result = system(cmd, out: $stdout, err: :out)
             return result if inline
 
-            exit 0 if result
+            # exit 0 if result
           end
         end
 

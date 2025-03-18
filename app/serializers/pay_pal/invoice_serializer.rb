@@ -32,7 +32,7 @@ module PayPal
     end
 
     def vendor_id
-      vendor.id
+      vendor&.id
     end
 
     def vendor_recurring_group_id

@@ -10,11 +10,13 @@ vendor/* linguist-vendored
 .gitattributes !filter !diff
 
 # Encrypt sensitive files using git-crypt
+.env.development filter=git-crypt diff=git-crypt
 spec/fixtures/pii/** filter=git-crypt diff=git-crypt
+db/development/postgres/downloads/**/*.sql filter=git-crypt diff=git-crypt
 
 # Identify the Yarn releases and plugin bundles as binary
-/.yarn/releases/** binary
-/.yarn/plugins/** binary
+.yarn/releases/** binary
+.yarn/plugins/** binary
 
 config/credentials/*.yml.enc diff=rails_credentials
 config/credentials.yml.enc diff=rails_credentials

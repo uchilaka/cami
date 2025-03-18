@@ -30,6 +30,8 @@
 
 # Docker container files
 /db/development/
+!db/development/postgres/downloads/
+!db/development/postgres/docker-endpoint-initdb.d/
 !db/development/mongodb/docker-entrypoint-initdb.d/
 
 ###################################################################
@@ -65,7 +67,8 @@ node_modules
 /.env.local
 /.env*
 !/.env.example
-/*.code-workspace
+#!.env.development
+#/*.code-workspace
 .tool-versions
 
 # General
