@@ -37,7 +37,7 @@ const PhoneNumberComboInput = forwardRef<HTMLInputElement, PhoneNumberInputProps
     success: !!success,
   })
   const containerClassName = clsx(containerClassNames, 'flex items-center')
-  const labelClassName = clsx(labelClassNames, 'peer-placeholder-shown:left-28')
+  const labelClassName = clsx(labelClassNames, { 'peer-placeholder-shown:left-28': !readOnly })
 
   const { logger } = useLogTransport()
   const { values, handleBlur, handleReset, handleChange, setFieldValue } = useFormikContext<Record<string, string>>()
@@ -99,18 +99,20 @@ const PhoneNumberComboInput = forwardRef<HTMLInputElement, PhoneNumberInputProps
   // For country flag images, see: https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes#Current_ISO_3166_country_codes
   return (
     <div className={containerClassName}>
-      <Button
-        loading={loading}
-        id={countryButtonId}
-        className="text-base px-2 py-3 flex-shrink-0 inline-flex z-10 rounded-0 text-gray-900 border-0 border-b-2 border-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
-        variant="transparent"
-        ref={countryControlRef}
-      >
-        <CountryCode country={country} />
-        <svg className="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-          <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
-        </svg>
-      </Button>
+      {!readOnly && (
+        <Button
+          loading={loading}
+          id={countryButtonId}
+          className="text-base px-2 py-3 flex-shrink-0 inline-flex z-10 rounded-0 text-gray-900 border-0 border-b-2 border-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
+          variant="transparent"
+          ref={countryControlRef}
+        >
+          <CountryCode country={country} />
+          <svg className="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+          </svg>
+        </Button>
+      )}
       <div
         id={countryDropdownId}
         ref={countryTargetRef}
