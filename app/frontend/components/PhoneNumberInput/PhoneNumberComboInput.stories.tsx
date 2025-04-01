@@ -47,3 +47,22 @@ export const WithInitialValue: Story = {
     },
   },
 }
+
+export const ReadOnlyWithInitialValue: Story = {
+  decorators: [withLogTransportDecorator, withFormikDecorator],
+  args: {
+    label: 'Phone Number',
+    name: 'phone',
+    readOnly: true,
+  },
+  parameters: {
+    formik: {
+      initialValues: {
+        phone: '+17405678900',
+      },
+      onSubmit: (values: any) => {
+        console.log(values)
+      },
+    },
+  },
+}
