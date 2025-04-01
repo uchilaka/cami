@@ -1,15 +1,4 @@
-import React, {
-  forwardRef,
-  InputHTMLAttributes,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  useMemo,
-  ChangeEventHandler,
-  TouchEventHandler,
-  MouseEventHandler,
-} from 'react'
+import React, { forwardRef, InputHTMLAttributes, useCallback, useEffect, useRef, useState, useMemo, MouseEventHandler } from 'react'
 import clsx from 'clsx'
 import { Dropdown } from 'flowbite'
 import { v4 as uuidv4 } from 'uuid'
@@ -24,8 +13,7 @@ import CountryFlag from './CountryFlag'
 import { RefButton as Button } from '../Button'
 
 import { useLogTransport } from '../LogTransportProvider'
-
-import useListOfCountries, { ISO3166Country } from './hooks/useListOfCountries'
+import useSelectedCountry from './hooks/useSelectedCountry'
 
 type PhoneNumberInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & FormInputProps & { international?: boolean }
 
@@ -33,13 +21,13 @@ const PhoneNumberComboInput = forwardRef<HTMLInputElement, PhoneNumberInputProps
   { id, type = 'tel', name, label, value, success, error, hint, readOnly, onChange, international, ...otherProps },
   ref,
 ) {
-  const [_dropdownEl, setDropdownEl] = useState<Dropdown | null>(null)
-  const [country, setCountry] = useState<ISO3166Country>()
+  const [dropdownEl, setDropdownEl] = useState<Dropdown | null>(null)
   const countryControlRef = useRef<HTMLButtonElement>(null)
   const countryTargetRef = useRef<HTMLDivElement>(null)
   const countryButtonId = ['dropdown-phone-button', id].filter((x) => x).join('--')
   const countryDropdownId = ['dropdown-phone', id].filter((x) => x).join('--')
   const inputId = id ?? uuidv4()
+  const { loading, countries, country, selectCountry } = useSelectedCountry()
   // See https://www.npmjs.com/package/libphonenumber-js#as-you-type-formatter
   const formatter = useMemo(() => new AsYouType(country?.alpha2), [country])
 
@@ -53,14 +41,17 @@ const PhoneNumberComboInput = forwardRef<HTMLInputElement, PhoneNumberInputProps
 
   const { logger } = useLogTransport()
   const { values, handleBlur, handleReset, handleChange, setFieldValue } = useFormikContext<Record<string, string>>()
-  const { loading, countries } = useListOfCountries()
 
   const handleCountryChange: MouseEventHandler<HTMLButtonElement> = useCallback(
     (ev) => {
-      const selectedAlpha2 = ev.currentTarget.dataset.countryAlpha2
-      // logger.debug({ selectedCountry })
+      const { countryAlpha2 } = ev.currentTarget.dataset
+      if (countryAlpha2) {
+        selectCountry(countryAlpha2)
+        document.getElementById(inputId)?.focus()
+        dropdownEl?.hide()
+      }
     },
-    [countries],
+    [dropdownEl, inputId, selectCountry],
   )
 
   // Setup the country dropdown
@@ -92,9 +83,10 @@ const PhoneNumberComboInput = forwardRef<HTMLInputElement, PhoneNumberInputProps
       logger.debug({ parsedValue, country: parsedValue?.country })
       if (parsedValue) {
         if (parsedValue.country) {
-          const newCountry = countries.find((c) => c.alpha2 === parsedValue.country)
+          const newCountry = selectCountry(parsedValue.country)
+          // const newCountry = countries.find((c) => c.alpha2 === parsedValue.country)
           logger.debug({ newCountry })
-          setCountry(newCountry)
+          // setCountry(newCountry)
         }
         const formattedValue = country ? parsedValue?.formatNational() : parsedValue?.formatInternational()
         logger.debug('PhoneNumberComboInput#useEffect', { country, newValue, formattedValue })

@@ -9,6 +9,7 @@ const useSelectedCountry = (initialCountryAlpha2?: string) => {
     (alpha2: string) => {
       const latestCountry = countries.find((c) => c.alpha2 === alpha2)
       setCountry(latestCountry)
+      return latestCountry
     },
     [countries],
   )
