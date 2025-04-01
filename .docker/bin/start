@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 # Intentionally skips the tunnel service, as it is only needed
 # when testing features like SSO or payment integrations

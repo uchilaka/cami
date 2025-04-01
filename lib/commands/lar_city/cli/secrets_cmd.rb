@@ -7,6 +7,11 @@ module LarCity
     class SecretsCmd < BaseCmd
       namespace 'secrets'
 
+      desc 'gpg-keys', 'List GPG keys in the system'
+      def gpg_keys
+        run 'gpg --list-secret-keys --keyid-format LONG'
+      end
+
       desc 'edit', 'Manage the secrets in the environment credentials file'
       option :editor,
              type: :string,
@@ -17,13 +22,9 @@ module LarCity
              required: true
       def edit
         executable = Rails.root.join('bin', 'rails')
-        command_to_run = "EDITOR=\"#{editor} --wait\" bundle exec #{executable} credentials:edit --environment=#{environment}"
-
-        say("Will execute#{dry_run? ? ' (Dry-run)' : ''}: #{command_to_run}", Color::YELLOW) if verbose? || dry_run?
-
-        return if dry_run?
-
-        system(command_to_run, out: $stdout)
+        run "EDITOR=\"#{editor} --wait\"",
+            "bundle exec #{executable} credentials:edit",
+            "--environment=#{environment}"
       end
 
       # TODO: Add interactive :history command to peek into backup credential files

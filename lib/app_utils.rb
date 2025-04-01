@@ -11,6 +11,13 @@ class AppUtils
   include OperatingSystemDetectable
 
   class << self
+    def crm_org_id
+      override_value = ENV.fetch('CRM_ORG_ID', nil)
+      return override_value if override_value.present?
+
+      Rails.application.credentials.crm&.org_id!
+    end
+
     def configure_real_smtp?
       send_emails? && !letter_opener_enabled? && !mailhog_enabled?
     end
