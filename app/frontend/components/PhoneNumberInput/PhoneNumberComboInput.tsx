@@ -83,12 +83,10 @@ const PhoneNumberComboInput = forwardRef<HTMLInputElement, PhoneNumberInputProps
       logger.debug({ parsedValue, country: parsedValue?.country })
       if (parsedValue) {
         if (parsedValue.country) {
-          const newCountry = selectCountry(parsedValue.country)
-          // const newCountry = countries.find((c) => c.alpha2 === parsedValue.country)
-          logger.debug({ newCountry })
-          // setCountry(newCountry)
+          const selectedCountry = selectCountry(parsedValue.country)
+          logger.debug({ selectedCountry })
         }
-        const formattedValue = country ? parsedValue?.formatNational() : parsedValue?.formatInternational()
+        const formattedValue = country && !readOnly ? parsedValue?.formatNational() : parsedValue?.formatInternational()
         logger.debug('PhoneNumberComboInput#useEffect', { country, newValue, formattedValue })
         if (formattedValue) setFieldValue(name, formattedValue, true)
       }
