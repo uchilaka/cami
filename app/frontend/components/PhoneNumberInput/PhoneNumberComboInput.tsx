@@ -1,4 +1,15 @@
-import React, { forwardRef, InputHTMLAttributes, useEffect, useRef, useState, useMemo } from 'react'
+import React, {
+  forwardRef,
+  InputHTMLAttributes,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+  ChangeEventHandler,
+  TouchEventHandler,
+  MouseEventHandler,
+} from 'react'
 import clsx from 'clsx'
 import { Dropdown } from 'flowbite'
 import { v4 as uuidv4 } from 'uuid'
@@ -19,7 +30,7 @@ import useListOfCountries, { ISO3166Country } from './hooks/useListOfCountries'
 type PhoneNumberInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & FormInputProps & { international?: boolean }
 
 const PhoneNumberComboInput = forwardRef<HTMLInputElement, PhoneNumberInputProps>(function RefPhoneNumberInput(
-  { id, type = 'tel', name, label, value, success, error, hint, readOnly, onChange, ...otherProps },
+  { id, type = 'tel', name, label, value, success, error, hint, readOnly, onChange, international, ...otherProps },
   ref,
 ) {
   const [_dropdownEl, setDropdownEl] = useState<Dropdown | null>(null)
@@ -43,6 +54,14 @@ const PhoneNumberComboInput = forwardRef<HTMLInputElement, PhoneNumberInputProps
   const { logger } = useLogTransport()
   const { values, handleBlur, handleReset, handleChange, setFieldValue } = useFormikContext<Record<string, string>>()
   const { loading, countries } = useListOfCountries()
+
+  const handleCountryChange: MouseEventHandler<HTMLButtonElement> = useCallback(
+    (ev) => {
+      const selectedAlpha2 = ev.currentTarget.dataset.countryAlpha2
+      // logger.debug({ selectedCountry })
+    },
+    [countries],
+  )
 
   // Setup the country dropdown
   useEffect(() => {
@@ -70,9 +89,11 @@ const PhoneNumberComboInput = forwardRef<HTMLInputElement, PhoneNumberInputProps
     logger.debug('PhoneNumberComboInput#useEffect', { newValue })
     if (newValue) {
       const parsedValue = parsePhoneNumber(newValue, country?.alpha2)
+      logger.debug({ parsedValue, country: parsedValue?.country })
       if (parsedValue) {
         if (parsedValue.country) {
           const newCountry = countries.find((c) => c.alpha2 === parsedValue.country)
+          logger.debug({ newCountry })
           setCountry(newCountry)
         }
         const formattedValue = country ? parsedValue?.formatNational() : parsedValue?.formatInternational()
@@ -81,7 +102,7 @@ const PhoneNumberComboInput = forwardRef<HTMLInputElement, PhoneNumberInputProps
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formatter, values[name]])
+  }, [countries, formatter, values[name]])
 
   // For country flag images, see: https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes#Current_ISO_3166_country_codes
   return (
@@ -103,7 +124,7 @@ const PhoneNumberComboInput = forwardRef<HTMLInputElement, PhoneNumberInputProps
         ref={countryTargetRef}
         className="hidden flex-shrink-0 z-10 inline-flex items-center absolute top-12 bg-white divide-y divide-gray-100 rounded-lg shadow w-55 dark:bg-gray-700"
       >
-        <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-phone-button">
+        <ul className="h-48 py-2 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-phone-button">
           {countries.map((country) => (
             <li key={country.alpha2}>
               <button
@@ -111,6 +132,7 @@ const PhoneNumberComboInput = forwardRef<HTMLInputElement, PhoneNumberInputProps
                 className="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
                 data-country-alpha2={country.alpha2}
                 role="menuitem"
+                onClick={handleCountryChange}
               >
                 <div className="inline-flex items-center space-between">
                   <CountryFlag alpha2={country?.alpha2} />

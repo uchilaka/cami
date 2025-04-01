@@ -19,6 +19,11 @@ const useListOfCountries = () => {
     try {
       const result = await fetch('/api/form_data/countries?format=json')
       const data: ISO3166Country[] = await result.json()
+      /**
+       * TODO: Detect the likely country from the user's browser locale
+       *   or optional location services and set it as the default country
+       *   in the phone number input.
+       */
       setCountries(data)
     } catch (_error) {
       // TODO: Handle the error from /api/form_data/countries
