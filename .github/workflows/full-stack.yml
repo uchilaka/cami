@@ -112,14 +112,14 @@ jobs:
           bundle exec rake vite:build_all
 
       - name: RSpec tests
-        env:
-          KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC: ${{ secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC }}
-          KNAPSACK_PRO_CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
-          KNAPSACK_PRO_CI_NODE_INDEX: ${{ matrix.ci_node_index }}
-          # See https://docs.knapsackpro.com/ruby/queue-mode/#dynamic-split-vs-fixed-split
-          KNAPSACK_PRO_FIXED_QUEUE_SPLIT: true
-          KNAPSACK_PRO_LOG_LEVEL: info
+        #env:
+        #  KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC: ${{ secrets.KNAPSACK_PRO_TEST_SUITE_TOKEN_RSPEC }}
+        #  KNAPSACK_PRO_CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
+        #  KNAPSACK_PRO_CI_NODE_INDEX: ${{ matrix.ci_node_index }}
+        #  # See https://docs.knapsackpro.com/ruby/queue-mode/#dynamic-split-vs-fixed-split
+        #  KNAPSACK_PRO_FIXED_QUEUE_SPLIT: true
+        #  KNAPSACK_PRO_LOG_LEVEL: info
         # See https://docs.knapsackpro.com/ruby/rspec/
         run: |
           # Run all specs except those with the option skip_in_ci: true
-          bundle exec rake "knapsack_pro:queue:rspec[--tag ~skip_in_ci:true]"
+          bundle exec rspec --tag ~skip_in_ci:true
