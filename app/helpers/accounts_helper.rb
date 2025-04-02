@@ -55,6 +55,6 @@ module AccountsHelper
   end
 
   def account_type_options
-    %w[Business Individual]
+    %w[Business Individual Vendor]
   end
 end
