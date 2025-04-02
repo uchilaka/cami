@@ -37,6 +37,27 @@ module Zoho
                   record: record.serializable_hash,
                   remote_crm_id:
                 )
+              else
+                Rails.logger.error(
+                  'Failed to update Zoho account record',
+                  record: record.serializable_hash,
+                  remote_crm_id:
+                )
+              end
+            when 'update'
+              if record.update(remote_crm_id:)
+                Rails.logger.info(
+                  'Successfully updated Zoho account record',
+                  record: record.serializable_hash,
+                  remote_crm_id:
+                )
+              else
+                Rails.logger.error(
+                  'Failed to update Zoho account record',
+                  record: record.serializable_hash,
+                  errors: record.errors.full_messages,
+                  remote_crm_id:
+                )
               end
             else
               Rails.logger.warn(
