@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# 20250402044316_add_indexes_to_accounts.rb
+# 20250402044316
 class AddIndexesToAccounts < ActiveRecord::Migration[7.2]
   disable_ddl_transaction!
 
