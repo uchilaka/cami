@@ -30,40 +30,25 @@ module Zoho
           if code == 'SUCCESS'
             remote_crm_id = info.dig('details', 'id')
             case action
-            when 'insert'
+            when 'insert', 'update'
               if record.update(remote_crm_id:)
                 Rails.logger.info(
                   'Successfully upserted Zoho account record',
                   record: record.serializable_hash,
-                  remote_crm_id:
+                  remote_crm_id:, action:
                 )
               else
                 Rails.logger.error(
                   'Failed to update Zoho account record',
                   record: record.serializable_hash,
-                  remote_crm_id:
-                )
-              end
-            when 'update'
-              if record.update(remote_crm_id:)
-                Rails.logger.info(
-                  'Successfully updated Zoho account record',
-                  record: record.serializable_hash,
-                  remote_crm_id:
-                )
-              else
-                Rails.logger.error(
-                  'Failed to update Zoho account record',
-                  record: record.serializable_hash,
-                  errors: record.errors.full_messages,
-                  remote_crm_id:
+                  remote_crm_id:, action:
                 )
               end
             else
               Rails.logger.warn(
                 "An unsupported action '#{action}' occurred against a Zoho account record",
                 record: record.serializable_hash,
-                result:
+                action:, result:
               )
             end
           else
