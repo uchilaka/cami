@@ -22,6 +22,8 @@
 #
 # Indexes
 #
+#  by_account_email_if_set         (email) UNIQUE WHERE (email IS NOT NULL)
+#  by_account_tax_id_if_set        (tax_id) UNIQUE WHERE ((tax_id IS NOT NULL) AND (TRIM(BOTH FROM tax_id) <> ''::text))
 #  index_accounts_on_discarded_at  (discarded_at)
 #
 # Foreign Keys

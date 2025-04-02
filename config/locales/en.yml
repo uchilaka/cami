@@ -68,9 +68,10 @@ en:
       registration: "Settings"
     footer:
       flowbite_icons: 'Flowbite Icons'
+      flowbite_integration_guide: 'Flowbite Integration Guide'
+      tailwind_docs: 'Tailwind CSS Documentation'
       fontawesome_icons: 'FontAwesome Icons'
       mongoid_docs: 'Mongoid Documentation (v8.1)'
-      flowbite_integration_guide: 'Flowbite Integration Guide'
       component_library: 'Component Library'
       paypal_sandbox_guide: 'PayPal Sandbox Testing Guide'
       ruby_doc: 'Ruby Documentation'

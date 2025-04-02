@@ -11,7 +11,7 @@ class NestedModel
 
   def initialize(args = {})
     super
-    @resource_attribute_name ||= self.class.name.parameterize(separator: '_')
+    @resource_attribute_name ||= self.class.name.to_s.parameterize(separator: '_')
     @errors = ActiveModel::Errors.new(self)
   end
 

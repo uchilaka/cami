@@ -7,7 +7,7 @@ module Zoho
       @resource_url ||= nil
 
       class << self
-        def upsert(record)
+        def upsert(record, pretend: false)
           access_token = AccessToken.generate['access_token']
           resource_uri = "/crm/v7/#{module_name}/upsert"
           payload = {
@@ -17,6 +17,11 @@ module Zoho
             duplicate_check_fields: %w[Email Phone],
             trigger: ['workflow']
           }
+          if pretend
+            Rails.logger.info("Pretending to upsert #{module_name} record data", payload:)
+            return
+          end
+
           response = connection(access_token:).post(resource_uri, payload)
           response.body
         end

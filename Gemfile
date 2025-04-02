@@ -111,6 +111,9 @@ gem 'ostruct'
 # Simple, feature rich ascii table generation library https://github.com/tj/terminal-table
 gem 'terminal-table'
 
+gem 'nokogiri'
+gem 'reverse_markdown'
+
 group :development, :test do
   gem 'capybara'
   gem 'capybara_accessibility_audit'

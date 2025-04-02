@@ -13,6 +13,7 @@ module LarCity
     class MissingRequiredModule < StandardError; end
     class UnsupportedOSError < StandardError; end
     class Unknown3rdPartyHostError < StandardError; end
+    class UnexpectedDataResponseError < StandardError; end
 
     class IntegrationRequestFailed < StandardError
       attr_reader :status, :vendor

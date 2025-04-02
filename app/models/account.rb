@@ -22,6 +22,8 @@
 #
 # Indexes
 #
+#  by_account_email_if_set         (email) UNIQUE WHERE (email IS NOT NULL)
+#  by_account_tax_id_if_set        (tax_id) UNIQUE WHERE ((tax_id IS NOT NULL) AND (TRIM(BOTH FROM tax_id) <> ''::text))
 #  index_accounts_on_discarded_at  (discarded_at)
 #
 # Foreign Keys
@@ -29,6 +31,9 @@
 #  fk_rails_...  (parent_id => accounts.id)
 #
 class Account < ApplicationRecord
+  # TODO: This change was suggested before the application was ever deployed.
+  #   We should be able to delete this line - the database would have been
+  #   re-initialized several times since then prior to the first deployment.
   self.ignored_columns += ['parent_account_id']
 
   rolify
@@ -53,7 +58,7 @@ class Account < ApplicationRecord
   attribute :metadata, :jsonb, default: { contacts: [] }
 
   validates :display_name, presence: true
-  validates :email, email: true, allow_nil: true
+  validates :email, email: true, allow_nil: true, uniqueness: { case_sensitive: false }
   validates :type, presence: true, inclusion: { in: %w[Account Business Individual Government Nonprofit Vendor] }
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
   validates :tax_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
@@ -76,6 +81,9 @@ class Account < ApplicationRecord
   alias users members
 
   before_validation :format_tax_id, if: :tax_id_changed?
+  after_commit :push_to_crm,
+               on: %i[create update],
+               if: -> { Flipper.enabled?(:feat__push_updates_to_crm) && crm_relevant_changes? }
 
   has_rich_text :readme
 
@@ -159,9 +167,19 @@ class Account < ApplicationRecord
     %w[invoices members rich_text_readme roles]
   end
 
+  protected
+
+  def crm_relevant_changes?
+    email_changed? || display_name_changed? || readme_changed? || tax_id_changed? || phone_changed?
+  end
+
   private
 
   def format_tax_id
     self.tax_id = tax_id.upcase if tax_id.present?
+  end
+
+  def push_to_crm
+    Zoho::UpsertAccountJob.perform_async(id)
   end
 end

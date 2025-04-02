@@ -118,6 +118,7 @@ class InvoicesController < ApplicationController
         :status,
         :issued_at,
         :due_at,
+        :updated_accounts_at,
         :amount,
         :amount_cents,
         :amount_currency,

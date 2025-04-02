@@ -25,6 +25,7 @@ if OS.mac?
   brew 'gnutls'
   brew 'foreman'
   cask 'ngrok'
+  brew 'pgadmin4'
   brew 'pinentry-mac'
 end
 

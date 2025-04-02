@@ -8,6 +8,7 @@ module Zoho
           attr = {
             Email: email,
             Account_Name: company_name,
+            Description: description,
             Phone: phone_number,
             Website: website
           }
@@ -34,6 +35,15 @@ module Zoho
 
     def website
       object.metadata.try(:[], 'website')
+    end
+
+    def description
+      return if object.readme.blank?
+
+      html_content = object.readme.to_s
+      return if html_content.blank?
+
+      ReverseMarkdown.convert html_content
     end
 
     def serializable_hash(_options = nil)

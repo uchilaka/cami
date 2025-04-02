@@ -8,13 +8,15 @@ class UpsertInvoiceRecordsJob < ApplicationJob
   BATCH_LIMIT = 25
 
   def perform
+    # TODO: Explore using Sidekiq's built-in batch processing features for UpsertInvoiceRecordsJob
     Invoice
       .where(updated_accounts_at: nil)
       .limit(batch_limit)
       .each do |invoice|
       next if invoice.metadata['accounts']&.none?
 
-      UpsertInvoiceRecordsWorkflow.call(invoice:, metadata: { options: { link_accounts: true } })
+      options = { link_accounts: true }
+      UpsertInvoiceRecordsWorkflow.call(invoice:, options:)
     end
   end
 

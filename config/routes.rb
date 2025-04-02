@@ -43,6 +43,8 @@ Rails.application.routes.draw do
 
   # get 'pages/services'
 
+  get 'app/invoices', to: 'pages#app', as: :app_invoices
+
   match 'app/*path', to: 'pages#app', via: :get
 
   root to: 'pages#app'
