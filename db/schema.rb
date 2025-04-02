@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_19_150823) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_02_044316) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -34,6 +34,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_19_150823) do
     t.datetime "discarded_at"
     t.uuid "parent_id"
     t.index ["discarded_at"], name: "index_accounts_on_discarded_at"
+    t.index ["email"], name: "by_account_email_if_set", unique: true, where: "(email IS NOT NULL)"
+    t.index ["tax_id"], name: "by_account_tax_id_if_set", unique: true, where: "((tax_id IS NOT NULL) AND (TRIM(BOTH FROM tax_id) <> ''::text))"
   end
 
   create_table "accounts_roles", id: false, force: :cascade do |t|

@@ -22,6 +22,8 @@
 #
 # Indexes
 #
+#  by_account_email_if_set         (email) UNIQUE WHERE (email IS NOT NULL)
+#  by_account_tax_id_if_set        (tax_id) UNIQUE WHERE ((tax_id IS NOT NULL) AND (TRIM(BOTH FROM tax_id) <> ''::text))
 #  index_accounts_on_discarded_at  (discarded_at)
 #
 # Foreign Keys
@@ -56,7 +58,7 @@ class Account < ApplicationRecord
   attribute :metadata, :jsonb, default: { contacts: [] }
 
   validates :display_name, presence: true
-  validates :email, email: true, allow_nil: true
+  validates :email, email: true, allow_nil: true, uniqueness: { case_sensitive: false }
   validates :type, presence: true, inclusion: { in: %w[Account Business Individual Government Nonprofit Vendor] }
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
   validates :tax_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
