@@ -14,8 +14,8 @@ module Zoho
       end
 
       Rails.logger.info('Upserting Zoho account record', id:)
-      result = Zoho::API::Account.upsert(account)
-      result
+      # TODO: Write back the remote_crm_id if successful
+      Zoho::API::Account.upsert(account)
     end
   end
 end
