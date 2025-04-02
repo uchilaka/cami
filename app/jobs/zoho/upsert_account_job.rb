@@ -14,7 +14,8 @@ module Zoho
       end
 
       Rails.logger.info('Upserting Zoho account record', id:)
-      Zoho::API::Account.upsert(account)
+      result = Zoho::API::Account.upsert(account)
+      result
     end
   end
 end
