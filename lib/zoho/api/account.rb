@@ -20,10 +20,33 @@ module Zoho
           if pretend
             Rails.logger.info("Pretending to upsert #{module_name} record data", payload:)
             return
+          else
+            Rails.logger.info('Upserting Zoho account record', id: record.id)
           end
-
           response = connection(access_token:).post(resource_uri, payload)
-          response.body
+          result = response.body
+          info = result.dig('data', 0)
+          code, action = info&.values_at('code', 'action')
+          if code == 'SUCCESS'
+            remote_crm_id = info.dig('details', 'id')
+            case action
+            when 'insert'
+              record.update(remote_crm_id:)
+            else
+              Rails.logger.warn(
+                'An unsupported action occurred against a Zoho account record',
+                record: record.serializable_hash,
+                result:
+              )
+            end
+          else
+            Rails.logger.error(
+              'Failed to upsert Zoho account record',
+              record: record.serializable_hash,
+              result:
+            )
+          end
+          result
         end
 
         def resource_url(auth: true)
