@@ -112,7 +112,7 @@ class AccountsController < ApplicationController
   def update_account_param_keys
     base_keys = %i[display_name readme status tax_id phone]
     if authorize(@account, :edit?)
-      base_keys + %i[email]
+      base_keys + %i[email type]
     else
       base_keys
     end

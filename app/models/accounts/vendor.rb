@@ -31,4 +31,8 @@
 #  fk_rails_...  (parent_id => accounts.id)
 #
 class Vendor < Account
+  # See SO recommendation: https://stackoverflow.com/a/9463495/3726759
+  def self.model_name
+    Account.model_name
+  end
 end

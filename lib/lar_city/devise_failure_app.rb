@@ -6,7 +6,7 @@ module LarCity
       if request.format == :json
         http_auth
       else
-        redirect
+        super
       end
     end
   end

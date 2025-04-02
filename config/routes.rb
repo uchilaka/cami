@@ -18,6 +18,14 @@ Rails.application.routes.draw do
     resources :invoices, except: %i[destroy]
   end
 
+  # resources :businesses, controller: :accounts, except: %i[destroy] do
+  #   resources :invoices, except: %i[destroy]
+  # end
+  #
+  # resources :individuals, controller: :accounts, except: %i[destroy] do
+  #   resources :invoices, except: %i[destroy]
+  # end
+
   devise_for :users,
              controllers: {
                sessions: 'users/passwordless',
