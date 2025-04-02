@@ -157,6 +157,12 @@ class Account < ApplicationRecord
     members << user
   end
 
+  def crm_url
+    return nil if remote_crm_id.blank?
+
+    crm_resource_url("tab/Accounts/#{remote_crm_id}")
+  end
+
   # Class methods
   def self.ransackable_attributes(_auth_object = nil)
     %w[display_name email slug tax_id]
