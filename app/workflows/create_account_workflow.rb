@@ -66,7 +66,7 @@ class CreateAccountWorkflow
 
   class << self
     def allowed_parameter_keys
-      %i[display_name status email slug tax_id phone metadata readme]
+      %i[display_name status email slug tax_id phone metadata readme type]
     end
   end
 end

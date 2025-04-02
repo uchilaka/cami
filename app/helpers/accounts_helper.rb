@@ -53,4 +53,8 @@ module AccountsHelper
       [status.titleize, status]
     end
   end
+
+  def account_type_options
+    %w[Business Individual Vendor]
+  end
 end

@@ -34,8 +34,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_02_044316) do
     t.datetime "discarded_at"
     t.uuid "parent_id"
     t.index ["discarded_at"], name: "index_accounts_on_discarded_at"
-    t.index ["email"], name: "by_account_email_if_set", unique: true, where: "(email IS NOT NULL)"
-    t.index ["tax_id"], name: "by_account_tax_id_if_set", unique: true, where: "((tax_id IS NOT NULL) AND (TRIM(BOTH FROM tax_id) <> ''::text))"
+    t.index ["email"], name: "by_account_email_if_set", unique: true, where: "(email IS NOT NULL)", nulls_not_distinct: true
   end
 
   create_table "accounts_roles", id: false, force: :cascade do |t|
