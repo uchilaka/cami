@@ -61,7 +61,7 @@ module Zoho
               end
             else
               Rails.logger.warn(
-                'An unsupported action occurred against a Zoho account record',
+                "An unsupported action '#{action}' occurred against a Zoho account record",
                 record: record.serializable_hash,
                 result:
               )
