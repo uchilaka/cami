@@ -10,6 +10,7 @@ require_relative '../config/environment'
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'rspec/rails'
+require 'knapsack_pro'
 # require 'rspec/wait'
 require 'aasm/rspec'
 require 'pundit/rspec'
@@ -19,6 +20,10 @@ require 'database_cleaner/active_record'
 require 'sidekiq/testing'
 require 'devise/test/integration_helpers'
 require 'vcr'
+require 'lib/zoho/credentials'
+
+# See https://docs.knapsackpro.com/knapsack_pro-ruby/guide/?rails=yes&test-runner=rspec&ci=github-actions#rspec
+KnapsackPro::Adapters::RSpecAdapter.bind
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -44,16 +49,26 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 # VCR usage docs https://benoittgt.github.io/vcr
-VCR.configure do |c|
-  c.cassette_library_dir = 'spec/fixtures/cassettes'
-  c.hook_into :faraday
-  c.allow_http_connections_when_no_cassette = true
+VCR.configure do |vcr_config|
+  vcr_config.cassette_library_dir = 'spec/fixtures/cassettes'
+  vcr_config.hook_into :faraday
+  vcr_config.allow_http_connections_when_no_cassette = true
 
   # IMPORTANT: Enables automatic cassette naming based on tags
-  c.configure_rspec_metadata!
+  vcr_config.configure_rspec_metadata!
+
+  # Filter out Zoho credentials (applies to all examples)
+  # vcr_config.filter_sensitive_data('<ZOHO_CLIENT_ID>') { Zoho::Credentials.client_id }
+  # vcr_config.filter_sensitive_data('<ZOHO_CLIENT_SECRET>') { Zoho::Credentials.client_secret }
+  # Filter out Zoho credentials (applies only to examples tagged with :zoho_cassette)
+  vcr_config.define_cassette_placeholder('<ZOHO_CLIENT_ID>', :zoho_cassette) { Zoho::Credentials.client_id }
+  vcr_config.define_cassette_placeholder('<ZOHO_CLIENT_SECRET>', :zoho_cassette) { Zoho::Credentials.client_secret }
+  vcr_config.define_cassette_placeholder('<ZOHO_AUTHORIZATION_HEADER>', :zoho_cassette) do |interaction|
+    interaction.request.headers['Authorization'].try(:first)
+  end
 
   # Setup :before_record hook to intercept PII data and prevent it from leaking into the cassettes
-  c.before_record(:obfuscate) do |interaction, cassette|
+  vcr_config.before_record(:obfuscate) do |interaction, cassette|
     if interaction.response.body.present?
       if cassette.name.present? &&
         interaction.response.headers['content-type'].any? { |t| %r{application/json}.match?(t) }
@@ -71,7 +86,7 @@ VCR.configure do |c|
     end
   end
 
-  c.before_http_request do |req|
+  vcr_config.before_http_request do |req|
     Rails.logger.info "VCR: Request", { method: req.method, uri: req.uri, headers: req.headers }
   end
 end
@@ -128,7 +143,7 @@ RSpec.configure do |config|
   config.include_context 'for phone number testing', real_world_data: true
 
   # Sample invoices
-  config.include_context 'for invoice testing', invoice_data: true
+  config.include_context 'for invoice testing', preload_invoice_data: true
 
   config.before(:suite) do
     if config.use_transactional_fixtures?
@@ -143,7 +158,12 @@ RSpec.configure do |config|
         uncommitted transaction data setup over the spec's database connection.
       MSG
     end
-    DatabaseCleaner.clean_with(:truncation)
+    # Ensure that truncation ONLY happens in rails test environment
+    if Rails.env.test?
+      DatabaseCleaner.clean_with(:truncation)
+    else
+      puts "️⚠️ RSpec is running in #{Rails.env} environment. Skipping database truncation. 🙅🏾‍♂️"
+    end
 
     Rails.application.load_seed
 
@@ -164,7 +184,7 @@ RSpec.configure do |config|
 
   config.around(:each) do |example|
     # Conditionally load invoice sample data
-    load_sample_invoice_dataset if example.metadata[:invoice_data]
+    load_sample_invoice_dataset if example.metadata[:preload_invoice_data]
 
     # Run example
     example.run

@@ -57,6 +57,14 @@ module StyleHelper
     )
   end
 
+  def badge_classes(*args)
+    compose_class_names(
+      'bg-purple-100 text-purple-800 text-xs font-medium dark:bg-purple-900 dark:text-purple-300',
+      'px-2.5 py-0.5 me-2 rounded-full',
+      args
+    )
+  end
+
   def default_item_action_btn_classes
     @default_action_btn_classes ||= item_action_btn_classes
   end

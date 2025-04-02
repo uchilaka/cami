@@ -1,10 +1,9 @@
-import React from 'react'
-import { Decorator, Meta, StoryObj, StrictArgs } from '@storybook/react'
-import { Formik, FormikConfig } from 'formik'
+import { Meta, StoryObj } from '@storybook/react'
 import PhoneLibNumberInput from './PhoneLibNumberInput'
+import { withFormikDecorator, withLogTransportDecorator } from './storybook/decorators'
 
 const meta = {
-  title: 'Components/PhoneLibNumberInput',
+  title: 'Components/PhoneInput/PhoneLibNumberInput',
   component: PhoneLibNumberInput,
 } satisfies Meta<typeof PhoneLibNumberInput>
 
@@ -12,17 +11,8 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-const withFormikDecorator: Decorator<StrictArgs> = (Story, { args, parameters }) => {
-  const { initialValues, onSubmit } = parameters.formik as FormikConfig<any>
-  return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit}>
-      <Story {...args} />
-    </Formik>
-  )
-}
-
 export const Default: Story = {
-  decorators: [withFormikDecorator],
+  decorators: [withFormikDecorator, withLogTransportDecorator],
   args: {
     label: 'Phone Number',
     id: 'phone',

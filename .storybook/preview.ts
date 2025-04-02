@@ -4,6 +4,7 @@ import { http, HttpResponse, delay } from 'msw'
 import mockFeaturesResponse from '../spec/fixtures/msw/feature_flags.json'
 import mockIndividualAccountResponse from '../spec/fixtures/msw/accounts/individual.json'
 import mockBusinessAccountResponse from '../spec/fixtures/msw/accounts/business.json'
+import mockCountriesResponse from '../spec/fixtures/msw/countries.json'
 
 /*
  * Initializes MSW
@@ -37,6 +38,10 @@ const preview: Preview = {
         http.get('/accounts/4321?format=json', async () => {
           await delay(150)
           return HttpResponse.json(mockBusinessAccountResponse)
+        }),
+        http.get('/api/form_data/countries?format=json', async () => {
+          await delay(150)
+          return HttpResponse.json(mockCountriesResponse)
         }),
       ],
     },

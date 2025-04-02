@@ -2,6 +2,9 @@
 
 module Zoho
   class AccessToken
+    # About class (instance) variables: https://www.ruby-lang.org/en/documentation/faq/8/
+    @@connection = nil
+
     class << self
       def generate
         response = connection.post('/oauth/v2/token', token_params)
@@ -31,7 +34,7 @@ module Zoho
       private
 
       def connection
-        @connection ||= Faraday.new(url: API::Account.resource_url) do |b|
+        @@connection ||= Faraday.new(url: API::Account.resource_url(auth: true)) do |b|
           b.request :url_encoded
           b.response :json
           b.response :logger if Rails.env.development?

@@ -27,3 +27,16 @@ export interface Account {
   email?: string
   readme?: RichText
 }
+
+export type ProfileFormData = {
+  givenName: string
+  familyName: string
+  phone?: string
+}
+
+export type AccountFormData = Partial<ProfileFormData> & {
+  displayName: string
+  email: string
+  type: 'Individual' | 'Business'
+  readme?: string
+}

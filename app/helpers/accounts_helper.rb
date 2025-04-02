@@ -11,10 +11,6 @@ module AccountsHelper
     Flipper.enabled?(:feat__account_filtering, current_user)
   end
 
-  def modal_dom_id(resource, content_type: '')
-    "#{resource.class.table_name.singularize}--#{content_type}-modal"
-  end
-
   def segment_filter_options
     [
       ['Past due', 'past_due'],

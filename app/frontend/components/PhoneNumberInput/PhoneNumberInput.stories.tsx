@@ -4,7 +4,7 @@ import { Formik, FormikConfig } from 'formik'
 import PhoneNumberInput from '.'
 
 const meta = {
-  title: 'Components/PhoneNumberInput',
+  title: 'Components/PhoneInput/PhoneNumberInput',
   component: PhoneNumberInput,
 } satisfies Meta<typeof PhoneNumberInput>
 

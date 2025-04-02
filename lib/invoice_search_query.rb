@@ -1,30 +1,14 @@
 # frozen_string_literal: true
 
-class InvoiceSearchQuery
-  attr_reader :query_string, :params, :filters, :sorters, :predicates
+require_relative 'search_query'
 
-  def initialize(query_string = nil, params: {})
-    @query_string = query_string
-    @params = params
-    @filters ||= {}
-    @sorters ||= []
-    @predicates ||= {}
-    build
-  end
-
-  def extend(params)
-    @params = @params.merge(params)
-    rebuild
-  end
-
+class InvoiceSearchQuery < SearchQuery
   def build
     compose_predicates
     compose_sorters
   end
 
-  alias rebuild build
-
-  private
+  protected
 
   def compose_predicates
     @predicates =
@@ -42,7 +26,7 @@ class InvoiceSearchQuery
       else
         {}
       end
-    return predicates unless query_param.present?
+    return predicates unless query_string.present?
 
     account_search_predicate =
       Invoice.fuzzy_search_predicate_key(
@@ -56,7 +40,7 @@ class InvoiceSearchQuery
       Invoice.fuzzy_search_predicate_key('invoice_number', matcher: nil)
     compound_cont_predicate =
       [invoice_search_predicate, account_search_predicate].join('_or_')
-    @predicates["#{compound_cont_predicate}_cont"] = query_param
+    @predicates["#{compound_cont_predicate}_cont"] = query_string
   end
 
   def compose_filters
@@ -92,30 +76,19 @@ class InvoiceSearchQuery
       end
   end
 
-  def query_param
-    params.permit(:q)[:q]
-  end
-
   def filter_params
     extract_search_params('f')
+  end
+
+  def query_param
+    params.permit('q')['q']
   end
 
   def sort_params
     extract_search_params('s', [])
   end
 
-  def extract_search_params(key, default_value = {})
-    # TODO: Filter params here based on whether we're trying for an array or a hash
-    if params[key].present?
-      begin
-        {}.merge(params[key] || {})
-      rescue TypeError => _e
-        params[key].to_a
-      end
-    else
-      default_value
-    end
-  end
+  private
 
   def compose_sorter_clause(field:, direction: 'asc')
     case field

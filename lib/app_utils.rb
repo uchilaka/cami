@@ -11,8 +11,23 @@ class AppUtils
   include OperatingSystemDetectable
 
   class << self
+    def crm_org_id
+      override_value = ENV.fetch('CRM_ORG_ID', nil)
+      return override_value if override_value.present?
+
+      Rails.application.credentials.crm&.org_id!
+    end
+
     def configure_real_smtp?
       send_emails? && !letter_opener_enabled? && !mailhog_enabled?
+    end
+
+    def hostname_is_nginx_proxy?
+      /\.ngrok\.(dev|app)/.match?(hostname)
+    end
+
+    def use_secure_protocol?
+      Rails.env.production? || hostname_is_nginx_proxy?
     end
 
     # LetterOpener should be enabled by default in the development environment
@@ -66,6 +81,38 @@ class AppUtils
       default_value = Rails.env.development? ? 'yes' : 'no'
 
       yes?(ENV.fetch('ENV_DEBUG_ASSETS', default_value))
+    end
+
+    def hostname
+      # TODO: Check if tunnel is available and use the NGROK hostname if so
+      #   otherwise, fallback to the configured hostname 👇🏾
+      ENV.fetch('HOSTNAME', Rails.application.credentials.hostname)
+    end
+
+    def log_level
+      if yes?(ENV.fetch('LOG_LEVEL_DEBUG', 'no'))
+        :debug
+      else
+        :info
+      end
+    end
+
+    def allowed_hosts_for(provider:)
+      Rails
+        .application
+        .config_for(:allowed_3rd_party_hosts)[provider.to_sym] || {}
+    end
+
+    def ruby_version(file_path = nil)
+      file_path ||= "#{Dir.pwd}/.tool-versions"
+      raise 'Error: .tool-versions file not found' unless File.exist?(file_path)
+
+      File.foreach(file_path) do |line|
+        match = line.match(/ruby\s+([\d.]+)/)
+        return match[1].to_s.strip if match
+      end
+
+      raise 'No ruby version found in .tool-versions'
     end
 
     # TODO: is this deprecated or refactored as implemented elsewhere?

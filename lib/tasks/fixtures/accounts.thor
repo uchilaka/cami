@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../../commands/lar_city/cli/base_cmd'
+require 'commands/lar_city/cli/base_cmd'
 
 module Fixtures
   class Accounts < LarCity::CLI::BaseCmd

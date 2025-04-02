@@ -69,3 +69,9 @@ Fabricator(:user_with_provider_profiles, from: :user) do
     user.save!
   end
 end
+
+Fabricator(:admin, from: :user) do
+  after_create do |user|
+    user.add_role(:admin)
+  end
+end

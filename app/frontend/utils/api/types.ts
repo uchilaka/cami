@@ -19,6 +19,7 @@ export interface Account extends GenericAccount {
   actions: Record<ActionKey, AccountAction>
   invoices: Invoice[]
   email?: string
+  phone?: string
   readme?: RichText
 }
 
@@ -31,7 +32,6 @@ export interface IndividualAccount extends Account {
 export interface BusinessAccount extends Account {
   type: 'Business'
   taxId: string
-  phone: string
 }
 
 export const isValidAccount = (account?: IndividualAccount | BusinessAccount | null): account is IndividualAccount | BusinessAccount => {

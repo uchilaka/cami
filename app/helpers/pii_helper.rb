@@ -33,6 +33,12 @@ module PIIHelper
   def replace_pii(default_value = nil, label:)
     # Replace PII patterns with corresponding fake data generation
     case label
+    when /access_token/i
+      if allow_access_tokens?
+        default_value
+      else
+        '<REDACTED_ACCESS_TOKEN>'
+      end
     when /(sur)?name/i, /(business|given|family|full)_name/i
       Faker::Name.neutral_first_name
     when /email/i
@@ -48,5 +54,11 @@ module PIIHelper
     else
       default_value
     end
+  end
+
+  private
+
+  def allow_access_tokens?
+    AppUtils.yes?(ENV.fetch('PII_FILTER_ALLOW_ACCESS_TOKENS', false))
   end
 end

@@ -64,6 +64,10 @@ const PhoneLibNumberInput: FC<PhoneNumberInputProps> = ({ id, type = 'tel', labe
   const { handleChange, errors, values = {} } = useFormikContext<Record<string, string>>()
   const message = errors[otherProps.name] ?? hint
 
+  useEffect(() => {
+    console.debug('PhoneLibNumberInput values:', { ...values })
+  }, [values])
+
   return (
     <div className={containerClassNames}>
       <PhoneLibInput

@@ -41,13 +41,13 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'pages/home'
-  get 'pages/dashboard'
   # get 'pages/services'
 
-  match 'app/*path', to: 'pages#home', via: :get
+  get 'app/invoices', to: 'pages#app', as: :app_invoices
 
-  root to: 'pages#home'
+  match 'app/*path', to: 'pages#app', via: :get
+
+  root to: 'pages#app'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -61,6 +61,12 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :features, only: %i[index], defaults: { format: :json }
+    resources :form_data, only: %i[] do
+      collection do
+        get :countries, defaults: { format: :json }
+        get :countries_map, defaults: { format: :json }
+      end
+    end
   end
 
   draw :flipper

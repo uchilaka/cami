@@ -4,26 +4,46 @@
 #
 # Table name: accounts
 #
-#  id           :uuid             not null, primary key
-#  display_name :string
-#  email        :string
-#  metadata     :jsonb
-#  phone        :jsonb
-#  readme       :text
-#  slug         :string
-#  status       :integer
-#  type         :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  tax_id       :string
+#  id            :uuid             not null, primary key
+#  discarded_at  :datetime
+#  display_name  :string
+#  email         :string
+#  metadata      :jsonb
+#  phone         :jsonb
+#  readme        :text
+#  slug          :string
+#  status        :integer
+#  type          :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  parent_id     :uuid
+#  remote_crm_id :string
+#  tax_id        :string
+#
+# Indexes
+#
+#  by_account_email_if_set         (email) UNIQUE WHERE (email IS NOT NULL)
+#  by_account_tax_id_if_set        (tax_id) UNIQUE WHERE ((tax_id IS NOT NULL) AND (TRIM(BOTH FROM tax_id) <> ''::text))
+#  index_accounts_on_discarded_at  (discarded_at)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (parent_id => accounts.id)
 #
 class Account < ApplicationRecord
+  # TODO: This change was suggested before the application was ever deployed.
+  #   We should be able to delete this line - the database would have been
+  #   re-initialized several times since then prior to the first deployment.
+  self.ignored_columns += ['parent_account_id']
+
   rolify
   resourcify
 
   include AASM
+  include Discard::Model
   include Searchable
   include Actionable
+  include Renderable
 
   # There are security implications to consider when using deterministic encryption.
   # See https://guides.rubyonrails.org/active_record_encryption.html#deterministic-and-non-deterministic-encryption
@@ -38,11 +58,16 @@ class Account < ApplicationRecord
   attribute :metadata, :jsonb, default: { contacts: [] }
 
   validates :display_name, presence: true
-  validates :email, email: true, allow_nil: true
-  validates :type, presence: true, inclusion: { in: %w[Account Business Individual Government Nonprofit] }
+  validates :email, email: true, allow_nil: true, uniqueness: { case_sensitive: false }
+  validates :type, presence: true, inclusion: { in: %w[Account Business Individual Government Nonprofit Vendor] }
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
   validates :tax_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
+  # Intended to store the ZohoCRM SOID
+  validates :remote_crm_id, uniqueness: { case_sensitive: false }, allow_blank: true, allow_nil: true
 
+  # See https://guides.rubyonrails.org/association_basics.html#self-joins
+  belongs_to :parent, class_name: 'Account', optional: true
+  has_many :dupes, class_name: 'Account', foreign_key: 'parent_id'
   has_many :invoices, as: :invoiceable, dependent: :nullify
   # TODO: This generates the following console error:
   #   `warning: already initialized constant Account::HABTM_Roles`
@@ -56,6 +81,9 @@ class Account < ApplicationRecord
   alias users members
 
   before_validation :format_tax_id, if: :tax_id_changed?
+  after_commit :push_to_crm,
+               on: %i[create update],
+               if: -> { Flipper.enabled?(:feat__push_updates_to_crm) && crm_relevant_changes? }
 
   has_rich_text :readme
 
@@ -132,16 +160,26 @@ class Account < ApplicationRecord
 
   # Class methods
   def self.ransackable_attributes(_auth_object = nil)
-    %w[display_name email tax_id]
+    %w[display_name email slug tax_id]
   end
 
   def self.ransackable_associations(_auth_object = nil)
     %w[invoices members rich_text_readme roles]
   end
 
+  protected
+
+  def crm_relevant_changes?
+    email_changed? || display_name_changed? || readme_changed? || tax_id_changed? || phone_changed?
+  end
+
   private
 
   def format_tax_id
     self.tax_id = tax_id.upcase if tax_id.present?
+  end
+
+  def push_to_crm
+    Zoho::UpsertAccountJob.perform_async(id)
   end
 end

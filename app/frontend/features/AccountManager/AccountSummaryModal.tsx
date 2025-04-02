@@ -4,7 +4,7 @@ import withAllTheProviders from '@/components/withAllTheProviders'
 import LoadingAnimation from '../../components/LoadingAnimation'
 import { useAccountContext, withAccountProvider } from '@/features/AccountManager/AccountProvider'
 import AccountTitleLabel from './AccountTitleLabel'
-import AccountForm from './AccountFormWithFormik'
+import AccountForm from './AccountForm'
 import CloseIcon from '@/components/Icons/CloseIcon'
 import AccountSlug from './AccountSlug'
 import { useLogTransport } from '@/components/LogTransportProvider'
@@ -31,7 +31,7 @@ const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ..
   const closeModal = async () => {
     if (!modalRef.current) return
     const modal = new Modal(modalRef.current)
-    logger.debug('Closing account summary modal')
+    logger.debug('@AccountSummaryModal :: closeModal', { modalId })
     modal.hide()
   }
 

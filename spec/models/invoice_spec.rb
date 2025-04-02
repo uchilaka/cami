@@ -78,7 +78,14 @@ RSpec.describe Invoice, type: :model do
     end
 
     context 'after save' do
-      subject { described_class.new(amount: '14.50', payment_vendor: 'paypal') }
+      subject do
+        described_class
+          .new(
+            invoice_number: random_invoice_number,
+            amount: '14.50',
+            payment_vendor: 'paypal'
+          )
+      end
 
       it { expect(subject).to be_valid }
       it { expect(subject.amount_cents).to eq 1450 }
@@ -225,6 +232,19 @@ RSpec.describe Invoice, type: :model do
     pending 'when invoice is sent'
     pending 'when invoice is paid'
     pending 'when invoice is overdue'
+  end
+
+  describe '#modal_dom_id' do
+    it { expect(subject.modal_dom_id).to eq "#{subject.model_name.singular}-modal|#{subject.id}|" }
+
+    context 'with content_type' do
+      let(:content_type) { 'content' }
+
+      it do
+        expect(subject.modal_dom_id(content_type:)).to \
+          eq "#{subject.model_name.singular}--#{content_type}--modal|#{subject.id}|"
+      end
+    end
   end
 
   describe '.fuzzy_search_predicate_key' do

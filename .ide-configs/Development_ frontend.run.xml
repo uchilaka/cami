@@ -10,11 +10,7 @@
       <env name="VITE_CJS_TRACE" value="true" />
     </envs>
     <EXTENSION ID="BundlerRunConfigurationExtension" BUNDLE_MODE="AUTO" bundleExecEnabled="true" />
-    <EXTENSION ID="RubyCoverageRunConfigurationExtension" track_test_folders="true" runner="rcov" ENABLE_BRANCH_COVERAGE="true" ENABLE_FORKED_COVERAGE="true">
-      <COVERAGE_PATTERN ENABLED="true">
-        <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
-      </COVERAGE_PATTERN>
-    </EXTENSION>
+    <EXTENSION ID="RubyCoverageRunConfigurationExtension" runner="rcov" />
     <EXTENSION ID="com.fapiko.jetbrains.plugins.better_direnv.runconfigs.RubyMineRunConfigurationExtension">
       <option name="DIRENV_ENABLED" value="false" />
       <option name="DIRENV_TRUSTED" value="true" />

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.configuration.before_initialize do |app|
+  # NOTE: Initialize the log stream unless we are running tests
+  #   or streaming is already initialized
   LogUtils.initialize_stream unless Rails.env.test? || LogUtils.streaming_via_http?
   # Configure logging for dependent services
   app.config.action_mailer.logger = Rails.logger

@@ -31,13 +31,47 @@ module Fixtures
         return
       end
 
-      # Process user records
-      results = User.create!(fixtures_to_load)
-      if results&.all?(&:valid?)
-        Rails.logger.info "Saved #{results.count} records"
-      else
-        saved_records = results.reject { |record| record.errors.any? }
-        Rails.logger.warn "Saved #{saved_records.count} of #{fixtures_to_load.count} records"
+      roles_to_set = {}
+
+      # # Set passwords
+      # fixtures_to_load = fixtures_to_load.map do |account|
+      #   account[:password] = SecureRandom.alphanumeric(16)
+      #   roles_to_set[account[:email]] = account.delete(:roles)
+      #   account
+      # end
+
+      fixtures_to_load = fixtures_to_load.each_with_object([]) do |record, hash|
+        record.symbolize_keys!
+        # Set password
+        record[:password] = SecureRandom.alphanumeric(16)
+        # Capture roles (will process in a following block)
+        roles_to_set[record[:email]] = record.delete(:roles)
+        # Set prepared record
+        hash << record
+      end
+
+      # Clean out any nil values
+      roles_to_set.compact!
+
+      User.transaction do
+        # Process user records
+        results = User.create!(fixtures_to_load)
+
+        # Assign roles
+        results.each do |user|
+          roles_to_add = roles_to_set[user.email]
+          next if user.invalid? || roles_to_add.blank?
+
+          roles_to_add.each { |role| user.add_role(role.to_sym) }
+        end
+
+        # Report status in console
+        if results.all?(&:valid?)
+          Rails.logger.info "Saved #{results.count} records"
+        else
+          saved_records = results.reject { |record| record.errors.any? }
+          Rails.logger.warn "Saved #{saved_records.count} of #{fixtures_to_load.count} records"
+        end
       end
     end
 

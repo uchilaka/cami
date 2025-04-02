@@ -4,23 +4,40 @@
 #
 # Table name: accounts
 #
-#  id           :uuid             not null, primary key
-#  display_name :string
-#  email        :string
-#  metadata     :jsonb
-#  phone        :jsonb
-#  readme       :text
-#  slug         :string
-#  status       :integer
-#  type         :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  tax_id       :string
+#  id            :uuid             not null, primary key
+#  discarded_at  :datetime
+#  display_name  :string
+#  email         :string
+#  metadata      :jsonb
+#  phone         :jsonb
+#  readme        :text
+#  slug          :string
+#  status        :integer
+#  type          :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  parent_id     :uuid
+#  remote_crm_id :string
+#  tax_id        :string
+#
+# Indexes
+#
+#  by_account_email_if_set         (email) UNIQUE WHERE (email IS NOT NULL)
+#  by_account_tax_id_if_set        (tax_id) UNIQUE WHERE ((tax_id IS NOT NULL) AND (TRIM(BOTH FROM tax_id) <> ''::text))
+#  index_accounts_on_discarded_at  (discarded_at)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (parent_id => accounts.id)
 #
 require 'rails_helper'
 
 RSpec.describe Account, type: :model do
   subject { Fabricate :account }
+
+  around do |example|
+    Sidekiq::Testing.inline! { example.run }
+  end
 
   it { should validate_presence_of :display_name }
   it { should validate_presence_of :slug }
@@ -42,6 +59,60 @@ RSpec.describe Account, type: :model do
 
   it_should_behave_like 'adding a role on an invoice is supported', :customer
   it_should_behave_like 'adding a role on an invoice is supported', :contact
+
+  # Scenarios
+  context 'with a parent account' do
+    let(:parent) { Fabricate :account }
+    let(:account) { Fabricate(:account, parent:) }
+
+    it { expect(account.parent).to eq parent }
+    it { expect(parent.dupes).to include(account) }
+  end
+
+  # Instance methods / accessors
+  describe '#modal_dom_id' do
+    let(:account) { Fabricate :account }
+
+    subject { account.modal_dom_id }
+
+    it { expect(subject).to eq "#{account.model_name.singular}-modal|#{account.id}|" }
+
+    context 'with content_type' do
+      let(:content_type) { 'content' }
+
+      subject { account.modal_dom_id(content_type:) }
+
+      it { expect(subject).to eq "#{account.model_name.singular}--#{content_type}--modal|#{account.id}|" }
+    end
+  end
+
+  describe '#remote_crm_id' do
+    context 'when blank' do
+      subject { Fabricate :account, remote_crm_id: '' }
+
+      it { expect(subject).to be_valid }
+    end
+
+    context 'with several blank records' do
+      let!(:account) { Fabricate :account, remote_crm_id: '' }
+
+      subject { Fabricate.build :account, remote_crm_id: '' }
+
+      it { expect(subject).to be_valid }
+    end
+
+    context 'when present in the database (case insensitive)' do
+      let!(:account) { Fabricate :account, remote_crm_id: 'ZohoCRM.123456789' }
+
+      subject { Fabricate.build :account, remote_crm_id: 'zohocrm.123456789' }
+
+      it { expect(subject).to be_invalid }
+
+      it 'fails validation on save' do
+        expect { subject.save! }.to raise_error ActiveRecord::RecordInvalid
+      end
+    end
+  end
 
   describe '#tax_id' do
     context 'when blank' do
@@ -95,6 +166,53 @@ RSpec.describe Account, type: :model do
     end
   end
 
+  describe '#invoices', skip: 'pending' do
+    let(:account) { Fabricate :account }
+    let(:invoice) { Fabricate :invoice }
+
+    pending 'can be accessed via "customer" role'
+  end
+
+  describe '#actions' do
+    subject { Fabricate :account }
+
+    it 'includes the expected action hashes' do
+      expect(subject.actions).to \
+        match(
+          back: hash_including(
+            dom_id: anything,
+            http_method: 'GET',
+            label: 'Back to Accounts',
+            url: anything
+          ),
+          delete: hash_including(
+            dom_id: anything,
+            http_method: 'DELETE',
+            label: 'Delete',
+            url: anything
+          ),
+          edit: hash_including(
+            dom_id: anything,
+            http_method: 'GET',
+            label: 'Edit',
+            url: anything
+          ),
+          show: hash_including(
+            dom_id: anything,
+            http_method: 'GET',
+            label: 'Account details',
+            url: anything
+          )
+        )
+    end
+
+    it { expect(subject.actions.dig(:back, :url)).to match(%r{/accounts\?locale=en$}) }
+    it { expect(subject.actions.dig(:delete, :url)).to match(%r{/accounts/#{subject.id}.json\?locale=en$}) }
+    it { expect(subject.actions.dig(:edit, :url)).to match(%r{/accounts/#{subject.id}\?locale=en$}) }
+    it { expect(subject.actions.dig(:show, :url)).to match(%r{/accounts/#{subject.id}\?locale=en$}) }
+  end
+
+  # Class methods
   describe '.fuzzy_search_predicate_key' do
     let(:fields) { %w[display_name email] }
 
@@ -143,51 +261,5 @@ RSpec.describe Account, type: :model do
         end
       end
     end
-  end
-
-  describe '#invoices', skip: 'pending' do
-    let(:account) { Fabricate :account }
-    let(:invoice) { Fabricate :invoice }
-
-    pending 'can be accessed via "customer" role'
-  end
-
-  describe '#actions' do
-    subject { Fabricate :account }
-
-    it 'includes the expected action hashes' do
-      expect(subject.actions).to \
-        match(
-          back: hash_including(
-            dom_id: anything,
-            http_method: 'GET',
-            label: 'Back to Accounts',
-            url: anything
-          ),
-          delete: hash_including(
-            dom_id: anything,
-            http_method: 'DELETE',
-            label: 'Delete',
-            url: anything
-          ),
-          edit: hash_including(
-            dom_id: anything,
-            http_method: 'GET',
-            label: 'Edit',
-            url: anything
-          ),
-          show: hash_including(
-            dom_id: anything,
-            http_method: 'GET',
-            label: 'Account details',
-            url: anything
-          )
-        )
-    end
-
-    it { expect(subject.actions.dig(:back, :url)).to match(%r{/accounts\?locale=en$}) }
-    it { expect(subject.actions.dig(:delete, :url)).to match(%r{/accounts/#{subject.id}.json\?locale=en$}) }
-    it { expect(subject.actions.dig(:edit, :url)).to match(%r{/accounts/#{subject.id}\?locale=en$}) }
-    it { expect(subject.actions.dig(:show, :url)).to match(%r{/accounts/#{subject.id}\?locale=en$}) }
   end
 end

@@ -4,18 +4,32 @@
 #
 # Table name: accounts
 #
-#  id           :uuid             not null, primary key
-#  display_name :string
-#  email        :string
-#  metadata     :jsonb
-#  phone        :jsonb
-#  readme       :text
-#  slug         :string
-#  status       :integer
-#  type         :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  tax_id       :string
+#  id            :uuid             not null, primary key
+#  discarded_at  :datetime
+#  display_name  :string
+#  email         :string
+#  metadata      :jsonb
+#  phone         :jsonb
+#  readme        :text
+#  slug          :string
+#  status        :integer
+#  type          :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  parent_id     :uuid
+#  remote_crm_id :string
+#  tax_id        :string
+#
+# Indexes
+#
+#  by_account_email_if_set         (email) UNIQUE WHERE (email IS NOT NULL)
+#  by_account_tax_id_if_set        (tax_id) UNIQUE WHERE ((tax_id IS NOT NULL) AND (TRIM(BOTH FROM tax_id) <> ''::text))
+#  index_accounts_on_discarded_at  (discarded_at)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (parent_id => accounts.id)
+#
 require 'phonelib'
 
 Fabricator(:account) do
@@ -39,10 +53,10 @@ Fabricator(:account) do
         'NG'
       end
     phone_number = Phonelib.parse(phone_input, country_alpha2)
-    {
-      full_e164: phone_number.full_e164,
-      country: phone_number.country
-    }
+    intersect_types = PhoneNumber.supported_types.intersection phone_number.types
+    number_type = intersect_types.any? ? intersect_types.first : phone_number.types.first
+    full_e164 = phone_number.full_e164
+    { country: phone_number.country, full_e164:, number_type: }
   end
 
   # TODO: Should not need to handle users transiently, since active record

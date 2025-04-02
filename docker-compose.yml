@@ -9,7 +9,7 @@ services:
       - '8025:8025'
     profiles:
       - batteries-included
-      - essential
+      - full-stack
 
   # Doc: https://ngrok.com/docs/using-ngrok-with/docker/#:~:text=Using%20ngrok%20with%20Docker%20Compose
   tunnel:
@@ -53,18 +53,19 @@ services:
     ports:
       - '16079:6379'
     volumes:
-      - ./db/development/redis:/data
+      - redis_data:/data
     entrypoint:
       - redis-server
       - --save 60 1
       - --loglevel warning
     profiles:
-      - essential
       - batteries-included
+      - essential
+      - full-stack
 
   app-store:
     container_name: db.accounts.larcity
-    image: postgres:15.4
+    image: postgres:15
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${APP_DATABASE_NAME}
@@ -74,12 +75,17 @@ services:
     ports:
       - '16032:5432'
     volumes:
+      - postgres_data:/var/lib/postgresql/data
       - ./db/development/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-      - ./db/development/postgres/data:/var/lib/postgresql/data
       - ./db/development/postgres/downloads:/usr/local/downloads
     profiles:
       - batteries-included
       - essential
+      - full-stack
+
+volumes:
+  postgres_data:
+  redis_data:
 
 networks:
   default:

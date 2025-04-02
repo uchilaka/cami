@@ -35,9 +35,16 @@ class ApplicationController < ActionController::Base
 
   def public_page?
     params['controller'] == 'pages' &&
-      (
-        %w[home].include?(params['action']) ||
-        %w[about].include?(params['path'])
-      )
+      params['action'] == 'app' &&
+      (params['path'].nil? || public_app_paths.include?(params['path']))
+  end
+
+  def public_app_paths
+    %w[
+      about
+      home
+      legal/terms
+      legal/privacy
+    ]
   end
 end
