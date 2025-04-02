@@ -1106,7 +1106,7 @@ __metadata:
     sass-migrator: "npm:^2.2.1"
     snakecase-keys: "npm:^8.0.1"
     storybook: "npm:^8.3.5"
-    styled-components: "npm:^6.1.13"
+    styled-components: "npm:^6.1.17"
     tailwindcss: "npm:^3.4.1"
     trix: "npm:^2.1.12"
     ts-jest: "npm:^29.1.2"
@@ -8668,9 +8668,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:^6.1.13":
-  version: 6.1.15
-  resolution: "styled-components@npm:6.1.15"
+"styled-components@npm:^6.1.17":
+  version: 6.1.17
+  resolution: "styled-components@npm:6.1.17"
   dependencies:
     "@emotion/is-prop-valid": "npm:1.2.2"
     "@emotion/unitless": "npm:0.8.1"
@@ -8684,7 +8684,7 @@ __metadata:
   peerDependencies:
     react: ">= 16.8.0"
     react-dom: ">= 16.8.0"
-  checksum: 10c0/7c29db75af722599e10962ef74edd86423275385a3bf6baeb76783dfacc3de7608d1cc07b0d5866986e5263d60f0801b0d1f5b3b63be1af23bed68fdca8eaab6
+  checksum: 10c0/87f35173c5fc2291ddba7ed8224d19fe6872d056a577f55fe130248f5ea23e5c48c012e881fa1ad93df60b56a12c1c2d553f628e204f090189221734927e50b0
   languageName: node
   linkType: hard
 
