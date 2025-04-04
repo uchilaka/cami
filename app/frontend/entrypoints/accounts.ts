@@ -18,7 +18,7 @@ document.addEventListener('turbo:load', () => {
     console.debug('A Turbo link was clicked', { ev })
   })
 
-  document.querySelectorAll('.action--view-account-summary').forEach((el: Element | HTMLElement) => {
+  document.querySelectorAll<HTMLElement>('.action--view-account-summary').forEach((el) => {
     el.addEventListener('click', ({ target }) => {
       const { resourceId: accountId, modalTargetAsync, modalToggleAsync } = (target as HTMLElement).dataset
       console.debug('View account summary was clicked', { accountId, modalTargetAsync, modalToggleAsync, target })
@@ -29,6 +29,21 @@ document.addEventListener('turbo:load', () => {
         const modal = new Modal(modalEl)
         modal.toggle()
       }
+    })
+  })
+
+  document.querySelectorAll<HTMLElement>('.action--manage-account').forEach((el) => {
+    el.addEventListener('click', ({ target }) => {
+      const { appStore } = document
+      const { modalTargetAsync, externalResourceUrl, resourceId } = (target as HTMLElement).dataset
+      console.debug('Manage account was clicked', { modalTargetAsync, resourceId, externalResourceUrl, target })
+      if (!appStore) throw new Error('App store is not defined')
+      if (!resourceId) throw new Error('Resource ID is not defined')
+      // Should show the offsite link warning modal
+      const modalEl = document.querySelector<HTMLElement>(`#${modalTargetAsync}`)
+      const modal = new Modal(modalEl)
+      appStore.getState().setSelectedAccounts([resourceId])
+      modal.toggle()
     })
   })
 })

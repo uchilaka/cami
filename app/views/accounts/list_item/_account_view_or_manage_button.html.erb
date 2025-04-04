@@ -1,0 +1,14 @@
+<% if account.crm_url.present? %>
+<%= button_tag "Manage",
+               class: compose_class_names('action--manage-account', default_item_action_btn_classes),
+               "data-resource-id": account.id.to_s,
+               "data-external-resource-url": account.crm_url,
+               "data-modal-target-async": 'offsite-link--modal',
+               "data-modal-toggle-async": 'offsite-link--modal' %>
+<% else %>
+<%= button_tag "View",
+               class: compose_class_names('action--view-account-summary', default_item_action_btn_classes),
+               "data-resource-id": account.id.to_s,
+               "data-modal-target-async": 'account--summary-modal',
+               "data-modal-toggle-async": 'account--summary-modal' %>
+<% end %>
