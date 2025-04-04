@@ -3,8 +3,12 @@ import { devtools, subscribeWithSelector } from 'zustand/middleware'
 // See https://github.com/pmndrs/zustand?tab=readme-ov-file#selecting-multiple-state-slices
 // import { useShallow } from 'zustand/react/shallow'
 
+// import { AccountSlice, createAccountSlice } from '@/features/AccountManager/store/accountSlice'
 import { createInvoiceSlice, InvoiceSlice } from '@/features/InvoiceManager/store/invoiceSlice'
 
+/**
+ * See doc on the slice pattern: https://github.com/pmndrs/zustand/blob/main/docs/guides/slices-pattern.md
+ */
 export type AppStore = InvoiceSlice
 
 const createAppStore: StateCreator<AppStore> = (...slices) => ({

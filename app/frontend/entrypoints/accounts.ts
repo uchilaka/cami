@@ -34,12 +34,12 @@ document.addEventListener('turbo:load', () => {
 
   document.querySelectorAll('.action--manage-account').forEach((el: Element | HTMLElement) => {
     el.addEventListener('click', ({ target }) => {
-      const { modalTargetAsync } = (target as HTMLElement).dataset
-      console.debug('Manage account was clicked', { modalTargetAsync, target })
+      const { modalTargetAsync, externalResourceUrl } = (target as HTMLElement).dataset
+      console.debug('Manage account was clicked', { modalTargetAsync, externalResourceUrl, target })
       // Should show the offsite link warning modal
       const modalEl = document.querySelector<HTMLElement>(`#${modalTargetAsync}`)
       const modal = new Modal(modalEl)
-      modal.hide()
+      modal.toggle()
     })
   })
 })

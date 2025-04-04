@@ -26,6 +26,8 @@ function mountIfContainerIsLoaded(containerId: string, Component: any, props: Ap
 
 const appStore = createAppStoreWithDevtools()
 
+document.appStore = appStore
+
 /**
  * TODO: Ensure this is the correct Turbo event (was: DOMContentLoaded)
  */

@@ -2,7 +2,7 @@
 <%= button_tag "Manage",
                class: compose_class_names('action--manage-account', default_item_action_btn_classes),
                "data-resource-id": account.id.to_s,
-               "data-url": account.crm_url,
+               "data-external-resource-url": account.crm_url,
                "data-modal-target-async": 'offsite-link--modal',
                "data-modal-toggle-async": 'offsite-link--modal' %>
 <% else %>

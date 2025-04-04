@@ -14,6 +14,7 @@ console.debug(`Paths detected in TSConfig file: ${tsConfigFile}`, { paths })
 export default defineConfig({
   test: {
     environment: 'jsdom', // or 'node'
+    // TODO: review the eslint plugin https://github.com/saqqdy/eslint-plugin-vitest-globals#readme
     globals: true,
     // https://vitest.dev/config/#coverage
     coverage: {
