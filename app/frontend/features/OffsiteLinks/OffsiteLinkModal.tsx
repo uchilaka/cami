@@ -22,6 +22,12 @@ const OffsiteLinkModal: React.FC<ComponentProps<'div'> & Partial<AppGlobalProps>
     const unsub = appStore?.subscribe(({ accountsMap, selectedAccountsMap }) => {
       logger.debug({ selectedAccountsMap })
       const selectedAccountId = Object.keys(selectedAccountsMap ?? {}).pop()
+      /**
+       * TODO: This doesn't return anything yet because the list of accounts is
+       *   not being passed to the frontend from Rails yet. We would need to have
+       *   app/frontend/entrypoints/accounts.ts pass the list of accounts (as JSON)
+       *   to the frontend by setting it in document.appStore
+       */
       const [selectedAccount] =
         Object.entries<Account>(accountsMap ?? {}).filter(([accountId, _account]) => accountId === selectedAccountId) ?? []
       console.debug({ selectedAccount })
