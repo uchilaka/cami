@@ -211,6 +211,30 @@ RSpec.describe Account, type: :model do
     it { expect(subject.actions.dig(:show, :url)).to match(%r{/accounts/#{subject.id}\?locale=en$}) }
   end
 
+  describe '#crm_url' do
+    let(:mock_crm_org_id) { '123456789' }
+    let(:account) { Fabricate :account }
+
+    subject(:expected_url) { account.crm_url }
+
+    before do
+      allow(account).to receive(:crm_org_id).and_return(mock_crm_org_id)
+    end
+
+    context 'when remote_crm_id is present' do
+      let(:remote_crm_id) { Faker::Number.number(digits: 12).to_s }
+      let(:account) { Fabricate(:account, remote_crm_id:) }
+
+      it { expect(expected_url).to eq "https://crm.zoho.com/crm/org#{mock_crm_org_id}/tab/Accounts/#{remote_crm_id}" }
+    end
+
+    context 'when remote_crm_id is blank' do
+      let(:account) { Fabricate :account, remote_crm_id: nil }
+
+      it { expect(expected_url).to be_nil }
+    end
+  end
+
   # Class methods
   describe '.fuzzy_search_predicate_key' do
     let(:fields) { %w[display_name email] }

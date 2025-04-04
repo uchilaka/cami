@@ -4,10 +4,15 @@ import { devtools, subscribeWithSelector } from 'zustand/middleware'
 // import { useShallow } from 'zustand/react/shallow'
 
 import { createInvoiceSlice, InvoiceSlice } from '@/features/InvoiceManager/store/invoiceSlice'
+import { AccountSlice, createAccountSlice } from '@/features/AccountManager/store/accountSlice'
 
-export type AppStore = InvoiceSlice
+/**
+ * See doc on the slice pattern: https://github.com/pmndrs/zustand/blob/main/docs/guides/slices-pattern.md
+ */
+export type AppStore = AccountSlice & InvoiceSlice
 
 const createAppStore: StateCreator<AppStore> = (...slices) => ({
+  ...createAccountSlice(...slices),
   ...createInvoiceSlice(...slices),
 })
 /**

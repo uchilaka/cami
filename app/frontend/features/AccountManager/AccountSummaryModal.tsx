@@ -8,8 +8,9 @@ import AccountForm from './AccountForm'
 import CloseIcon from '@/components/Icons/CloseIcon'
 import AccountSlug from './AccountSlug'
 import { useLogTransport } from '@/components/LogTransportProvider'
+import { AppGlobalProps } from '@/utils'
 
-const AccountSummaryModal: React.FC<ComponentProps<'div'>> = ({ children, id, ...props }) => {
+const AccountSummaryModal: React.FC<ComponentProps<'div'> & Partial<AppGlobalProps>> = ({ children, id, appStore, ...props }) => {
   const [accountLoader, setAccountLoader] = useState<AbortController>()
   const modalRef = useRef<HTMLDivElement>(null)
   const { logger } = useLogTransport()
