@@ -1,9 +1,10 @@
-import React, { ComponentProps, useRef } from 'react'
+import React, { ComponentProps, useRef, useEffect } from 'react'
 import { Modal } from 'flowbite'
 import { useLogTransport } from '@/components/LogTransportProvider'
 import withAllTheProviders from '@/components/withAllTheProviders'
 import { AppGlobalProps } from '@/utils'
 import CloseIcon from '@/components/Icons/CloseIcon'
+import { Account } from '../AccountManager/types'
 
 const OffsiteLinkModal: React.FC<ComponentProps<'div'> & Partial<AppGlobalProps>> = ({ children, id, appStore, ...props }) => {
   const modalRef = useRef<HTMLDivElement>(null)
@@ -16,6 +17,19 @@ const OffsiteLinkModal: React.FC<ComponentProps<'div'> & Partial<AppGlobalProps>
     logger.debug('@OffsiteLinkModal :: closeModal', { modalId })
     modal.hide()
   }
+
+  useEffect(() => {
+    const unsub = appStore?.subscribe(({ accountsMap, selectedAccountsMap }) => {
+      logger.debug({ selectedAccountsMap })
+      const selectedAccountId = Object.keys(selectedAccountsMap ?? {}).pop()
+      const [selectedAccount] =
+        Object.entries<Account>(accountsMap ?? {}).filter(([accountId, _account]) => accountId === selectedAccountId) ?? []
+      console.debug({ selectedAccount })
+      return selectedAccountsMap
+    }, logger.debug)
+    return unsub
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appStore, logger?.debug])
 
   return (
     <div
