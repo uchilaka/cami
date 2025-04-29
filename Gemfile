@@ -24,7 +24,7 @@ gem 'dotenv', groups: %i[development test], require: 'dotenv/load'
 # Redis feature flag adapter for Flipper
 gem 'flipper-api', '~> 1.3'
 gem 'flipper-redis', '~> 1.2'
-gem 'flipper-ui', '~> 1.2'
+gem 'flipper-ui', '~> 1.3'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
